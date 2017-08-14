@@ -1,0 +1,150 @@
+<resources>
+  <string name="app_name">爱看头条</string>
+
+
+  <!--User -->
+  <string name="user_feeds">动态</string>
+  <string name="user_focus">关注</string>
+  <string name="user_fans">粉丝</string>
+  <string name="user_visitor">访客</string>
+
+  <string name="user_main_text_msg">消息通知</string>
+  <string name="user_main_text_collection">我的收藏</string>
+  <string name="user_main_text_shop">头条商城</string>
+  <string name="user_main_text_jd">京东特供</string>
+  <string name="user_main_text_feedback">用户反馈</string>
+  <string name="user_main_text_setting">系统设置</string>
+
+  <string name="setting_update_info">个人资料编辑</string>
+  <string name="setting_clear_cache">清除缓存</string>
+  <string name="setting_text_size">字体大小</string>
+  <string name="setting_switch_wifi">非 WIFI 网络播放提醒</string>
+  <string name="setting_system_protocol">系统协议</string>
+  <string name="setting_current_version">当前版本</string>
+  <string name="setting_about_us">关于我们</string>
+
+  <string name="text_num">%d/300</string>
+
+  <string name="setting_logout">退出登录</string>
+  <string name="tips_logout">再按一次退出爱看头条</string>
+
+  <!--Login-->
+  <string name="login_text">进入头条</string>
+  <string name="login_without_pwd_text">免密码登录</string>
+  <string name="login_by_pwd">账号密码登录</string>
+
+  <!-- News -->
+  <string name="channel_explain">点击可增删/长按并拖拽可排序</string>
+  <string name="my_channel">我的栏目</string>
+  <string name="more_channel">更多栏目</string>
+  <string name="channel_manage">栏目管理</string>
+
+  <!-- Focus -->
+
+  <string name="focus_add">关注</string>
+
+
+  <!--视频-->
+  <string name="videos">视频</string>
+  <string name="video_play_times">%1$s次播放</string>
+  <string name="search_text">搜索</string>
+  <string name="test_format_play_video_num">%d 次播放</string>
+  <string name="test_format_replay_num">%d条回复</string>
+
+  <!--common-->
+  <string name="hint_comments">写评论...</string>
+  <string name="net_error">网络访问错误，请稍后再试</string>
+  <string name="empty">还没有数据哦</string>
+  <string name="loading">请稍后...</string>
+  <string name="reload">重新尝试</string>
+  <string name="no_net">网络不可用,请检查你的网络</string>
+
+  <string name="submit_text">提交</string>
+  <string name="cancel">取消</string>
+
+
+  <!--title text-->
+  <string name="title_add_focus">添加关注</string>
+  <string name="title_edit_channel">栏目编辑</string>
+  <string name="title_broke_news">我要爆料</string>
+  <string name="title_feedback">意见反馈</string>
+  <string name="title_setting">设置</string>
+  <string name="title_user_notify">我的消息</string>
+
+
+  <!--hint text-->
+  <string name="hint_input_phone">手机号</string>
+  <string name="hint_input_password">密码</string>
+  <string name="hint_news_search">请输入您要搜索的内容</string>
+  <string name="hint_feedback_text">请输入您的意见或建议 (最多400字)</string>
+  <string name="hint_contacts_text">QQ 、邮箱 或手机号码等联系方式</string>
+  <string name="hint_broke_news">* 图片不超过10张，文数不超过300 *</string>
+  <string name="hint_input_msg_code">验证码</string>
+
+  <!--menu-->
+  <string name="news">AndroidFire新闻</string>
+  <string name="zhihu">知乎</string>
+  <string name="photo">图片</string>
+  <string name="video">视频</string>
+  <string name="tools">设置</string>
+  <string name="no_photo_mode">无图模式</string>
+  <string name="night_mode">夜间模式</string>
+  <string name="about">关于</string>
+
+  <string name="navigation_drawer_open">Open navigation drawer</string>
+  <string name="navigation_drawer_close">Close navigation drawer</string>
+  <!-- 共享过度动画 -->
+  <string name="transition_photos">transition_animation_news_photos</string>
+
+
+  <string name="test_text_long">不论何时，做你认为最重要的事情,不论何时，做你认为最重要的事情</string>
+
+  <!-- 新闻 -->
+  <string name="photo_collections">图集：%1$s</string>
+  <string name="news_from">%1$s %2$s</string>
+  <string name="photo_detail_title">%1$d/%2$d　%3$s</string>
+  <string name="web_view">WebView</string>
+  <string name="photo_news">图片新闻</string>
+  <string name="browser">用浏览器打开</string>
+  <string name="share">分享</string>
+  <string name="share_contents">来自「AndroidFire」的分享：%1$s %2$s</string>
+
+  <!-- 图片 -->
+  <string name="girl_title">靓妹纸</string>
+  <string name="girl">妹纸</string>
+  <string name="set_wallpaper">设为壁纸</string>
+
+
+  <!--动态 -->
+  <string name="circle_zone">AndroidFire动态</string>
+  <string name="zone_img_position">circle_img_position</string>
+  <string name="circle_zone_not_read_news">%1$s条新消息</string>
+  <string name="expand">全文</string>
+  <string name="shink">收起</string>
+  <string name="nick_name">世锋日上</string>
+  <string name="save">提交</string>
+  <string name="circle_publish_empty">发表内容不能为空！</string>
+  <string name="zone_publish_title">发表说说</string>
+  <string name="zone_toggle_theme_title">切换主题</string>
+  <string name="friend_zone_title">好友动态</string>
+  <string name="friend_zone_toggle">日夜模式切换</string>
+  <string name="friend_zone_about">关于</string>
+  <string name="care_main_title">我关注的</string>
+  <string name="care_about_wechat">更多精彩文章请关注微信公众号"Android经验分享"：这里将长期为您分享Android高手经验、中外开源项目、源码解析、框架设计和Android好文推荐！</string>
+
+
+  <string name="test_text_short">超能工作室</string>
+  <string name="test_text_medium">简介：我们不能改变潮水的方向，但总要试试。。。。。。。</string>
+  <string name="user_name">Shaun</string>
+  <string name="signature">Life is short , just do IT !</string>
+  <string name="text_video">http://2449.vod.myqcloud.com/2449_22ca37a6ea9011e5acaaf51d105342e3.f20.mp4</string>
+
+  <string name="search_history">历史记录</string>
+  <string name="search_recommend">猜你想搜的</string>
+  <string name="title_user_center">个人中心</string>
+  <string name="test_time">04-25 0:48</string>
+  <string name="title_collection">我的收藏</string>
+  <string name="msg_code_send">发送验证码</string>
+
+
+</resources>

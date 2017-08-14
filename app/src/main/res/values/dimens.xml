@@ -1,0 +1,38 @@
+<resources>
+
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="gudieview_width">6dp</dimen>
+    <dimen name="gudieview_height">6dp</dimen>
+
+    <dimen name="tab_indicator_width">24dp</dimen>
+    <dimen name="tab_indicator_height">2dp</dimen>
+
+    <!-- font -->
+    <dimen name="font_tiny">10sp</dimen>
+    <dimen name="font_small">12sp</dimen>
+    <dimen name="font_normal">14sp</dimen>
+    <dimen name="font_main">16sp</dimen>
+    <dimen name="font_big">20sp</dimen>
+    <dimen name="font_large">24sp</dimen>
+
+    <dimen name="padding_tiny">4dp</dimen>
+    <dimen name="padding_small">8dp</dimen>
+    <dimen name="padding_normal">16dp</dimen>
+    <dimen name="padding_large">24dp</dimen>
+
+    <dimen name="title_height">44dp</dimen>
+    <dimen name="divide_line_width">0.5dp</dimen>
+    <dimen name="divide_block_width">8dp</dimen>
+    <dimen name="input_text_padding">12dp</dimen>
+
+    <dimen name="title_btn_width">60dp</dimen>
+
+    <dimen name="layout_height_large">56dp</dimen>
+    <dimen name="layout_height_big">48dp</dimen>
+    <dimen name="layout_height_normal">42dp</dimen>
+    <dimen name="layout_height_small">32dp</dimen>
+
+    <dimen name="layout_height_video">210dp</dimen>
+</resources>
