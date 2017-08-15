@@ -1,6 +1,12 @@
 <resources>
   <string name="app_name">爱看头条</string>
 
+  <!-- Main TAB -->
+  <string name="main_tab_home">首页</string>
+  <string name="main_tab_video">视频</string>
+  <string name="main_tab_focus">关注</string>
+  <string name="main_tab_user">个人</string>
+
 
   <!--User -->
   <string name="user_feeds">动态</string>

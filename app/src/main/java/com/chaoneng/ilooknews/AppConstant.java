@@ -8,4 +8,6 @@ package com.chaoneng.ilooknews;
 public interface AppConstant {
 
   String HOME_CURRENT_TAB_POSITION = "HOME_CURRENT_TAB_POSITION";
+
+  String TEST_AVATAR= "http://wohuizhong.com/pictures/avatar/888";
 }

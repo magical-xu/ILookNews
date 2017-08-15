@@ -2,7 +2,8 @@ package com.chaoneng.ilooknews.widget.image;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import com.bumptech.glide.Glide;
+import com.chaoneng.ilooknews.R;
+import com.chaoneng.ilooknews.library.glide.GlideApp;
 import com.magicalxu.library.MR;
 
 /**
@@ -29,10 +30,12 @@ public class HeadImageView extends CircularImage {
   /**
    * 直接调用mXCRoundRectImageView的setHeadImageUrl方法
    */
-  public void setHeadImageUrl(final String url) {
-    Glide.with(getContext()).load(url)
-        //.placeholder(MR.getIdByDrawableName(getContext(), "wpk_default_head_bg"))
-        //.error(MR.getIdByDrawableName(getContext(), "wpk_default_head_bg"))
+  public void setHeadImage(String url) {
+    GlideApp.with(this)
+        .load(url)
+        .error(R.drawable.default_head)
+        .fallback(R.drawable.default_head)
+        .placeholder(R.drawable.default_head)
         .into(this);
   }
 }

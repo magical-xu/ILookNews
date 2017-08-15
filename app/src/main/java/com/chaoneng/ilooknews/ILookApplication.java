@@ -11,7 +11,7 @@ import com.magicalxu.library.Utils;
 
 public class ILookApplication extends Application{
 
-  private Context INSTANCE;
+  private static Context INSTANCE;
 
   @Override
   public void onCreate() {
@@ -22,7 +22,7 @@ public class ILookApplication extends Application{
     Utils.init(this);
   }
 
-  public Context getAppContext(){
+  public static Context getAppContext(){
     return INSTANCE;
   }
 }

@@ -20,7 +20,12 @@ public class MainActivity extends BaseActivity {
   @BindView(R.id.id_main_container) FrameLayout mContainer;
   @BindView(R.id.id_main_tab_layout) CommonTabLayout mTabLayout;
 
-  private String[] mTitles = { "首页", "视频", "关注", "我" };
+  private String[] mTitles = {
+      ILookApplication.getAppContext().getString(R.string.main_tab_home),
+      ILookApplication.getAppContext().getString(R.string.main_tab_video),
+      ILookApplication.getAppContext().getString(R.string.main_tab_focus),
+      ILookApplication.getAppContext().getString(R.string.main_tab_user)
+  };
   private int[] mIconUnSelectIds = {
       R.drawable.ic_home_normal, R.drawable.ic_video_normal, R.drawable.ic_care_normal,
       R.drawable.ic_profile_normal
@@ -62,11 +67,13 @@ public class MainActivity extends BaseActivity {
       public void onTabSelect(int position) {
         SwitchTo(position);
       }
+
       @Override
       public void onTabReselect(int position) {
       }
     });
   }
+
   /**
    * 初始化碎片
    */
@@ -74,10 +81,14 @@ public class MainActivity extends BaseActivity {
     FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
     int currentTabPosition = 0;
     if (savedInstanceState != null) {
-      newsMainFragment = (HomeMainFragment) getSupportFragmentManager().findFragmentByTag("newsMainFragment");
-      videoMainFragment = (VideoMainFragment) getSupportFragmentManager().findFragmentByTag("videoMainFragment");
-      careMainFragment = (FocusMainFragment) getSupportFragmentManager().findFragmentByTag("careMainFragment");
-      userMainFragment = (UserMainFragment) getSupportFragmentManager().findFragmentByTag("userMainFragment");
+      newsMainFragment =
+          (HomeMainFragment) getSupportFragmentManager().findFragmentByTag("newsMainFragment");
+      videoMainFragment =
+          (VideoMainFragment) getSupportFragmentManager().findFragmentByTag("videoMainFragment");
+      careMainFragment =
+          (FocusMainFragment) getSupportFragmentManager().findFragmentByTag("careMainFragment");
+      userMainFragment =
+          (UserMainFragment) getSupportFragmentManager().findFragmentByTag("userMainFragment");
       currentTabPosition = savedInstanceState.getInt(AppConstant.HOME_CURRENT_TAB_POSITION);
     } else {
       newsMainFragment = new HomeMainFragment();

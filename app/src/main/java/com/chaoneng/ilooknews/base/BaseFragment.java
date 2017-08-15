@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 /**
  * Created by magical on 2017/3/17.
@@ -21,6 +22,7 @@ public abstract class BaseFragment extends Fragment {
   protected Context mContext;
 
   protected Bundle mBundle;
+  public Unbinder unbinder;
 
   @Override
   public void onAttach(Context context) {
@@ -60,7 +62,7 @@ public abstract class BaseFragment extends Fragment {
         //不需要加载动画
         mRootView = inflater.inflate(getLayoutName(), container, false);
       }
-      ButterKnife.bind(this, mRootView);
+      unbinder = ButterKnife.bind(this, mRootView);
       return mRootView;
     }
     return super.onCreateView(inflater, container, savedInstanceState);
@@ -98,5 +100,6 @@ public abstract class BaseFragment extends Fragment {
   @Override
   public void onDestroyView() {
     super.onDestroyView();
+    unbinder.unbind();
   }
 }
