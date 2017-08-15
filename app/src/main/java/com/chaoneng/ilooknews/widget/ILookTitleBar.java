@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.chaoneng.ilooknews.R;
+import com.chaoneng.ilooknews.widget.image.HeadImageView;
 
 /**
  * Created by magical.zhang on 2017/3/18.
@@ -17,10 +18,16 @@ import com.chaoneng.ilooknews.R;
  */
 public class ILookTitleBar extends RelativeLayout implements View.OnClickListener {
 
+  protected HeadImageView mLeftCircle;
   protected ImageView mLeftImage;
+  protected TextView mLeftText;
+
   protected TextView mTitleText;
+  protected TextView mTitleImage;
+
   protected TextView mRightText;
   protected ImageView mRightImage;
+
   private TitleCallback listener;
 
   public ILookTitleBar(Context context) {
@@ -44,16 +51,22 @@ public class ILookTitleBar extends RelativeLayout implements View.OnClickListene
     LayoutInflater inflater = LayoutInflater.from(context);
     inflater.inflate(R.layout.layout_title_bar_center, this);
 
-    //mLeftImage = (ImageView) findViewById(R.id.iv_title_left);
-    //mTitleText = (TextView) findViewById(R.id.tv_title);
-    //mRightText = (TextView) findViewById(R.id.tv_title_right);
-    //mRightImage = (ImageView) findViewById(R.id.iv_title_right);
+    mLeftCircle = findViewById(R.id.iv_circle_left);
+    mLeftImage = findViewById(R.id.iv_title_left);
+    mLeftText = findViewById(R.id.tv_title_left);
+
+    mTitleText = findViewById(R.id.tv_title);
+    mTitleImage = findViewById(R.id.iv_title);
+
+    mRightText = findViewById(R.id.tv_title_right);
+    mRightImage = findViewById(R.id.iv_title_right);
   }
 
   private void setTitleEvent() {
     mRightText.setOnClickListener(this);
     mRightImage.setOnClickListener(this);
     mLeftImage.setOnClickListener(this);
+    mLeftCircle.setOnClickListener(this);
   }
 
   public void setTitle(String title) {
@@ -65,6 +78,7 @@ public class ILookTitleBar extends RelativeLayout implements View.OnClickListene
   }
 
   public void setLeftImage(int resId) {
+    mLeftImage.setVisibility(View.VISIBLE);
     mLeftImage.setImageResource(resId);
   }
 
