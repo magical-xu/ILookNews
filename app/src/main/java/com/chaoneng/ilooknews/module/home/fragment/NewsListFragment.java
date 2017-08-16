@@ -1,5 +1,6 @@
 package com.chaoneng.ilooknews.module.home.fragment;
 
+import android.os.Bundle;
 import com.chaoneng.ilooknews.R;
 import com.chaoneng.ilooknews.base.BaseFragment;
 
@@ -9,6 +10,16 @@ import com.chaoneng.ilooknews.base.BaseFragment;
  */
 
 public class NewsListFragment extends BaseFragment {
+
+  private static final String PAGE_TYPE = "PAGE_TYPE";
+
+  public static NewsListFragment newInstance(String type) {
+    NewsListFragment fragment = new NewsListFragment();
+    Bundle bundle = new Bundle();
+    bundle.putString(PAGE_TYPE, type);
+    fragment.setArguments(bundle);
+    return fragment;
+  }
 
   @Override
   protected void beginLoadData() {

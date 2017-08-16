@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+  <style mce_bogus="1" name="dialogSlideAnim" parent="android:Animation">
+    <item name="android:windowEnterAnimation">@anim/dialog_bottom_slide_in</item>
+    <item name="android:windowExitAnimation">@anim/dialog_bottom_slide_out</item>
+  </style>
+</resources>

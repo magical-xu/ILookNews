@@ -7,6 +7,12 @@
   <string name="main_tab_focus">关注</string>
   <string name="main_tab_user">个人</string>
 
+  <!-- Sub Fix TAB -->
+  <string name="sub_tab_recommend">推荐</string>
+  <string name="sub_tab_joke">搞笑</string>
+  <string name="sub_tab_music">音乐</string>
+  <string name="sub_tab_social">社会</string>
+
 
   <!--User -->
   <string name="user_feeds">动态</string>
