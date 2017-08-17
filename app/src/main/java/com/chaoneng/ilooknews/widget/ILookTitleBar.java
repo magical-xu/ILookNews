@@ -23,7 +23,7 @@ public class ILookTitleBar extends RelativeLayout implements View.OnClickListene
   protected TextView mLeftText;
 
   protected TextView mTitleText;
-  protected TextView mTitleImage;
+  protected ImageView mTitleImage;
 
   protected TextView mRightText;
   protected ImageView mRightImage;

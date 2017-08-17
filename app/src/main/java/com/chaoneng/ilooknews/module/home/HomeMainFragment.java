@@ -15,6 +15,7 @@ import com.chaoneng.ilooknews.instance.TabManager;
 import com.chaoneng.ilooknews.module.home.callback.OnChannelListener;
 import com.chaoneng.ilooknews.module.home.fragment.ChannelDialogFragment;
 import com.chaoneng.ilooknews.module.home.fragment.NewsListFragment;
+import com.chaoneng.ilooknews.util.IntentHelper;
 import com.chaoneng.ilooknews.widget.adapter.BaseFragmentStateAdapter;
 import com.chaoneng.ilooknews.widget.adapter.OnPageChangeListener;
 import com.chaoneng.ilooknews.widget.image.HeadImageView;
@@ -91,7 +92,7 @@ public class HomeMainFragment extends BaseFragment implements OnChannelListener 
 
   @OnClick(R.id.iv_notify)
   public void toNotifyPage() {
-    ToastUtils.showShort("通知");
+    IntentHelper.openNotifyPage(getActivity());
   }
 
   @OnClick(R.id.iv_edit_channel)

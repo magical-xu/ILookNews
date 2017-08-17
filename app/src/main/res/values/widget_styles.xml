@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+  <style name="style_recycler_view">
+    <item name="android:overScrollMode">never</item>
+    <item name="android:background">@color/white</item>
+  </style>
+</resources>

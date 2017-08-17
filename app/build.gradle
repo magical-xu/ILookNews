@@ -34,4 +34,5 @@ dependencies {
   compile 'com.squareup.retrofit2:retrofit:2.3.0'
   compile 'com.android.support:design:26.0.0-alpha1'
   compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.27'
+  compile 'com.scwang.smartrefresh:SmartRefreshLayout:1.0.3'
 }

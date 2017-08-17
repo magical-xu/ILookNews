@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="@dimen/padding_normal">
+
+  <com.chaoneng.ilooknews.widget.image.HeadImageView
+      android:layout_marginTop="@dimen/padding_tiny"
+      android:id="@+id/iv_avatar"
+      android:layout_width="40dp"
+      android:layout_height="40dp"
+      tools:background="@color/red" />
+
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginLeft="@dimen/padding_small"
+      android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_notify_type"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:maxLines="1"
+        android:textColor="@color/red_warn"
+        android:textSize="@dimen/font_main"
+        tools:text="@string/app_name" />
+
+    <TextView
+        android:id="@+id/tv_notify_msg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/padding_tiny"
+        android:textSize="@dimen/font_main"
+        tools:text="@string/app_name" />
+
+    <TextView
+        android:id="@+id/tv_notify_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/padding_small"
+        android:textColor="@color/three_text_color"
+        android:textSize="@dimen/font_small"
+        tools:text="@string/test_time" />
+  </LinearLayout>
+</LinearLayout>

@@ -21,6 +21,10 @@
         <category android:name="android.intent.category.LAUNCHER" />
       </intent-filter>
     </activity>
+
+    <activity
+        android:name=".module.home.activity.NotifyActivity"
+        android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize" />
   </application>
 
 </manifest>
