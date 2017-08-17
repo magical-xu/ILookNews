@@ -4,6 +4,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import com.chaoneng.ilooknews.instance.TabManager;
 
 /**
  * Created by magical on 2017/8/15.
@@ -42,6 +43,14 @@ public class ItemDragHelperCallBack extends ItemTouchHelper.Callback {
     if (viewHolder.getItemViewType() != target.getItemViewType()) {
       return false;
     }
+
+    // add by magical 默认标签的位置不能移动
+    int targetPos = target.getAdapterPosition();
+    int realPos = targetPos - 1;    // 多了第一个布局的 position
+    if (realPos < TabManager.getInstance().getDefaultSize()) {
+      return false;
+    }
+
     if (onChannelDragListener != null) {
       onChannelDragListener.onItemMove(viewHolder.getAdapterPosition(),
           target.getAdapterPosition());

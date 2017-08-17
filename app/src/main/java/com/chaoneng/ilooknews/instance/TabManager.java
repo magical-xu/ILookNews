@@ -16,9 +16,26 @@ import java.util.List;
 public class TabManager {
 
   private List<Channel> mTabList;
+  private List<Channel> otherChannelList;
 
   private TabManager() {
     mTabList = new ArrayList<>();
+    otherChannelList = new ArrayList<>();
+    initMyDefault();
+
+    initOther();
+  }
+
+  private void initOther() {
+    otherChannelList.add(new Channel(Channel.TYPE_OTHER_CHANNEL, "西瓜", "西瓜"));
+    otherChannelList.add(new Channel(Channel.TYPE_OTHER_CHANNEL, "橘子", "橘子"));
+    otherChannelList.add(new Channel(Channel.TYPE_OTHER_CHANNEL, "西红柿", "西红柿"));
+    otherChannelList.add(new Channel(Channel.TYPE_OTHER_CHANNEL, "土豆泥", "土豆泥"));
+    otherChannelList.add(new Channel(Channel.TYPE_OTHER_CHANNEL, "薯片", "薯片"));
+    otherChannelList.add(new Channel(Channel.TYPE_OTHER_CHANNEL, "牛肉", "牛肉"));
+  }
+
+  private void initMyDefault() {
     Context appContext = ILookApplication.getAppContext();
     String recommend = appContext.getString(R.string.sub_tab_recommend);
     String joke = appContext.getString(R.string.sub_tab_joke);
@@ -39,6 +56,21 @@ public class TabManager {
   private static class SingletonHolder {
 
     private static final TabManager mInstance = new TabManager();
+  }
+
+  /**
+   * 拿到有几个默认标签
+   */
+  public int getDefaultSize() {
+    int size = mTabList.size();
+    int count = 0;
+    for (int i = 0; i < size; i++) {
+      Channel channel = mTabList.get(i);
+      if (channel.access) {
+        count++;
+      }
+    }
+    return count;
   }
 
   /**
@@ -74,6 +106,30 @@ public class TabManager {
    */
   public List<Channel> getTabList() {
     return mTabList;
+  }
+
+  public List<Channel> getOtherList() {
+    return otherChannelList;
+  }
+
+  /**
+   * 移动到我的频道
+   */
+  public Channel moveToMyChannel(int starPos, int endPos) {
+
+    Channel channel = otherChannelList.remove(starPos);
+    mTabList.add(endPos, channel);
+    return channel;
+  }
+
+  /**
+   * 移动到推荐频道
+   */
+  public Channel moveToOtherChannel(int starPos, int endPos) {
+
+    Channel remove = mTabList.remove(starPos);
+    otherChannelList.add(endPos, remove);
+    return remove;
   }
 
   /**

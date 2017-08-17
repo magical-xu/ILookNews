@@ -14,13 +14,16 @@ import android.view.ViewGroup;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.chaoneng.ilooknews.R;
 import com.chaoneng.ilooknews.data.Channel;
+import com.chaoneng.ilooknews.instance.TabManager;
 import com.chaoneng.ilooknews.module.home.adapter.ChannelAdapter;
 import com.chaoneng.ilooknews.module.home.callback.ItemDragHelperCallBack;
 import com.chaoneng.ilooknews.module.home.callback.OnChannelDragListener;
 import com.chaoneng.ilooknews.module.home.callback.OnChannelListener;
+import com.magicalxu.library.blankj.ToastUtils;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,6 +46,11 @@ public class ChannelDialogFragment extends DialogFragment implements OnChannelDr
 
   public void setOnChannelListener(OnChannelListener onChannelListener) {
     mOnChannelListener = onChannelListener;
+  }
+
+  public static ChannelDialogFragment newInstance() {
+    ChannelDialogFragment dialogFragment = new ChannelDialogFragment();
+    return dialogFragment;
   }
 
   @Override
@@ -70,37 +78,29 @@ public class ChannelDialogFragment extends DialogFragment implements OnChannelDr
     processLogic();
   }
 
-  public static ChannelDialogFragment newInstance(List<Channel> selectedDatas,
-      List<Channel> unselectedDatas) {
-    ChannelDialogFragment dialogFragment = new ChannelDialogFragment();
-    Bundle bundle = new Bundle();
-    //bundle.putSerializable(ConstanceValue.DATA_SELECTED, (Serializable) selectedDatas);
-    //bundle.putSerializable(ConstanceValue.DATA_UNSELECTED, (Serializable) unselectedDatas);
-    dialogFragment.setArguments(bundle);
-    return dialogFragment;
-  }
-
-  private void setDataType(List<Channel> datas, int type) {
-    for (int i = 0; i < datas.size(); i++) {
-      datas.get(i).setItemType(type);
-    }
-  }
-
   private void processLogic() {
-    mDatas.add(new Channel(Channel.TYPE_MY, "我的频道", ""));
-    Bundle bundle = getArguments();
-    //List<Channel> selectedDatas =
-    //    (List<Channel>) bundle.getSerializable(ConstanceValue.DATA_SELECTED);
-    //List<Channel> unselectedDatas =
-    //    (List<Channel>) bundle.getSerializable(ConstanceValue.DATA_UNSELECTED);
-    //setDataType(selectedDatas, TYPE_MY_CHANNEL);
-    //setDataType(unselectedDatas, Channel.TYPE_OTHER_CHANNEL);
 
-    //mDatas.addAll(selectedDatas);
-    //mDatas.add(new Channel(Channel.TYPE_OTHER, "频道推荐", ""));
-    //mDatas.addAll(unselectedDatas);
+    // my channel title
+    mDatas.add(new Channel(Channel.TYPE_MY, "我的频道", ""));
+
+    // my channel list
+    List<Channel> myList = TabManager.getInstance().getTabList();
+    mDatas.addAll(myList);
+
+    // other channel title
+    mDatas.add(new Channel(Channel.TYPE_OTHER, "频道推荐", ""));
+
+    // other channel list
+    List<Channel> otherList = TabManager.getInstance().getOtherList();
+    mDatas.addAll(otherList);
 
     mAdapter = new ChannelAdapter(mDatas);
+    mAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+      @Override
+      public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+        ToastUtils.showShort(String.valueOf(position));
+      }
+    });
     GridLayoutManager manager = new GridLayoutManager(getActivity(), 4);
     mRecyclerView.setLayoutManager(manager);
     mRecyclerView.setAdapter(mAdapter);

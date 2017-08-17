@@ -1,6 +1,6 @@
 package com.chaoneng.ilooknews.module.home;
 
-import android.content.Intent;
+import android.content.DialogInterface;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.widget.ImageView;
@@ -12,6 +12,8 @@ import com.chaoneng.ilooknews.R;
 import com.chaoneng.ilooknews.base.BaseFragment;
 import com.chaoneng.ilooknews.data.Channel;
 import com.chaoneng.ilooknews.instance.TabManager;
+import com.chaoneng.ilooknews.module.home.callback.OnChannelListener;
+import com.chaoneng.ilooknews.module.home.fragment.ChannelDialogFragment;
 import com.chaoneng.ilooknews.module.home.fragment.NewsListFragment;
 import com.chaoneng.ilooknews.widget.adapter.BaseFragmentStateAdapter;
 import com.chaoneng.ilooknews.widget.adapter.OnPageChangeListener;
@@ -26,7 +28,7 @@ import java.util.List;
  * Description : 主页 - 首页
  */
 
-public class HomeMainFragment extends BaseFragment {
+public class HomeMainFragment extends BaseFragment implements OnChannelListener {
 
   @BindView(R.id.iv_avatar) HeadImageView mHeadView;
   @BindView(R.id.ll_search) LinearLayout mSearchView;
@@ -94,11 +96,45 @@ public class HomeMainFragment extends BaseFragment {
 
   @OnClick(R.id.iv_edit_channel)
   public void toMoreTabPage() {
-    ToastUtils.showShort("添加标签");
+    ChannelDialogFragment dialogFragment = ChannelDialogFragment.newInstance();
+    dialogFragment.setOnChannelListener(this);
+    dialogFragment.show(getChildFragmentManager(), "CHANNEL");
+    dialogFragment.setOnDismissListener(new DialogInterface.OnDismissListener() {
+      @Override
+      public void onDismiss(DialogInterface dialog) {
+        mPagerAdapter.updateTitle(TabManager.getInstance().getTabNameList());
+        mPagerAdapter.notifyDataSetChanged();
+        mTabView.notifyDataSetChanged();
+        //mVp.setOffscreenPageLimit(mSelectedDatas.size());
+        //tab.setCurrentItem(tab.getSelectedTabPosition());
+      }
+    });
   }
 
   @Override
-  public void onActivityResult(int requestCode, int resultCode, Intent data) {
-    super.onActivityResult(requestCode, resultCode, data);
+  public void onItemMove(int starPos, int endPos) {
+    listMove(TabManager.getInstance().getTabList(), starPos, endPos);
+    listMove(newsFragmentList, starPos, endPos);
+  }
+
+  @Override
+  public void onMoveToMyChannel(int starPos, int endPos) {
+
+    Channel channel = TabManager.getInstance().moveToMyChannel(starPos, endPos);
+    newsFragmentList.add(NewsListFragment.newInstance(channel.code));
+  }
+
+  @Override
+  public void onMoveToOtherChannel(int starPos, int endPos) {
+    TabManager.getInstance().moveToOtherChannel(starPos, endPos);
+    newsFragmentList.remove(starPos);
+  }
+
+  private void listMove(List datas, int starPos, int endPos) {
+    Object o = datas.get(starPos);
+    //先删除之前的位置
+    datas.remove(starPos);
+    //添加到现在的位置
+    datas.add(endPos, o);
   }
 }

@@ -26,6 +26,10 @@ public class BaseFragmentStateAdapter extends FragmentStatePagerAdapter {
     this.fragmentList = fragmentList;
   }
 
+  public void updateTitle(List<String> titles) {
+    this.mTitles = titles;
+  }
+
   public BaseFragmentStateAdapter(FragmentManager fm, List<Fragment> fragmentList,
       List<String> mTitles) {
     super(fm);
@@ -46,5 +50,10 @@ public class BaseFragmentStateAdapter extends FragmentStatePagerAdapter {
   @Override
   public int getCount() {
     return fragmentList.size();
+  }
+
+  @Override
+  public int getItemPosition(Object object) {
+    return POSITION_NONE;
   }
 }

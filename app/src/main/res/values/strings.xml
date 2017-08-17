@@ -157,6 +157,7 @@
   <string name="test_time">04-25 0:48</string>
   <string name="title_collection">我的收藏</string>
   <string name="msg_code_send">发送验证码</string>
+  <string name="edit">编辑</string>
 
 
 </resources>
