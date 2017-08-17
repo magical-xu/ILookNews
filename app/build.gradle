@@ -32,7 +32,11 @@ dependencies {
   annotationProcessor 'com.github.bumptech.glide:compiler:4.0.0'
   compile 'com.github.bumptech.glide:okhttp3-integration:4.0.0'
   compile 'com.squareup.retrofit2:retrofit:2.3.0'
+  compile 'com.squareup.retrofit2:converter-gson:2.3.0'
   compile 'com.android.support:design:26.0.0-alpha1'
   compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.27'
   compile 'com.scwang.smartrefresh:SmartRefreshLayout:1.0.3'
+  compile 'com.google.code.gson:gson:2.8.1'
+  compile 'com.facebook.stetho:stetho:1.5.0'
+  compile 'com.facebook.stetho:stetho-okhttp3:1.5.0'
 }

@@ -2,6 +2,9 @@ package com.chaoneng.ilooknews;
 
 import android.app.Application;
 import android.content.Context;
+import com.chaoneng.ilooknews.api.Constant;
+import com.chaoneng.ilooknews.net.client.NetRequest;
+import com.facebook.stetho.Stetho;
 import com.magicalxu.library.Utils;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.DefaultRefreshFooterCreater;
@@ -50,6 +53,16 @@ public class ILookApplication extends Application {
     INSTANCE = getApplicationContext();
 
     Utils.init(this);
+    initLib();
+  }
+
+  private void initLib() {
+
+    // request debug
+    Stetho.initializeWithDefaults(this);
+
+    // init retrofit client
+    NetRequest.getInstance().init(this, Constant.BASE_URL);
   }
 
   public static Context getAppContext() {
