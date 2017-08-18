@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+
+  <RelativeLayout
+      android:id="@+id/id_item_msg"
+      style="@style/user_item_setting_vg">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/ic_profile_notify"
+        android:drawablePadding="@dimen/padding_small"
+        android:gravity="center"
+        android:text="@string/user_main_text_msg"
+        android:textColor="@color/two_text_color" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:src="@drawable/ic_right_expand" />
+  </RelativeLayout>
+
+  <RelativeLayout
+      android:id="@+id/id_item_collect"
+      style="@style/user_item_setting_vg">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/ic_profile_collection"
+        android:drawablePadding="@dimen/padding_small"
+        android:gravity="center"
+        android:text="@string/user_main_text_collection"
+        android:textColor="@color/two_text_color" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:src="@drawable/ic_right_expand" />
+  </RelativeLayout>
+
+  <RelativeLayout
+      android:id="@+id/id_item_broke"
+      style="@style/user_item_setting_vg">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/ic_profile_broke"
+        android:drawablePadding="@dimen/padding_small"
+        android:gravity="center"
+        android:text="@string/title_broke_news"
+        android:textColor="@color/two_text_color" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:src="@drawable/ic_right_expand" />
+  </RelativeLayout>
+
+  <RelativeLayout
+      android:id="@+id/id_item_feedback"
+      style="@style/user_item_setting_vg">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/ic_profile_talk"
+        android:drawablePadding="@dimen/padding_small"
+        android:gravity="center"
+        android:text="@string/user_main_text_feedback"
+        android:textColor="@color/two_text_color" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:src="@drawable/ic_right_expand" />
+  </RelativeLayout>
+
+  <RelativeLayout
+      android:id="@+id/id_item_setting"
+      style="@style/user_item_setting_vg">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/ic_profile_setting"
+        android:drawablePadding="@dimen/padding_small"
+        android:gravity="center"
+        android:text="@string/user_main_text_setting"
+        android:textColor="@color/two_text_color" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:src="@drawable/ic_right_expand" />
+  </RelativeLayout>
+</merge>

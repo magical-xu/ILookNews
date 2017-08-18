@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/credit_container"
+    android:layout_width="match_parent"
+    android:layout_height="56dp"
+    android:layout_marginBottom="12dp"
+    android:divider="@drawable/divider_line_vertical"
+    android:dividerPadding="@dimen/padding_normal"
+    android:gravity="center"
+    android:orientation="horizontal"
+    android:showDividers="middle">
+
+  <com.chaoneng.ilooknews.module.user.widget.RelationView
+      android:id="@+id/credit_topic"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_weight="1" />
+
+  <com.chaoneng.ilooknews.module.user.widget.RelationView
+      android:id="@+id/credit_following"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_weight="1" />
+
+  <com.chaoneng.ilooknews.module.user.widget.RelationView
+      android:id="@+id/credit_fans"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_weight="1" />
+
+  <com.chaoneng.ilooknews.module.user.widget.RelationView
+      android:id="@+id/credit_visitors"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_weight="1" />
+</LinearLayout>

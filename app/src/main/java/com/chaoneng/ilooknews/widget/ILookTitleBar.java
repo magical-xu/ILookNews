@@ -77,9 +77,21 @@ public class ILookTitleBar extends RelativeLayout implements View.OnClickListene
     }
   }
 
+  public ILookTitleBar setTitleImage(int resId) {
+    mTitleText.setVisibility(View.GONE);
+    mTitleImage.setVisibility(View.VISIBLE);
+    mTitleImage.setImageResource(resId);
+    return this;
+  }
+
   public void setLeftImage(int resId) {
     mLeftImage.setVisibility(View.VISIBLE);
     mLeftImage.setImageResource(resId);
+  }
+
+  public ILookTitleBar hideLeftImage() {
+    mLeftImage.setVisibility(View.GONE);
+    return this;
   }
 
   public void setRightText(String text) {
@@ -91,9 +103,10 @@ public class ILookTitleBar extends RelativeLayout implements View.OnClickListene
     }
   }
 
-  public void setRightImage(int resId) {
+  public ILookTitleBar setRightImage(int resId) {
     mRightImage.setVisibility(View.VISIBLE);
     mRightImage.setImageResource(resId);
+    return this;
   }
 
   public void attach(Activity activity) {

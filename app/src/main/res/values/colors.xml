@@ -17,6 +17,9 @@
   <color name="main_divider_color">#dddddd</color>
   <color name="minor_divider_color">#e9e5e5</color>
 
+  <!-- press bg -->
+  <color name="bg_press_color">#eeeeee</color>
+
   <color name="bg_news_header_start">#20b5f8</color>
   <color name="bg_news_header_end">#3be7f2</color>
 

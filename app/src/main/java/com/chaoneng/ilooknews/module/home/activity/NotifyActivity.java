@@ -8,14 +8,15 @@ import butterknife.BindView;
 import com.chaoneng.ilooknews.AppConstant;
 import com.chaoneng.ilooknews.R;
 import com.chaoneng.ilooknews.api.Constant;
+import com.chaoneng.ilooknews.api.GankModel;
 import com.chaoneng.ilooknews.api.GankService;
 import com.chaoneng.ilooknews.base.BaseActivity;
 import com.chaoneng.ilooknews.data.BaseUser;
 import com.chaoneng.ilooknews.module.home.adapter.NotifyAdapter;
+import com.chaoneng.ilooknews.net.callback.SimpleJsonCallback;
 import com.chaoneng.ilooknews.net.client.NetRequest;
 import com.chaoneng.ilooknews.util.DividerHelper;
 import com.chaoneng.ilooknews.widget.ILookTitleBar;
-import com.magicalxu.library.blankj.ToastUtils;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadmoreListener;
@@ -23,8 +24,6 @@ import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import java.util.ArrayList;
 import java.util.List;
 import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * Created by magical on 17/8/17.
@@ -68,31 +67,54 @@ public class NotifyActivity extends BaseActivity {
     });
   }
 
-  int page = 1;
+  int curPage = 1;
 
   private void loadData() {
 
     GankService service = NetRequest.getInstance().create(GankService.class);
-    Call<BaseUser> call = service.getData(Constant.PAGE_LIMIT, String.valueOf(page));
-    call.enqueue(new Callback<BaseUser>() {
+    Call<GankModel> call = service.getData(Constant.PAGE_LIMIT, String.valueOf(curPage));
+
+    call.enqueue(new SimpleJsonCallback<GankModel>() {
       @Override
-      public void onResponse(Call<BaseUser> call, Response<BaseUser> response) {
-        List<BaseUser> list = new ArrayList<>();
-        for (int i = 0; i < 20; i++) {
-          BaseUser user = new BaseUser();
-          user.avatar = AppConstant.TEST_AVATAR;
-          user.nickname = "系统消息";
-          user.sign = "Shaun 关注了 你";
-          list.add(user);
-        }
-        mAdapter.setNewData(list);
+      public void onSuccess(GankModel data) {
+        buildFakeData();
       }
 
       @Override
-      public void onFailure(Call<BaseUser> call, Throwable t) {
-        ToastUtils.showShort(t.getMessage());
+      public void onFailed(int code, String message) {
+        if (curPage == 1) {
+          mRefreshLayout.finishRefresh();
+        } else {
+          mRefreshLayout.finishLoadmore();
+        }
       }
     });
+  }
+
+  private void buildFakeData() {
+
+    if (curPage == 4) {
+      mRefreshLayout.finishLoadmore();
+      curPage = 3;
+      return;
+    }
+
+    List<BaseUser> list = new ArrayList<>();
+    for (int i = 0; i < 10; i++) {
+      BaseUser user = new BaseUser();
+      user.avatar = AppConstant.TEST_AVATAR;
+      user.nickname = "系统消息";
+      user.sign = "Shaun 关注了 你 -- > " + String.valueOf(curPage);
+      list.add(user);
+    }
+
+    if (curPage == 1) {
+      mAdapter.setNewData(list);
+      mRefreshLayout.finishRefresh();
+    } else {
+      mAdapter.addData(list);
+      mRefreshLayout.finishLoadmore();
+    }
   }
 
   private void configRecyclerView() {
@@ -106,12 +128,15 @@ public class NotifyActivity extends BaseActivity {
     mRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
       @Override
       public void onRefresh(RefreshLayout refreshlayout) {
-        mRefreshLayout.finishRefresh(3000);
+
+        curPage = 1;
+        loadData();
       }
     }).setOnLoadmoreListener(new OnLoadmoreListener() {
       @Override
       public void onLoadmore(RefreshLayout refreshlayout) {
-        mRefreshLayout.finishLoadmore(3000);
+        curPage++;
+        loadData();
       }
     });
 

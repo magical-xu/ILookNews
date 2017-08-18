@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?attr/selectableItemBackground"
+    android:clickable="true"
+    android:descendantFocusability="blocksDescendants">
+
+  <TextView
+      android:id="@+id/id_top"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_centerHorizontal="true"
+      android:layout_marginTop="5dp"
+      android:gravity="center"
+      android:text="0"
+      android:textColor="@color/black"
+      android:textSize="@dimen/font_main"
+      tools:text="433232" />
+
+  <TextView
+      android:id="@+id/id_bottom"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_below="@id/id_top"
+      android:layout_centerHorizontal="true"
+      android:layout_marginTop="5dp"
+      android:gravity="center"
+      android:text="粉絲"
+      android:textColor="@color/two_text_color"
+      android:textSize="@dimen/font_tiny"
+      tools:text="粉丝" />
+
+  <TextView
+      android:id="@+id/id_red"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_alignTop="@id/id_top"
+      android:layout_marginLeft="2dp"
+      android:layout_marginTop="-5dp"
+      android:layout_toRightOf="@id/id_top"
+      android:visibility="gone"
+      tools:text="+99"
+      tools:visibility="visible"
+      style="@style/wpk_text_person_red_notification" />
+
+</RelativeLayout>

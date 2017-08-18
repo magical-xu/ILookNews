@@ -15,6 +15,7 @@ import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.constant.SpinnerStyle;
 import com.scwang.smartrefresh.layout.footer.ClassicsFooter;
 import com.scwang.smartrefresh.layout.header.ClassicsHeader;
+import timber.log.Timber;
 
 /**
  * Created by magical on 17/8/14.
@@ -57,6 +58,9 @@ public class ILookApplication extends Application {
   }
 
   private void initLib() {
+
+    // init timber
+    Timber.plant(new Timber.DebugTree());
 
     // request debug
     Stetho.initializeWithDefaults(this);

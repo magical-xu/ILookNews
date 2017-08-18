@@ -55,20 +55,16 @@ public abstract class BaseFragment extends Fragment {
       @Nullable Bundle savedInstanceState) {
     if (0 != getLayoutName()) {
 
-      if (isNeedShowLoadingView()) {
-        //需要加载动画
-        //mRootView = inflateWitchBlankLoading(inflater, getLayoutName());
-      } else {
-        //不需要加载动画
-        mRootView = inflater.inflate(getLayoutName(), container, false);
+      mRootView = inflater.inflate(getLayoutName(), container, false);
+
+      if (bind()) {
+        unbinder = ButterKnife.bind(this, mRootView);
       }
-      unbinder = ButterKnife.bind(this, mRootView);
+
       return mRootView;
     }
     return super.onCreateView(inflater, container, savedInstanceState);
   }
-
-  //protected abstract View inflateWitchBlankLoading(LayoutInflater inflater, int layoutName);
 
   @Override
   public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -77,6 +73,10 @@ public abstract class BaseFragment extends Fragment {
     doInit();
 
     beginLoadData();
+  }
+
+  public boolean bind() {
+    return true;
   }
 
   protected abstract void beginLoadData();
@@ -100,6 +100,8 @@ public abstract class BaseFragment extends Fragment {
   @Override
   public void onDestroyView() {
     super.onDestroyView();
-    unbinder.unbind();
+    if (null != unbinder) {
+      unbinder.unbind();
+    }
   }
 }

@@ -1,14 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/role_yellow_gray"
-    android:orientation="vertical">
+    android:background="@color/white">
 
-  <TextView
-      android:text="測試"
-      android:textSize="@dimen/font_large"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content" />
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:gravity="center_horizontal"
+      android:orientation="vertical">
 
-</LinearLayout>
+    <com.chaoneng.ilooknews.widget.image.HeadImageView
+        android:id="@+id/iv_avatar"
+        android:layout_width="67dp"
+        android:layout_height="67dp"
+        android:layout_marginTop="48dp" />
+
+    <TextView
+        android:id="@+id/id_nickname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/padding_normal"
+        android:text="@string/user_name" />
+
+    <TextView
+        android:id="@+id/id_sign"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/padding_small"
+        android:text="@string/signature" />
+
+    <include layout="@layout/include_relation_view" />
+
+    <include layout="@layout/include_full_divider" />
+
+    <include layout="@layout/merge_home_item_setting" />
+  </LinearLayout>
+</android.support.v4.widget.NestedScrollView>
+
