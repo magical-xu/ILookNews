@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.chaoneng.ilooknews">
 
   <uses-permission android:name="android.permission.INTERNET" />
   <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+  <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+  <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
   <application
       android:name=".ILookApplication"
@@ -11,7 +14,20 @@
       android:icon="@mipmap/ic_logo"
       android:label="@string/app_name"
       android:supportsRtl="true"
-      android:theme="@style/AppTheme">
+      android:theme="@style/AppTheme"
+      tools:replace="android:theme,android:label">
+
+    <provider
+        android:name="android.support.v4.content.FileProvider"
+        android:authorities="${applicationId}.file.provider"
+        android:exported="false"
+        android:grantUriPermissions="true">
+
+      <meta-data
+          android:name="android.support.FILE_PROVIDER_PATHS"
+          android:resource="@xml/boxing_file_provider" />
+
+    </provider>
 
     <activity
         android:name=".module.login.SplashActivity"
@@ -40,6 +56,9 @@
         android:theme="@style/SimpleActivityTheme" />
     <activity
         android:name=".module.login.LoginActivity"
+        android:theme="@style/SimpleActivityTheme" />
+    <activity
+        android:name=".module.user.activity.ProfileActivity"
         android:theme="@style/SimpleActivityTheme" />
   </application>
 

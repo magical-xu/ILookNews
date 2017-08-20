@@ -22,6 +22,7 @@
       android:src="@mipmap/ic_logo" />
 
   <TextView
+      android:id="@+id/id_login_type"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_gravity="center_horizontal"
@@ -32,8 +33,14 @@
   <ViewFlipper
       android:id="@+id/id_toggle"
       android:layout_width="match_parent"
-      android:layout_height="wrap_content">
+      android:layout_height="wrap_content"
+      android:layout_marginLeft="@dimen/padding_large"
+      android:layout_marginRight="@dimen/padding_large"
+      android:layout_marginTop="10dp">
 
+    <include layout="@layout/include_login_mobile" />
+
+    <include layout="@layout/include_login_sms" />
 
   </ViewFlipper>
 

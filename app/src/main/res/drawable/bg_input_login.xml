@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+  <stroke
+      android:color="@color/main_divider_color"
+      android:width="1dp" />
+
+  <padding
+      android:bottom="0dp"
+      android:left="8dp"
+      android:right="8dp"
+      android:top="0dp" />
+
+  <!-- solid 填充颜色 -->
+  <solid android:color="@color/white" />
+
+  <corners android:radius="8dp" />
+</shape>

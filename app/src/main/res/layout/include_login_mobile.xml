@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+  <com.chaoneng.ilooknews.widget.ClearEditText
+      android:id="@+id/id_page1_username"
+      android:layout_width="match_parent"
+      android:layout_height="44dp"
+      android:background="@drawable/bg_input_login"
+      android:gravity="center_vertical"
+      android:hint="@string/hint_input_phone"
+      android:inputType="phone"
+      android:maxLength="11"
+      android:maxLines="1"
+      android:paddingLeft="@dimen/input_text_padding"
+      android:paddingRight="@dimen/input_text_padding"
+      android:textColorHint="@color/three_text_color"
+      android:textSize="@dimen/font_main" />
+
+  <com.chaoneng.ilooknews.widget.PasswordEditText
+      android:id="@+id/id_page1_pwd"
+      android:layout_width="match_parent"
+      android:layout_height="44dp"
+      android:layout_marginTop="@dimen/padding_normal"
+      android:background="@drawable/bg_input_login"
+      android:gravity="center_vertical"
+      android:hint="@string/hint_input_password"
+      android:inputType="textPassword"
+      android:paddingLeft="@dimen/input_text_padding"
+      android:paddingRight="@dimen/input_text_padding"
+      android:maxLines="1"
+      android:textColorHint="@color/three_text_color"
+      android:textSize="@dimen/font_main" />
+
+</LinearLayout>

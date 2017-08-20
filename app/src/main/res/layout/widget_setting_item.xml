@@ -43,6 +43,17 @@
       tools:text="缓存大小 32MB"
       tools:visibility="visible" />
 
+  <com.chaoneng.ilooknews.widget.image.HeadImageView
+      android:id="@+id/id_item_iv_head"
+      android:layout_width="30dp"
+      android:layout_height="30dp"
+      android:layout_centerVertical="true"
+      android:layout_marginRight="@dimen/padding_small"
+      android:layout_toLeftOf="@id/id_item_arrow"
+      android:visibility="gone"
+      tools:background="#f00"
+      tools:visibility="visible" />
+
   <ToggleButton
       android:id="@+id/id_item_toggle"
       android:layout_width="30dp"

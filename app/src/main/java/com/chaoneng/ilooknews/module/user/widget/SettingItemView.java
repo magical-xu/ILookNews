@@ -10,6 +10,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 import com.chaoneng.ilooknews.R;
+import com.chaoneng.ilooknews.widget.image.HeadImageView;
 
 /**
  * Created by magical on 17/8/20.
@@ -24,6 +25,7 @@ public class SettingItemView extends RelativeLayout {
   private ImageView mRightArrow;
   private ToggleButton mRightToggle;
   //private View mDivider;
+  private HeadImageView mHeadIv;
 
   public SettingItemView(Context context) {
     this(context, null);
@@ -47,6 +49,7 @@ public class SettingItemView extends RelativeLayout {
     mRightText = root.findViewById(R.id.id_item_right_text);
     mRightToggle = root.findViewById(R.id.id_item_toggle);
     //mDivider = root.findViewById(R.id.id_bottom_divider);
+    mHeadIv = root.findViewById(R.id.id_item_iv_head);
   }
 
   public SettingItemView setTitle(String title) {
@@ -79,5 +82,12 @@ public class SettingItemView extends RelativeLayout {
 
   public ToggleButton getToggle() {
     return mRightToggle;
+  }
+
+  public SettingItemView setHead(String url) {
+    mHeadIv.setVisibility(View.VISIBLE);
+    mHeadIv.setHeadImage(url);
+    mRightText.setVisibility(View.GONE);
+    return this;
   }
 }

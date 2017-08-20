@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="44dp"
+      android:background="@drawable/bg_input_login">
+
+    <com.chaoneng.ilooknews.widget.ClearEditText
+        android:id="@+id/id_page2_username"
+        android:layout_width="0dp"
+        android:layout_height="44dp"
+        android:layout_weight="1"
+        android:background="@null"
+        android:gravity="center_vertical"
+        android:hint="@string/hint_input_phone"
+        android:inputType="phone"
+        android:maxLength="11"
+        android:maxLines="1"
+        android:paddingLeft="@dimen/input_text_padding"
+        android:paddingRight="@dimen/input_text_padding"
+        android:textColorHint="@color/three_text_color"
+        android:textSize="@dimen/font_main" />
+
+    <View
+        android:layout_width="0.5dp"
+        android:layout_height="25dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginRight="5dp"
+        android:background="@drawable/divider_line_vertical" />
+
+    <TextView
+        android:id="@+id/tv_send_msg"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:paddingLeft="@dimen/padding_small"
+        android:paddingRight="@dimen/padding_small"
+        android:text="@string/msg_code_send"
+        android:textColor="@color/main_color" />
+  </LinearLayout>
+
+
+  <com.chaoneng.ilooknews.widget.PasswordEditText
+      android:id="@+id/id_page2_pwd"
+      android:layout_width="match_parent"
+      android:layout_height="44dp"
+      android:layout_marginTop="@dimen/padding_normal"
+      android:background="@drawable/bg_input_login"
+      android:gravity="center_vertical"
+      android:hint="@string/hint_input_password"
+      android:inputType="textPassword"
+      android:maxLines="1"
+      android:paddingLeft="@dimen/input_text_padding"
+      android:paddingRight="@dimen/input_text_padding"
+      android:textColorHint="@color/three_text_color"
+      android:textSize="@dimen/font_main" />
+
+</LinearLayout>

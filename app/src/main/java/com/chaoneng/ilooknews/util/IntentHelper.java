@@ -5,6 +5,7 @@ import android.content.Intent;
 import com.chaoneng.ilooknews.module.home.activity.NotifyActivity;
 import com.chaoneng.ilooknews.module.login.LoginActivity;
 import com.chaoneng.ilooknews.module.user.activity.FeedBackActivity;
+import com.chaoneng.ilooknews.module.user.activity.ProfileActivity;
 import com.chaoneng.ilooknews.module.user.activity.SettingActivity;
 import com.chaoneng.ilooknews.module.video.activity.VideoDetailActivity;
 
@@ -48,5 +49,12 @@ public class IntentHelper {
    */
   public static void openLoginPage(Context context) {
     context.startActivity(new Intent(context, LoginActivity.class));
+  }
+
+  /**
+   * 跳转编辑资料界面
+   */
+  public static void openProfilePage(Context context) {
+    context.startActivity(new Intent(context, ProfileActivity.class));
   }
 }

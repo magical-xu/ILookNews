@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+  <com.chaoneng.ilooknews.module.user.widget.SettingItemView
+      android:id="@+id/id_modify_avatar"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="@dimen/padding_small" />
+
+  <com.chaoneng.ilooknews.module.user.widget.SettingItemView
+      android:id="@+id/id_modify_nick"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content" />
+
+  <com.chaoneng.ilooknews.module.user.widget.SettingItemView
+      android:id="@+id/id_modify_sign"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="@dimen/padding_small" />
+
+</LinearLayout>
