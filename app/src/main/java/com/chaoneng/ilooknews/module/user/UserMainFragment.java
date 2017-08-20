@@ -109,7 +109,7 @@ public class UserMainFragment extends BaseFragment {
         IntentHelper.openFeedbackPage(getActivity());
         break;
       case R.id.id_item_setting:
-        ToastUtils.showShort("系统设置");
+        IntentHelper.openSettingPage(getActivity());
         break;
       case R.id.credit_topic:
         ToastUtils.showShort("动态");

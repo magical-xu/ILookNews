@@ -1,5 +1,7 @@
 package com.chaoneng.ilooknews;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.widget.FrameLayout;
@@ -40,6 +42,12 @@ public class MainActivity extends BaseActivity {
   private VideoMainFragment videoMainFragment;
   private FocusMainFragment careMainFragment;
   private UserMainFragment userMainFragment;
+
+  public static void startAction(Activity activity) {
+    Intent intent = new Intent(activity, MainActivity.class);
+    activity.startActivity(intent);
+    activity.overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+  }
 
   @Override
   public int getLayoutId() {

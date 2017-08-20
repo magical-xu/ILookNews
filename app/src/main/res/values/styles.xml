@@ -13,9 +13,15 @@
     <item name="android:configChanges">
       orientation|screenSize|smallestScreenSize|keyboard|keyboardHidden
     </item>
-    <!--<item name="android:screenOrientation">portrait</item>-->
+    <item name="android:screenOrientation">portrait</item>
     <item name="android:exported">false</item>
     <item name="android:windowSoftInputMode">adjustResize|stateHidden</item>
+  </style>
+
+  <style name="SplashActivityTheme" parent="SimpleActivityTheme">
+    <item name="android:windowFullscreen">true</item>
+    <item name="android:windowIsTranslucent">true</item>
+    <item name="android:windowContentOverlay">@null</item>
   </style>
 
 

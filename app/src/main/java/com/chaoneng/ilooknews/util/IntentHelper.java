@@ -3,7 +3,9 @@ package com.chaoneng.ilooknews.util;
 import android.content.Context;
 import android.content.Intent;
 import com.chaoneng.ilooknews.module.home.activity.NotifyActivity;
+import com.chaoneng.ilooknews.module.login.LoginActivity;
 import com.chaoneng.ilooknews.module.user.activity.FeedBackActivity;
+import com.chaoneng.ilooknews.module.user.activity.SettingActivity;
 import com.chaoneng.ilooknews.module.video.activity.VideoDetailActivity;
 
 /**
@@ -32,5 +34,19 @@ public class IntentHelper {
    */
   public static void openVideoDetailPage(Context context, String vid) {
     VideoDetailActivity.newInstance(context, vid);
+  }
+
+  /**
+   * 跳转系统设置界面
+   */
+  public static void openSettingPage(Context context) {
+    context.startActivity(new Intent(context, SettingActivity.class));
+  }
+
+  /**
+   * 跳转登录界面
+   */
+  public static void openLoginPage(Context context) {
+    context.startActivity(new Intent(context, LoginActivity.class));
   }
 }

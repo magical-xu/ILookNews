@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+  <ImageView
+      android:id="@+id/iv_finish"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="right"
+      android:layout_marginRight="@dimen/padding_large"
+      android:layout_marginTop="@dimen/padding_small"
+      android:src="@drawable/ic_finish" />
+
+  <ImageView
+      android:layout_width="80dp"
+      android:layout_height="80dp"
+      android:layout_gravity="center_horizontal"
+      android:layout_marginTop="@dimen/padding_large"
+      android:src="@mipmap/ic_logo" />
+
+  <TextView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center_horizontal"
+      android:layout_marginTop="@dimen/padding_normal"
+      android:text="@string/login_by_pwd"
+      android:textSize="@dimen/font_big" />
+
+  <ViewFlipper
+      android:id="@+id/id_toggle"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content">
+
+
+  </ViewFlipper>
+
+  <TextView
+      android:id="@+id/tv_login"
+      android:layout_width="match_parent"
+      android:layout_height="44dp"
+      android:layout_marginLeft="@dimen/padding_large"
+      android:layout_marginRight="@dimen/padding_large"
+      android:layout_marginTop="@dimen/padding_large"
+      android:background="@drawable/bg_btn_login"
+      android:gravity="center"
+      android:text="@string/login_text"
+      android:textColor="@color/white"
+      android:textSize="@dimen/font_big" />
+
+  <TextView
+      android:id="@+id/tv_change_login_type"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center_horizontal"
+      android:layout_marginTop="@dimen/padding_large"
+      android:padding="@dimen/padding_small"
+      android:text="@string/login_without_pwd_text"
+      android:textColor="@color/main_color"
+      android:textSize="@dimen/font_main" />
+
+  <Space
+      android:layout_width="match_parent"
+      android:layout_height="0dp"
+      android:layout_weight="1" />
+
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:gravity="center"
+      android:orientation="horizontal"
+      android:paddingBottom="@dimen/padding_large">
+
+    <ImageView
+        android:id="@+id/id_we_chat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="44dp"
+        android:src="@drawable/img_login_wechat" />
+
+    <ImageView
+        android:id="@+id/id_qq"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="44dp"
+        android:src="@drawable/img_login_qq" />
+
+    <ImageView
+        android:id="@+id/id_wei_bo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/img_login_weibo" />
+  </LinearLayout>
+</LinearLayout>

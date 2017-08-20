@@ -1,8 +1,11 @@
 package com.chaoneng.ilooknews.module.home.fragment;
 
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
+import butterknife.BindView;
 import com.chaoneng.ilooknews.R;
 import com.chaoneng.ilooknews.base.BaseFragment;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 
 import static com.chaoneng.ilooknews.AppConstant.PAGE_TYPE;
 
@@ -12,6 +15,11 @@ import static com.chaoneng.ilooknews.AppConstant.PAGE_TYPE;
  */
 
 public class NewsListFragment extends BaseFragment {
+
+  @BindView(R.id.id_recycler) RecyclerView mRecyclerView;
+  @BindView(R.id.id_refresh_layout) SmartRefreshLayout mRefreshLayout;
+
+
 
   public static NewsListFragment newInstance(String type) {
     NewsListFragment fragment = new NewsListFragment();
@@ -38,6 +46,6 @@ public class NewsListFragment extends BaseFragment {
 
   @Override
   protected int getLayoutName() {
-    return R.layout.fragment_home_news_list;
+    return R.layout.simple_recycler_list;
   }
 }

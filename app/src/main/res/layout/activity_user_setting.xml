@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:scrollbars="none">
+
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="vertical">
+
+    <com.chaoneng.ilooknews.module.user.widget.SettingItemView
+        android:id="@+id/id_edit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <include layout="@layout/include_divider_rect" />
+
+    <com.chaoneng.ilooknews.module.user.widget.SettingItemView
+        android:id="@+id/id_toggle_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <include layout="@layout/include_left_margin_divider" />
+
+    <com.chaoneng.ilooknews.module.user.widget.SettingItemView
+        android:id="@+id/id_clear_cache"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <include layout="@layout/include_left_margin_divider" />
+
+    <com.chaoneng.ilooknews.module.user.widget.SettingItemView
+        android:id="@+id/id_wifi"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <include layout="@layout/include_divider_rect" />
+
+    <com.chaoneng.ilooknews.module.user.widget.SettingItemView
+        android:id="@+id/id_agreement"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <include layout="@layout/include_left_margin_divider" />
+
+    <com.chaoneng.ilooknews.module.user.widget.SettingItemView
+        android:id="@+id/id_version"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <include layout="@layout/include_left_margin_divider" />
+
+    <com.chaoneng.ilooknews.module.user.widget.SettingItemView
+        android:id="@+id/id_about"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <include layout="@layout/include_divider_rect" />
+
+    <TextView
+        android:id="@+id/tv_logout"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_margin="@dimen/padding_normal"
+        android:background="@drawable/bg_logout"
+        android:gravity="center"
+        android:text="@string/setting_logout"
+        android:textColor="@color/white"
+        android:textSize="16sp" />
+  </LinearLayout>
+
+</ScrollView>
