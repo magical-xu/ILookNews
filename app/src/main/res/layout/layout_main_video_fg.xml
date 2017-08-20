@@ -1,14 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:background="@color/red"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:orientation="vertical">
 
-  <TextView
-      android:text="測試"
-      android:textSize="@dimen/font_large"
-      android:layout_width="wrap_content"
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:gravity="center_vertical"
+      android:orientation="horizontal">
+
+    <com.flyco.tablayout.SlidingTabLayout
+        android:id="@+id/sliding_tabs"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_weight="1"
+        app:tl_indicator_color="@color/main_color"
+        app:tl_indicator_height="2dp"
+        app:tl_indicator_margin_bottom="4dp"
+        app:tl_indicator_width="@dimen/padding_normal"
+        app:tl_tab_width="48dp"
+        app:tl_textSelectColor="@color/main_color"
+        app:tl_textUnselectColor="@color/three_text_color"
+        app:tl_textsize="@dimen/font_main" />
+
+    <ImageView
+        android:id="@+id/btn_search"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/padding_small"
+        android:src="@drawable/ic_search_video" />
+  </LinearLayout>
+
+  <android.support.v4.view.ViewPager
+      android:id="@+id/view_pager"
+      android:layout_width="match_parent"
       android:layout_height="wrap_content" />
 
 </LinearLayout>

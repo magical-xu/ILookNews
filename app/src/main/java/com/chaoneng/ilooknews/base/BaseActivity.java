@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import butterknife.ButterKnife;
 import com.chaoneng.ilooknews.R;
 import com.chaoneng.ilooknews.widget.ILookTitleBar;
+import fm.jiecao.jcvideoplayer_lib.JCVideoPlayer;
 
 /**
  * Created by magical on 17/8/14.
@@ -79,8 +80,7 @@ public abstract class BaseActivity extends AppCompatActivity {
    */
   private void checkAnimation() {
     if (showPageAnimation()) {
-      pageAnimationFromBottom =
-          getIntent().getBooleanExtra(PAGE_ANIMATION_FROM_BOTTOM, false);
+      pageAnimationFromBottom = getIntent().getBooleanExtra(PAGE_ANIMATION_FROM_BOTTOM, false);
       if (!pageAnimationFromBottom) {
         overridePendingTransition(R.anim.page_enter_right, R.anim.page_exit_scale);
       } else {
@@ -111,5 +111,13 @@ public abstract class BaseActivity extends AppCompatActivity {
         setContentView(view);
       }
     }
+  }
+
+  @Override
+  public void onBackPressed() {
+    if (JCVideoPlayer.backPress()) {
+      return;
+    }
+    super.onBackPressed();
   }
 }

@@ -12,9 +12,10 @@
       android:label="@string/app_name"
       android:supportsRtl="true"
       android:theme="@style/AppTheme">
+
     <activity
         android:name=".MainActivity"
-        android:configChanges="orientation|keyboard|keyboardHidden|screenSize|smallestScreenSize">
+        android:theme="@style/SimpleActivityTheme">
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />
 
@@ -24,7 +25,14 @@
 
     <activity
         android:name=".module.home.activity.NotifyActivity"
-        android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize" />
+        android:theme="@style/SimpleActivityTheme" />
+    <activity
+        android:name=".module.user.activity.FeedBackActivity"
+        android:theme="@style/SimpleActivityTheme" />
+    <activity
+        android:name=".module.video.activity.VideoDetailActivity"
+        android:theme="@style/SimpleActivityTheme" />
+
   </application>
 
 </manifest>

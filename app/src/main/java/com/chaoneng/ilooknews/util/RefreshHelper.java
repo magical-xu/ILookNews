@@ -1,5 +1,6 @@
 package com.chaoneng.ilooknews.util;
 
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -22,6 +23,7 @@ public abstract class RefreshHelper<T> {
   private RecyclerView mRecyclerView;
 
   private int curPage;
+  private boolean rect;   // ItemDivider user rect
 
   /**
    * 刷新好帮手
@@ -32,9 +34,15 @@ public abstract class RefreshHelper<T> {
    */
   public RefreshHelper(SmartRefreshLayout mRefreshLayout, BaseQuickAdapter mAdapter,
       RecyclerView mRecyclerView) {
+    this(mRefreshLayout, mAdapter, mRecyclerView, false);
+  }
+
+  public RefreshHelper(SmartRefreshLayout mRefreshLayout, BaseQuickAdapter mAdapter,
+      RecyclerView mRecyclerView, boolean rect) {
     this.mRefreshLayout = mRefreshLayout;
     this.mAdapter = mAdapter;
     this.mRecyclerView = mRecyclerView;
+    this.rect = rect;
     init();
   }
 
@@ -65,7 +73,9 @@ public abstract class RefreshHelper<T> {
     mRecyclerView.setLayoutManager(manager);
     mRecyclerView.setHasFixedSize(true);
     mRecyclerView.addItemDecoration(
-        DividerHelper.drawVerticalLine(mRecyclerView.getContext(), 0, false, false));
+        rect ? DividerHelper.newRvDividerRect(mRecyclerView.getContext())
+            : DividerHelper.drawVerticalLine(mRecyclerView.getContext(), 0, false, false));
+    mRecyclerView.setItemAnimator(new DefaultItemAnimator());
   }
 
   public void beginLoadData() {

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+  <TextView
+      android:id="@+id/tv_title"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="@dimen/padding_normal"
+      android:paddingLeft="@dimen/padding_normal"
+      android:paddingRight="@dimen/padding_normal"
+      android:textColor="@color/one_text_color"
+      android:textSize="@dimen/font_main"
+      tools:text="@string/test_text_long" />
+
+  <TextView
+      android:id="@+id/tv_play_num"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="@dimen/padding_small"
+      android:paddingLeft="@dimen/padding_normal"
+      android:paddingRight="@dimen/padding_normal"
+      android:textColor="@color/three_text_color"
+      android:textSize="@dimen/font_small"
+      tools:text="@string/test_time" />
+
+  <LinearLayout
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:orientation="horizontal"
+      android:paddingLeft="@dimen/padding_normal">
+
+    <TextView
+        android:id="@+id/tv_up"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/ic_up"
+        android:drawablePadding="@dimen/padding_tiny"
+        android:gravity="center"
+        android:paddingBottom="@dimen/padding_small"
+        android:paddingRight="@dimen/padding_small"
+        android:paddingTop="@dimen/padding_small"
+        tools:text="23" />
+
+    <TextView
+        android:id="@+id/tv_down"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/ic_down"
+        android:drawablePadding="4dp"
+        android:gravity="center"
+        android:paddingBottom="@dimen/padding_small"
+        android:paddingRight="@dimen/padding_small"
+        android:paddingTop="@dimen/padding_small"
+        tools:text="23" />
+  </LinearLayout>
+
+  <LinearLayout
+      android:paddingLeft="@dimen/padding_normal"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center_vertical"
+      android:layout_marginTop="8dp"
+      android:paddingBottom="@dimen/padding_small"
+      android:orientation="horizontal">
+
+    <com.chaoneng.ilooknews.widget.image.HeadImageView
+        android:id="@+id/id_header_iv"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center_vertical"
+        tools:background="#f00" />
+
+    <TextView
+        android:id="@+id/id_header_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="12dp"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:maxLines="1"
+        android:textColor="@color/one_text_color"
+        android:textSize="@dimen/font_main"
+        tools:text="magical" />
+
+    <Space
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1" />
+
+    <TextView
+        android:id="@+id/id_header_focus"
+        android:layout_width="64dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginRight="8dp"
+        android:background="@drawable/bg_btn_focus"
+        android:gravity="center"
+        android:text="@string/focus_add"
+        android:textColor="@color/main_color"
+        android:textSize="@dimen/font_normal" />
+  </LinearLayout>
+</LinearLayout>

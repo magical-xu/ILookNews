@@ -106,7 +106,7 @@ public class UserMainFragment extends BaseFragment {
         ToastUtils.showShort("我要爆料");
         break;
       case R.id.id_item_feedback:
-        ToastUtils.showShort("用户反馈");
+        IntentHelper.openFeedbackPage(getActivity());
         break;
       case R.id.id_item_setting:
         ToastUtils.showShort("系统设置");

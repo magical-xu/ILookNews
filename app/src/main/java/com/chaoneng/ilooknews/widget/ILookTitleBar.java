@@ -28,6 +28,8 @@ public class ILookTitleBar extends RelativeLayout implements View.OnClickListene
   protected TextView mRightText;
   protected ImageView mRightImage;
 
+  protected View mDivider;
+
   private TitleCallback listener;
 
   public ILookTitleBar(Context context) {
@@ -60,6 +62,8 @@ public class ILookTitleBar extends RelativeLayout implements View.OnClickListene
 
     mRightText = findViewById(R.id.tv_title_right);
     mRightImage = findViewById(R.id.iv_title_right);
+
+    mDivider = findViewById(R.id.id_divider_bottom);
   }
 
   private void setTitleEvent() {
@@ -69,12 +73,13 @@ public class ILookTitleBar extends RelativeLayout implements View.OnClickListene
     mLeftCircle.setOnClickListener(this);
   }
 
-  public void setTitle(String title) {
+  public ILookTitleBar setTitle(String title) {
     if (TextUtils.isEmpty(title)) {
       mTitleText.setVisibility(View.GONE);
     } else {
       mTitleText.setText(title);
     }
+    return this;
   }
 
   public ILookTitleBar setTitleImage(int resId) {
@@ -84,9 +89,10 @@ public class ILookTitleBar extends RelativeLayout implements View.OnClickListene
     return this;
   }
 
-  public void setLeftImage(int resId) {
+  public ILookTitleBar setLeftImage(int resId) {
     mLeftImage.setVisibility(View.VISIBLE);
     mLeftImage.setImageResource(resId);
+    return this;
   }
 
   public ILookTitleBar hideLeftImage() {
@@ -94,13 +100,26 @@ public class ILookTitleBar extends RelativeLayout implements View.OnClickListene
     return this;
   }
 
-  public void setRightText(String text) {
+  public ILookTitleBar hideDivider() {
+    mDivider.setVisibility(View.GONE);
+    return this;
+  }
+
+  public ILookTitleBar setLeftCircle(String url) {
+    mLeftCircle.setVisibility(View.VISIBLE);
+    mLeftImage.setVisibility(View.GONE);
+    mLeftCircle.setHeadImage(url);
+    return this;
+  }
+
+  public ILookTitleBar setRightText(String text) {
     if (TextUtils.isEmpty(text)) {
       mRightText.setVisibility(View.GONE);
     } else {
       mRightText.setVisibility(View.VISIBLE);
       mRightText.setText(text);
     }
+    return this;
   }
 
   public ILookTitleBar setRightImage(int resId) {

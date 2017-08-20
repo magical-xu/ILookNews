@@ -13,6 +13,8 @@
   <string name="sub_tab_music">音乐</string>
   <string name="sub_tab_social">社会</string>
 
+  <string name="tips_input_feed_and_contact">请输入反馈内容和联系方式后提交！</string>
+
 
   <!--User -->
   <string name="user_feeds">动态</string>

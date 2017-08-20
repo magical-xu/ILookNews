@@ -9,6 +9,14 @@
   </style>
 
 
+  <style name="SimpleActivityTheme" parent="AppTheme">
+    <item name="android:configChanges">
+      orientation|screenSize|smallestScreenSize|keyboard|keyboardHidden
+    </item>
+    <!--<item name="android:screenOrientation">portrait</item>-->
+    <item name="android:exported">false</item>
+    <item name="android:windowSoftInputMode">adjustResize|stateHidden</item>
+  </style>
 
 
 </resources>

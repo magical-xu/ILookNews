@@ -75,4 +75,8 @@ public class ILookApplication extends Application {
   public static Context getAppContext() {
     return INSTANCE;
   }
+
+  public static String getLocalString(int resId) {
+    return getAppContext().getString(resId);
+  }
 }
