@@ -2,11 +2,8 @@ package com.chaoneng.ilooknews;
 
 import android.app.Application;
 import android.content.Context;
-import com.bilibili.boxing.BoxingCrop;
-import com.bilibili.boxing.BoxingMediaLoader;
 import com.chaoneng.ilooknews.api.Constant;
-import com.chaoneng.ilooknews.library.boxing.BoxingGlideLoader;
-import com.chaoneng.ilooknews.library.boxing.BoxingUcrop;
+import com.chaoneng.ilooknews.library.boxing.BoxingHelper;
 import com.chaoneng.ilooknews.net.client.NetRequest;
 import com.facebook.stetho.Stetho;
 import com.magicalxu.library.Utils;
@@ -73,8 +70,7 @@ public class ILookApplication extends Application {
     Stetho.initializeWithDefaults(this);
 
     // init boxing
-    BoxingMediaLoader.getInstance().init(new BoxingGlideLoader());
-    BoxingCrop.getInstance().init(new BoxingUcrop());
+    BoxingHelper.init();
 
     // init retrofit client
     NetRequest.getInstance().init(this, Constant.BASE_URL);
