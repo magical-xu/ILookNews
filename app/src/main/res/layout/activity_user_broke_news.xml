@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/padding_normal"
+    android:paddingRight="@dimen/padding_normal"
+    android:paddingTop="@dimen/padding_normal">
+
+  <com.chaoneng.ilooknews.widget.text.CountEditText
+      android:id="@+id/id_count_edit"
+      android:layout_width="match_parent"
+      android:layout_height="230dp" />
+
+  <com.chaoneng.ilooknews.widget.selector.ImageSelector
+      android:id="@+id/id_image_selector"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="@dimen/padding_normal"
+      android:background="@color/white"
+      android:orientation="vertical"
+      android:paddingLeft="@dimen/padding_small"
+      android:paddingRight="@dimen/padding_small"
+      android:paddingTop="@dimen/padding_tiny" />
+
+  <TextView
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_margin="@dimen/padding_large"
+      android:gravity="center"
+      android:text="@string/hint_broke_news" />
+</LinearLayout>

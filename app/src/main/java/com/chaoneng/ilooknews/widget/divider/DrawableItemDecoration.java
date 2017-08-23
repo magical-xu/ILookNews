@@ -1,5 +1,6 @@
 package com.chaoneng.ilooknews.widget.divider;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Rect;
@@ -20,6 +21,8 @@ public class DrawableItemDecoration extends RecyclerView.ItemDecoration {
   private boolean isShowLast;
   private boolean isVertical;
   private int dividerMargin;
+
+  private final Rect mBounds = new Rect();
 
   public DrawableItemDecoration(Context context, int dividerDrawableId, int dividerHeight,
       int dividerMargin) {
@@ -86,35 +89,65 @@ public class DrawableItemDecoration extends RecyclerView.ItemDecoration {
     }
   }
 
-  private void drawHorizontal(Canvas c, RecyclerView parent) {
-    final int top = parent.getPaddingTop();
-    final int bottom = parent.getHeight() - parent.getPaddingBottom();
+  @SuppressLint("NewApi")
+  private void drawHorizontal(Canvas canvas, RecyclerView parent) {
+    //final int top = parent.getPaddingTop();
+    //final int bottom = parent.getHeight() - parent.getPaddingBottom();
+    //
+    //for (int i = 0; i < parent.getChildCount(); i++) {
+    //  final View child = parent.getChildAt(i);
+    //  final RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) child.getLayoutParams();
+    //
+    //  //todo: isShowFirst, isShowLast
+    //
+    //  final int left =
+    //      child.getRight() + params.rightMargin + Math.round(ViewCompat.getTranslationX(child));
+    //  final int right = left + dividerHeight;
+    //  dividerDrawable.setBounds(left, top, right, bottom);
+    //  dividerDrawable.draw(c);
+    //}
 
-    for (int i = 0; i < parent.getChildCount(); i++) {
-      final View child = parent.getChildAt(i);
-      final RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) child.getLayoutParams();
-
-      //todo: isShowFirst, isShowLast
-
-      final int left =
-          child.getRight() + params.rightMargin + Math.round(ViewCompat.getTranslationX(child));
-      final int right = left + dividerHeight;
-      dividerDrawable.setBounds(left, top, right, bottom);
-      dividerDrawable.draw(c);
+    canvas.save();
+    final int top;
+    final int bottom;
+    if (parent.getClipToPadding()) {
+      top = parent.getPaddingTop();
+      bottom = parent.getHeight() - parent.getPaddingBottom();
+      canvas.clipRect(parent.getPaddingLeft(), top, parent.getWidth() - parent.getPaddingRight(),
+          bottom);
+    } else {
+      top = 0;
+      bottom = parent.getHeight();
     }
+
+    final int childCount = parent.getChildCount();
+    for (int i = 0; i < childCount; i++) {
+      final View child = parent.getChildAt(i);
+      parent.getLayoutManager().getDecoratedBoundsWithMargins(child, mBounds);
+      final int right = mBounds.right + Math.round(child.getTranslationX()) + dividerHeight;
+      final int left = right - dividerDrawable.getIntrinsicWidth();
+      dividerDrawable.setBounds(left, top, right, bottom);
+      dividerDrawable.draw(canvas);
+    }
+    canvas.restore();
   }
 
   @Override
   public void getItemOffsets(Rect outRect, View view, RecyclerView parent,
       RecyclerView.State state) {
-    int position = parent.getChildAdapterPosition(view);
-    int count = state.getItemCount();
-
-    //只有第一行需要top，避免space = top+bottom
-    if (isShowFirst && position == 0) {
-      outRect.top = dividerHeight;
+    //int position = parent.getChildAdapterPosition(view);
+    //int count = state.getItemCount();
+    //
+    ////只有第一行需要top，避免space = top+bottom
+    //if (isShowFirst && position == 0) {
+    //  outRect.top = dividerHeight;
+    //}
+    //
+    //outRect.bottom = dividerHeight;
+    if (isVertical) {
+      outRect.set(0, 0, 0, dividerDrawable.getIntrinsicHeight());
+    } else {
+      outRect.set(0, 0, dividerDrawable.getIntrinsicWidth(), 0);
     }
-
-    outRect.bottom = dividerHeight;
   }
 }

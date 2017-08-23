@@ -103,7 +103,7 @@ public class UserMainFragment extends BaseFragment {
         ToastUtils.showShort("我的收藏");
         break;
       case R.id.id_item_broke:
-        ToastUtils.showShort("我要爆料");
+        IntentHelper.openBrokePage(getActivity());
         break;
       case R.id.id_item_feedback:
         IntentHelper.openFeedbackPage(getActivity());

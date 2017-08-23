@@ -25,4 +25,12 @@
     <item name="android:clickable">true</item>
     <item name="android:descendantFocusability">blocksDescendants</item>
   </style>
+
+  <style name="style_common_edit_text">
+    <item name="android:textColor">@color/one_text_color</item>
+    <item name="android:textColorHint">@color/three_text_color</item>
+    <item name="android:textSize">@dimen/font_main</item>
+    <item name="android:paddingLeft">@dimen/input_text_padding</item>
+    <item name="android:paddingRight">@dimen/input_text_padding</item>
+  </style>
 </resources>

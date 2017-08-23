@@ -10,6 +10,8 @@
       android:layout_height="wrap_content"
       android:layout_marginTop="@dimen/padding_small" />
 
+  <include layout="@layout/include_left_margin_divider" />
+
   <com.chaoneng.ilooknews.module.user.widget.SettingItemView
       android:id="@+id/id_modify_nick"
       android:layout_width="match_parent"

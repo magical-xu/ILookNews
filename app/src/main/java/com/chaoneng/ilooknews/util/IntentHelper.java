@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import com.chaoneng.ilooknews.module.home.activity.NotifyActivity;
 import com.chaoneng.ilooknews.module.login.LoginActivity;
+import com.chaoneng.ilooknews.module.user.activity.BrokeActivity;
 import com.chaoneng.ilooknews.module.user.activity.FeedBackActivity;
 import com.chaoneng.ilooknews.module.user.activity.ProfileActivity;
 import com.chaoneng.ilooknews.module.user.activity.SettingActivity;
@@ -56,5 +57,12 @@ public class IntentHelper {
    */
   public static void openProfilePage(Context context) {
     context.startActivity(new Intent(context, ProfileActivity.class));
+  }
+
+  /**
+   * 跳转爆料界面
+   */
+  public static void openBrokePage(Context context) {
+    context.startActivity(new Intent(context, BrokeActivity.class));
   }
 }

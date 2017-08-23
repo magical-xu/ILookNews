@@ -14,10 +14,7 @@
       android:inputType="phone"
       android:maxLength="11"
       android:maxLines="1"
-      android:paddingLeft="@dimen/input_text_padding"
-      android:paddingRight="@dimen/input_text_padding"
-      android:textColorHint="@color/three_text_color"
-      android:textSize="@dimen/font_main" />
+      style="@style/style_common_edit_text" />
 
   <com.chaoneng.ilooknews.widget.PasswordEditText
       android:id="@+id/id_page1_pwd"
@@ -28,10 +25,7 @@
       android:gravity="center_vertical"
       android:hint="@string/hint_input_password"
       android:inputType="textPassword"
-      android:paddingLeft="@dimen/input_text_padding"
-      android:paddingRight="@dimen/input_text_padding"
       android:maxLines="1"
-      android:textColorHint="@color/three_text_color"
-      android:textSize="@dimen/font_main" />
+      style="@style/style_common_edit_text" />
 
 </LinearLayout>

@@ -32,4 +32,9 @@ public class DividerHelper {
     return new DrawableItemDecoration(context, true, R.color.main_divider_color,
         CompatUtil.getDimension(context, R.dimen.divide_line_width), marginDp, top, bottom);
   }
+
+  public static DrawableItemDecoration drawHorizontalRect(Context context) {
+    return new DrawableItemDecoration(context, false, R.color.main_divider_color,
+        CompatUtil.getDimension(context, R.dimen.divide_block_width), 0, false, false);
+  }
 }

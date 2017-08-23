@@ -60,6 +60,10 @@
     <activity
         android:name=".module.user.activity.ProfileActivity"
         android:theme="@style/SimpleActivityTheme" />
+    <activity
+        android:name=".module.user.activity.BrokeActivity"
+        android:configChanges="orientation|screenSize|keyboard|keyboardHidden|smallestScreenSize"
+        android:theme="@style/SimpleActivityTheme" />
   </application>
 
 </manifest>
