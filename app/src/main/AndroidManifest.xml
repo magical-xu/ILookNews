@@ -41,28 +41,43 @@
 
     <activity
         android:name=".MainActivity"
+        android:screenOrientation="portrait"
         android:theme="@style/SimpleActivityTheme" />
     <activity
         android:name=".module.home.activity.NotifyActivity"
+        android:screenOrientation="portrait"
         android:theme="@style/SimpleActivityTheme" />
     <activity
         android:name=".module.user.activity.FeedBackActivity"
+        android:screenOrientation="portrait"
         android:theme="@style/SimpleActivityTheme" />
     <activity
         android:name=".module.video.activity.VideoDetailActivity"
+        android:screenOrientation="portrait"
         android:theme="@style/SimpleActivityTheme" />
     <activity
         android:name=".module.user.activity.SettingActivity"
+        android:screenOrientation="portrait"
         android:theme="@style/SimpleActivityTheme" />
     <activity
         android:name=".module.login.LoginActivity"
+        android:screenOrientation="portrait"
         android:theme="@style/SimpleActivityTheme" />
     <activity
         android:name=".module.user.activity.ProfileActivity"
+        android:screenOrientation="portrait"
         android:theme="@style/SimpleActivityTheme" />
     <activity
         android:name=".module.user.activity.BrokeActivity"
-        android:configChanges="orientation|screenSize|keyboard|keyboardHidden|smallestScreenSize"
+        android:screenOrientation="portrait"
+        android:theme="@style/SimpleActivityTheme" />
+    <activity
+        android:name=".module.search.SearchActivity"
+        android:screenOrientation="portrait"
+        android:theme="@style/SimpleActivityTheme" />
+    <activity
+        android:name=".module.user.activity.UserCenterActivity"
+        android:screenOrientation="portrait"
         android:theme="@style/SimpleActivityTheme" />
   </application>
 

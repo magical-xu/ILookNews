@@ -20,7 +20,6 @@ import com.chaoneng.ilooknews.widget.adapter.BaseFragmentStateAdapter;
 import com.chaoneng.ilooknews.widget.adapter.OnPageChangeListener;
 import com.chaoneng.ilooknews.widget.image.HeadImageView;
 import com.flyco.tablayout.SlidingTabLayout;
-import com.magicalxu.library.blankj.ToastUtils;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -82,12 +81,12 @@ public class HomeMainFragment extends BaseFragment implements OnChannelListener 
 
   @OnClick(R.id.ll_search)
   public void toSearchPage() {
-    ToastUtils.showShort("搜索");
+    IntentHelper.openSearchPage(getActivity());
   }
 
   @OnClick(R.id.iv_avatar)
   public void toUserCenterPage() {
-    ToastUtils.showShort("个人中心");
+    IntentHelper.openUserCenterPage(getActivity());
   }
 
   @OnClick(R.id.iv_notify)

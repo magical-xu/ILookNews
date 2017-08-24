@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingLeft="@dimen/padding_normal"
+    android:paddingRight="@dimen/padding_normal"
+    android:paddingTop="@dimen/padding_large">
+
+  <com.chaoneng.ilooknews.widget.image.HeadImageView
+      android:id="@+id/iv_avatar"
+      android:layout_width="40dp"
+      android:layout_height="40dp"
+      android:layout_marginRight="@dimen/padding_normal" />
+
+  <TextView
+      android:id="@+id/tv_name"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginBottom="@dimen/padding_small"
+      android:layout_toRightOf="@id/iv_avatar"
+      android:ellipsize="end"
+      android:maxLines="1"
+      android:textColor="@color/one_text_color"
+      tools:text="@string/test_text_short" />
+
+  <TextView
+      android:id="@+id/tv_time"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_alignLeft="@id/tv_name"
+      android:layout_below="@id/tv_name"
+      android:layout_marginBottom="@dimen/padding_small"
+      android:textColor="@color/three_text_color"
+      android:textSize="@dimen/font_small"
+      tools:text="@string/test_time" />
+
+  <TextView
+      android:id="@+id/tv_title"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_below="@id/tv_time"
+      android:textColor="@color/two_text_color"
+      tools:text="@string/test_text_long" />
+
+  <com.google.android.flexbox.FlexboxLayout
+      android:id="@+id/fl_body"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_below="@id/tv_title"
+      android:layout_marginBottom="32dp"
+      android:layout_marginTop="@dimen/padding_normal"
+      app:flexWrap="wrap" />
+</RelativeLayout>

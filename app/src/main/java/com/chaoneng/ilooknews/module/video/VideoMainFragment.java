@@ -11,10 +11,10 @@ import com.chaoneng.ilooknews.base.BaseTitleFragment;
 import com.chaoneng.ilooknews.data.Channel;
 import com.chaoneng.ilooknews.instance.TabManager;
 import com.chaoneng.ilooknews.module.video.fragment.VideoListFragment;
+import com.chaoneng.ilooknews.util.IntentHelper;
 import com.chaoneng.ilooknews.widget.adapter.BaseFragmentAdapter;
 import com.chaoneng.ilooknews.widget.adapter.OnPageChangeListener;
 import com.flyco.tablayout.SlidingTabLayout;
-import com.magicalxu.library.blankj.ToastUtils;
 import fm.jiecao.jcvideoplayer_lib.JCVideoPlayerStandard;
 import java.util.ArrayList;
 import java.util.List;
@@ -81,6 +81,6 @@ public class VideoMainFragment extends BaseTitleFragment {
 
   @OnClick(R.id.btn_search)
   public void onClickSearch() {
-    ToastUtils.showShort("搜索");
+    IntentHelper.openSearchPage(getActivity());
   }
 }

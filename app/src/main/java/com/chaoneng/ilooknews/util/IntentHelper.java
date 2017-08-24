@@ -4,10 +4,12 @@ import android.content.Context;
 import android.content.Intent;
 import com.chaoneng.ilooknews.module.home.activity.NotifyActivity;
 import com.chaoneng.ilooknews.module.login.LoginActivity;
+import com.chaoneng.ilooknews.module.search.SearchActivity;
 import com.chaoneng.ilooknews.module.user.activity.BrokeActivity;
 import com.chaoneng.ilooknews.module.user.activity.FeedBackActivity;
 import com.chaoneng.ilooknews.module.user.activity.ProfileActivity;
 import com.chaoneng.ilooknews.module.user.activity.SettingActivity;
+import com.chaoneng.ilooknews.module.user.activity.UserCenterActivity;
 import com.chaoneng.ilooknews.module.video.activity.VideoDetailActivity;
 
 /**
@@ -64,5 +66,19 @@ public class IntentHelper {
    */
   public static void openBrokePage(Context context) {
     context.startActivity(new Intent(context, BrokeActivity.class));
+  }
+
+  /**
+   * 跳转搜索界面
+   */
+  public static void openSearchPage(Context context) {
+    context.startActivity(new Intent(context, SearchActivity.class));
+  }
+
+  /**
+   * 跳转用户中心界面
+   */
+  public static void openUserCenterPage(Context context) {
+    context.startActivity(new Intent(context, UserCenterActivity.class));
   }
 }

@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:divider="@drawable/divider_line_horizontal"
+    android:orientation="vertical"
+    android:showDividers="middle|end">
+
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="@dimen/title_height"
+      android:background="@color/white">
+    <ImageView
+        android:id="@+id/iv_back"
+        android:layout_width="@dimen/title_btn_width"
+        android:layout_height="match_parent"
+        android:scaleType="center"
+        android:src="@drawable/ic_back_black" />
+
+    <EditText
+        android:id="@+id/et_key"
+        android:layout_width="0dp"
+        android:layout_height="24dp"
+        android:layout_weight="1"
+        android:background="@drawable/bg_search_view4"
+        android:drawableLeft="@drawable/ic_search"
+        android:drawablePadding="@dimen/padding_small"
+        android:hint="@string/hint_news_search"
+        android:paddingLeft="@dimen/padding_small"
+        android:paddingRight="@dimen/padding_small"
+        android:textColorHint="@color/three_text_color"
+        android:textSize="@dimen/font_small" />
+
+    <TextView
+        android:id="@+id/btn_search"
+        android:layout_width="48dp"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="@string/search_text"
+        android:textColor="@color/main_color" />
+  </LinearLayout>
+
+  <com.chaoneng.ilooknews.module.user.widget.SettingItemView
+      android:id="@+id/id_history"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content" />
+
+  <!--<com.chaoneng.ilooknews.app.ui.widget.SettingRowView-->
+  <!--android:id="@+id/srv_history_del"-->
+  <!--style="@style/Srv.PaddingH16"-->
+  <!--custom:srv_main_text="@string/search_history"-->
+  <!--custom:srv_main_text_color="@color/three_text_color"-->
+  <!--custom:srv_icon_right="@drawable/selector_del_history"-->
+  <!--custom:srv_checked="false"-->
+  <!--custom:srv_underline="false"/>-->
+
+  <com.google.android.flexbox.FlexboxLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      custom:dividerDrawableHorizontal="@drawable/divider_line_horizontal"
+      custom:dividerDrawableVertical="@drawable/divider_line_vertical"
+      custom:flexWrap="wrap"
+      custom:showDividerHorizontal="middle"
+      custom:showDividerVertical="middle">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/layout_height_normal"
+        android:gravity="center_vertical"
+        android:paddingLeft="@dimen/padding_small"
+        android:text="@string/test_text_short"
+        android:textColor="@color/one_text_color"
+        custom:layout_flexBasisPercent="49%" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/layout_height_normal"
+        android:gravity="center_vertical"
+        android:paddingLeft="@dimen/padding_small"
+        android:text="@string/test_text_short"
+        android:textColor="@color/one_text_color"
+        custom:layout_flexBasisPercent="49%" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/layout_height_normal"
+        android:gravity="center_vertical"
+        android:paddingLeft="@dimen/padding_small"
+        android:text="@string/test_text_short"
+        android:textColor="@color/one_text_color"
+        custom:layout_flexBasisPercent="49%" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/layout_height_normal"
+        android:gravity="center_vertical"
+        android:paddingLeft="@dimen/padding_small"
+        android:text="@string/test_text_short"
+        android:textColor="@color/one_text_color"
+        custom:layout_flexBasisPercent="49%" />
+  </com.google.android.flexbox.FlexboxLayout>
+
+
+  <com.chaoneng.ilooknews.module.user.widget.SettingItemView
+      android:id="@+id/id_recommend"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content" />
+
+  <!--<com.chaoneng.ilooknews.app.ui.widget.SettingRowView-->
+  <!--android:id="@+id/srv_recommend"-->
+  <!--style="@style/Srv.PaddingH16"-->
+  <!--custom:srv_main_text="@string/search_recommend"-->
+  <!--custom:srv_main_text_color="@color/three_text_color"-->
+  <!--custom:srv_icon_right="@drawable/selector_eyes"-->
+  <!--custom:srv_checked="false"-->
+  <!--custom:srv_underline="false"/>-->
+
+
+  <com.google.android.flexbox.FlexboxLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      custom:dividerDrawableHorizontal="@drawable/divider_line_horizontal"
+      custom:dividerDrawableVertical="@drawable/divider_line_vertical"
+      custom:flexWrap="wrap"
+      custom:showDividerHorizontal="middle"
+      custom:showDividerVertical="middle">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/layout_height_normal"
+        android:gravity="center_vertical"
+        android:paddingLeft="@dimen/padding_small"
+        android:text="@string/test_text_short"
+        android:textColor="@color/one_text_color"
+        custom:layout_flexBasisPercent="49%" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/layout_height_normal"
+        android:gravity="center_vertical"
+        android:paddingLeft="@dimen/padding_small"
+        android:text="@string/test_text_short"
+        android:textColor="@color/one_text_color"
+        custom:layout_flexBasisPercent="49%" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/layout_height_normal"
+        android:gravity="center_vertical"
+        android:paddingLeft="@dimen/padding_small"
+        android:text="@string/test_text_short"
+        android:textColor="@color/one_text_color"
+        custom:layout_flexBasisPercent="49%" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/layout_height_normal"
+        android:gravity="center_vertical"
+        android:paddingLeft="@dimen/padding_small"
+        android:text="@string/test_text_short"
+        android:textColor="@color/one_text_color"
+        custom:layout_flexBasisPercent="49%" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/layout_height_normal"
+        android:gravity="center_vertical"
+        android:paddingLeft="@dimen/padding_small"
+        android:text="@string/test_text_short"
+        android:textColor="@color/one_text_color"
+        custom:layout_flexBasisPercent="49%" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/layout_height_normal"
+        android:gravity="center_vertical"
+        android:paddingLeft="@dimen/padding_small"
+        android:text="@string/test_text_short"
+        android:textColor="@color/one_text_color"
+        custom:layout_flexBasisPercent="49%" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/layout_height_normal"
+        android:gravity="center_vertical"
+        android:paddingLeft="@dimen/padding_small"
+        android:text="@string/test_text_short"
+        android:textColor="@color/one_text_color"
+        custom:layout_flexBasisPercent="49%" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/layout_height_normal"
+        android:gravity="center_vertical"
+        android:paddingLeft="@dimen/padding_small"
+        android:text="@string/test_text_short"
+        android:textColor="@color/one_text_color"
+        custom:layout_flexBasisPercent="49%" />
+
+
+  </com.google.android.flexbox.FlexboxLayout>
+</LinearLayout>

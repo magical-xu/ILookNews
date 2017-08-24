@@ -50,5 +50,5 @@ dependencies {
     exclude group: 'com.squareup.okio'
     exclude group: 'com.squareup.okhttp3'
   }
-  compile 'com.yqritc:recyclerview-flexibledivider:1.4.0'
+  compile 'com.google.android:flexbox:0.3.0'
 }

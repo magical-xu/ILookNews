@@ -5,6 +5,8 @@ import com.chaoneng.ilooknews.api.Constant;
 import com.chaoneng.ilooknews.api.GankModel;
 import com.chaoneng.ilooknews.api.GankService;
 import com.chaoneng.ilooknews.module.focus.data.FocusBean;
+import com.chaoneng.ilooknews.module.user.data.BrokeNewsBean;
+import com.chaoneng.ilooknews.module.user.data.UserStateBean;
 import com.chaoneng.ilooknews.module.video.data.VideoComment;
 import com.chaoneng.ilooknews.module.video.data.VideoListBean;
 import com.chaoneng.ilooknews.net.callback.SimpleJsonCallback;
@@ -59,6 +61,8 @@ public class MockServer<T> {
     int FOCUS = 2;
     int VIDEO_LIST = 3;
     int VIDEO_COMMENT = 4;
+    int USER_STATE = 5;
+    int USER_BROKE = 6;
   }
 
   public void mockGankCall(int page, final int type) {
@@ -89,6 +93,10 @@ public class MockServer<T> {
         return (List<T>) getVideoList();
       case Type.VIDEO_COMMENT:
         return (List<T>) getVideoComment();
+      case Type.USER_STATE:
+        return (List<T>) getUserStateList();
+      case Type.USER_BROKE:
+        return (List<T>) getBrokeNewsList();
     }
     return null;
   }
@@ -132,6 +140,24 @@ public class MockServer<T> {
     List<VideoComment> list = new ArrayList<>();
     for (int i = 0; i < 10; i++) {
       VideoComment user = new VideoComment();
+      list.add(user);
+    }
+    return list;
+  }
+
+  private List<UserStateBean> getUserStateList() {
+    List<UserStateBean> list = new ArrayList<>();
+    for (int i = 0; i < 10; i++) {
+      UserStateBean user = new UserStateBean();
+      list.add(user);
+    }
+    return list;
+  }
+
+  private List<BrokeNewsBean> getBrokeNewsList() {
+    List<BrokeNewsBean> list = new ArrayList<>();
+    for (int i = 0; i < 10; i++) {
+      BrokeNewsBean user = new BrokeNewsBean();
       list.add(user);
     }
     return list;

@@ -11,5 +11,7 @@ public interface AppConstant {
 
   String TEST_AVATAR = "http://wohuizhong.com/pictures/avatar/888";
 
+  String TEST_SIGN = "Life is short, just do IT !";
+
   String PAGE_TYPE = "PAGE_TYPE";
 }

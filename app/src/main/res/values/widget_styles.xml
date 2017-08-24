@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+  <style name="expanded_title">
+    <item name="android:textSize">0sp</item>
+  </style>
+
+  <style name="toolbar">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">48dp</item>
+    <item name="android:background">@drawable/selector_titlebar_btn_bg</item>
+  </style>
+
   <style name="style_recycler_view">
     <item name="android:overScrollMode">never</item>
     <item name="android:background">@color/white</item>

@@ -1,6 +1,7 @@
 package com.chaoneng.ilooknews.module.user.widget;
 
 import android.content.Context;
+import android.support.annotation.ColorRes;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -10,6 +11,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 import com.chaoneng.ilooknews.R;
+import com.chaoneng.ilooknews.util.CompatUtil;
 import com.chaoneng.ilooknews.widget.image.HeadImageView;
 
 /**
@@ -65,6 +67,17 @@ public class SettingItemView extends RelativeLayout {
 
   public SettingItemView hideRightArrow() {
     mRightArrow.setVisibility(View.INVISIBLE);
+    return this;
+  }
+
+  public SettingItemView setRightDrawable(int resId) {
+    mRightArrow.setVisibility(View.VISIBLE);
+    mRightArrow.setImageResource(resId);
+    return this;
+  }
+
+  public SettingItemView setTitleColor(@ColorRes int color) {
+    mLeftTitle.setTextColor(CompatUtil.getColor(getContext(), color));
     return this;
   }
 

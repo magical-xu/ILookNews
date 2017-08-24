@@ -23,7 +23,7 @@ public abstract class RefreshHelper<T> {
   private RecyclerView mRecyclerView;
 
   private int curPage;
-  private boolean rect;   // ItemDivider user rect
+  private boolean rect;   // ItemDivider use rect
 
   /**
    * 刷新好帮手
