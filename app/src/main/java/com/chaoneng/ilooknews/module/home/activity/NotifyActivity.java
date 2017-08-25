@@ -24,6 +24,7 @@ public class NotifyActivity extends BaseActivity {
 
   private NotifyAdapter mAdapter;
   private RefreshHelper mRefreshHelper;
+  private MockServer mockServer;
 
   @Override
   public int getLayoutId() {
@@ -60,10 +61,11 @@ public class NotifyActivity extends BaseActivity {
     mRefreshHelper = new RefreshHelper(mRefreshLayout, mAdapter, mRecyclerView) {
       @Override
       public void onRequest(int page) {
-        MockServer.getInstance().mockGankCall(page, MockServer.Type.NOTIFY);
+        mockServer.mockGankCall(page, MockServer.Type.NOTIFY);
       }
     };
-    MockServer.getInstance().init(mRefreshHelper);
+    mockServer = MockServer.getInstance();
+    mockServer.init(mRefreshHelper);
     mRefreshHelper.beginLoadData();
   }
 }

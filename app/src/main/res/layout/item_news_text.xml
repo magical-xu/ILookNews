@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ll_root"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="@dimen/padding_normal">
+
+  <TextView
+      android:id="@+id/tv_news_title"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginBottom="@dimen/padding_small"
+      android:maxLines="2"
+      android:textColor="@color/one_text_color"
+      android:textSize="@dimen/font_main"
+      tools:text="@string/test_text_long" />
+
+  <!--<com.chaoneng.ilooknews.app.ui.widget.RowViewBottom-->
+  <!--android:id="@+id/rvb"-->
+  <!--android:layout_width="match_parent"-->
+  <!--android:layout_height="wrap_content" />-->
+</LinearLayout>

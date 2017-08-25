@@ -29,12 +29,12 @@ public class MockServer<T> {
   }
 
   public static MockServer getInstance() {
-    return MockServerHolder.instance;
+    return new MockServer();
   }
 
-  private static class MockServerHolder {
-    private static final MockServer instance = new MockServer();
-  }
+  //private static class MockServerHolder {
+  //  private static final MockServer instance = new MockServer();
+  //}
 
   public void init(RefreshHelper helper) {
     this.mRefreshHelper = helper;

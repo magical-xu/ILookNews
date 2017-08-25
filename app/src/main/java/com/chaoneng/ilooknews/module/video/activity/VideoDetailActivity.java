@@ -48,6 +48,7 @@ public class VideoDetailActivity extends BaseActivity {
 
   private VideoCommentAdapter mAdapter;
   private RefreshHelper mRefreshHelper;
+  private MockServer mockServer;
 
   public static void newInstance(Context context, String vid) {
     Intent intent = new Intent(context, VideoDetailActivity.class);
@@ -80,10 +81,11 @@ public class VideoDetailActivity extends BaseActivity {
     mRefreshHelper = new RefreshHelper(mRefreshLayout, mAdapter, mRecyclerView) {
       @Override
       public void onRequest(int page) {
-        MockServer.getInstance().mockGankCall(page, MockServer.Type.VIDEO_COMMENT);
+        mockServer.mockGankCall(page, MockServer.Type.VIDEO_COMMENT);
       }
     };
-    MockServer.getInstance().init(mRefreshHelper);
+    mockServer = MockServer.getInstance();
+    mockServer.init(mRefreshHelper);
     bindHeader();
 
     mRefreshHelper.beginLoadData();

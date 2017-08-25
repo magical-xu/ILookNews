@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rl_root"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/padding_normal">
+
+  <TextView
+      android:id="@+id/tv_news_title"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_toLeftOf="@+id/iv_news_right"
+      android:maxLines="2"
+      android:textColor="@color/one_text_color"
+      android:textSize="@dimen/font_main"
+      tools:text="@string/test_text_long" />
+
+  <!--<com.chaoneng.ilooknews.app.ui.widget.RowViewBottom-->
+  <!--android:id="@+id/rvb"-->
+  <!--android:layout_width="match_parent"-->
+  <!--android:layout_height="wrap_content"-->
+  <!--android:layout_toLeftOf="@+id/iv_news_right"-->
+  <!--android:layout_alignParentBottom="true" />-->
+
+  <ImageView
+      android:id="@+id/iv_news_right"
+      android:layout_width="114dp"
+      android:layout_height="76dp"
+      android:layout_alignParentRight="true"
+      android:layout_marginLeft="12dp"
+      tools:src="@mipmap/ic_launcher" />
+</RelativeLayout>

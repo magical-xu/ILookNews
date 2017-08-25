@@ -12,7 +12,7 @@ import com.chaoneng.ilooknews.data.Channel;
 import com.chaoneng.ilooknews.instance.TabManager;
 import com.chaoneng.ilooknews.module.video.fragment.VideoListFragment;
 import com.chaoneng.ilooknews.util.IntentHelper;
-import com.chaoneng.ilooknews.widget.adapter.BaseFragmentAdapter;
+import com.chaoneng.ilooknews.widget.adapter.BaseFragmentStateAdapter;
 import com.chaoneng.ilooknews.widget.adapter.OnPageChangeListener;
 import com.flyco.tablayout.SlidingTabLayout;
 import fm.jiecao.jcvideoplayer_lib.JCVideoPlayerStandard;
@@ -30,7 +30,7 @@ public class VideoMainFragment extends BaseTitleFragment {
   @BindView(R.id.btn_search) ImageView mSearchView;
   @BindView(R.id.view_pager) ViewPager mViewPager;
 
-  private BaseFragmentAdapter mPagerAdapter;
+  private BaseFragmentStateAdapter mPagerAdapter;
   private List<Fragment> videoFragmentList = new ArrayList<>();
 
   @Override
@@ -42,12 +42,13 @@ public class VideoMainFragment extends BaseTitleFragment {
       videoFragmentList.add(VideoListFragment.newInstance(subTab.code));
     }
 
-    mPagerAdapter = new BaseFragmentAdapter(getFragmentManager(), videoFragmentList,
+    mPagerAdapter = new BaseFragmentStateAdapter(getChildFragmentManager(), videoFragmentList,
         TabManager.getInstance().getTabNameList());
 
     mViewPager.setAdapter(mPagerAdapter);
     //mViewPager.setOffscreenPageLimit(3);
     mTabView.setViewPager(mViewPager);
+    mViewPager.setCurrentItem(0);
 
     mViewPager.addOnPageChangeListener(new OnPageChangeListener() {
       @Override

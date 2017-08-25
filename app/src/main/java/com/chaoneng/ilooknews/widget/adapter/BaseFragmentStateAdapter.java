@@ -18,7 +18,7 @@ import java.util.List;
  */
 public class BaseFragmentStateAdapter extends FragmentStatePagerAdapter {
 
-  List<Fragment> fragmentList = new ArrayList<Fragment>();
+  List<Fragment> fragmentList = new ArrayList<>();
   private List<String> mTitles;
 
   public BaseFragmentStateAdapter(FragmentManager fm, List<Fragment> fragmentList) {
@@ -52,8 +52,8 @@ public class BaseFragmentStateAdapter extends FragmentStatePagerAdapter {
     return fragmentList.size();
   }
 
-  @Override
-  public int getItemPosition(Object object) {
-    return POSITION_NONE;
-  }
+  //@Override
+  //public int getItemPosition(Object object) {
+  //  return POSITION_NONE;
+  //}
 }

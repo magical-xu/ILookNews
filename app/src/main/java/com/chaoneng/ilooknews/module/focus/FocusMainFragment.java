@@ -24,6 +24,7 @@ public class FocusMainFragment extends BaseTitleFragment {
 
   private FocusAdapter mAdapter;
   private RefreshHelper mRefreshHelper;
+  private MockServer mockServer;
 
   @Override
   protected void beginLoadData() {
@@ -64,9 +65,10 @@ public class FocusMainFragment extends BaseTitleFragment {
     mRefreshHelper = new RefreshHelper(mRefreshLayout, mAdapter, mRecyclerView) {
       @Override
       public void onRequest(int page) {
-        MockServer.getInstance().mockGankCall(page, MockServer.Type.FOCUS);
+        mockServer.mockGankCall(page, MockServer.Type.FOCUS);
       }
     };
-    MockServer.getInstance().init(mRefreshHelper);
+    mockServer = MockServer.getInstance();
+    mockServer.init(mRefreshHelper);
   }
 }

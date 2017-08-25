@@ -55,7 +55,7 @@ public class HomeMainFragment extends BaseFragment implements OnChannelListener 
       newsFragmentList.add(NewsListFragment.newInstance(subTab.code));
     }
 
-    mPagerAdapter = new BaseFragmentStateAdapter(getFragmentManager(), newsFragmentList,
+    mPagerAdapter = new BaseFragmentStateAdapter(getChildFragmentManager(), newsFragmentList,
         TabManager.getInstance().getTabNameList());
 
     mViewPager.setAdapter(mPagerAdapter);

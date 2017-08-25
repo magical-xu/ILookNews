@@ -21,6 +21,7 @@ public class StateListFragment extends BaseFragment {
 
   private RefreshHelper mRefreshHelper;
   private StateAdapter mAdapter;
+  private MockServer mockServer;
 
   @Override
   protected void beginLoadData() {
@@ -34,10 +35,11 @@ public class StateListFragment extends BaseFragment {
     mRefreshHelper = new RefreshHelper(mRefreshLayout, mAdapter, mRecyclerView, true) {
       @Override
       public void onRequest(int page) {
-        MockServer.getInstance().mockGankCall(page, MockServer.Type.USER_STATE);
+        mockServer.mockGankCall(page, MockServer.Type.USER_STATE);
       }
     };
-    MockServer.getInstance().init(mRefreshHelper);
+    mockServer = MockServer.getInstance();
+    mockServer.init(mRefreshHelper);
   }
 
   @Override

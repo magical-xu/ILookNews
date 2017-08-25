@@ -2,10 +2,26 @@ package com.chaoneng.ilooknews.module.home.fragment;
 
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import butterknife.BindView;
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chaoneng.ilooknews.R;
+import com.chaoneng.ilooknews.api.Constant;
+import com.chaoneng.ilooknews.api.GankModel;
+import com.chaoneng.ilooknews.api.GankService;
 import com.chaoneng.ilooknews.base.BaseFragment;
+import com.chaoneng.ilooknews.data.MockServer;
+import com.chaoneng.ilooknews.module.home.adapter.NewsListAdapter;
+import com.chaoneng.ilooknews.module.home.data.NewsListBean;
+import com.chaoneng.ilooknews.net.callback.SimpleJsonCallback;
+import com.chaoneng.ilooknews.net.client.NetRequest;
+import com.chaoneng.ilooknews.util.IntentHelper;
+import com.chaoneng.ilooknews.util.RefreshHelper;
+import com.magicalxu.library.blankj.ToastUtils;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import java.util.ArrayList;
+import java.util.List;
+import retrofit2.Call;
 
 import static com.chaoneng.ilooknews.AppConstant.PAGE_TYPE;
 
@@ -19,7 +35,10 @@ public class NewsListFragment extends BaseFragment {
   @BindView(R.id.id_recycler) RecyclerView mRecyclerView;
   @BindView(R.id.id_refresh_layout) SmartRefreshLayout mRefreshLayout;
 
-
+  private NewsListAdapter mAdapter;
+  private RefreshHelper mRefreshHelper;
+  private MockServer mockServer;
+  private List<NewsListBean> mDataList = new ArrayList<>();
 
   public static NewsListFragment newInstance(String type) {
     NewsListFragment fragment = new NewsListFragment();
@@ -31,12 +50,81 @@ public class NewsListFragment extends BaseFragment {
 
   @Override
   protected void beginLoadData() {
-
+    mRefreshHelper.beginLoadData();
   }
 
   @Override
   protected void doInit() {
 
+    mAdapter = new NewsListAdapter(mDataList);
+    mockServer = MockServer.getInstance();
+    mRefreshHelper = new RefreshHelper(mRefreshLayout, mAdapter, mRecyclerView) {
+      @Override
+      public void onRequest(int page) {
+        loadData(page);
+      }
+    };
+    mockServer.init(mRefreshHelper);
+
+    mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+      @Override
+      public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+        NewsListBean bean = mAdapter.getData().get(position);
+        int itemType = bean.getItemType();
+        if (itemType == NewsListBean.VIDEO) {
+          IntentHelper.openVideoDetailPage(getActivity(), "");
+        } else if (itemType == NewsListBean.TEXT) {
+          //纯文字
+        } else if (itemType == NewsListBean.THREE_IMG) {
+          // TODO: 17/8/25 多图浏览
+        } else {
+          ToastUtils.showShort("哈哈哈");
+        }
+      }
+    });
+  }
+
+  private void loadData(final int page) {
+    GankService service = NetRequest.getInstance().create(GankService.class);
+    Call<GankModel> call = service.getData(Constant.PAGE_LIMIT, String.valueOf(page));
+
+    call.enqueue(new SimpleJsonCallback<GankModel>() {
+      @Override
+      public void onSuccess(GankModel data) {
+        buildFakeData(page);
+      }
+
+      @Override
+      public void onFailed(int code, String message) {
+        mRefreshHelper.onFail();
+      }
+    });
+  }
+
+  private void buildFakeData(int page) {
+
+    List<NewsListBean> list = new ArrayList<>();
+    for (int i = 0; i < 10; i++) {
+      NewsListBean bean = new NewsListBean();
+      bean.setItemType((int) (Math.random() * 5) + 1);
+      list.add(bean);
+    }
+
+    if (page == 1) {
+
+      mRefreshHelper.finishRefresh();
+      mAdapter.setNewData(list);
+    } else {
+
+      if (page == 4) {
+        mRefreshHelper.setNoMoreData();
+        mRefreshHelper.setCurPage(3);
+        return;
+      }
+
+      mRefreshHelper.finishLoadmore();
+      mAdapter.addData(list);
+    }
   }
 
   @Override

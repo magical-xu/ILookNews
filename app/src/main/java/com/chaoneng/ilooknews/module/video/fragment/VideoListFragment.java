@@ -32,6 +32,7 @@ public class VideoListFragment extends BaseFragment {
 
   private VideoListAdapter mAdapter;
   private RefreshHelper mRefreshHelper;
+  private MockServer mockServer;
 
   public static VideoListFragment newInstance(String type) {
     VideoListFragment fragment = new VideoListFragment();
@@ -53,10 +54,11 @@ public class VideoListFragment extends BaseFragment {
     mRefreshHelper = new RefreshHelper(mRefreshLayout, mAdapter, mRecyclerView) {
       @Override
       public void onRequest(int page) {
-        MockServer.getInstance().mockGankCall(page, MockServer.Type.VIDEO_LIST);
+        mockServer.mockGankCall(page, MockServer.Type.VIDEO_LIST);
       }
     };
-    MockServer.getInstance().init(mRefreshHelper);
+    mockServer = MockServer.getInstance();
+    mockServer.init(mRefreshHelper);
 
     mRecyclerView.addOnChildAttachStateChangeListener(
         new RecyclerView.OnChildAttachStateChangeListener() {

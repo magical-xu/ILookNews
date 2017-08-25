@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ll_root"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="@dimen/padding_normal">
+
+  <TextView
+      android:id="@+id/tv_news_title"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:singleLine="true"
+      android:textColor="@color/one_text_color"
+      android:textSize="@dimen/font_main"
+      tools:text="@string/test_text_long" />
+
+  <LinearLayout
+      android:id="@+id/iv_group"
+      android:layout_width="match_parent"
+      android:layout_height="100dp"
+      android:layout_marginBottom="@dimen/padding_small"
+      android:layout_marginTop="@dimen/padding_small"
+      android:gravity="center"
+      android:orientation="horizontal">
+
+    <ImageView
+        android:id="@+id/iv_news_left"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        tools:src="@mipmap/ic_launcher" />
+
+    <ImageView
+        android:id="@+id/iv_news_middle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        tools:src="@mipmap/ic_launcher" />
+
+    <ImageView
+        android:id="@+id/iv_news_right"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        tools:src="@mipmap/ic_launcher" />
+  </LinearLayout>
+
+  <!--<com.chaoneng.ilooknews.app.ui.widget.RowViewBottom-->
+  <!--android:id="@+id/rvb"-->
+  <!--android:layout_width="match_parent"-->
+  <!--android:layout_height="wrap_content" />-->
+</LinearLayout>
