@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black"
+    android:clipToPadding="true">
+
+  <com.chaoneng.ilooknews.widget.viewpager.ViewPagerFixed
+      android:id="@+id/view_pager"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:background="@color/black" />
+
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_alignParentBottom="true"
+      android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/photo_detail_title_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/alpha_20_black"
+        android:padding="@dimen/padding_small"
+        android:textColor="@color/primary_text_white"
+        android:textSize="@dimen/font_normal"
+        tools:text="1/5  武汉奢华别墅区被洪水围困成孤岛" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="@dimen/padding_small">
+
+      <EditText
+          android:id="@+id/id_edit"
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          android:layout_weight="1"
+          android:background="@drawable/bg_editor_gray"
+          android:hint="@string/hint_comments"
+          android:textColorHint="@color/alpha_50_white" />
+
+      <ImageView
+          android:id="@+id/id_comment"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:padding="@dimen/padding_small"
+          android:src="@drawable/ic_profile_collection" />
+
+      <ImageView
+          android:id="@+id/id_star"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:padding="@dimen/padding_small"
+          android:src="@drawable/ic_profile_collection" />
+    </LinearLayout>
+  </LinearLayout>
+</RelativeLayout>
+

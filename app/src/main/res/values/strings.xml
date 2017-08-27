@@ -161,6 +161,8 @@
   <string name="title_collection">我的收藏</string>
   <string name="msg_code_send">发送验证码</string>
   <string name="edit">编辑</string>
+  <string name="send">发送</string>
+  <string name="hint_write_comment">写评论&#8230;</string>
 
 
 </resources>

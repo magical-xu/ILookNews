@@ -2,7 +2,9 @@ package com.chaoneng.ilooknews.util;
 
 import android.content.Context;
 import android.content.Intent;
+import com.chaoneng.ilooknews.module.home.activity.NewsPhotoDetailActivity;
 import com.chaoneng.ilooknews.module.home.activity.NotifyActivity;
+import com.chaoneng.ilooknews.module.home.data.NewsDetailActivity;
 import com.chaoneng.ilooknews.module.login.LoginActivity;
 import com.chaoneng.ilooknews.module.search.SearchActivity;
 import com.chaoneng.ilooknews.module.user.activity.BrokeActivity;
@@ -80,5 +82,19 @@ public class IntentHelper {
    */
   public static void openUserCenterPage(Context context) {
     context.startActivity(new Intent(context, UserCenterActivity.class));
+  }
+
+  /**
+   * 跳转新闻图片详情界面
+   */
+  public static void openNewsPhotoDetailPage(Context context) {
+    context.startActivity(new Intent(context, NewsPhotoDetailActivity.class));
+  }
+
+  /**
+   * 跳转新闻详情界面 （图文）
+   */
+  public static void openNewsDetailPage(Context context) {
+    context.startActivity(new Intent(context, NewsDetailActivity.class));
   }
 }

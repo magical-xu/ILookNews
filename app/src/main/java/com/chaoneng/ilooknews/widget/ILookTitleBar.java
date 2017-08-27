@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -29,6 +30,7 @@ public class ILookTitleBar extends RelativeLayout implements View.OnClickListene
   protected ImageView mRightImage;
 
   protected View mDivider;
+  protected ViewGroup mTitleBg;
 
   private TitleCallback listener;
 
@@ -64,6 +66,7 @@ public class ILookTitleBar extends RelativeLayout implements View.OnClickListene
     mRightImage = findViewById(R.id.iv_title_right);
 
     mDivider = findViewById(R.id.id_divider_bottom);
+    mTitleBg = findViewById(R.id.id_title_bg);
   }
 
   private void setTitleEvent() {
@@ -125,6 +128,11 @@ public class ILookTitleBar extends RelativeLayout implements View.OnClickListene
   public ILookTitleBar setRightImage(int resId) {
     mRightImage.setVisibility(View.VISIBLE);
     mRightImage.setImageResource(resId);
+    return this;
+  }
+
+  public ILookTitleBar setTitleBg(int color) {
+    mTitleBg.setBackgroundResource(color);
     return this;
   }
 

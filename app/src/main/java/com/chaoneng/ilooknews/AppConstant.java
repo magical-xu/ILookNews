@@ -14,4 +14,6 @@ public interface AppConstant {
   String TEST_SIGN = "Life is short, just do IT !";
 
   String PAGE_TYPE = "PAGE_TYPE";
+
+  String PHOTO_DETAIL_IMGSRC = "photo_detail_imgsrc";
 }

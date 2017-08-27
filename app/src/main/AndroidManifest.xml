@@ -79,6 +79,14 @@
         android:name=".module.user.activity.UserCenterActivity"
         android:screenOrientation="portrait"
         android:theme="@style/SimpleActivityTheme" />
+    <activity
+        android:name=".module.home.activity.NewsPhotoDetailActivity"
+        android:screenOrientation="portrait"
+        android:theme="@style/SimpleActivityTheme" />
+    <activity
+        android:name=".module.home.data.NewsDetailActivity"
+        android:screenOrientation="portrait"
+        android:theme="@style/SimpleActivityTheme" />
   </application>
 
 </manifest>

@@ -17,7 +17,6 @@ import com.chaoneng.ilooknews.net.callback.SimpleJsonCallback;
 import com.chaoneng.ilooknews.net.client.NetRequest;
 import com.chaoneng.ilooknews.util.IntentHelper;
 import com.chaoneng.ilooknews.util.RefreshHelper;
-import com.magicalxu.library.blankj.ToastUtils;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import java.util.ArrayList;
 import java.util.List;
@@ -74,11 +73,11 @@ public class NewsListFragment extends BaseFragment {
         if (itemType == NewsListBean.VIDEO) {
           IntentHelper.openVideoDetailPage(getActivity(), "");
         } else if (itemType == NewsListBean.TEXT) {
-          //纯文字
+          IntentHelper.openNewsDetailPage(mContext);
         } else if (itemType == NewsListBean.THREE_IMG) {
-          // TODO: 17/8/25 多图浏览
+          IntentHelper.openNewsPhotoDetailPage(mContext);
         } else {
-          ToastUtils.showShort("哈哈哈");
+          IntentHelper.openNewsDetailPage(mContext);
         }
       }
     });

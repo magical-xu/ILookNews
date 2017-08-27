@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+  <TextView
+      android:id="@+id/id_news_detail_title"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:ellipsize="end"
+      android:gravity="left"
+      android:maxLines="2"
+      android:padding="@dimen/padding_small"
+      android:textColor="@color/one_text_color"
+      android:textSize="@dimen/font_big"
+      tools:text="@string/test_text_long" />
+
+  <WebView
+      android:id="@+id/id_news_detail_web"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="@dimen/padding_normal" />
+
+  <TextView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="right"
+      android:layout_marginTop="@dimen/padding_normal"
+      android:text="转载自xxx"
+      android:textColor="@color/one_text_color"
+      android:textSize="@dimen/font_normal" />
+
+</LinearLayout>
