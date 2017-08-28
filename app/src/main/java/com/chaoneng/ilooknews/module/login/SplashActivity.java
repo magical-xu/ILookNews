@@ -10,6 +10,7 @@ import com.chaoneng.ilooknews.BuildConfig;
 import com.chaoneng.ilooknews.MainActivity;
 import com.chaoneng.ilooknews.R;
 import com.chaoneng.ilooknews.base.BaseActivity;
+import com.chaoneng.ilooknews.instance.TabManager;
 import com.chaoneng.ilooknews.util.TimeCountdown;
 
 /**
@@ -36,6 +37,9 @@ public class SplashActivity extends BaseActivity {
 
     alphaAnimation();
     countDown();
+
+    // for init tab as early as possible
+    TabManager.getInstance().getNewsChannel(null);
   }
 
   private void alphaAnimation() {

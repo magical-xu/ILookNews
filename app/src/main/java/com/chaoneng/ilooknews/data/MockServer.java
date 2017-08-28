@@ -67,7 +67,7 @@ public class MockServer<T> {
 
   public void mockGankCall(int page, final int type) {
     GankService service = NetRequest.getInstance().create(GankService.class);
-    Call<GankModel> call = service.getData(Constant.PAGE_LIMIT, String.valueOf(page));
+    Call<GankModel> call = service.getData(Constant.BASE_URL + page);
 
     call.enqueue(new SimpleJsonCallback<GankModel>() {
       @Override

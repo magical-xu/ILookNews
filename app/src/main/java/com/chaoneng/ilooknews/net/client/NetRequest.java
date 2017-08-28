@@ -57,8 +57,4 @@ public class NetRequest {
   public void clearCookie() {
     ((CookieManager) mOkHttpClient.cookieJar()).clearCookie();
   }
-
-  public void enqueue() {
-
-  }
 }

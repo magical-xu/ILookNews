@@ -1,12 +1,20 @@
 package com.chaoneng.ilooknews.instance;
 
 import android.content.Context;
+import android.support.annotation.Nullable;
+import com.chaoneng.ilooknews.AppConstant;
 import com.chaoneng.ilooknews.ILookApplication;
 import com.chaoneng.ilooknews.R;
+import com.chaoneng.ilooknews.api.HomeService;
 import com.chaoneng.ilooknews.data.Channel;
+import com.chaoneng.ilooknews.data.TabBean;
+import com.chaoneng.ilooknews.net.callback.SimpleCallback;
+import com.chaoneng.ilooknews.net.client.NetRequest;
+import com.chaoneng.ilooknews.net.data.HttpResult;
+import com.chaoneng.ilooknews.util.NotifyListener;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import retrofit2.Call;
 
 /**
  * Created by magical on 17/8/16.
@@ -17,13 +25,14 @@ public class TabManager {
 
   private List<Channel> mTabList;
   private List<Channel> otherChannelList;
+  private boolean hasInit;
 
   private TabManager() {
     mTabList = new ArrayList<>();
     otherChannelList = new ArrayList<>();
-    initMyDefault();
 
-    initOther();
+    //initMyDefault();
+    //initOther();
   }
 
   private void initOther() {
@@ -58,6 +67,10 @@ public class TabManager {
     private static final TabManager mInstance = new TabManager();
   }
 
+  public boolean hasInit() {
+    return hasInit;
+  }
+
   /**
    * 拿到有几个默认标签
    */
@@ -74,31 +87,10 @@ public class TabManager {
   }
 
   /**
-   * 对标签进行互换位置
-   */
-  public void swap(int from, int to) {
-    Collections.swap(mTabList, from, to);
-  }
-
-  /**
    * 添加标签
    */
   public void add(Channel entity) {
     mTabList.add(entity);
-  }
-
-  /**
-   * 刪除标签
-   */
-  public void remove(Channel entity) {
-    mTabList.remove(entity);
-  }
-
-  /**
-   * 删除指定位置
-   */
-  public void remove(int position) {
-    mTabList.remove(position);
   }
 
   /**
@@ -115,20 +107,53 @@ public class TabManager {
   /**
    * 移动到我的频道
    */
-  public Channel moveToMyChannel(int starPos, int endPos) {
+  public Channel moveToMyChannel(final int starPos, final int endPos) {
+
+    //Channel channel = otherChannelList.get(starPos);
+    //
+    //HomeService service = NetRequest.getInstance().create(HomeService.class);
+    //Call<HttpResult<String>> call = service.addMyChannel(AppConstant.TEST_USER_ID, channel.code);
+    //call.enqueue(new SimpleCallback<String>() {
+    //  @Override
+    //  public void onSuccess(String data) {
 
     Channel channel = otherChannelList.remove(starPos);
+    channel.setItemType(Channel.TYPE_MY_CHANNEL);
     mTabList.add(endPos, channel);
+    //  }
+    //
+    //  @Override
+    //  public void onFail(String code, String errorMsg) {
+    //
+    //  }
+    //});
+
     return channel;
   }
 
   /**
    * 移动到推荐频道
    */
-  public Channel moveToOtherChannel(int starPos, int endPos) {
+  public Channel moveToOtherChannel(final int starPos, final int endPos) {
 
+    //Channel channel = mTabList.get(starPos);
+    //
+    //HomeService service = NetRequest.getInstance().create(HomeService.class);
+    //Call<HttpResult<String>> call = service.deleteMyChannel(AppConstant.TEST_USER_ID, channel.code);
+    //call.enqueue(new Callback<HttpResult<String>>() {
+    //  @Override
+    //  public void onResponse(Call<HttpResult<String>> call, Response<HttpResult<String>> response) {
     Channel remove = mTabList.remove(starPos);
+    remove.setItemType(Channel.TYPE_OTHER_CHANNEL);
     otherChannelList.add(endPos, remove);
+    //  }
+    //
+    //  @Override
+    //  public void onFailure(Call<HttpResult<String>> call, Throwable t) {
+    //
+    //  }
+    //});
+
     return remove;
   }
 
@@ -141,5 +166,43 @@ public class TabManager {
       nameList.add(mTabList.get(i).title);
     }
     return nameList;
+  }
+
+  /**
+   * 网络拉取 新闻类型 频道
+   */
+  public void getNewsChannel(@Nullable final NotifyListener listener) {
+
+    HomeService service = NetRequest.getInstance().create(HomeService.class);
+    Call<HttpResult<TabBean>> call = service.getChannel(AppConstant.TEST_USER_ID, HomeService.NEWS);
+    call.enqueue(new SimpleCallback<TabBean>() {
+      @Override
+      public void onSuccess(TabBean data) {
+
+        hasInit = true;
+        mTabList = data.myChannels;
+        otherChannelList = data.myChannelsNot;
+        adaptMultiType(mTabList, true);
+        adaptMultiType(otherChannelList, false);
+        if (null != listener) {
+          listener.onSuccess();
+        }
+      }
+
+      @Override
+      public void onFail(String code, String errorMsg) {
+
+        hasInit = false;
+        if (null != listener) {
+          listener.onFail();
+        }
+      }
+    });
+  }
+
+  private void adaptMultiType(List<Channel> list, boolean mine) {
+    for (Channel one : list) {
+      one.setItemType(mine ? Channel.TYPE_MY_CHANNEL : Channel.TYPE_OTHER_CHANNEL);
+    }
   }
 }

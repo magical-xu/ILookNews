@@ -73,7 +73,7 @@ public class ILookApplication extends Application {
     BoxingHelper.init();
 
     // init retrofit client
-    NetRequest.getInstance().init(this, Constant.BASE_URL);
+    NetRequest.getInstance().init(this, Constant.ILOOK_BASE_URL);
   }
 
   public static Context getAppContext() {

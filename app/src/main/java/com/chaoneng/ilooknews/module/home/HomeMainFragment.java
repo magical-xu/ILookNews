@@ -16,6 +16,7 @@ import com.chaoneng.ilooknews.module.home.callback.OnChannelListener;
 import com.chaoneng.ilooknews.module.home.fragment.ChannelDialogFragment;
 import com.chaoneng.ilooknews.module.home.fragment.NewsListFragment;
 import com.chaoneng.ilooknews.util.IntentHelper;
+import com.chaoneng.ilooknews.util.NotifyListener;
 import com.chaoneng.ilooknews.widget.adapter.BaseFragmentStateAdapter;
 import com.chaoneng.ilooknews.widget.adapter.OnPageChangeListener;
 import com.chaoneng.ilooknews.widget.image.HeadImageView;
@@ -49,6 +50,30 @@ public class HomeMainFragment extends BaseFragment implements OnChannelListener 
   @Override
   protected void doInit() {
 
+    if (TabManager.getInstance().hasInit()) {
+      setUp();
+    } else {
+      TabManager.getInstance().getNewsChannel(new NotifyListener() {
+        @Override
+        public void onSuccess() {
+          setUp();
+        }
+
+        @Override
+        public void onFail() {
+        }
+      });
+    }
+
+    mViewPager.addOnPageChangeListener(new OnPageChangeListener() {
+      @Override
+      public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+        // TODO: 17/8/16 暂停播放视频
+      }
+    });
+  }
+
+  private void setUp() {
     List<Channel> tabList = TabManager.getInstance().getTabList();
 
     for (Channel subTab : tabList) {
@@ -60,13 +85,6 @@ public class HomeMainFragment extends BaseFragment implements OnChannelListener 
 
     mViewPager.setAdapter(mPagerAdapter);
     mTabView.setViewPager(mViewPager);
-
-    mViewPager.addOnPageChangeListener(new OnPageChangeListener() {
-      @Override
-      public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-        // TODO: 17/8/16 暂停播放视频
-      }
-    });
   }
 
   @Override
@@ -120,6 +138,7 @@ public class HomeMainFragment extends BaseFragment implements OnChannelListener 
   @Override
   public void onMoveToMyChannel(int starPos, int endPos) {
 
+    // TODO: 17/8/28 may have trouble
     Channel channel = TabManager.getInstance().moveToMyChannel(starPos, endPos);
     newsFragmentList.add(NewsListFragment.newInstance(channel.code));
   }

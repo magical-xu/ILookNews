@@ -43,7 +43,7 @@ public class UserMainFragment extends BaseFragment {
   protected void beginLoadData() {
 
     GankService service = NetRequest.getInstance().create(GankService.class);
-    Call<GankModel> call = service.getData(Constant.PAGE_LIMIT, "1");
+    Call<GankModel> call = service.getData(Constant.BASE_URL + "1");
 
     call.enqueue(new SimpleJsonCallback<GankModel>() {
       @Override

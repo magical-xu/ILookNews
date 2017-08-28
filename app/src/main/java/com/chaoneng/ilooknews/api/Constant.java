@@ -7,7 +7,9 @@ package com.chaoneng.ilooknews.api;
 
 public interface Constant {
 
-  String BASE_URL = "http://gank.io/";
+  String BASE_URL = "http://gank.io/api/data/Android/10/";
+
+  String ILOOK_BASE_URL = "http://www.super1288.xyz/api/";
 
   String PAGE_LIMIT = "10";
 }

@@ -7,12 +7,16 @@ import java.io.Serializable;
  * Description : 固定返回格式
  * {
  * "code":"0"
- * "message":"0"
+ * "msg":"0"
  * "data":[]or{}
  * }
  */
 
-public class HttpResult implements Serializable {
+public class HttpResult<T> implements Serializable {
 
-  public boolean error;
+  public String code;
+
+  public String msg;
+
+  public T data;
 }
