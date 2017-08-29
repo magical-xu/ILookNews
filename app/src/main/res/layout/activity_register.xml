@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp">
+
+  <EditText
+      android:id="@+id/id_mobile"
+      android:layout_width="match_parent"
+      android:layout_height="40dp"
+      android:layout_marginTop="10dp"
+      android:background="@drawable/bg_editor"
+      android:hint="手机号"
+      style="@style/style_common_edit_text" />
+
+  <EditText
+      android:id="@+id/id_code"
+      android:layout_width="match_parent"
+      android:layout_height="40dp"
+      android:layout_marginTop="10dp"
+      android:background="@drawable/bg_editor"
+      android:hint="验证码"
+      style="@style/style_common_edit_text" />
+
+  <EditText
+      android:id="@+id/id_username"
+      android:layout_width="match_parent"
+      android:layout_height="40dp"
+      android:layout_marginTop="10dp"
+      android:background="@drawable/bg_editor"
+      android:hint="用户名"
+      style="@style/style_common_edit_text" />
+
+  <EditText
+      android:id="@+id/id_pwd"
+      android:layout_width="match_parent"
+      android:layout_height="40dp"
+      android:layout_marginTop="10dp"
+      android:background="@drawable/bg_editor"
+      android:hint="密码"
+      style="@style/style_common_edit_text" />
+
+  <TextView
+      android:id="@+id/id_register"
+      android:layout_width="match_parent"
+      android:layout_height="40dp"
+      android:layout_marginTop="10dp"
+      android:background="@drawable/bg_btn_login"
+      android:gravity="center"
+      android:text="注册" />
+
+  <TextView
+      android:id="@+id/id_get_code"
+      android:layout_width="match_parent"
+      android:layout_height="40dp"
+      android:layout_marginTop="10dp"
+      android:background="@drawable/bg_btn_login"
+      android:gravity="center"
+      android:text="获取验证码" />
+
+</LinearLayout>

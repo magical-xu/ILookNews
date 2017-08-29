@@ -106,8 +106,8 @@ public class MockServer<T> {
     for (int i = 0; i < 10; i++) {
       BaseUser user = new BaseUser();
       user.avatar = AppConstant.TEST_AVATAR;
-      user.nickname = "系统消息";
-      user.sign = "Shaun 关注了 你 -- > " + String.valueOf(mRefreshHelper.getCurPage());
+      user.username = "系统消息";
+      user.introduce = "Shaun 关注了 你 -- > " + String.valueOf(mRefreshHelper.getCurPage());
       list.add(user);
     }
     return list;

@@ -11,8 +11,7 @@
       android:background="@drawable/bg_input_login"
       android:gravity="center_vertical"
       android:hint="@string/hint_input_phone"
-      android:inputType="phone"
-      android:maxLength="11"
+      android:inputType="text"
       android:maxLines="1"
       style="@style/style_common_edit_text" />
 

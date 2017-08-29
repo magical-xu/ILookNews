@@ -22,8 +22,8 @@ public class NotifyAdapter extends BaseQuickAdapter<BaseUser, BaseViewHolder> {
   protected void convert(BaseViewHolder helper, BaseUser item) {
 
     ((HeadImageView) helper.getView(R.id.iv_avatar)).setHeadImage(item.avatar);
-    helper.setText(R.id.tv_notify_type, item.nickname);
-    helper.setText(R.id.tv_notify_msg, item.sign);
+    helper.setText(R.id.tv_notify_type, item.username);
+    helper.setText(R.id.tv_notify_msg, item.introduce);
     helper.setText(R.id.tv_notify_time, "刚刚");
   }
 }
