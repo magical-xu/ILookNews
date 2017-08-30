@@ -6,7 +6,7 @@
     android:layout_height="250dp"
     android:orientation="vertical">
 
-  <fm.jiecao.jcvideoplayer_lib.JCVideoPlayerStandard
+  <com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer
       android:id="@+id/video_player"
       android:layout_width="match_parent"
       android:layout_height="@dimen/layout_height_video" />

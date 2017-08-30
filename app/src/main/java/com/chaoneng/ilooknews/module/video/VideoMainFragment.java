@@ -15,7 +15,7 @@ import com.chaoneng.ilooknews.util.IntentHelper;
 import com.chaoneng.ilooknews.widget.adapter.BaseFragmentStateAdapter;
 import com.chaoneng.ilooknews.widget.adapter.OnPageChangeListener;
 import com.flyco.tablayout.SlidingTabLayout;
-import fm.jiecao.jcvideoplayer_lib.JCVideoPlayerStandard;
+import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,7 +54,7 @@ public class VideoMainFragment extends BaseTitleFragment {
       @Override
       public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
         // TODO: 17/8/16 暂停播放视频
-        JCVideoPlayerStandard.releaseAllVideos();
+        //JCVideoPlayerStandard.releaseAllVideos();
       }
     });
   }
@@ -83,5 +83,12 @@ public class VideoMainFragment extends BaseTitleFragment {
   @OnClick(R.id.btn_search)
   public void onClickSearch() {
     IntentHelper.openSearchPage(getActivity());
+  }
+
+  public boolean onBackPressed() {
+    if (StandardGSYVideoPlayer.backFromWindowFull(getActivity())) {
+      return true;
+    }
+    return false;
   }
 }

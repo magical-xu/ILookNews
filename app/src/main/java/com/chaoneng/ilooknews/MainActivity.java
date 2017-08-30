@@ -156,4 +156,12 @@ public class MainActivity extends BaseActivity {
         break;
     }
   }
+
+  @Override
+  public void onBackPressed() {
+    if (null != videoMainFragment && videoMainFragment.onBackPressed()) {
+      return;
+    }
+    super.onBackPressed();
+  }
 }
