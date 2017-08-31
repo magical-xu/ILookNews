@@ -35,11 +35,6 @@ public class PhotoDetailFragment extends BaseFragment {
   }
 
   @Override
-  protected boolean isNeedShowLoadingView() {
-    return false;
-  }
-
-  @Override
   protected int getLayoutName() {
     return R.layout.fragment_news_photo_detail;
   }

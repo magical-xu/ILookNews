@@ -88,11 +88,6 @@ public class HomeMainFragment extends BaseFragment implements OnChannelListener 
   }
 
   @Override
-  protected boolean isNeedShowLoadingView() {
-    return false;
-  }
-
-  @Override
   protected int getLayoutName() {
     return R.layout.layout_main_home_fg;
   }

@@ -45,8 +45,14 @@ public class VideoListFragment extends BaseFragment {
     return fragment;
   }
 
+  //@Override
+  //protected void l() {
+  //  mRefreshHelper.beginLoadData();
+  //}
+
   @Override
-  protected void beginLoadData() {
+  protected void lazyLoad() {
+    super.lazyLoad();
     mRefreshHelper.beginLoadData();
   }
 
@@ -134,20 +140,9 @@ public class VideoListFragment extends BaseFragment {
   }
 
   @Override
-  protected boolean isNeedShowLoadingView() {
-    return false;
-  }
-
-  @Override
   protected int getLayoutName() {
     return R.layout.simple_recycler_list;
   }
-
-  //@Override
-  //public void onPause() {
-  //  super.onPause();
-  //  JCVideoPlayerStandard.releaseAllVideos();
-  //}
 
   @Override
   public void onPause() {

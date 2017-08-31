@@ -52,8 +52,8 @@ public class BaseFragmentStateAdapter extends FragmentStatePagerAdapter {
     return fragmentList.size();
   }
 
-  //@Override
-  //public int getItemPosition(Object object) {
-  //  return POSITION_NONE;
-  //}
+  @Override
+  public int getItemPosition(Object object) {
+    return POSITION_NONE;
+  }
 }

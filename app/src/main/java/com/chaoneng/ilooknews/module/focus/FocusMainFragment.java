@@ -32,11 +32,6 @@ public class FocusMainFragment extends BaseTitleFragment {
   }
 
   @Override
-  protected boolean isNeedShowLoadingView() {
-    return false;
-  }
-
-  @Override
   public void init() {
 
     mTitleBar.setTitleImage(R.drawable.img_focus_title)

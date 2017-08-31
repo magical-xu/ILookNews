@@ -3,7 +3,8 @@ package com.chaoneng.ilooknews;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.Fragment;
+import android.view.KeyEvent;
 import android.widget.FrameLayout;
 import butterknife.BindView;
 import com.chaoneng.ilooknews.base.BaseActivity;
@@ -12,12 +13,18 @@ import com.chaoneng.ilooknews.module.focus.FocusMainFragment;
 import com.chaoneng.ilooknews.module.home.HomeMainFragment;
 import com.chaoneng.ilooknews.module.user.UserMainFragment;
 import com.chaoneng.ilooknews.module.video.VideoMainFragment;
+import com.chaoneng.ilooknews.util.FragmentHelper;
 import com.flyco.tablayout.CommonTabLayout;
 import com.flyco.tablayout.listener.CustomTabEntity;
 import com.flyco.tablayout.listener.OnTabSelectListener;
 import java.util.ArrayList;
 
 public class MainActivity extends BaseActivity {
+
+  private static final int TAB_HOME = 0;
+  private static final int TAB_VIDEO = 1;
+  private static final int TAB_FOCUS = 2;
+  private static final int TAB_USER = 3;
 
   @BindView(R.id.id_main_container) FrameLayout mContainer;
   @BindView(R.id.id_main_tab_layout) CommonTabLayout mTabLayout;
@@ -28,20 +35,24 @@ public class MainActivity extends BaseActivity {
       ILookApplication.getAppContext().getString(R.string.main_tab_focus),
       ILookApplication.getAppContext().getString(R.string.main_tab_user)
   };
+
   private int[] mIconUnSelectIds = {
       R.drawable.ic_home_normal, R.drawable.ic_video_normal, R.drawable.ic_care_normal,
       R.drawable.ic_profile_normal
   };
+
   private int[] mIconSelectIds = {
       R.drawable.ic_home_selected, R.drawable.ic_video_selected, R.drawable.ic_care_selected,
       R.drawable.ic_profile_selected
   };
+
   private ArrayList<CustomTabEntity> mTabEntities = new ArrayList<>();
 
-  private HomeMainFragment newsMainFragment;
+  private HomeMainFragment homeMainFragment;
   private VideoMainFragment videoMainFragment;
   private FocusMainFragment careMainFragment;
   private UserMainFragment userMainFragment;
+  private Fragment mCurPage;
 
   public static void startAction(Activity activity) {
     Intent intent = new Intent(activity, MainActivity.class);
@@ -73,7 +84,7 @@ public class MainActivity extends BaseActivity {
     mTabLayout.setOnTabSelectListener(new OnTabSelectListener() {
       @Override
       public void onTabSelect(int position) {
-        SwitchTo(position);
+        loadPage(position);
       }
 
       @Override
@@ -86,82 +97,78 @@ public class MainActivity extends BaseActivity {
    * 初始化碎片
    */
   private void initFragment(Bundle savedInstanceState) {
-    FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-    int currentTabPosition = 0;
-    if (savedInstanceState != null) {
-      newsMainFragment =
-          (HomeMainFragment) getSupportFragmentManager().findFragmentByTag("newsMainFragment");
-      videoMainFragment =
-          (VideoMainFragment) getSupportFragmentManager().findFragmentByTag("videoMainFragment");
-      careMainFragment =
-          (FocusMainFragment) getSupportFragmentManager().findFragmentByTag("careMainFragment");
-      userMainFragment =
-          (UserMainFragment) getSupportFragmentManager().findFragmentByTag("userMainFragment");
-      currentTabPosition = savedInstanceState.getInt(AppConstant.HOME_CURRENT_TAB_POSITION);
-    } else {
-      newsMainFragment = new HomeMainFragment();
-      videoMainFragment = new VideoMainFragment();
-      careMainFragment = new FocusMainFragment();
-      userMainFragment = new UserMainFragment();
 
-      transaction.add(R.id.id_main_container, newsMainFragment, "newsMainFragment");
-      transaction.add(R.id.id_main_container, videoMainFragment, "videoMainFragment");
-      transaction.add(R.id.id_main_container, careMainFragment, "careMainFragment");
-      transaction.add(R.id.id_main_container, userMainFragment, "userMainFragment");
-    }
-    transaction.commit();
-    SwitchTo(currentTabPosition);
-    mTabLayout.setCurrentTab(currentTabPosition);
+    //int currentTabPosition = 0;
+    //if (savedInstanceState != null) {
+    //  homeMainFragment =
+    //      (HomeMainFragment) getSupportFragmentManager().findFragmentByTag("homeMainFragment");
+    //  videoMainFragment =
+    //      (VideoMainFragment) getSupportFragmentManager().findFragmentByTag("videoMainFragment");
+    //  careMainFragment =
+    //      (FocusMainFragment) getSupportFragmentManager().findFragmentByTag("careMainFragment");
+    //  userMainFragment =
+    //      (UserMainFragment) getSupportFragmentManager().findFragmentByTag("userMainFragment");
+    //  currentTabPosition = savedInstanceState.getInt(AppConstant.HOME_CURRENT_TAB_POSITION);
+    //} else {
+    //  homeMainFragment = new HomeMainFragment();
+    //  videoMainFragment = new VideoMainFragment();
+    //  careMainFragment = new FocusMainFragment();
+    //  userMainFragment = new UserMainFragment();
+    //}
+    //SwitchTo(currentTabPosition);
+    loadPage(TAB_HOME);
+    mTabLayout.setCurrentTab(TAB_HOME);
   }
 
-  /**
-   * 切换
-   */
-  private void SwitchTo(int position) {
-    FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-    //JCVideoPlayerStandard.releaseAllVideos(); //补丁
-    switch (position) {
-      //首页
-      case 0:
-        transaction.show(newsMainFragment);
-        transaction.hide(videoMainFragment);
-        transaction.hide(careMainFragment);
-        transaction.hide(userMainFragment);
-        transaction.commitAllowingStateLoss();
+  private void loadPage(int index) {
+
+    Fragment page = null;
+    switch (index) {
+      case TAB_HOME:
+        if (null == homeMainFragment) {
+          homeMainFragment = new HomeMainFragment();
+        }
+        page = homeMainFragment;
         break;
-      //视频
-      case 1:
-        transaction.hide(newsMainFragment);
-        transaction.show(videoMainFragment);
-        transaction.hide(careMainFragment);
-        transaction.hide(userMainFragment);
-        transaction.commitAllowingStateLoss();
+
+      case TAB_VIDEO:
+        if (null == videoMainFragment) {
+          videoMainFragment = new VideoMainFragment();
+        }
+        page = videoMainFragment;
         break;
-      //关注
-      case 2:
-        transaction.hide(newsMainFragment);
-        transaction.hide(videoMainFragment);
-        transaction.show(careMainFragment);
-        transaction.hide(userMainFragment);
-        transaction.commitAllowingStateLoss();
+      case TAB_FOCUS:
+        if (null == careMainFragment) {
+          careMainFragment = new FocusMainFragment();
+        }
+        page = careMainFragment;
         break;
-      case 3:
-        transaction.hide(newsMainFragment);
-        transaction.hide(videoMainFragment);
-        transaction.hide(careMainFragment);
-        transaction.show(userMainFragment);
-        transaction.commitAllowingStateLoss();
+      case TAB_USER:
+        if (null == userMainFragment) {
+          userMainFragment = new UserMainFragment();
+        }
+        page = userMainFragment;
         break;
       default:
         break;
     }
+
+    if (null != page) {
+
+      FragmentHelper.switchFragment(this, mCurPage, page, R.id.id_main_container);
+      mCurPage = page;
+    }
   }
 
   @Override
-  public void onBackPressed() {
-    if (null != videoMainFragment && videoMainFragment.onBackPressed()) {
-      return;
+  public boolean onKeyDown(int keyCode, KeyEvent event) {
+    if (keyCode == KeyEvent.KEYCODE_BACK && null != mCurPage) {
+      if (mCurPage instanceof VideoMainFragment) {
+        if (((VideoMainFragment) mCurPage).onBackPressed()) {
+          return true;
+        }
+      }
     }
-    super.onBackPressed();
+    return super.onKeyDown(keyCode, event);
   }
 }

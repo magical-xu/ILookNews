@@ -79,11 +79,6 @@ public class UserMainFragment extends BaseFragment {
   }
 
   @Override
-  protected boolean isNeedShowLoadingView() {
-    return false;
-  }
-
-  @Override
   protected int getLayoutName() {
     return R.layout.layout_main_user_fg;
   }

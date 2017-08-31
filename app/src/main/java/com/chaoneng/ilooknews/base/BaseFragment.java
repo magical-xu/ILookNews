@@ -16,12 +16,15 @@ import butterknife.Unbinder;
 
 public abstract class BaseFragment extends Fragment {
 
-  private static final String PARAM_BASEFRAGMENT_STATE = "basefragment_state";
+  private boolean isFragmentVisible;
+
+  private boolean isPrepare;
+
+  private boolean isFirstLoad = true;
 
   protected View mRootView;
   protected Context mContext;
 
-  protected Bundle mBundle;
   public Unbinder unbinder;
 
   @Override
@@ -31,22 +34,28 @@ public abstract class BaseFragment extends Fragment {
   }
 
   @Override
-  public void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    if (savedInstanceState != null) {
-      mBundle = savedInstanceState.getBundle(PARAM_BASEFRAGMENT_STATE);
-    }
-    if (mBundle == null) {
-      mBundle = getArguments();
+  public void setUserVisibleHint(boolean isVisibleToUser) {
+    super.setUserVisibleHint(isVisibleToUser);
+    if (getUserVisibleHint()) {
+      onVisible();
+    } else {
+      onInvisible();
     }
   }
 
   @Override
-  public void onSaveInstanceState(Bundle outState) {
-    super.onSaveInstanceState(outState);
-    if (mBundle != null) {
-      outState.putBundle(PARAM_BASEFRAGMENT_STATE, mBundle);
+  public void onHiddenChanged(boolean hidden) {
+    super.onHiddenChanged(hidden);
+    if (hidden) {
+      onInvisible();
+    } else {
+      onVisible();
     }
+  }
+
+  @Override
+  public void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
   }
 
   @Nullable
@@ -56,6 +65,7 @@ public abstract class BaseFragment extends Fragment {
     if (0 != getLayoutName()) {
 
       mRootView = inflater.inflate(getLayoutName(), container, false);
+      //isPrepare = true;
 
       if (bind()) {
         unbinder = ButterKnife.bind(this, mRootView);
@@ -79,27 +89,48 @@ public abstract class BaseFragment extends Fragment {
     return true;
   }
 
-  protected abstract void beginLoadData();
+  protected void beginLoadData() {
 
-  protected abstract void doInit();
+  }
+
+  protected void doInit() {
+  }
+
+  protected void onVisible() {
+    isFragmentVisible = true;
+    initData();
+  }
+
+  protected void onInvisible() {
+    isFragmentVisible = false;
+  }
+
+  protected void initData() {
+
+    // 视图未销毁 且 可见
+    if (isFragmentVisible) {
+      if (isFirstLoad) {
+        isFirstLoad = false;
+        lazyLoad();
+      }
+    }
+  }
 
   /**
-   * 是否开启加载动画
-   * 默认不开启
-   * 如果需要加载动画 可以在子类重写此方法 并返回 true
+   * 需要懒加载的界面 实现此方法
+   * 且只会在首次加载数据时回调
    */
-  protected abstract boolean isNeedShowLoadingView();
+  protected void lazyLoad() {
 
-  /**
-   * 获取layout的名字
-   *
-   * @return String
-   */
+  }
+
   protected abstract int getLayoutName();
 
   @Override
   public void onDestroyView() {
     super.onDestroyView();
+    //isPrepare = false;
+    isFirstLoad = true;
     if (null != unbinder) {
       unbinder.unbind();
     }

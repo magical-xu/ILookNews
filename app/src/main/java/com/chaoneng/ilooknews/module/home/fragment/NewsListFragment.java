@@ -183,11 +183,6 @@ public class NewsListFragment extends BaseFragment {
   }
 
   @Override
-  protected boolean isNeedShowLoadingView() {
-    return false;
-  }
-
-  @Override
   protected int getLayoutName() {
     return R.layout.simple_recycler_list;
   }
