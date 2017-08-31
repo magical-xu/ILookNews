@@ -15,6 +15,7 @@ import com.chaoneng.ilooknews.util.NotifyListener;
 import java.util.ArrayList;
 import java.util.List;
 import retrofit2.Call;
+import timber.log.Timber;
 
 /**
  * Created by magical on 17/8/16.
@@ -23,186 +24,253 @@ import retrofit2.Call;
 
 public class TabManager {
 
-  private List<Channel> mTabList;
-  private List<Channel> otherChannelList;
-  private boolean hasInit;
+    private List<Channel> mTabList;
+    private List<Channel> otherChannelList;
+    private List<Channel> mVideoChannelList;    // 视频的tab是单独拉的
+    private boolean hasNewsInit;                // 新闻tab 是否初始化完毕
+    private boolean hasVideoInit;               // 视频tab 是否初始化完毕
 
-  private TabManager() {
-    mTabList = new ArrayList<>();
-    otherChannelList = new ArrayList<>();
-
-    //initMyDefault();
-    //initOther();
-  }
-
-  private void initOther() {
-    otherChannelList.add(new Channel(Channel.TYPE_OTHER_CHANNEL, "西瓜", "西瓜"));
-    otherChannelList.add(new Channel(Channel.TYPE_OTHER_CHANNEL, "橘子", "橘子"));
-    otherChannelList.add(new Channel(Channel.TYPE_OTHER_CHANNEL, "西红柿", "西红柿"));
-    otherChannelList.add(new Channel(Channel.TYPE_OTHER_CHANNEL, "土豆泥", "土豆泥"));
-    otherChannelList.add(new Channel(Channel.TYPE_OTHER_CHANNEL, "薯片", "薯片"));
-    otherChannelList.add(new Channel(Channel.TYPE_OTHER_CHANNEL, "牛肉", "牛肉"));
-  }
-
-  private void initMyDefault() {
-    Context appContext = ILookApplication.getAppContext();
-    String recommend = appContext.getString(R.string.sub_tab_recommend);
-    String joke = appContext.getString(R.string.sub_tab_joke);
-    String music = appContext.getString(R.string.sub_tab_music);
-    String social = appContext.getString(R.string.sub_tab_social);
-
-    // add the default tab
-    mTabList.add(new Channel(Channel.TYPE_MY_CHANNEL, recommend, recommend, true));
-    mTabList.add(new Channel(Channel.TYPE_MY_CHANNEL, joke, joke, true));
-    mTabList.add(new Channel(Channel.TYPE_MY_CHANNEL, music, music, true));
-    mTabList.add(new Channel(Channel.TYPE_MY_CHANNEL, social, social, true));
-  }
-
-  public static TabManager getInstance() {
-    return SingletonHolder.mInstance;
-  }
-
-  private static class SingletonHolder {
-
-    private static final TabManager mInstance = new TabManager();
-  }
-
-  public boolean hasInit() {
-    return hasInit;
-  }
-
-  /**
-   * 拿到有几个默认标签
-   */
-  public int getDefaultSize() {
-    int size = mTabList.size();
-    int count = 0;
-    for (int i = 0; i < size; i++) {
-      Channel channel = mTabList.get(i);
-      if (channel.access) {
-        count++;
-      }
+    private TabManager() {
+        mTabList = new ArrayList<>();
+        otherChannelList = new ArrayList<>();
+        mVideoChannelList = new ArrayList<>();
+        //initMyDefault();
+        //initOther();
     }
-    return count;
-  }
 
-  /**
-   * 添加标签
-   */
-  public void add(Channel entity) {
-    mTabList.add(entity);
-  }
-
-  /**
-   * 拿到 tab 列表
-   */
-  public List<Channel> getTabList() {
-    return mTabList;
-  }
-
-  public List<Channel> getOtherList() {
-    return otherChannelList;
-  }
-
-  /**
-   * 移动到我的频道
-   */
-  public Channel moveToMyChannel(final int starPos, final int endPos) {
-
-    //Channel channel = otherChannelList.get(starPos);
-    //
-    //HomeService service = NetRequest.getInstance().create(HomeService.class);
-    //Call<HttpResult<String>> call = service.addMyChannel(AppConstant.TEST_USER_ID, channel.code);
-    //call.enqueue(new SimpleCallback<String>() {
-    //  @Override
-    //  public void onSuccess(String data) {
-
-    Channel channel = otherChannelList.remove(starPos);
-    channel.setItemType(Channel.TYPE_MY_CHANNEL);
-    mTabList.add(endPos, channel);
-    //  }
-    //
-    //  @Override
-    //  public void onFail(String code, String errorMsg) {
-    //
-    //  }
-    //});
-
-    return channel;
-  }
-
-  /**
-   * 移动到推荐频道
-   */
-  public Channel moveToOtherChannel(final int starPos, final int endPos) {
-
-    //Channel channel = mTabList.get(starPos);
-    //
-    //HomeService service = NetRequest.getInstance().create(HomeService.class);
-    //Call<HttpResult<String>> call = service.deleteMyChannel(AppConstant.TEST_USER_ID, channel.code);
-    //call.enqueue(new Callback<HttpResult<String>>() {
-    //  @Override
-    //  public void onResponse(Call<HttpResult<String>> call, Response<HttpResult<String>> response) {
-    Channel remove = mTabList.remove(starPos);
-    remove.setItemType(Channel.TYPE_OTHER_CHANNEL);
-    otherChannelList.add(endPos, remove);
-    //  }
-    //
-    //  @Override
-    //  public void onFailure(Call<HttpResult<String>> call, Throwable t) {
-    //
-    //  }
-    //});
-
-    return remove;
-  }
-
-  /**
-   * 拿到 tab 名字列表
-   */
-  public List<String> getTabNameList() {
-    List<String> nameList = new ArrayList<>();
-    for (int i = 0; i < mTabList.size(); i++) {
-      nameList.add(mTabList.get(i).title);
+    @Deprecated
+    private void initOther() {
+        otherChannelList.add(new Channel(Channel.TYPE_OTHER_CHANNEL, "西瓜", "西瓜"));
+        otherChannelList.add(new Channel(Channel.TYPE_OTHER_CHANNEL, "橘子", "橘子"));
+        otherChannelList.add(new Channel(Channel.TYPE_OTHER_CHANNEL, "西红柿", "西红柿"));
+        otherChannelList.add(new Channel(Channel.TYPE_OTHER_CHANNEL, "土豆泥", "土豆泥"));
+        otherChannelList.add(new Channel(Channel.TYPE_OTHER_CHANNEL, "薯片", "薯片"));
+        otherChannelList.add(new Channel(Channel.TYPE_OTHER_CHANNEL, "牛肉", "牛肉"));
     }
-    return nameList;
-  }
 
-  /**
-   * 网络拉取 新闻类型 频道
-   */
-  public void getNewsChannel(@Nullable final NotifyListener listener) {
+    @Deprecated
+    private void initMyDefault() {
+        Context appContext = ILookApplication.getAppContext();
+        String recommend = appContext.getString(R.string.sub_tab_recommend);
+        String joke = appContext.getString(R.string.sub_tab_joke);
+        String music = appContext.getString(R.string.sub_tab_music);
+        String social = appContext.getString(R.string.sub_tab_social);
 
-    HomeService service = NetRequest.getInstance().create(HomeService.class);
-    Call<HttpResult<TabBean>> call = service.getChannel(AppConstant.TEST_USER_ID, HomeService.NEWS);
-    call.enqueue(new SimpleCallback<TabBean>() {
-      @Override
-      public void onSuccess(TabBean data) {
+        // add the default tab
+        mTabList.add(new Channel(Channel.TYPE_MY_CHANNEL, recommend, recommend, true));
+        mTabList.add(new Channel(Channel.TYPE_MY_CHANNEL, joke, joke, true));
+        mTabList.add(new Channel(Channel.TYPE_MY_CHANNEL, music, music, true));
+        mTabList.add(new Channel(Channel.TYPE_MY_CHANNEL, social, social, true));
+    }
 
-        hasInit = true;
-        mTabList = data.myChannels;
-        otherChannelList = data.myChannelsNot;
-        adaptMultiType(mTabList, true);
-        adaptMultiType(otherChannelList, false);
-        if (null != listener) {
-          listener.onSuccess();
+    public static TabManager getInstance() {
+        return SingletonHolder.mInstance;
+    }
+
+    private static class SingletonHolder {
+
+        private static final TabManager mInstance = new TabManager();
+    }
+
+    public boolean hasNewsInit() {
+        return hasNewsInit;
+    }
+
+    public boolean hasVideoInit() {
+        return hasVideoInit;
+    }
+
+    /**
+     * 拿到有几个默认标签
+     */
+    public int getDefaultSize() {
+        int size = mTabList.size();
+        int count = 0;
+        for (int i = 0; i < size; i++) {
+            Channel channel = mTabList.get(i);
+            if (channel.access) {
+                count++;
+            }
         }
-      }
-
-      @Override
-      public void onFail(String code, String errorMsg) {
-
-        hasInit = false;
-        if (null != listener) {
-          listener.onFail();
-        }
-      }
-    });
-  }
-
-  private void adaptMultiType(List<Channel> list, boolean mine) {
-    for (Channel one : list) {
-      one.setItemType(mine ? Channel.TYPE_MY_CHANNEL : Channel.TYPE_OTHER_CHANNEL);
+        return count;
     }
-  }
+
+    /**
+     * 添加标签
+     */
+    public void add(Channel entity) {
+        mTabList.add(entity);
+    }
+
+    /**
+     * 拿到 tab 列表
+     */
+    public List<Channel> getTabList() {
+        return mTabList;
+    }
+
+    /**
+     * 拿到 推荐标签列表
+     */
+    public List<Channel> getOtherList() {
+        return otherChannelList;
+    }
+
+    /**
+     * 拿到 视频标签列表
+     */
+    public List<Channel> getVideoList() {
+        return mVideoChannelList;
+    }
+
+    /**
+     * 移动到我的频道
+     */
+    public Channel moveToMyChannel(final int starPos, final int endPos) {
+
+        //Channel channel = otherChannelList.get(starPos);
+        //
+        //HomeService service = NetRequest.getInstance().create(HomeService.class);
+        //Call<HttpResult<String>> call = service.addMyChannel(AppConstant.TEST_USER_ID, channel.code);
+        //call.enqueue(new SimpleCallback<String>() {
+        //  @Override
+        //  public void onSuccess(String data) {
+
+        Channel channel = otherChannelList.remove(starPos);
+        channel.setItemType(Channel.TYPE_MY_CHANNEL);
+        mTabList.add(endPos, channel);
+        //  }
+        //
+        //  @Override
+        //  public void onFail(String code, String errorMsg) {
+        //
+        //  }
+        //});
+
+        return channel;
+    }
+
+    /**
+     * 移动到推荐频道
+     */
+    public Channel moveToOtherChannel(final int starPos, final int endPos) {
+
+        //Channel channel = mTabList.get(starPos);
+        //
+        //HomeService service = NetRequest.getInstance().create(HomeService.class);
+        //Call<HttpResult<String>> call = service.deleteMyChannel(AppConstant.TEST_USER_ID, channel.code);
+        //call.enqueue(new Callback<HttpResult<String>>() {
+        //  @Override
+        //  public void onResponse(Call<HttpResult<String>> call, Response<HttpResult<String>> response) {
+        Channel remove = mTabList.remove(starPos);
+        remove.setItemType(Channel.TYPE_OTHER_CHANNEL);
+        otherChannelList.add(endPos, remove);
+        //  }
+        //
+        //  @Override
+        //  public void onFailure(Call<HttpResult<String>> call, Throwable t) {
+        //
+        //  }
+        //});
+
+        return remove;
+    }
+
+    /**
+     * 拿到 tab 名字列表
+     */
+    public List<String> getTabNameList(boolean isVideo) {
+
+        List<Channel> targetList;
+        if (isVideo) {
+            targetList = mVideoChannelList;
+        } else {
+            targetList = mTabList;
+        }
+
+        List<String> nameList = new ArrayList<>();
+        for (int i = 0; i < targetList.size(); i++) {
+            nameList.add(targetList.get(i).title);
+        }
+        return nameList;
+    }
+
+    /**
+     * 网络拉取 新闻类型 频道
+     */
+    public void getNewsChannel(@Nullable final NotifyListener listener) {
+
+        HomeService service = NetRequest.getInstance().create(HomeService.class);
+        Call<HttpResult<TabBean>> call =
+                service.getChannel(AppConstant.TEST_USER_ID, HomeService.NEWS);
+        call.enqueue(new SimpleCallback<TabBean>() {
+            @Override
+            public void onSuccess(TabBean data) {
+
+                if (null != data) {
+                    hasNewsInit = true;
+                    mTabList = data.myChannels;
+                    otherChannelList = data.myChannelsNot;
+                    adaptMultiType(mTabList, true);
+                    adaptMultiType(otherChannelList, false);
+
+                    if (null != listener) {
+                        listener.onSuccess();
+                    }
+                } else {
+                    Timber.e(" can't get tab data.");
+                }
+            }
+
+            @Override
+            public void onFail(String code, String errorMsg) {
+
+                hasNewsInit = false;
+                if (null != listener) {
+                    listener.onFail();
+                }
+            }
+        });
+    }
+
+    private void adaptMultiType(List<Channel> list, boolean mine) {
+        for (Channel one : list) {
+            one.setItemType(mine ? Channel.TYPE_MY_CHANNEL : Channel.TYPE_OTHER_CHANNEL);
+        }
+    }
+
+    /**
+     * 网络拉取 视频类型 频道
+     */
+    public void getVideoChannel(@Nullable final NotifyListener listener) {
+
+        HomeService service = NetRequest.getInstance().create(HomeService.class);
+        Call<HttpResult<TabBean>> call =
+                service.getChannel(AppConstant.TEST_USER_ID, HomeService.VIDEO);
+        call.enqueue(new SimpleCallback<TabBean>() {
+            @Override
+            public void onSuccess(TabBean data) {
+
+                if (null != data) {
+                    mVideoChannelList = data.myChannels;
+                    hasVideoInit = true;
+
+                    if (null != listener) {
+                        listener.onSuccess();
+                    }
+                } else {
+                    Timber.e(" can't get tab data.");
+                }
+            }
+
+            @Override
+            public void onFail(String code, String errorMsg) {
+
+                hasVideoInit = false;
+                if (null != listener) {
+                    listener.onFail();
+                }
+            }
+        });
+    }
 }

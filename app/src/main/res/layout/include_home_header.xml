@@ -73,12 +73,10 @@
         android:layout_width="0dp"
         android:layout_height="40dp"
         android:layout_weight="1"
+        style="@style/tab_indicator"
         app:tl_indicator_color="@color/white"
-        app:tl_indicator_height="2dp"
-        app:tl_indicator_margin_bottom="4dp"
-        app:tl_indicator_width="@dimen/padding_normal"
-        app:tl_tab_width="48dp"
-        app:tl_textsize="@dimen/font_main" />
+        app:tl_textSelectColor="@color/white"
+        app:tl_textUnselectColor="@color/alpha_75_white"/>
 
     <ImageView
         android:id="@+id/iv_edit_channel"

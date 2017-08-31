@@ -20,51 +20,53 @@ import com.chaoneng.ilooknews.util.TimeCountdown;
 
 public class SplashActivity extends BaseActivity {
 
-  @BindView(R.id.tv_count_down) TextView mTimer;
-  @BindView(R.id.rl_container_ad) RelativeLayout mAdRoot;
-  @BindView(R.id.iv_logo) TextView mLogo;
-  @BindView(R.id.container) RelativeLayout rootView;
+    @BindView(R.id.tv_count_down) TextView mTimer;
+    @BindView(R.id.rl_container_ad) RelativeLayout mAdRoot;
+    @BindView(R.id.iv_logo) TextView mLogo;
+    @BindView(R.id.container) RelativeLayout rootView;
 
-  private TimeCountdown mTimeCountdown;
+    private TimeCountdown mTimeCountdown;
 
-  @Override
-  public int getLayoutId() {
-    return R.layout.activity_splash;
-  }
+    @Override
+    public int getLayoutId() {
+        return R.layout.activity_splash;
+    }
 
-  @Override
-  public void handleChildPage(Bundle savedInstanceState) {
+    @Override
+    public void handleChildPage(Bundle savedInstanceState) {
 
-    alphaAnimation();
-    countDown();
+        alphaAnimation();
+        countDown();
 
-    // for init tab as early as possible
-    TabManager.getInstance().getNewsChannel(null);
-  }
+        // for init tab as early as possible
+        TabManager tabManager = TabManager.getInstance();
+        tabManager.getNewsChannel(null);
+        tabManager.getVideoChannel(null);
+    }
 
-  private void alphaAnimation() {
-    long durationMs = 200;
-    if (BuildConfig.DEBUG) durationMs = 0; // speed up under debug
+    private void alphaAnimation() {
+        long durationMs = 200;
+        if (BuildConfig.DEBUG) durationMs = 0; // speed up under debug
 
-    Animation anim = new AlphaAnimation(0.1f, 1.0f);
-    anim.setDuration(durationMs);
-    rootView.startAnimation(anim);
-  }
+        Animation anim = new AlphaAnimation(0.1f, 1.0f);
+        anim.setDuration(durationMs);
+        rootView.startAnimation(anim);
+    }
 
-  private void countDown() {
-    int durationMs = 3 * 1000;
-    if (BuildConfig.DEBUG) durationMs = 0; // speed up under debug
+    private void countDown() {
+        int durationMs = 3 * 1000;
+        if (BuildConfig.DEBUG) durationMs = 0; // speed up under debug
 
-    mTimeCountdown = new TimeCountdown(durationMs, 1000) {
-      @Override
-      public void countdownListener(int currentValue, boolean isEnd) {
-        if (isEnd) {
-          MainActivity.startAction(SplashActivity.this);
-          finish();
-        } else {
-          mTimer.setText(String.format("跳过 %s", currentValue / 1000));
-        }
-      }
-    };
-  }
+        mTimeCountdown = new TimeCountdown(durationMs, 1000) {
+            @Override
+            public void countdownListener(int currentValue, boolean isEnd) {
+                if (isEnd) {
+                    MainActivity.startAction(SplashActivity.this);
+                    finish();
+                } else {
+                    mTimer.setText(String.format("跳过 %s", currentValue / 1000));
+                }
+            }
+        };
+    }
 }

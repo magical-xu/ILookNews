@@ -12,6 +12,7 @@ import com.chaoneng.ilooknews.data.Channel;
 import com.chaoneng.ilooknews.instance.TabManager;
 import com.chaoneng.ilooknews.module.video.fragment.VideoListFragment;
 import com.chaoneng.ilooknews.util.IntentHelper;
+import com.chaoneng.ilooknews.util.NotifyListener;
 import com.chaoneng.ilooknews.widget.adapter.BaseFragmentStateAdapter;
 import com.chaoneng.ilooknews.widget.adapter.OnPageChangeListener;
 import com.flyco.tablayout.SlidingTabLayout;
@@ -27,68 +28,89 @@ import java.util.List;
 
 public class VideoMainFragment extends BaseTitleFragment {
 
-  @BindView(R.id.sliding_tabs) SlidingTabLayout mTabView;
-  @BindView(R.id.btn_search) ImageView mSearchView;
-  @BindView(R.id.view_pager) ViewPager mViewPager;
+    @BindView(R.id.sliding_tabs) SlidingTabLayout mTabView;
+    @BindView(R.id.btn_search) ImageView mSearchView;
+    @BindView(R.id.view_pager) ViewPager mViewPager;
 
-  private BaseFragmentStateAdapter mPagerAdapter;
-  private List<Fragment> videoFragmentList = new ArrayList<>();
+    private BaseFragmentStateAdapter mPagerAdapter;
+    private List<Fragment> videoFragmentList = new ArrayList<>();
 
-  @Override
-  public void init() {
-    checkTitle();
-    List<Channel> tabList = TabManager.getInstance().getTabList();
+    @Override
+    public void init() {
+        checkTitle();
 
-    for (Channel subTab : tabList) {
-      videoFragmentList.add(VideoListFragment.newInstance(subTab.code));
+        TabManager tabManager = TabManager.getInstance();
+        if (tabManager.hasVideoInit()) {
+            setUp();
+        } else {
+            tabManager.getVideoChannel(new NotifyListener() {
+                @Override
+                public void onSuccess() {
+                    setUp();
+                }
+
+                @Override
+                public void onFail() {
+                }
+            });
+        }
     }
 
-    mPagerAdapter = new BaseFragmentStateAdapter(getChildFragmentManager(), videoFragmentList,
-        TabManager.getInstance().getTabNameList());
+    private void setUp() {
 
-    mViewPager.setAdapter(mPagerAdapter);
-    mTabView.setViewPager(mViewPager);
-    mViewPager.setCurrentItem(0);
+        List<Channel> tabList = TabManager.getInstance().getVideoList();
 
-    mViewPager.addOnPageChangeListener(new OnPageChangeListener() {
-      @Override
-      public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-        // TODO: 17/8/16 暂停播放视频
-        GSYVideoPlayer.releaseAllVideos();
-      }
-    });
-  }
+        for (Channel subTab : tabList) {
+            videoFragmentList.add(VideoListFragment.newInstance(subTab.code));
+        }
 
-  private void checkTitle() {
-    mTitleBar.setTitleImage(R.drawable.img_video_title)
-        .setLeftCircle(AppConstant.TEST_AVATAR)
-        .hideDivider();
-  }
+        mPagerAdapter = new BaseFragmentStateAdapter(getChildFragmentManager(), videoFragmentList,
+                TabManager.getInstance().getTabNameList(true));
 
-  @Override
-  public int getSubLayout() {
-    return R.layout.layout_main_video_fg;
-  }
+        mViewPager.setAdapter(mPagerAdapter);
+        mTabView.setViewPager(mViewPager);
+        mViewPager.setCurrentItem(0);
 
-  @Override
-  protected void beginLoadData() {
-
-  }
-
-  @OnClick(R.id.btn_search)
-  public void onClickSearch() {
-    IntentHelper.openSearchPage(getActivity());
-  }
-
-  public boolean onBackPressed() {
-    if (StandardGSYVideoPlayer.backFromWindowFull(getActivity())) {
-      return true;
+        mViewPager.addOnPageChangeListener(new OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset,
+                    int positionOffsetPixels) {
+                // TODO: 17/8/16 暂停播放视频
+                GSYVideoPlayer.releaseAllVideos();
+            }
+        });
     }
-    return false;
-  }
 
-  @Override
-  protected void onVisible() {
-    super.onVisible();
-  }
+    private void checkTitle() {
+        mTitleBar.setTitleImage(R.drawable.img_video_title)
+                .setLeftCircle(AppConstant.TEST_AVATAR)
+                .hideDivider();
+    }
+
+    @Override
+    public int getSubLayout() {
+        return R.layout.layout_main_video_fg;
+    }
+
+    @Override
+    protected void beginLoadData() {
+
+    }
+
+    @OnClick(R.id.btn_search)
+    public void onClickSearch() {
+        IntentHelper.openSearchPage(getActivity());
+    }
+
+    public boolean onBackPressed() {
+        if (StandardGSYVideoPlayer.backFromWindowFull(getActivity())) {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    protected void onVisible() {
+        super.onVisible();
+    }
 }

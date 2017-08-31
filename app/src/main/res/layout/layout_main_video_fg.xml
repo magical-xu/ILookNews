@@ -12,19 +12,27 @@
       android:gravity="center_vertical"
       android:orientation="horizontal">
 
+    <!--app:tl_tab_width="48dp"-->
+    <!--
+    app:tl_indicator_color="@color/main_color"
+        app:tl_indicator_corner_radius="3dp"
+        app:tl_indicator_height="2dp"
+        app:tl_indicator_margin_bottom="4dp"
+        app:tl_indicator_width="@dimen/padding_normal"
+        app:tl_indicator_width_equal_title="true"
+        app:tl_tab_padding="@dimen/padding_small"
+        app:tl_tab_space_equal="true"
+        app:tl_textBold="SELECT"
+        app:tl_textSelectColor="@color/main_color"
+        app:tl_textUnselectColor="@color/three_text_color"
+        app:tl_textsize="@dimen/font_main"
+    -->
     <com.flyco.tablayout.SlidingTabLayout
         android:id="@+id/sliding_tabs"
         android:layout_width="0dp"
         android:layout_height="40dp"
         android:layout_weight="1"
-        app:tl_indicator_color="@color/main_color"
-        app:tl_indicator_height="2dp"
-        app:tl_indicator_margin_bottom="4dp"
-        app:tl_indicator_width="@dimen/padding_normal"
-        app:tl_tab_width="48dp"
-        app:tl_textSelectColor="@color/main_color"
-        app:tl_textUnselectColor="@color/three_text_color"
-        app:tl_textsize="@dimen/font_main" />
+        style="@style/tab_indicator" />
 
     <ImageView
         android:id="@+id/btn_search"
