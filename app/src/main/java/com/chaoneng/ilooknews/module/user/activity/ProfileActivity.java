@@ -13,7 +13,7 @@ import com.chaoneng.ilooknews.AppConstant;
 import com.chaoneng.ilooknews.R;
 import com.chaoneng.ilooknews.base.BaseActivity;
 import com.chaoneng.ilooknews.module.user.widget.SettingItemView;
-import com.chaoneng.ilooknews.widget.ILookTitleBar;
+import com.chaoneng.ilooknews.widget.ilook.ILookTitleBar;
 import com.magicalxu.library.blankj.ToastUtils;
 import java.util.List;
 

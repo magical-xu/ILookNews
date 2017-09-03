@@ -8,7 +8,7 @@ import com.bilibili.boxing.model.entity.BaseMedia;
 import com.chaoneng.ilooknews.R;
 import com.chaoneng.ilooknews.base.BaseActivity;
 import com.chaoneng.ilooknews.library.boxing.BoxingHelper;
-import com.chaoneng.ilooknews.widget.ILookTitleBar;
+import com.chaoneng.ilooknews.widget.ilook.ILookTitleBar;
 import com.chaoneng.ilooknews.widget.selector.ImageSelector;
 import com.chaoneng.ilooknews.widget.selector.ImageSelectorCallback;
 import com.chaoneng.ilooknews.widget.text.CountEditText;

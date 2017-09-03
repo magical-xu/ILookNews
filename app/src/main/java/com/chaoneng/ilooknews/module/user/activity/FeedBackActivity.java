@@ -7,7 +7,7 @@ import android.widget.EditText;
 import butterknife.BindView;
 import com.chaoneng.ilooknews.R;
 import com.chaoneng.ilooknews.base.BaseActivity;
-import com.chaoneng.ilooknews.widget.ILookTitleBar;
+import com.chaoneng.ilooknews.widget.ilook.ILookTitleBar;
 import com.magicalxu.library.blankj.ToastUtils;
 
 /**

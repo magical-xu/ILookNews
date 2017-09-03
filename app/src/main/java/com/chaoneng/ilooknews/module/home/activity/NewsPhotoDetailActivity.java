@@ -12,7 +12,7 @@ import com.chaoneng.ilooknews.R;
 import com.chaoneng.ilooknews.base.BaseActivity;
 import com.chaoneng.ilooknews.module.home.data.NewsPhotoDetail;
 import com.chaoneng.ilooknews.module.home.fragment.PhotoDetailFragment;
-import com.chaoneng.ilooknews.widget.ILookTitleBar;
+import com.chaoneng.ilooknews.widget.ilook.ILookTitleBar;
 import com.chaoneng.ilooknews.widget.adapter.BaseFragmentAdapter;
 import com.chaoneng.ilooknews.widget.adapter.OnPageChangeListener;
 import com.chaoneng.ilooknews.widget.viewpager.ViewPagerFixed;

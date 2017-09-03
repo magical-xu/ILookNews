@@ -9,7 +9,7 @@ import com.chaoneng.ilooknews.base.BaseActivity;
 import com.chaoneng.ilooknews.data.MockServer;
 import com.chaoneng.ilooknews.module.home.adapter.NotifyAdapter;
 import com.chaoneng.ilooknews.util.RefreshHelper;
-import com.chaoneng.ilooknews.widget.ILookTitleBar;
+import com.chaoneng.ilooknews.widget.ilook.ILookTitleBar;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 
 /**

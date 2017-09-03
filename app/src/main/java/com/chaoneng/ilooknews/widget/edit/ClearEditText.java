@@ -1,4 +1,4 @@
-package com.chaoneng.ilooknews.widget;
+package com.chaoneng.ilooknews.widget.edit;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;

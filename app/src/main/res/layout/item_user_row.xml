@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:padding="@dimen/padding_normal">
+
+  <com.chaoneng.ilooknews.widget.image.HeadImageView
+      android:id="@+id/iv_avatar"
+      android:layout_width="40dp"
+      android:layout_height="40dp"
+      tools:background="#f00" />
+
+  <LinearLayout
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_weight="1"
+      android:orientation="vertical"
+      android:paddingLeft="12dp"
+      android:paddingRight="8dp">
+
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/padding_small"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textColor="@color/one_text_color"
+        android:textSize="@dimen/font_main"
+        tools:text="@string/test_text_long" />
+
+    <TextView
+        android:id="@+id/tv_intro"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textColor="@color/two_text_color"
+        android:textSize="@dimen/font_small"
+        tools:text="@string/test_text_medium" />
+  </LinearLayout>
+
+  <TextView
+      android:id="@+id/tv_focus"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:background="@drawable/bg_btn_focus"
+      android:padding="@dimen/padding_small"
+      android:text="@string/focus_add"
+      android:textColor="@color/main_color"
+      android:textSize="@dimen/font_main" />
+</LinearLayout>

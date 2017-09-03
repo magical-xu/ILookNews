@@ -4,7 +4,7 @@ import android.view.LayoutInflater;
 import android.widget.FrameLayout;
 import butterknife.ButterKnife;
 import com.chaoneng.ilooknews.R;
-import com.chaoneng.ilooknews.widget.ILookTitleBar;
+import com.chaoneng.ilooknews.widget.ilook.ILookTitleBar;
 
 /**
  * Created by magical on 17/8/18.

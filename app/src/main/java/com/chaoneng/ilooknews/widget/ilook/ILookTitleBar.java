@@ -1,4 +1,4 @@
-package com.chaoneng.ilooknews.widget;
+package com.chaoneng.ilooknews.widget.ilook;
 
 import android.app.Activity;
 import android.content.Context;

@@ -10,7 +10,7 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import butterknife.ButterKnife;
 import com.chaoneng.ilooknews.R;
-import com.chaoneng.ilooknews.widget.ILookTitleBar;
+import com.chaoneng.ilooknews.widget.ilook.ILookTitleBar;
 import fm.jiecao.jcvideoplayer_lib.JCVideoPlayer;
 
 /**
