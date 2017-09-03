@@ -11,6 +11,9 @@ public interface AppConstant {
 
     int DEFAULT_PAGE_SIZE = 10;   //列表页默认10条
 
+    String USER_FOLLOW = "1";     //已关注
+    String USER_UN_FOLLOW = "0";  //未关注
+
     String HOME_CURRENT_TAB_POSITION = "HOME_CURRENT_TAB_POSITION";
 
     String TEST_AVATAR = "http://wohuizhong.com/pictures/avatar/888";

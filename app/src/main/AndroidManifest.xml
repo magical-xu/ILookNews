@@ -41,9 +41,9 @@
 
     <activity
         android:name=".MainActivity"
-        android:screenOrientation="portrait"
-        android:exported="false"
         android:configChanges="orientation|screenSize|keyboard|keyboardHidden"
+        android:exported="false"
+        android:screenOrientation="portrait"
         android:theme="@style/SimpleActivityTheme" />
     <activity
         android:name=".module.home.activity.NotifyActivity"
@@ -90,8 +90,13 @@
         android:screenOrientation="portrait"
         android:theme="@style/SimpleActivityTheme" />
     <activity
-        android:configChanges="orientation|screenSize|keyboard|keyboardHidden"
         android:name=".module.login.RegisterActivity"
+        android:configChanges="orientation|screenSize|keyboard|keyboardHidden"
+        android:screenOrientation="portrait"
+        android:theme="@style/SimpleActivityTheme" />
+    <activity
+        android:name=".module.focus.AddFollowListActivity"
+        android:configChanges="orientation|screenSize|keyboard|keyboardHidden"
         android:screenOrientation="portrait"
         android:theme="@style/SimpleActivityTheme" />
   </application>

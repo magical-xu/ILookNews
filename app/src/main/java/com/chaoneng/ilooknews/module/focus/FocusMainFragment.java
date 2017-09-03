@@ -14,6 +14,7 @@ import com.chaoneng.ilooknews.module.focus.data.FocusWrapper;
 import com.chaoneng.ilooknews.net.callback.SimpleCallback;
 import com.chaoneng.ilooknews.net.client.NetRequest;
 import com.chaoneng.ilooknews.net.data.HttpResult;
+import com.chaoneng.ilooknews.util.IntentHelper;
 import com.chaoneng.ilooknews.util.RefreshHelper;
 import com.chaoneng.ilooknews.widget.ilook.ILookTitleBar;
 import com.magicalxu.library.blankj.ToastUtils;
@@ -50,7 +51,7 @@ public class FocusMainFragment extends BaseTitleFragment {
                     @Override
                     public void onClickRightImage(View view) {
                         super.onClickRightImage(view);
-                        ToastUtils.showShort("加關注");
+                        IntentHelper.openAddFocusPage(getActivity());
                     }
                 });
 

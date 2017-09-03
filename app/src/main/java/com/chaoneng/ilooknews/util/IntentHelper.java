@@ -2,6 +2,7 @@ package com.chaoneng.ilooknews.util;
 
 import android.content.Context;
 import android.content.Intent;
+import com.chaoneng.ilooknews.module.focus.AddFollowListActivity;
 import com.chaoneng.ilooknews.module.home.activity.NewsPhotoDetailActivity;
 import com.chaoneng.ilooknews.module.home.activity.NotifyActivity;
 import com.chaoneng.ilooknews.module.home.activity.NewsDetailActivity;
@@ -104,5 +105,12 @@ public class IntentHelper {
      */
     public static void openRegisterPage(Context context) {
         context.startActivity(new Intent(context, RegisterActivity.class));
+    }
+
+    /**
+     * 跳转加关注界面
+     */
+    public static void openAddFocusPage(Context context) {
+        context.startActivity(new Intent(context, AddFollowListActivity.class));
     }
 }

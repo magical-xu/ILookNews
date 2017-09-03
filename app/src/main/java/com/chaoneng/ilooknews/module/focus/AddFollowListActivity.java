@@ -8,7 +8,7 @@ import com.chaoneng.ilooknews.AppConstant;
 import com.chaoneng.ilooknews.R;
 import com.chaoneng.ilooknews.api.UserService;
 import com.chaoneng.ilooknews.base.BaseActivity;
-import com.chaoneng.ilooknews.module.focus.adapter.FocusAdapter;
+import com.chaoneng.ilooknews.module.focus.adapter.FocusAddAdapter;
 import com.chaoneng.ilooknews.module.focus.data.FocusBean;
 import com.chaoneng.ilooknews.module.focus.data.FocusWrapper;
 import com.chaoneng.ilooknews.net.callback.SimpleCallback;
@@ -30,7 +30,7 @@ public class AddFollowListActivity extends BaseActivity {
     @BindView(R.id.id_recycler) RecyclerView mRecyclerView;
     @BindView(R.id.id_refresh_layout) SmartRefreshLayout mRefreshLayout;
 
-    private FocusAdapter mAdapter;
+    private FocusAddAdapter mAdapter;
     private RefreshHelper<FocusBean> mRefreshHelper;
     private UserService service;
 
@@ -61,7 +61,7 @@ public class AddFollowListActivity extends BaseActivity {
 
     private void config() {
 
-        mAdapter = new FocusAdapter(R.layout.item_main_focus);
+        mAdapter = new FocusAddAdapter(R.layout.item_add_focus);
         mRecyclerView.setAdapter(mAdapter);
         mRefreshHelper = new RefreshHelper<FocusBean>(mRefreshLayout, mAdapter, mRecyclerView) {
             @Override
@@ -69,6 +69,8 @@ public class AddFollowListActivity extends BaseActivity {
                 loadData(page);
             }
         };
+
+        mRefreshHelper.beginLoadData();
     }
 
     private void loadData(int page) {
