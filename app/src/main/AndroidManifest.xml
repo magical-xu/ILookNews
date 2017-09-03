@@ -86,7 +86,7 @@
         android:screenOrientation="portrait"
         android:theme="@style/SimpleActivityTheme" />
     <activity
-        android:name=".module.home.data.NewsDetailActivity"
+        android:name=".module.home.activity.NewsDetailActivity"
         android:screenOrientation="portrait"
         android:theme="@style/SimpleActivityTheme" />
     <activity

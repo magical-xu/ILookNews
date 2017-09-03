@@ -1,5 +1,6 @@
 package com.chaoneng.ilooknews.api;
 
+import com.chaoneng.ilooknews.module.focus.data.FocusWrapper;
 import com.chaoneng.ilooknews.net.data.HttpResult;
 import java.util.Map;
 import retrofit2.Call;
@@ -80,4 +81,11 @@ public interface UserService {
     @POST("changeUserInfo")
     Call<HttpResult<String>> modifyUserInfo(@Query("userid") String userId, @Query("type") int type,
             @QueryMap Map<String, String> options);
+
+    /**
+     * 我未关注的用户列表
+     */
+    @GET("getNotFollow")
+    Call<HttpResult<FocusWrapper>> getNotFollowList(@Query("myid") String userId,
+            @Query("page") int page, @Query("pageSize") int pageSize);
 }

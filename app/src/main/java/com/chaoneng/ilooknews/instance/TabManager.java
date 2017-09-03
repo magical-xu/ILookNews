@@ -76,6 +76,10 @@ public class TabManager {
         return hasNewsInit;
     }
 
+    public void setHasInit(boolean hasInit) {
+        this.hasNewsInit = hasInit;
+    }
+
     public boolean hasVideoInit() {
         return hasVideoInit;
     }

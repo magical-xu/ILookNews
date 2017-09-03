@@ -4,18 +4,24 @@ import java.io.Serializable;
 
 /**
  * Created by magical on 17/8/19.
- * Description :
+ * Description : 未关注人列表
  */
 
 public class FocusBean implements Serializable {
 
-  public String avatar;
+    /**
+     * target_id : 402881e55dc289e6015dc289eb300000
+     * isFollow : 0
+     * gender : 0
+     * isVip : 0
+     * lastTitleVideo :
+     * introduce :
+     */
 
-  public String name;
-
-  public String time;
-
-  public String intro;
-
-  public String content;
+    public String target_id;
+    public String isFollow;
+    public int gender;
+    public int isVip;
+    public String lastTitleVideo;
+    public String introduce;
 }

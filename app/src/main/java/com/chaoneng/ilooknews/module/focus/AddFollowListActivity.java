@@ -1,13 +1,13 @@
 package com.chaoneng.ilooknews.module.focus;
 
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import butterknife.BindView;
 import com.chaoneng.ilooknews.AppConstant;
 import com.chaoneng.ilooknews.R;
 import com.chaoneng.ilooknews.api.UserService;
-import com.chaoneng.ilooknews.base.BaseTitleFragment;
-import com.chaoneng.ilooknews.data.MockServer;
+import com.chaoneng.ilooknews.base.BaseActivity;
 import com.chaoneng.ilooknews.module.focus.adapter.FocusAdapter;
 import com.chaoneng.ilooknews.module.focus.data.FocusBean;
 import com.chaoneng.ilooknews.module.focus.data.FocusWrapper;
@@ -21,46 +21,42 @@ import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import retrofit2.Call;
 
 /**
- * Created by magical on 17/8/15.
- * Description : 主页 - 关注
+ * Created by magical on 2017/9/3.
+ * Description : 加关注列表
  */
 
-public class FocusMainFragment extends BaseTitleFragment {
+public class AddFollowListActivity extends BaseActivity {
 
     @BindView(R.id.id_recycler) RecyclerView mRecyclerView;
     @BindView(R.id.id_refresh_layout) SmartRefreshLayout mRefreshLayout;
 
     private FocusAdapter mAdapter;
     private RefreshHelper<FocusBean> mRefreshHelper;
-    private MockServer mockServer;
     private UserService service;
 
     @Override
-    protected void beginLoadData() {
-        mRefreshHelper.beginLoadData();
+    public int getLayoutId() {
+        return R.layout.simple_recycler_list;
     }
 
     @Override
-    public void init() {
+    protected boolean addTitleBar() {
+        return true;
+    }
 
-        mTitleBar.setTitleImage(R.drawable.img_focus_title)
-                .setRightImage(R.drawable.ic_care_plus_blue)
-                .hideLeftImage()
-                .setTitleListener(new ILookTitleBar.TitleCallbackAdapter() {
-                    @Override
-                    public void onClickRightImage(View view) {
-                        super.onClickRightImage(view);
-                        ToastUtils.showShort("加關注");
-                    }
-                });
+    @Override
+    public void handleChildPage(Bundle savedInstanceState) {
+
+        mTitleBar.setTitle("添加关注").setTitleListener(new ILookTitleBar.TitleCallbackAdapter() {
+            @Override
+            public void onClickLeft(View view) {
+                super.onClickLeft(view);
+                finish();
+            }
+        });
 
         service = NetRequest.getInstance().create(UserService.class);
         config();
-    }
-
-    @Override
-    public int getSubLayout() {
-        return R.layout.simple_recycler_list;
     }
 
     private void config() {
@@ -70,12 +66,9 @@ public class FocusMainFragment extends BaseTitleFragment {
         mRefreshHelper = new RefreshHelper<FocusBean>(mRefreshLayout, mAdapter, mRecyclerView) {
             @Override
             public void onRequest(int page) {
-                //mockServer.mockGankCall(page, MockServer.Type.FOCUS);
                 loadData(page);
             }
         };
-        //mockServer = MockServer.getInstance();
-        //mockServer.init(mRefreshHelper);
     }
 
     private void loadData(int page) {

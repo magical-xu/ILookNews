@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import com.chaoneng.ilooknews.module.home.activity.NewsPhotoDetailActivity;
 import com.chaoneng.ilooknews.module.home.activity.NotifyActivity;
-import com.chaoneng.ilooknews.module.home.data.NewsDetailActivity;
+import com.chaoneng.ilooknews.module.home.activity.NewsDetailActivity;
 import com.chaoneng.ilooknews.module.login.LoginActivity;
 import com.chaoneng.ilooknews.module.login.RegisterActivity;
 import com.chaoneng.ilooknews.module.search.SearchActivity;
@@ -95,8 +95,8 @@ public class IntentHelper {
     /**
      * 跳转新闻详情界面 （图文）
      */
-    public static void openNewsDetailPage(Context context) {
-        context.startActivity(new Intent(context, NewsDetailActivity.class));
+    public static void openNewsDetailPage(Context context, String newsId) {
+        NewsDetailActivity.getInstance(context, newsId);
     }
 
     /**

@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import com.chaoneng.ilooknews.api.Constant;
 import com.chaoneng.ilooknews.library.boxing.BoxingHelper;
+import com.chaoneng.ilooknews.library.loadandretry.LoadingAndRetryManager;
 import com.chaoneng.ilooknews.net.client.NetRequest;
 import com.facebook.stetho.Stetho;
 import com.magicalxu.library.Utils;
@@ -25,62 +26,67 @@ import timber.log.Timber;
 
 public class ILookApplication extends Application {
 
-  private static Context INSTANCE;
+    private static Context INSTANCE;
 
-  //static 代码段可以防止内存泄露
-  static {
-    //设置全局的Header构建器
-    SmartRefreshLayout.setDefaultRefreshHeaderCreater(new DefaultRefreshHeaderCreater() {
-      @Override
-      public RefreshHeader createRefreshHeader(Context context, RefreshLayout layout) {
-        layout.setPrimaryColorsId(R.color.colorPrimary, android.R.color.white);//全局设置主题颜色
-        return new ClassicsHeader(context).setSpinnerStyle(
-            SpinnerStyle.Translate);//指定为经典Header，默认是 贝塞尔雷达Header
-      }
-    });
-    //设置全局的Footer构建器
-    SmartRefreshLayout.setDefaultRefreshFooterCreater(new DefaultRefreshFooterCreater() {
-      @Override
-      public RefreshFooter createRefreshFooter(Context context, RefreshLayout layout) {
-        //指定为经典Footer，默认是 BallPulseFooter
-        ClassicsFooter footer = new ClassicsFooter(context).setSpinnerStyle(SpinnerStyle.Translate);
-        footer.setBackgroundResource(android.R.color.white);
-        footer.setSpinnerStyle(SpinnerStyle.Scale);
-        return footer;
-      }
-    });
-  }
+    //static 代码段可以防止内存泄露
+    static {
+        //设置全局的Header构建器
+        SmartRefreshLayout.setDefaultRefreshHeaderCreater(new DefaultRefreshHeaderCreater() {
+            @Override
+            public RefreshHeader createRefreshHeader(Context context, RefreshLayout layout) {
+                layout.setPrimaryColorsId(R.color.colorPrimary, android.R.color.white);//全局设置主题颜色
+                return new ClassicsHeader(context).setSpinnerStyle(
+                        SpinnerStyle.Translate);//指定为经典Header，默认是 贝塞尔雷达Header
+            }
+        });
+        //设置全局的Footer构建器
+        SmartRefreshLayout.setDefaultRefreshFooterCreater(new DefaultRefreshFooterCreater() {
+            @Override
+            public RefreshFooter createRefreshFooter(Context context, RefreshLayout layout) {
+                //指定为经典Footer，默认是 BallPulseFooter
+                ClassicsFooter footer =
+                        new ClassicsFooter(context).setSpinnerStyle(SpinnerStyle.Translate);
+                footer.setBackgroundResource(android.R.color.white);
+                footer.setSpinnerStyle(SpinnerStyle.Scale);
+                return footer;
+            }
+        });
 
-  @Override
-  public void onCreate() {
-    super.onCreate();
+        LoadingAndRetryManager.BASE_EMPTY_LAYOUT_ID = R.layout.base_empty;
+        LoadingAndRetryManager.BASE_LOADING_LAYOUT_ID = R.layout.base_loading;
+        LoadingAndRetryManager.BASE_RETRY_LAYOUT_ID = R.layout.base_retry;
+    }
 
-    INSTANCE = getApplicationContext();
+    @Override
+    public void onCreate() {
+        super.onCreate();
 
-    Utils.init(this);
-    initLib();
-  }
+        INSTANCE = getApplicationContext();
 
-  private void initLib() {
+        Utils.init(this);
+        initLib();
+    }
 
-    // init timber
-    Timber.plant(new Timber.DebugTree());
+    private void initLib() {
 
-    // request debug
-    Stetho.initializeWithDefaults(this);
+        // init timber
+        Timber.plant(new Timber.DebugTree());
 
-    // init boxing
-    BoxingHelper.init();
+        // request debug
+        Stetho.initializeWithDefaults(this);
 
-    // init retrofit client
-    NetRequest.getInstance().init(this, Constant.ILOOK_BASE_URL);
-  }
+        // init boxing
+        BoxingHelper.init();
 
-  public static Context getAppContext() {
-    return INSTANCE;
-  }
+        // init retrofit client
+        NetRequest.getInstance().init(this, Constant.ILOOK_BASE_URL);
+    }
 
-  public static String getLocalString(int resId) {
-    return getAppContext().getString(resId);
-  }
+    public static Context getAppContext() {
+        return INSTANCE;
+    }
+
+    public static String getLocalString(int resId) {
+        return getAppContext().getString(resId);
+    }
 }

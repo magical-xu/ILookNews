@@ -80,7 +80,8 @@ public class NewsListFragment extends BaseFragment {
         mRefreshHelper = new RefreshHelper(mRefreshLayout, mAdapter, mRecyclerView) {
             @Override
             public void onRequest(int page) {
-                loadData(page);
+                //loadData(page);
+                load(page);
             }
         };
         mockServer.init(mRefreshHelper);
@@ -90,14 +91,15 @@ public class NewsListFragment extends BaseFragment {
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 NewsListBean bean = mAdapter.getData().get(position);
                 int itemType = bean.getItemType();
+                String newId = bean.newId;
                 if (itemType == NewsListBean.VIDEO) {
                     IntentHelper.openVideoDetailPage(getActivity(), "");
                 } else if (itemType == NewsListBean.TEXT) {
-                    IntentHelper.openNewsDetailPage(mContext);
+                    IntentHelper.openNewsDetailPage(mContext, newId);
                 } else if (itemType == NewsListBean.THREE_IMG) {
                     IntentHelper.openNewsPhotoDetailPage(mContext);
                 } else {
-                    IntentHelper.openNewsDetailPage(mContext);
+                    IntentHelper.openNewsDetailPage(mContext, newId);
                 }
             }
         });
