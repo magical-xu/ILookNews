@@ -1,7 +1,7 @@
 package com.chaoneng.ilooknews.api;
 
 import com.chaoneng.ilooknews.data.TabBean;
-import com.chaoneng.ilooknews.module.home.data.NewsDetailBean;
+import com.chaoneng.ilooknews.data.NewsInfoWrapper;
 import com.chaoneng.ilooknews.module.home.data.NewsListWrapper;
 import com.chaoneng.ilooknews.net.data.HttpResult;
 import java.util.Map;
@@ -47,7 +47,7 @@ public interface HomeService {
    * 获取新闻详情
    */
   @GET("getNewsInfoByid")
-  Call<HttpResult<NewsDetailBean>> getNewsDetail(@Query("userid") String userId,
+  Call<HttpResult<NewsInfoWrapper>> getNewsDetail(@Query("userid") String userId,
       @Query("newsId") String newsId, @Query("newstype") int type);
 
   /**

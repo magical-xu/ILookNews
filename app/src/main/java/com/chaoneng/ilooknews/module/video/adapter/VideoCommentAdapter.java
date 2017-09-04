@@ -5,7 +5,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.chaoneng.ilooknews.AppConstant;
 import com.chaoneng.ilooknews.R;
-import com.chaoneng.ilooknews.module.video.data.VideoComment;
+import com.chaoneng.ilooknews.data.CommentBean;
 import com.chaoneng.ilooknews.widget.image.HeadImageView;
 
 /**
@@ -13,14 +13,14 @@ import com.chaoneng.ilooknews.widget.image.HeadImageView;
  * Description :
  */
 
-public class VideoCommentAdapter extends BaseQuickAdapter<VideoComment, BaseViewHolder> {
+public class VideoCommentAdapter extends BaseQuickAdapter<CommentBean, BaseViewHolder> {
 
   public VideoCommentAdapter(@LayoutRes int layoutResId) {
     super(layoutResId);
   }
 
   @Override
-  protected void convert(BaseViewHolder helper, VideoComment item) {
+  protected void convert(BaseViewHolder helper, CommentBean item) {
 
     HeadImageView headImageView = helper.getView(R.id.iv_avatar);
     headImageView.setHeadImage(AppConstant.TEST_AVATAR);

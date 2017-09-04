@@ -1,6 +1,8 @@
 package com.chaoneng.ilooknews.module.user.widget;
 
 import android.content.Context;
+import android.support.annotation.ColorRes;
+import android.support.annotation.DimenRes;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +11,7 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.chaoneng.ilooknews.R;
+import com.chaoneng.ilooknews.util.CompatUtil;
 
 /**
  * Created by magical.zhang on 2017/2/27.
@@ -57,6 +60,26 @@ public class RelationView extends RelativeLayout {
 
   public RelationView hideRedPoint() {
     mRedPoint.setVisibility(View.GONE);
+    return this;
+  }
+
+  public RelationView setTopColor(@ColorRes int color) {
+    mCountTv.setTextColor(CompatUtil.getColor(getContext(), color));
+    return this;
+  }
+
+  public RelationView setBottomColor(@ColorRes int color) {
+    mSuffix.setTextColor(CompatUtil.getColor(getContext(), color));
+    return this;
+  }
+
+  public RelationView setTopSize(@DimenRes int size) {
+    mCountTv.setTextSize(size);
+    return this;
+  }
+
+  public RelationView setBottomSize(@DimenRes int size) {
+    mSuffix.setTextSize(size);
     return this;
   }
 }

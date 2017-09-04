@@ -28,6 +28,7 @@ public interface AppConstant {
     String TEST_NEWS_USER_ID = "402881ea5bbdf23f015bbdf2418b0000";
 
     String TEST_NEWS_ID = "402881ea5bc512b1015bc512b5110000";
+    String TEST_PHOTO_NEWS_ID = "402881ea5bc50ff7015bc50ffc1a0000";
 
     String TEST_VIDEO_URL = "http://baobab.wdjcdn.com/14564977406580.mp4";
 

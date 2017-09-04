@@ -99,7 +99,7 @@ public class NewsListFragment extends BaseFragment {
                 } else if (itemType == NewsListBean.THREE_IMG) {
                     IntentHelper.openNewsPhotoDetailPage(mContext);
                 } else {
-                    IntentHelper.openNewsDetailPage(mContext, newId);
+                    IntentHelper.openNewsPhotoDetailPage(mContext);
                 }
             }
         });

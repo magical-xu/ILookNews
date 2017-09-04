@@ -7,7 +7,6 @@ import com.chaoneng.ilooknews.api.GankService;
 import com.chaoneng.ilooknews.module.focus.data.FocusBean;
 import com.chaoneng.ilooknews.module.user.data.BrokeNewsBean;
 import com.chaoneng.ilooknews.module.user.data.UserStateBean;
-import com.chaoneng.ilooknews.module.video.data.VideoComment;
 import com.chaoneng.ilooknews.module.video.data.VideoListBean;
 import com.chaoneng.ilooknews.net.callback.SimpleJsonCallback;
 import com.chaoneng.ilooknews.net.client.NetRequest;
@@ -136,10 +135,10 @@ public class MockServer<T> {
         return list;
     }
 
-    private List<VideoComment> getVideoComment() {
-        List<VideoComment> list = new ArrayList<>();
+  private List<CommentBean> getVideoComment() {
+    List<CommentBean> list = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
-            VideoComment user = new VideoComment();
+          CommentBean user = new CommentBean();
             list.add(user);
         }
         return list;

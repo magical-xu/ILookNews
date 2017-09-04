@@ -1,13 +1,13 @@
-package com.chaoneng.ilooknews.module.video.data;
+package com.chaoneng.ilooknews.data;
 
 import java.io.Serializable;
 
 /**
  * Created by magical on 17/8/20.
- * Description : 视频评论
+ * Description : 统一 评论实体
  */
 
-public class VideoComment implements Serializable {
+public class CommentBean implements Serializable {
 
     /**
      * cid : 8a10fb5e5e258bec015e27ebd46e0001

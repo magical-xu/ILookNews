@@ -3,6 +3,8 @@ package com.chaoneng.ilooknews.api;
 import com.chaoneng.ilooknews.module.focus.data.FocusWrapper;
 import com.chaoneng.ilooknews.module.user.data.NotifyDetail;
 import com.chaoneng.ilooknews.module.user.data.NotifyWrapper;
+import com.chaoneng.ilooknews.module.user.data.UserCenterWrapper;
+import com.chaoneng.ilooknews.module.user.data.UserInfoWrapper;
 import com.chaoneng.ilooknews.net.data.HttpResult;
 import java.util.Map;
 import org.json.JSONObject;
@@ -119,7 +121,7 @@ public interface UserService {
    * @param type 1 动态 2 我的爆料
    */
   @GET("getUserInfo")
-  Call<HttpResult<String>> getUserInfo(@Query("userid") String userId,
+  Call<HttpResult<UserInfoWrapper>> getUserInfo(@Query("userid") String userId,
       @Query("targetId") String targetId, @Query("type") int type, @Query("page") int page,
       @Query("pageSize") int pageSize);
 
@@ -141,6 +143,7 @@ public interface UserService {
    * 我的个人中心
    */
   @GET("getMyCenter")
-  Call<HttpResult<String>> getMyCenter(@Query("userid") String userId, @Query("page") int page,
+  Call<HttpResult<UserCenterWrapper>> getMyCenter(@Query("userid") String userId,
+      @Query("page") int page,
       @Query("pageSize") int pageSize);
 }

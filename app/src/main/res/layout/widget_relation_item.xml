@@ -3,9 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?attr/selectableItemBackground"
-    android:clickable="true"
-    android:descendantFocusability="blocksDescendants">
+    android:background="?attr/selectableItemBackground">
 
   <TextView
       android:id="@+id/id_top"
@@ -17,7 +15,7 @@
       android:text="0"
       android:textColor="@color/black"
       android:textSize="@dimen/font_main"
-      tools:text="433232" />
+      tools:text="1111111" />
 
   <TextView
       android:id="@+id/id_bottom"
@@ -34,11 +32,11 @@
 
   <TextView
       android:id="@+id/id_red"
+      android:layout_marginLeft="2dp"
+      android:layout_marginTop="5dp"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_alignTop="@id/id_top"
-      android:layout_marginLeft="2dp"
-      android:layout_marginTop="-5dp"
       android:layout_toRightOf="@id/id_top"
       android:visibility="gone"
       tools:text="+99"

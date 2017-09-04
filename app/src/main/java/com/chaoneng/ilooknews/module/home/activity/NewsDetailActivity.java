@@ -18,9 +18,10 @@ import com.chaoneng.ilooknews.R;
 import com.chaoneng.ilooknews.api.HomeService;
 import com.chaoneng.ilooknews.base.BaseActivity;
 import com.chaoneng.ilooknews.data.MockServer;
-import com.chaoneng.ilooknews.module.home.data.NewsDetailBean;
+import com.chaoneng.ilooknews.data.NewsInfo;
+import com.chaoneng.ilooknews.data.NewsInfoWrapper;
 import com.chaoneng.ilooknews.module.video.adapter.VideoCommentAdapter;
-import com.chaoneng.ilooknews.module.video.data.VideoComment;
+import com.chaoneng.ilooknews.data.CommentBean;
 import com.chaoneng.ilooknews.net.callback.SimpleCallback;
 import com.chaoneng.ilooknews.net.client.NetRequest;
 import com.chaoneng.ilooknews.net.data.HttpResult;
@@ -48,7 +49,7 @@ public class NewsDetailActivity extends BaseActivity {
     private TextView mTitleTv;
 
     private VideoCommentAdapter mAdapter;
-    private RefreshHelper<VideoComment> mRefreshHelper;
+    private RefreshHelper<CommentBean> mRefreshHelper;
     private MockServer mockServer;
     private String PAGE_NEWS_ID;
 
@@ -74,7 +75,7 @@ public class NewsDetailActivity extends BaseActivity {
         checkIntent();
         checkTitle();
         mAdapter = new VideoCommentAdapter(R.layout.item_video_comment);
-        mRefreshHelper = new RefreshHelper<VideoComment>(mRefreshLayout, mAdapter, mRecyclerView) {
+        mRefreshHelper = new RefreshHelper<CommentBean>(mRefreshLayout, mAdapter, mRecyclerView) {
             @Override
             public void onRequest(int page) {
                 //mockServer.mockGankCall(page, MockServer.Type.VIDEO_COMMENT);
@@ -126,12 +127,12 @@ public class NewsDetailActivity extends BaseActivity {
     private void loadData(final int page) {
 
         HomeService homeService = NetRequest.getInstance().create(HomeService.class);
-        Call<HttpResult<NewsDetailBean>> call =
+        Call<HttpResult<NewsInfoWrapper>> call =
                 homeService.getNewsDetail(AppConstant.TEST_NEWS_USER_ID, AppConstant.TEST_NEWS_ID,
                         2);
-        call.enqueue(new SimpleCallback<NewsDetailBean>() {
+        call.enqueue(new SimpleCallback<NewsInfoWrapper>() {
             @Override
-            public void onSuccess(NewsDetailBean data) {
+            public void onSuccess(NewsInfoWrapper data) {
 
                 if (null == data) {
                     return;
@@ -151,7 +152,7 @@ public class NewsDetailActivity extends BaseActivity {
         });
     }
 
-    private void bindItem(List<VideoComment> list) {
+    private void bindItem(List<CommentBean> list) {
 
         mRefreshHelper.setData(list);
     }
@@ -159,7 +160,7 @@ public class NewsDetailActivity extends BaseActivity {
     /**
      * 绑定新闻头部数据
      */
-    private void bindHeader(@Nullable NewsDetailBean.NewInfoBean newInfo) {
+    private void bindHeader(@Nullable NewsInfo newInfo) {
 
         if (null == newInfo) {
             return;

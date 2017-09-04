@@ -7,13 +7,13 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import com.chaoneng.ilooknews.AppConstant;
 import com.chaoneng.ilooknews.R;
-import com.chaoneng.ilooknews.api.Constant;
-import com.chaoneng.ilooknews.api.GankModel;
-import com.chaoneng.ilooknews.api.GankService;
+import com.chaoneng.ilooknews.api.UserService;
 import com.chaoneng.ilooknews.base.BaseFragment;
+import com.chaoneng.ilooknews.module.user.data.UserCenterWrapper;
 import com.chaoneng.ilooknews.module.user.widget.RelationView;
-import com.chaoneng.ilooknews.net.callback.SimpleJsonCallback;
+import com.chaoneng.ilooknews.net.callback.SimpleCallback;
 import com.chaoneng.ilooknews.net.client.NetRequest;
+import com.chaoneng.ilooknews.net.data.HttpResult;
 import com.chaoneng.ilooknews.util.IntentHelper;
 import com.chaoneng.ilooknews.widget.image.HeadImageView;
 import com.magicalxu.library.blankj.ToastUtils;
@@ -39,43 +39,55 @@ public class UserMainFragment extends BaseFragment {
   @BindView(R.id.id_item_feedback) RelativeLayout mItemFeed;
   @BindView(R.id.id_item_setting) RelativeLayout mItemSetting;
 
+  private UserService service;
+
   @Override
   protected void beginLoadData() {
 
-    GankService service = NetRequest.getInstance().create(GankService.class);
-    Call<GankModel> call = service.getData(Constant.BASE_URL + "1");
+    service = NetRequest.getInstance().create(UserService.class);
+    Call<HttpResult<UserCenterWrapper>> call =
+        service.getMyCenter(AppConstant.TEST_USER_ID, 1, AppConstant.DEFAULT_PAGE_SIZE);
 
-    call.enqueue(new SimpleJsonCallback<GankModel>() {
+    call.enqueue(new SimpleCallback<UserCenterWrapper>() {
       @Override
-      public void onSuccess(GankModel data) {
-        mHeadIv.setHeadImage(AppConstant.TEST_AVATAR);
-        mTvNick.setText("magical");
-        mTvSign.setText("Life is short , just do IT !");
+      public void onSuccess(UserCenterWrapper data) {
+
+        // TODO: 17/9/4 保存用户信息 便于其他地方使用
+        bindUserData(data);
       }
 
       @Override
-      public void onFailed(int code, String message) {
+      public void onFail(String code, String errorMsg) {
+        ToastUtils.showShort(errorMsg);
       }
     });
+  }
+
+  private void bindUserData(UserCenterWrapper data) {
+
+    if (null == data) {
+      return;
+    }
+
+    // relation data
+    mTvTopic.setCount(String.valueOf(data.followedNum));
+    mTvFollow.setCount(String.valueOf(data.followedNum));
+    mTvFans.setCount(String.valueOf(data.fansNum));
+    mTvVisit.setCount(String.valueOf(data.visitorsNum));
+
+    // user data
+    mHeadIv.setHeadImage(data.userIcon);
+    mTvNick.setText(data.nickname);
+    mTvSign.setText(data.introduce);
   }
 
   @Override
   protected void doInit() {
 
-    mTvTopic.setBottom("动态").setCount("0").hideRedPoint();
-
-    mTvFollow.setBottom("关注").setCount("100").hideRedPoint();
-
-    mTvFans.setBottom("粉丝").setCount("9984").setRedPoint("45");
-
-    mTvVisit.setBottom("访客").setCount("0").hideRedPoint();
-
-    mTvTopic.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View view) {
-        ToastUtils.showShort("动态");
-      }
-    });
+    mTvTopic.setBottom("动态").hideRedPoint();
+    mTvFollow.setBottom("关注").hideRedPoint();
+    mTvFans.setBottom("粉丝").hideRedPoint();
+    mTvVisit.setBottom("访客").hideRedPoint();
   }
 
   @Override

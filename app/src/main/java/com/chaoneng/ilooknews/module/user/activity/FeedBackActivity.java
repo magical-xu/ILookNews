@@ -13,6 +13,7 @@ import com.chaoneng.ilooknews.net.callback.SimpleCallback;
 import com.chaoneng.ilooknews.net.client.NetRequest;
 import com.chaoneng.ilooknews.net.data.HttpResult;
 import com.chaoneng.ilooknews.widget.ilook.ILookTitleBar;
+import com.magicalxu.library.blankj.KeyboardUtils;
 import com.magicalxu.library.blankj.ToastUtils;
 import retrofit2.Call;
 
@@ -76,6 +77,7 @@ public class FeedBackActivity extends BaseActivity {
       return;
     }
 
+    KeyboardUtils.hideSoftInput(this);
     Call<HttpResult<String>> call = service.addFeedback(AppConstant.TEST_USER_ID, feed);
     call.enqueue(new SimpleCallback<String>() {
       @Override
