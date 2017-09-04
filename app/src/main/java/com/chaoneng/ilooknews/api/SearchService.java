@@ -7,7 +7,7 @@ import retrofit2.http.Query;
 
 /**
  * Created by magical on 17/8/28.
- * Description :
+ * Description : 搜索相关api
  */
 
 public interface SearchService {
@@ -17,4 +17,10 @@ public interface SearchService {
    */
   @GET("doSearch")
   Call<HttpResult<String>> doSearch(@Query("userid") String userId, @Query("keyText") String key);
+
+  /**
+   * 获取搜索历史
+   */
+  @GET("beforeSearch")
+  Call<HttpResult<String>> getSearchHistory(@Query("userid") String userId);
 }

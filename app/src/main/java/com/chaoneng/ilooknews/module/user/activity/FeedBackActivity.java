@@ -5,10 +5,16 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import butterknife.BindView;
+import com.chaoneng.ilooknews.AppConstant;
 import com.chaoneng.ilooknews.R;
+import com.chaoneng.ilooknews.api.UserService;
 import com.chaoneng.ilooknews.base.BaseActivity;
+import com.chaoneng.ilooknews.net.callback.SimpleCallback;
+import com.chaoneng.ilooknews.net.client.NetRequest;
+import com.chaoneng.ilooknews.net.data.HttpResult;
 import com.chaoneng.ilooknews.widget.ilook.ILookTitleBar;
 import com.magicalxu.library.blankj.ToastUtils;
+import retrofit2.Call;
 
 /**
  * Created by magical on 17/8/19.
@@ -19,6 +25,8 @@ public class FeedBackActivity extends BaseActivity {
 
   @BindView(R.id.et_feedback) EditText mFeedbackEt;
   @BindView(R.id.et_contacts) EditText mContactEt;
+
+  private UserService service;
 
   @Override
   public int getLayoutId() {
@@ -33,6 +41,7 @@ public class FeedBackActivity extends BaseActivity {
   @Override
   public void handleChildPage(Bundle savedInstanceState) {
 
+    service = NetRequest.getInstance().create(UserService.class);
     checkTitle();
   }
 
@@ -66,5 +75,18 @@ public class FeedBackActivity extends BaseActivity {
       ToastUtils.showShort(getString(R.string.tips_input_feed_and_contact));
       return;
     }
+
+    Call<HttpResult<String>> call = service.addFeedback(AppConstant.TEST_USER_ID, feed);
+    call.enqueue(new SimpleCallback<String>() {
+      @Override
+      public void onSuccess(String data) {
+        ToastUtils.showShort("反馈成功！");
+      }
+
+      @Override
+      public void onFail(String code, String errorMsg) {
+        ToastUtils.showShort(errorMsg);
+      }
+    });
   }
 }
