@@ -9,6 +9,7 @@
       android:id="@+id/iv_avatar"
       android:layout_width="40dp"
       android:layout_height="40dp"
+      android:layout_marginTop="@dimen/padding_small"
       tools:background="#f00" />
 
   <LinearLayout
@@ -27,7 +28,8 @@
         android:layout_weight="1"
         android:maxLines="1"
         android:paddingRight="@dimen/padding_small"
-        android:textSize="@dimen/font_main" />
+        android:textSize="@dimen/font_main"
+        tools:text="magical" />
 
     <TextView
         android:id="@+id/tv_up"
@@ -36,9 +38,9 @@
         android:drawableLeft="@drawable/ic_up"
         android:drawablePadding="4dp"
         android:gravity="center"
-        android:paddingBottom="@dimen/padding_small"
+        android:paddingBottom="@dimen/padding_tiny"
         android:paddingRight="@dimen/padding_small"
-        android:paddingTop="@dimen/padding_small"
+        android:paddingTop="@dimen/padding_tiny"
         tools:text="23" />
   </LinearLayout>
 
@@ -49,15 +51,34 @@
       android:layout_alignLeft="@id/ll_container"
       android:layout_below="@id/ll_container"
       android:textColor="@color/one_text_color"
+      android:visibility="visible"
       tools:text="@string/test_text_long" />
 
-  <!--<com.chaoneng.ilooknews.app.ui.widget.RowViewBottom-->
-  <!--android:id="@+id/rvb"-->
-  <!--android:layout_alignLeft="@id/ll_container"-->
-  <!--android:layout_below="@id/tv_comment"-->
-  <!--android:layout_marginTop="@dimen/padding_small"-->
-  <!--android:layout_width="wrap_content"-->
-  <!--android:layout_height="wrap_content"-->
-  <!--app:third_text_drawable_right="@drawable/ic_right_expand"-->
-  <!--app:drawable_padding="@dimen/padding_tiny"/>-->
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_alignLeft="@id/ll_container"
+      android:layout_below="@id/tv_comment"
+      android:layout_marginTop="@dimen/padding_small"
+      android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/id_timestamp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/three_text_color"
+        android:textSize="@dimen/font_small"
+        tools:text="04-13   21:34" />
+
+    <TextView
+        android:id="@+id/id_comment_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/padding_normal"
+        android:drawablePadding="@dimen/padding_tiny"
+        android:drawableRight="@drawable/ic_right_expand"
+        android:text="3条回复"
+        android:textColor="@color/three_text_color"
+        android:textSize="@dimen/font_small" />
+  </LinearLayout>
 </RelativeLayout>

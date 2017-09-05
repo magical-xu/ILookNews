@@ -55,6 +55,7 @@
         android:theme="@style/SimpleActivityTheme" />
     <activity
         android:name=".module.video.activity.VideoDetailActivity"
+        android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize"
         android:screenOrientation="portrait"
         android:theme="@style/SimpleActivityTheme" />
     <activity

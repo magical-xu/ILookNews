@@ -20,7 +20,7 @@ import com.chaoneng.ilooknews.base.BaseActivity;
 import com.chaoneng.ilooknews.data.MockServer;
 import com.chaoneng.ilooknews.data.NewsInfo;
 import com.chaoneng.ilooknews.data.NewsInfoWrapper;
-import com.chaoneng.ilooknews.module.video.adapter.VideoCommentAdapter;
+import com.chaoneng.ilooknews.module.video.adapter.CommentAdapter;
 import com.chaoneng.ilooknews.data.CommentBean;
 import com.chaoneng.ilooknews.net.callback.SimpleCallback;
 import com.chaoneng.ilooknews.net.client.NetRequest;
@@ -48,7 +48,7 @@ public class NewsDetailActivity extends BaseActivity {
     private WebView mWebView;
     private TextView mTitleTv;
 
-    private VideoCommentAdapter mAdapter;
+  private CommentAdapter mAdapter;
     private RefreshHelper<CommentBean> mRefreshHelper;
     private MockServer mockServer;
     private String PAGE_NEWS_ID;
@@ -74,7 +74,7 @@ public class NewsDetailActivity extends BaseActivity {
 
         checkIntent();
         checkTitle();
-        mAdapter = new VideoCommentAdapter(R.layout.item_video_comment);
+      mAdapter = new CommentAdapter(R.layout.item_video_comment);
         mRefreshHelper = new RefreshHelper<CommentBean>(mRefreshLayout, mAdapter, mRecyclerView) {
             @Override
             public void onRequest(int page) {

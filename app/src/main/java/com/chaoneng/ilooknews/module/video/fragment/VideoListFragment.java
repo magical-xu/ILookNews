@@ -47,11 +47,6 @@ public class VideoListFragment extends BaseFragment {
         return fragment;
     }
 
-    //@Override
-    //protected void l() {
-    //  mRefreshHelper.beginLoadData();
-    //}
-
     @Override
     protected void lazyLoad() {
         super.lazyLoad();
@@ -60,14 +55,6 @@ public class VideoListFragment extends BaseFragment {
 
     @Override
     protected void doInit() {
-
-        //loadingAndRetryManager =
-        //        LoadingAndRetryManager.generate(this, new OnLoadingAndRetryListener() {
-        //            @Override
-        //            public void setRetryEvent(View retryView) {
-        //            }
-        //        });
-        //loadingAndRetryManager.showLoading();
 
         mAdapter = new VideoListAdapter(R.layout.item_main_video_list);
         mRefreshHelper = new RefreshHelper(mRefreshLayout, mAdapter, mRecyclerView) {
@@ -78,17 +65,6 @@ public class VideoListFragment extends BaseFragment {
         };
         mockServer = MockServer.getInstance();
         mockServer.init(mRefreshHelper);
-
-        mRecyclerView.addOnChildAttachStateChangeListener(
-                new RecyclerView.OnChildAttachStateChangeListener() {
-                    @Override
-                    public void onChildViewAttachedToWindow(View view) {
-                    }
-
-                    @Override
-                    public void onChildViewDetachedFromWindow(View view) {
-                    }
-                });
 
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
 

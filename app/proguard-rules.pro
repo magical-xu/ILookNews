@@ -38,3 +38,9 @@
 # okhttp
 -dontwarn okio.**
 -dontwarn javax.annotation.**
+
+# gsy video player
+-keep class tv.danmaku.ijk.** { *; }
+-dontwarn tv.danmaku.ijk.**
+-keep class com.shuyu.gsyvideoplayer.** { *; }
+-dontwarn com.shuyu.gsyvideoplayer.**
