@@ -22,8 +22,5 @@
       android:layout_height="@dimen/layout_height_video"
       android:layout_marginBottom="@dimen/padding_small" />
 
-  <!--<com.chaoneng.ilooknews.app.ui.widget.RowViewBottom-->
-  <!--android:id="@+id/rvb"-->
-  <!--android:layout_width="match_parent"-->
-  <!--android:layout_height="wrap_content" />-->
+  <include layout="@layout/include_list_bottom" />
 </LinearLayout>

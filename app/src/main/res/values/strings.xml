@@ -163,6 +163,7 @@
   <string name="edit">编辑</string>
   <string name="send">发送</string>
   <string name="hint_write_comment">写评论&#8230;</string>
+  <string name="place_comment">%s 评论</string>
 
 
 </resources>

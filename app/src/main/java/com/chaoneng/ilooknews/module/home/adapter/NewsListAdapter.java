@@ -16,7 +16,7 @@ import java.util.List;
 
 /**
  * Created by magical on 17/8/20.
- * Description :
+ * Description : 新闻列表
  */
 
 public class NewsListAdapter extends BaseMultiItemQuickAdapter<NewsListBean, BaseViewHolder> {
@@ -30,9 +30,12 @@ public class NewsListAdapter extends BaseMultiItemQuickAdapter<NewsListBean, Bas
     public NewsListAdapter(List<NewsListBean> data) {
         super(data);
         addItemType(NewsListBean.TEXT, R.layout.item_news_text);
-        addItemType(NewsListBean.SINGLE_IMG, R.layout.item_news_single_img);
-        addItemType(NewsListBean.TWO_IMG, R.layout.item_news_two_img);
-        addItemType(NewsListBean.THREE_IMG, R.layout.item_news_three_img);
+        addItemType(NewsListBean.IMAGE, R.layout.item_news_text);
+        addItemType(NewsListBean.AD, R.layout.item_news_text);
+        addItemType(NewsListBean.HTML, R.layout.item_news_text);
+        //addItemType(NewsListBean.IMAGE, R.layout.item_news_single_img);
+        //addItemType(NewsListBean.TWO_IMG, R.layout.item_news_two_img);
+        //addItemType(NewsListBean.THREE_IMG, R.layout.item_news_three_img);
         addItemType(NewsListBean.VIDEO, R.layout.item_news_video);
     }
 
@@ -41,16 +44,10 @@ public class NewsListAdapter extends BaseMultiItemQuickAdapter<NewsListBean, Bas
 
         switch (helper.getItemViewType()) {
             case NewsListBean.TEXT:
+            case NewsListBean.IMAGE:
+            case NewsListBean.AD:
+            case NewsListBean.HTML:
                 bindText(helper, item);
-                break;
-            case NewsListBean.SINGLE_IMG:
-                bindSingleImg(helper, item);
-                break;
-            case NewsListBean.TWO_IMG:
-                bindTwoImg(helper, item);
-                break;
-            case NewsListBean.THREE_IMG:
-                bindThreeImg(helper, item);
                 break;
             case NewsListBean.VIDEO:
                 bindVideo(helper, item);
@@ -60,8 +57,12 @@ public class NewsListAdapter extends BaseMultiItemQuickAdapter<NewsListBean, Bas
 
     private void bindVideo(BaseViewHolder helper, NewsListBean item) {
 
-        helper.setText(R.id.tv_news_title,
-                ILookApplication.getLocalString(R.string.test_text_long));
+        helper.setText(R.id.tv_news_title, item.title);
+        helper.setText(R.id.id_bottom_publisher, item.nickname);
+        helper.setText(R.id.id_bottom_comment_count,
+                String.format(mContext.getString(R.string.place_comment),
+                        String.valueOf(item.commentCount)));
+        helper.setText(R.id.id_bottom_time, item.createTime);
 
         JCVideoPlayerStandard mVideoPlayer = helper.getView(R.id.videoplayer);
         mVideoPlayer.setUp(ILookApplication.getLocalString(R.string.text_video),
@@ -82,11 +83,11 @@ public class NewsListAdapter extends BaseMultiItemQuickAdapter<NewsListBean, Bas
         helper.setText(R.id.tv_news_title,
                 ILookApplication.getLocalString(R.string.test_text_long));
         ImageLoader.loadImage(AppConstant.TEST_AVATAR,
-                ((ImageView) helper.getView(R.id.iv_news_right)));
+                ((ImageView) helper.getView(R.id.iv_news_center_image1)));
         ImageLoader.loadImage(AppConstant.TEST_AVATAR,
-                ((ImageView) helper.getView(R.id.iv_news_left)));
+                ((ImageView) helper.getView(R.id.iv_news_center_image2)));
         ImageLoader.loadImage(AppConstant.TEST_AVATAR,
-                ((ImageView) helper.getView(R.id.iv_news_middle)));
+                ((ImageView) helper.getView(R.id.iv_news_center_image3)));
     }
 
     private void bindTwoImg(BaseViewHolder helper, NewsListBean item) {
@@ -109,7 +110,11 @@ public class NewsListAdapter extends BaseMultiItemQuickAdapter<NewsListBean, Bas
 
     private void bindText(BaseViewHolder helper, NewsListBean item) {
 
-        helper.setText(R.id.tv_news_title,
-                ILookApplication.getLocalString(R.string.test_text_long));
+        helper.setText(R.id.tv_news_title, item.title);
+        helper.setText(R.id.id_bottom_publisher, item.nickname);
+        helper.setText(R.id.id_bottom_comment_count,
+                String.format(mContext.getString(R.string.place_comment),
+                        String.valueOf(item.commentCount)));
+        helper.setText(R.id.id_bottom_time, item.createTime);
     }
 }

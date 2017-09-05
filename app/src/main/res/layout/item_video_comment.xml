@@ -66,9 +66,8 @@
         android:id="@+id/id_timestamp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/three_text_color"
-        android:textSize="@dimen/font_small"
-        tools:text="04-13   21:34" />
+        tools:text="04-13   21:34"
+        style="@style/list_bottom_widget" />
 
     <TextView
         android:id="@+id/id_comment_count"
@@ -78,7 +77,6 @@
         android:drawablePadding="@dimen/padding_tiny"
         android:drawableRight="@drawable/ic_right_expand"
         android:text="3条回复"
-        android:textColor="@color/three_text_color"
-        android:textSize="@dimen/font_small" />
+        style="@style/list_bottom_widget" />
   </LinearLayout>
 </RelativeLayout>

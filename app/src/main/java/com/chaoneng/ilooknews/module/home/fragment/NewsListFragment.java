@@ -8,9 +8,6 @@ import butterknife.BindView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chaoneng.ilooknews.AppConstant;
 import com.chaoneng.ilooknews.R;
-import com.chaoneng.ilooknews.api.Constant;
-import com.chaoneng.ilooknews.api.GankModel;
-import com.chaoneng.ilooknews.api.GankService;
 import com.chaoneng.ilooknews.api.HomeService;
 import com.chaoneng.ilooknews.base.BaseFragment;
 import com.chaoneng.ilooknews.data.MockServer;
@@ -18,7 +15,6 @@ import com.chaoneng.ilooknews.module.home.adapter.NewsListAdapter;
 import com.chaoneng.ilooknews.module.home.data.NewsListBean;
 import com.chaoneng.ilooknews.module.home.data.NewsListWrapper;
 import com.chaoneng.ilooknews.net.callback.SimpleCallback;
-import com.chaoneng.ilooknews.net.callback.SimpleJsonCallback;
 import com.chaoneng.ilooknews.net.client.NetRequest;
 import com.chaoneng.ilooknews.net.data.HttpResult;
 import com.chaoneng.ilooknews.util.IntentHelper;
@@ -56,11 +52,6 @@ public class NewsListFragment extends BaseFragment {
         return fragment;
     }
 
-    //@Override
-    //protected void beginLoadData() {
-    //    mRefreshHelper.beginLoadData();
-    //}
-
     @Override
     protected void lazyLoad() {
         super.lazyLoad();
@@ -80,7 +71,6 @@ public class NewsListFragment extends BaseFragment {
         mRefreshHelper = new RefreshHelper(mRefreshLayout, mAdapter, mRecyclerView) {
             @Override
             public void onRequest(int page) {
-                //loadData(page);
                 load(page);
             }
         };
@@ -96,28 +86,16 @@ public class NewsListFragment extends BaseFragment {
                     IntentHelper.openVideoDetailPage(getActivity(), "");
                 } else if (itemType == NewsListBean.TEXT) {
                     IntentHelper.openNewsDetailPage(mContext, newId);
-                } else if (itemType == NewsListBean.THREE_IMG) {
+                } else if (itemType == NewsListBean.IMAGE) {
                     IntentHelper.openNewsPhotoDetailPage(mContext);
+                } else if (itemType == NewsListBean.AD) {
+                    //广告类跳转
+                    IntentHelper.openNewsPhotoDetailPage(mContext);
+                } else if (itemType == NewsListBean.HTML) {
+                    //跳转类
                 } else {
-                    IntentHelper.openNewsPhotoDetailPage(mContext);
+                    Timber.e("can't resolve jump type.");
                 }
-            }
-        });
-    }
-
-    private void loadData(final int page) {
-        GankService service = NetRequest.getInstance().create(GankService.class);
-        Call<GankModel> call = service.getData(Constant.BASE_URL + page);
-
-        call.enqueue(new SimpleJsonCallback<GankModel>() {
-            @Override
-            public void onSuccess(GankModel data) {
-                buildFakeData(page);
-            }
-
-            @Override
-            public void onFailed(int code, String message) {
-                mRefreshHelper.onFail();
             }
         });
     }
@@ -163,32 +141,6 @@ public class NewsListFragment extends BaseFragment {
                 mRefreshHelper.onFail();
             }
         });
-    }
-
-    private void buildFakeData(int page) {
-
-        List<NewsListBean> list = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            NewsListBean bean = new NewsListBean();
-            bean.setItemType((int) (Math.random() * 5) + 1);
-            list.add(bean);
-        }
-
-        if (page == 1) {
-
-            mRefreshHelper.finishRefresh();
-            mAdapter.setNewData(list);
-        } else {
-
-            if (page == 4) {
-                mRefreshHelper.setNoMoreData();
-                mRefreshHelper.setCurPage(3);
-                return;
-            }
-
-            mRefreshHelper.finishLoadmore();
-            mAdapter.addData(list);
-        }
     }
 
     @Override

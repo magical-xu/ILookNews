@@ -11,34 +11,33 @@ import com.google.gson.annotations.SerializedName;
 
 public class NewsListBean implements MultiItemEntity {
 
-  public static final int VIDEO = 1;
-  public static final int TEXT = 2;
-  public static final int SINGLE_IMG = 3;
-  public static final int TWO_IMG = 4;
-  public static final int THREE_IMG = 5;
+    public static final int VIDEO = 1;
+    public static final int TEXT = 2;
+    public static final int IMAGE = 3;
+    public static final int AD = 4;
+    public static final int HTML = 5;
 
-  @SerializedName("newstype")
-  public int type;
+    @SerializedName("newstype") public int type;
 
-  @Override
-  public int getItemType() {
-    return type;
-  }
+    @Override
+    public int getItemType() {
+        return type;
+    }
 
-  public void setItemType(int type) {
-    this.type = type;
-  }
+    public void setItemType(int type) {
+        this.type = type;
+    }
 
-  public String newId;
-  public String userid;
-  public String nickname;
-  public String userIcon;
-  public String title;
-  public String coverpic;
-  public int commentCount;
-  public int pic_count;
-  public String createTime;
-  public int weight;
-  public int adtype;
-  public String appName;
+    public String newId;
+    public String userid;
+    public String nickname;
+    public String userIcon;
+    public String title;
+    public String coverpic;
+    public int commentCount;
+    public int pic_count;
+    public String createTime;
+    public int weight;
+    public int adtype;
+    public String appName;
 }
