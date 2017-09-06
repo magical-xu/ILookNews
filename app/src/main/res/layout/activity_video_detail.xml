@@ -56,5 +56,12 @@
 
   </com.scwang.smartrefresh.layout.SmartRefreshLayout>
 
-  <include layout="@layout/include_fake_edit_bottom" />
+  <include
+      layout="@layout/include_real_edit_bottom"
+      android:id="@+id/id_real_bottom"
+      android:visibility="gone" />
+
+  <include
+      layout="@layout/include_fake_edit_bottom"
+      android:id="@+id/id_fake_bottom" />
 </LinearLayout>
