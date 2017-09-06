@@ -8,6 +8,7 @@ package com.chaoneng.ilooknews;
 public interface AppConstant {
 
     String UID = "UID";
+    String NONE_VALUE = "0";
 
     int DEFAULT_PAGE_SIZE = 10;   //列表页默认10条
 

@@ -31,7 +31,10 @@ public class CommentAdapter extends BaseQuickAdapter<CommentBean, BaseViewHolder
     helper.setText(R.id.tv_name, item.nickname)
         .setText(R.id.tv_up, String.valueOf(item.careCount))
         .setText(R.id.tv_comment, item.text)
-        .setText(R.id.id_comment_count, String.valueOf(item.commentCount))
-        .setText(R.id.id_timestamp, item.createDate);
+        .setText(R.id.id_comment_count, String.format(mContext.getString(R.string.place_reply),
+            String.valueOf(item.commentCount)))
+        .setText(R.id.id_timestamp, item.createDate)
+        .addOnClickListener(R.id.id_comment_count)
+        .addOnClickListener(R.id.tv_up);
   }
 }

@@ -26,6 +26,7 @@
       android:padding="@dimen/padding_small">
 
     <EditText
+        android:id="@+id/id_edit"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"

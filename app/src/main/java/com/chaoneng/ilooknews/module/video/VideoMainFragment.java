@@ -75,7 +75,6 @@ public class VideoMainFragment extends BaseTitleFragment {
             @Override
             public void onPageScrolled(int position, float positionOffset,
                     int positionOffsetPixels) {
-                // TODO: 17/8/16 暂停播放视频
                 GSYVideoPlayer.releaseAllVideos();
             }
         });
@@ -109,8 +108,4 @@ public class VideoMainFragment extends BaseTitleFragment {
         return false;
     }
 
-    @Override
-    protected void onVisible() {
-        super.onVisible();
-    }
 }

@@ -19,6 +19,7 @@ import com.chaoneng.ilooknews.util.RefreshHelper;
 import com.chaoneng.ilooknews.widget.image.HeadImageView;
 import com.magicalxu.library.blankj.ToastUtils;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
@@ -79,11 +80,9 @@ public class VideoDetailActivity extends BaseActivity {
     mockServer.init(mRefreshHelper);
     bindHeader();
 
-    //外部辅助的旋转，帮助全屏
     orientationUtils = new OrientationUtils(this, mVideoPlayer);
-    //初始化不打开外部的旋转
     orientationUtils.setEnable(false);
-    VideoHelper.initPlayer(this, mVideoPlayer, "嫂子嫂子", orientationUtils);
+    VideoHelper.initDetailPage(this, AppConstant.TEST_VIDEO_URL, mVideoPlayer, orientationUtils);
 
     mRefreshHelper.beginLoadData();
   }
@@ -130,6 +129,7 @@ public class VideoDetailActivity extends BaseActivity {
   protected void onPause() {
     super.onPause();
 
+    GSYVideoManager.onPause();
     isPause = true;
   }
 
@@ -137,6 +137,7 @@ public class VideoDetailActivity extends BaseActivity {
   protected void onResume() {
     super.onResume();
 
+    GSYVideoManager.onResume();
     isPause = false;
   }
 
@@ -165,7 +166,7 @@ public class VideoDetailActivity extends BaseActivity {
     super.onConfigurationChanged(newConfig);
     //如果旋转了就全屏
     if (!isPause) {
-      mVideoPlayer.onConfigurationChanged(this, newConfig, orientationUtils);
+      mVideoPlayer.onConfigurationChanged(this, newConfig, null);
     }
   }
 }

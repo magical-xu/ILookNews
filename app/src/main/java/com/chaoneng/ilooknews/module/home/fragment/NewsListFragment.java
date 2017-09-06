@@ -34,117 +34,116 @@ import static com.chaoneng.ilooknews.AppConstant.PAGE_TYPE;
 
 public class NewsListFragment extends BaseFragment {
 
-    @BindView(R.id.id_recycler) RecyclerView mRecyclerView;
-    @BindView(R.id.id_refresh_layout) SmartRefreshLayout mRefreshLayout;
+  @BindView(R.id.id_recycler) RecyclerView mRecyclerView;
+  @BindView(R.id.id_refresh_layout) SmartRefreshLayout mRefreshLayout;
 
-    private NewsListAdapter mAdapter;
-    private RefreshHelper mRefreshHelper;
-    private MockServer mockServer;
-    private List<NewsListBean> mDataList = new ArrayList<>();
+  private NewsListAdapter mAdapter;
+  private RefreshHelper mRefreshHelper;
+  private MockServer mockServer;
+  private List<NewsListBean> mDataList = new ArrayList<>();
 
-    private String mCid;    //频道标签类型
+  private String mCid;    //频道标签类型
 
-    public static NewsListFragment newInstance(String type) {
-        NewsListFragment fragment = new NewsListFragment();
-        Bundle bundle = new Bundle();
-        bundle.putString(PAGE_TYPE, type);
-        fragment.setArguments(bundle);
-        return fragment;
+  public static NewsListFragment newInstance(String type) {
+    NewsListFragment fragment = new NewsListFragment();
+    Bundle bundle = new Bundle();
+    bundle.putString(PAGE_TYPE, type);
+    fragment.setArguments(bundle);
+    return fragment;
+  }
+
+  @Override
+  protected void lazyLoad() {
+    super.lazyLoad();
+    mRefreshHelper.beginLoadData();
+  }
+
+  @Override
+  protected void doInit() {
+
+    Bundle bundle = getArguments();
+    if (null != bundle) {
+      mCid = bundle.getString(PAGE_TYPE);
     }
 
-    @Override
-    protected void lazyLoad() {
-        super.lazyLoad();
-        mRefreshHelper.beginLoadData();
-    }
+    mAdapter = new NewsListAdapter(mDataList);
+    mockServer = MockServer.getInstance();
+    mRefreshHelper = new RefreshHelper(mRefreshLayout, mAdapter, mRecyclerView) {
+      @Override
+      public void onRequest(int page) {
+        load(page);
+      }
+    };
+    mockServer.init(mRefreshHelper);
 
-    @Override
-    protected void doInit() {
-
-        Bundle bundle = getArguments();
-        if (null != bundle) {
-            mCid = bundle.getString(PAGE_TYPE);
+    mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+      @Override
+      public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+        NewsListBean bean = mAdapter.getData().get(position);
+        int itemType = bean.getItemType();
+        String newId = bean.newId;
+        if (itemType == NewsListBean.VIDEO) {
+          IntentHelper.openVideoDetailPage(getActivity(), "");
+        } else if (itemType == NewsListBean.TEXT) {
+          IntentHelper.openNewsDetailPage(mContext, newId, itemType);
+        } else if (itemType == NewsListBean.IMAGE) {
+          IntentHelper.openNewsPhotoDetailPage(mContext);
+        } else if (itemType == NewsListBean.AD) {
+          //广告类跳转
+          IntentHelper.openNewsPhotoDetailPage(mContext);
+        } else if (itemType == NewsListBean.HTML) {
+          //跳转类
+        } else {
+          Timber.e("can't resolve jump type.");
         }
+      }
+    });
+  }
 
-        mAdapter = new NewsListAdapter(mDataList);
-        mockServer = MockServer.getInstance();
-        mRefreshHelper = new RefreshHelper(mRefreshLayout, mAdapter, mRecyclerView) {
-            @Override
-            public void onRequest(int page) {
-                load(page);
-            }
-        };
-        mockServer.init(mRefreshHelper);
+  private void load(final int page) {
 
-        mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                NewsListBean bean = mAdapter.getData().get(position);
-                int itemType = bean.getItemType();
-                String newId = bean.newId;
-                if (itemType == NewsListBean.VIDEO) {
-                    IntentHelper.openVideoDetailPage(getActivity(), "");
-                } else if (itemType == NewsListBean.TEXT) {
-                    IntentHelper.openNewsDetailPage(mContext, newId);
-                } else if (itemType == NewsListBean.IMAGE) {
-                    IntentHelper.openNewsPhotoDetailPage(mContext);
-                } else if (itemType == NewsListBean.AD) {
-                    //广告类跳转
-                    IntentHelper.openNewsPhotoDetailPage(mContext);
-                } else if (itemType == NewsListBean.HTML) {
-                    //跳转类
-                } else {
-                    Timber.e("can't resolve jump type.");
-                }
-            }
-        });
+    if (TextUtils.isEmpty(mCid)) {
+      Timber.e(" cannot get page cid.");
+      return;
     }
 
-    private void load(final int page) {
+    HomeService service = NetRequest.getInstance().create(HomeService.class);
+    Call<HttpResult<NewsListWrapper>> call =
+        service.getNewsList(AppConstant.TEST_USER_ID, mCid, page, AppConstant.DEFAULT_PAGE_SIZE);
+    call.enqueue(new SimpleCallback<NewsListWrapper>() {
+      @Override
+      public void onSuccess(NewsListWrapper data) {
 
-        if (TextUtils.isEmpty(mCid)) {
-            Timber.e(" cannot get page cid.");
+        if (page == 1) {
+
+          mRefreshHelper.finishRefresh();
+          mAdapter.setNewData(data.list);
+        } else {
+
+          if (!data.havePage) {
+            mRefreshHelper.setNoMoreData();
             return;
+          }
+
+          if (data.list.size() < AppConstant.DEFAULT_PAGE_SIZE) {
+            mRefreshHelper.setNoMoreData();
+            return;
+          }
+
+          mRefreshHelper.finishLoadmore();
+          mAdapter.addData(data.list);
         }
+      }
 
-        HomeService service = NetRequest.getInstance().create(HomeService.class);
-        Call<HttpResult<NewsListWrapper>> call =
-                service.getNewsList(AppConstant.TEST_USER_ID, mCid, page,
-                        AppConstant.DEFAULT_PAGE_SIZE);
-        call.enqueue(new SimpleCallback<NewsListWrapper>() {
-            @Override
-            public void onSuccess(NewsListWrapper data) {
+      @Override
+      public void onFail(String code, String errorMsg) {
+        mRefreshHelper.onFail();
+      }
+    });
+  }
 
-                if (page == 1) {
-
-                    mRefreshHelper.finishRefresh();
-                    mAdapter.setNewData(data.list);
-                } else {
-
-                    if (!data.havePage) {
-                        mRefreshHelper.setNoMoreData();
-                        return;
-                    }
-
-                    if (data.list.size() < AppConstant.DEFAULT_PAGE_SIZE) {
-                        mRefreshHelper.setNoMoreData();
-                        return;
-                    }
-
-                    mRefreshHelper.finishLoadmore();
-                    mAdapter.addData(data.list);
-                }
-            }
-
-            @Override
-            public void onFail(String code, String errorMsg) {
-                mRefreshHelper.onFail();
-            }
-        });
-    }
-
-    @Override
-    protected int getLayoutName() {
-        return R.layout.simple_recycler_list;
-    }
+  @Override
+  protected int getLayoutName() {
+    return R.layout.simple_recycler_list;
+  }
 }

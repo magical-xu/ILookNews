@@ -164,6 +164,8 @@
   <string name="send">发送</string>
   <string name="hint_write_comment">写评论&#8230;</string>
   <string name="place_comment">%s 评论</string>
+  <string name="place_reply">%s 条回复</string>
+  <string name="comment_can_not_be_null">评论不能为空</string>
 
 
 </resources>

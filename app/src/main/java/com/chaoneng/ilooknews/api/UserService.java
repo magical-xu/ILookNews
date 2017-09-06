@@ -52,20 +52,6 @@ public interface UserService {
       @Query("myid") String myId, @Query("type") int type, @Query("page") int page,
       @Query("pageSize") int size);
 
-  /**
-   * 点赞或不喜欢
-   *
-   * @param fromId 点赞的用户ID
-   * @param toId 被点赞的用户ID
-   * @param type 新闻的类型 ==11时点赞的为评论
-   * @param tempId 新闻ID 或评论ID
-   * @param subType =1为点赞=2为不喜欢
-   */
-  @POST("addLike")
-  Call<HttpResult<String>> optLike(@Query("fromUserid") String fromId,
-      @Query("toUserid") String toId, @Query("type") int type, @Query("tempid") String tempId,
-      @Query("subtype") int subType);
-
   @GET("getShare")
   Call<HttpResult<String>> getShare(@Query("userid") String userId, @Query("nid") String nid,
       @Query("shareType") int share, @Query("newsType") int news);

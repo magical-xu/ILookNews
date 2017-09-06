@@ -5,6 +5,7 @@ import com.chaoneng.ilooknews.data.NewsInfoWrapper;
 import com.chaoneng.ilooknews.module.home.data.NewsListWrapper;
 import com.chaoneng.ilooknews.net.data.HttpResult;
 import java.util.Map;
+import org.json.JSONObject;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
@@ -54,15 +55,15 @@ public interface HomeService {
    * 发表评论
    */
   @POST("addNewsComment")
-  Call<HttpResult<String>> postNewsComment(@Query("userid") String userId,
+  Call<HttpResult<JSONObject>> postNewsComment(@Query("userid") String userId,
       @Query("newsId") String newsId, @Query("newstype") int type,
-      @Query("parentId") String parentId);
+      @Query("parentId") String parentId, @Query("text") String comment);
 
   /**
    * 获取评论
    */
   @GET("getNewsComment")
-  Call<HttpResult<String>> getNewsComment(@Query("userid") String userId,
+  Call<HttpResult<NewsInfoWrapper>> getNewsComment(@Query("userid") String userId,
       @Query("newsId") String newsId, @Query("newstype") int type,
       @Query("parentId") String parentId, @Query("page") int page, @Query("pagesize") int size);
 
@@ -97,4 +98,17 @@ public interface HomeService {
   Call<HttpResult<String>> getCollectionList(@Query("userid") String userId,
       @Query("page") int page, @Query("pageSize") int pageSize);
 
+  /**
+   * 点赞或不喜欢
+   *
+   * @param fromId 点赞的用户ID
+   * @param toId 被点赞的用户ID
+   * @param type 新闻的类型 ==11时点赞的为评论
+   * @param tempId 新闻ID 或评论ID
+   * @param subType =1为点赞=2为不喜欢
+   */
+  @POST("addLike")
+  Call<HttpResult<JSONObject>> optLike(@Query("fromUserid") String fromId,
+      @Query("toUserid") String toId, @Query("type") int type, @Query("tempid") String tempId,
+      @Query("subtype") int subType);
 }
