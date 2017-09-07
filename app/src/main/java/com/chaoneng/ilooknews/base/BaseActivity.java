@@ -11,7 +11,6 @@ import android.widget.LinearLayout;
 import butterknife.ButterKnife;
 import com.chaoneng.ilooknews.R;
 import com.chaoneng.ilooknews.widget.ilook.ILookTitleBar;
-import fm.jiecao.jcvideoplayer_lib.JCVideoPlayer;
 
 /**
  * Created by magical on 17/8/14.
@@ -115,9 +114,6 @@ public abstract class BaseActivity extends AppCompatActivity {
 
   @Override
   public void onBackPressed() {
-    if (JCVideoPlayer.backPress()) {
-      return;
-    }
     super.onBackPressed();
   }
 }

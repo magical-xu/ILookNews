@@ -2,6 +2,8 @@ package com.chaoneng.ilooknews.util;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.NonNull;
+import com.chaoneng.ilooknews.SimpleWebActivity;
 import com.chaoneng.ilooknews.module.focus.AddFollowListActivity;
 import com.chaoneng.ilooknews.module.home.activity.NewsPhotoDetailActivity;
 import com.chaoneng.ilooknews.module.home.activity.NotifyActivity;
@@ -112,5 +114,12 @@ public class IntentHelper {
    */
   public static void openAddFocusPage(Context context) {
     context.startActivity(new Intent(context, AddFollowListActivity.class));
+  }
+
+  /**
+   * 跳转 web 页面
+   */
+  public static void openWebPage(Context context, @NonNull String url) {
+    SimpleWebActivity.getInstance(context, url);
   }
 }

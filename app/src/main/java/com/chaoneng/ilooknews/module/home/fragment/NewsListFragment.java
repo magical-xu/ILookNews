@@ -1,6 +1,9 @@
 package com.chaoneng.ilooknews.module.home.fragment;
 
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
@@ -14,12 +17,15 @@ import com.chaoneng.ilooknews.data.MockServer;
 import com.chaoneng.ilooknews.module.home.adapter.NewsListAdapter;
 import com.chaoneng.ilooknews.module.home.data.NewsListBean;
 import com.chaoneng.ilooknews.module.home.data.NewsListWrapper;
+import com.chaoneng.ilooknews.module.video.adapter.VideoListAdapter;
 import com.chaoneng.ilooknews.net.callback.SimpleCallback;
 import com.chaoneng.ilooknews.net.client.NetRequest;
 import com.chaoneng.ilooknews.net.data.HttpResult;
 import com.chaoneng.ilooknews.util.IntentHelper;
 import com.chaoneng.ilooknews.util.RefreshHelper;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.shuyu.gsyvideoplayer.GSYVideoManager;
+import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 import java.util.ArrayList;
 import java.util.List;
 import retrofit2.Call;
@@ -43,6 +49,7 @@ public class NewsListFragment extends BaseFragment {
   private List<NewsListBean> mDataList = new ArrayList<>();
 
   private String mCid;    //频道标签类型
+  private boolean mFull;
 
   public static NewsListFragment newInstance(String type) {
     NewsListFragment fragment = new NewsListFragment();
@@ -67,14 +74,52 @@ public class NewsListFragment extends BaseFragment {
     }
 
     mAdapter = new NewsListAdapter(mDataList);
-    mockServer = MockServer.getInstance();
+    //mockServer = MockServer.getInstance();
     mRefreshHelper = new RefreshHelper(mRefreshLayout, mAdapter, mRecyclerView) {
       @Override
       public void onRequest(int page) {
         load(page);
       }
     };
-    mockServer.init(mRefreshHelper);
+    //mockServer.init(mRefreshHelper);
+
+    mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+
+      int firstVisibleItem;
+      int lastVisibleItem;
+
+      @Override
+      public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+        super.onScrollStateChanged(recyclerView, newState);
+      }
+
+      @Override
+      public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+        super.onScrolled(recyclerView, dx, dy);
+
+        LinearLayoutManager linearLayoutManager =
+                (LinearLayoutManager) recyclerView.getLayoutManager();
+
+        firstVisibleItem = linearLayoutManager.findFirstVisibleItemPosition();
+        lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
+        //大于0说明有播放
+        if (GSYVideoManager.instance().getPlayPosition() >= 0) {
+          //当前播放的位置
+          int position = GSYVideoManager.instance().getPlayPosition();
+          //对应的播放列表TAG
+          if (GSYVideoManager.instance().getPlayTag().equals(VideoListAdapter.TAG) && (position
+                  < firstVisibleItem || position > lastVisibleItem)) {
+
+            //如果滑出去了上面和下面就是否，和今日头条一样
+            //是否全屏
+            if (!mFull) {
+              GSYVideoPlayer.releaseAllVideos();
+              mAdapter.notifyDataSetChanged();
+            }
+          }
+        }
+      }
+    });
 
     mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
       @Override
@@ -93,6 +138,7 @@ public class NewsListFragment extends BaseFragment {
           IntentHelper.openNewsPhotoDetailPage(mContext);
         } else if (itemType == NewsListBean.HTML) {
           //跳转类
+          IntentHelper.openWebPage(getActivity(), AppConstant.TEST_WEB_URL);
         } else {
           Timber.e("can't resolve jump type.");
         }
@@ -109,7 +155,8 @@ public class NewsListFragment extends BaseFragment {
 
     HomeService service = NetRequest.getInstance().create(HomeService.class);
     Call<HttpResult<NewsListWrapper>> call =
-        service.getNewsList(AppConstant.TEST_USER_ID, mCid, page, AppConstant.DEFAULT_PAGE_SIZE);
+            service.getNewsList(AppConstant.TEST_USER_ID, mCid, page,
+                    AppConstant.DEFAULT_PAGE_SIZE);
     call.enqueue(new SimpleCallback<NewsListWrapper>() {
       @Override
       public void onSuccess(NewsListWrapper data) {
@@ -145,5 +192,34 @@ public class NewsListFragment extends BaseFragment {
   @Override
   protected int getLayoutName() {
     return R.layout.simple_recycler_list;
+  }
+
+  @Override
+  public void onPause() {
+    super.onPause();
+    GSYVideoManager.onPause();
+  }
+
+  @Override
+  public void onResume() {
+    super.onResume();
+    GSYVideoManager.onResume();
+  }
+
+  @Override
+  public void onDestroy() {
+    super.onDestroy();
+    GSYVideoPlayer.releaseAllVideos();
+  }
+
+  @Override
+  public void onConfigurationChanged(Configuration newConfig) {
+    super.onConfigurationChanged(newConfig);
+    //如果旋转了就全屏
+    if (newConfig.orientation != ActivityInfo.SCREEN_ORIENTATION_USER) {
+      mFull = false;
+    } else {
+      mFull = true;
+    }
   }
 }
