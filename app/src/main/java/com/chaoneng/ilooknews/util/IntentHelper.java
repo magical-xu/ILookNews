@@ -5,9 +5,9 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import com.chaoneng.ilooknews.SimpleWebActivity;
 import com.chaoneng.ilooknews.module.focus.AddFollowListActivity;
+import com.chaoneng.ilooknews.module.home.activity.NewsDetailActivity;
 import com.chaoneng.ilooknews.module.home.activity.NewsPhotoDetailActivity;
 import com.chaoneng.ilooknews.module.home.activity.NotifyActivity;
-import com.chaoneng.ilooknews.module.home.activity.NewsDetailActivity;
 import com.chaoneng.ilooknews.module.login.LoginActivity;
 import com.chaoneng.ilooknews.module.login.RegisterActivity;
 import com.chaoneng.ilooknews.module.search.SearchActivity;
@@ -91,8 +91,8 @@ public class IntentHelper {
   /**
    * 跳转新闻图片详情界面
    */
-  public static void openNewsPhotoDetailPage(Context context) {
-    context.startActivity(new Intent(context, NewsPhotoDetailActivity.class));
+  public static void openNewsPhotoDetailPage(Context context, String newsId, int type) {
+    NewsPhotoDetailActivity.getInstance(context, newsId, type);
   }
 
   /**

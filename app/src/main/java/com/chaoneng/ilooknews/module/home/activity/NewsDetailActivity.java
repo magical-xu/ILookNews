@@ -22,7 +22,6 @@ import com.chaoneng.ilooknews.R;
 import com.chaoneng.ilooknews.api.HomeService;
 import com.chaoneng.ilooknews.base.BaseActivity;
 import com.chaoneng.ilooknews.data.CommentBean;
-import com.chaoneng.ilooknews.data.MockServer;
 import com.chaoneng.ilooknews.data.NewsInfo;
 import com.chaoneng.ilooknews.data.NewsInfoWrapper;
 import com.chaoneng.ilooknews.module.home.fragment.CommentDialogFragment;
@@ -33,12 +32,16 @@ import com.chaoneng.ilooknews.net.data.HttpResult;
 import com.chaoneng.ilooknews.util.HtmlUtil;
 import com.chaoneng.ilooknews.util.RefreshHelper;
 import com.chaoneng.ilooknews.widget.ilook.ILookTitleBar;
+import com.chaoneng.ilooknews.widget.image.HeadImageView;
 import com.magicalxu.library.blankj.KeyboardUtils;
 import com.magicalxu.library.blankj.ToastUtils;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import java.util.List;
 import org.json.JSONObject;
 import retrofit2.Call;
+
+import static com.chaoneng.ilooknews.AppConstant.PARAMS_NEWS_ID;
+import static com.chaoneng.ilooknews.AppConstant.PARAMS_NEWS_TYPE;
 
 /**
  * Created by magical on 17/8/27.
@@ -47,258 +50,313 @@ import retrofit2.Call;
 
 public class NewsDetailActivity extends BaseActivity {
 
-    private static final String TAG = "NewsDetailActivity";
-    private static final String PARAMS_NEWS_ID = "params_news_id";
-    private static final String PARAMS_NEWS_TYPE = "params_news_type";
+  private static final String TAG = "NewsDetailActivity";
 
-    @BindView(R.id.id_recycler) RecyclerView mRecyclerView;
-    @BindView(R.id.id_refresh_layout) SmartRefreshLayout mRefreshLayout;
-    @BindView(R.id.id_edit) EditText mInputView;
-    @BindView(R.id.id_send) TextView mSendBtn;
+  @BindView(R.id.id_recycler) RecyclerView mRecyclerView;
+  @BindView(R.id.id_refresh_layout) SmartRefreshLayout mRefreshLayout;
+  @BindView(R.id.id_edit) EditText mInputView;
+  @BindView(R.id.id_send) TextView mSendBtn;
 
-    private WebView mWebView;
-    private TextView mTitleTv;
+  private WebView mWebView;
+  private TextView mTitleTv;
+  private TextView mKey1View;
+  private TextView mKey2View;
+  private TextView mKey3View;
+  private TextView mUpView;
+  private TextView mDownView;
+  private HeadImageView mHeaderIv;
+  private TextView mHeaderName;
+  private TextView mHeaderIntro;
+  private TextView mHeaderFocus;
 
-    private CommentAdapter mAdapter;
-    private RefreshHelper<CommentBean> mRefreshHelper;
-    private MockServer mockServer;
-    private String PAGE_NEWS_ID;
-    private int PAGE_NEWS_TYPE;
-    private HomeService homeService;
+  private CommentAdapter mAdapter;
+  private RefreshHelper<CommentBean> mRefreshHelper;
+  private String PAGE_NEWS_ID;
+  private int PAGE_NEWS_TYPE;
+  private HomeService homeService;
 
-    public static void getInstance(Context context, @NonNull String newsId, int newsType) {
-        Intent intent = new Intent(context, NewsDetailActivity.class);
-        intent.putExtra(PARAMS_NEWS_ID, newsId);
-        intent.putExtra(PARAMS_NEWS_TYPE, newsType);
-        context.startActivity(intent);
+  private boolean hasNewsPraise;
+
+  public static void getInstance(Context context, @NonNull String newsId, int newsType) {
+    Intent intent = new Intent(context, NewsDetailActivity.class);
+    intent.putExtra(PARAMS_NEWS_ID, newsId);
+    intent.putExtra(PARAMS_NEWS_TYPE, newsType);
+    context.startActivity(intent);
+  }
+
+  @Override
+  public int getLayoutId() {
+    return R.layout.activity_news_detail;
+  }
+
+  @Override
+  protected boolean addTitleBar() {
+    return true;
+  }
+
+  @Override
+  public void handleChildPage(Bundle savedInstanceState) {
+
+    checkIntent();
+    checkTitle();
+    homeService = NetRequest.getInstance().create(HomeService.class);
+    mAdapter = new CommentAdapter(R.layout.item_video_comment);
+    mRefreshHelper = new RefreshHelper<CommentBean>(mRefreshLayout, mAdapter, mRecyclerView) {
+      @Override
+      public void onRequest(int page) {
+        loadData(page);
+      }
+    };
+    mAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+      @Override
+      public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+        switch (view.getId()) {
+          case R.id.id_comment_count:
+            CommentDialogFragment fragment = CommentDialogFragment.newInstance();
+            fragment.show(getSupportFragmentManager(), TAG);
+            break;
+          case R.id.tv_up:
+            onPraise(position);
+            break;
+        }
+      }
+    });
+    initHeader();
+    mRefreshHelper.beginLoadData();
+  }
+
+  private void onPraise(final int position) {
+
+    int type;
+    final boolean hasPraise;
+    String cid;
+    if (position == AppConstant.INVALIDATE) {
+      //操作 新闻
+
+      type = PAGE_NEWS_TYPE;
+      hasPraise = hasNewsPraise;
+      cid = PAGE_NEWS_ID;
+    } else {
+      //操作 评论列表
+
+      type = 11;
+      CommentBean commentBean = mAdapter.getData().get(position);
+      cid = commentBean.cid;
+      hasPraise = TextUtils.equals(AppConstant.HAS_PRAISE, commentBean.isFollow);
     }
 
-    @Override
-    public int getLayoutId() {
-        return R.layout.activity_news_detail;
-    }
+    int subType = hasPraise ? 2 : 1;
+    Call<HttpResult<JSONObject>> call =
+            homeService.optLike(AppConstant.TEST_USER_ID, null, type, cid, subType);
+    call.enqueue(new SimpleCallback<JSONObject>() {
+      @Override
+      public void onSuccess(JSONObject data) {
 
-    @Override
-    protected boolean addTitleBar() {
-        return true;
-    }
+        if (position == AppConstant.INVALIDATE) {
 
-    @Override
-    public void handleChildPage(Bundle savedInstanceState) {
+        } else {
+          if (hasPraise) {
+            //取消点赞成功
+            ToastUtils.showShort("取消点赞成功");
+            //commentBean.isFollow = AppConstant.UN_PRAISE;
+          } else {
+            //点赞成功
+            ToastUtils.showShort("点赞成功");
+            //commentBean.isFollow = AppConstant.HAS_PRAISE;
+          }
+        }
+      }
 
-        checkIntent();
-        checkTitle();
-        homeService = NetRequest.getInstance().create(HomeService.class);
-        mAdapter = new CommentAdapter(R.layout.item_video_comment);
-        mRefreshHelper = new RefreshHelper<CommentBean>(mRefreshLayout, mAdapter, mRecyclerView) {
-            @Override
-            public void onRequest(int page) {
-                //mockServer.mockGankCall(page, MockServer.Type.VIDEO_COMMENT);
-                loadData(page);
-            }
-        };
-        mAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
-            @Override
-            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-                switch (view.getId()) {
-                    case R.id.id_comment_count:
-                        CommentDialogFragment fragment = CommentDialogFragment.newInstance();
-                        fragment.show(getSupportFragmentManager(), TAG);
-                        break;
-                    case R.id.tv_up:
-                        onPraise(position);
-                        break;
-                }
-            }
-        });
-        //mockServer = MockServer.getInstance();
-        //mockServer.init(mRefreshHelper);
-        initHeader();
-        mRefreshHelper.beginLoadData();
-    }
+      @Override
+      public void onFail(String code, String errorMsg) {
+        ToastUtils.showShort(errorMsg);
+      }
+    });
+  }
 
-    private void onPraise(int position) {
+  private void checkIntent() {
 
-        CommentBean commentBean = mAdapter.getData().get(position);
-        String cid = commentBean.cid;
-        Call<HttpResult<JSONObject>> call =
-                homeService.optLike(AppConstant.TEST_USER_ID, null, 11, cid, 1);
-        call.enqueue(new SimpleCallback<JSONObject>() {
-            @Override
-            public void onSuccess(JSONObject data) {
-                ToastUtils.showShort("点赞成功");
-            }
+    Intent intent = getIntent();
+    PAGE_NEWS_ID = intent.getStringExtra(PARAMS_NEWS_ID);
+    PAGE_NEWS_TYPE = intent.getIntExtra(PARAMS_NEWS_TYPE, 0);
+  }
 
-            @Override
-            public void onFail(String code, String errorMsg) {
-                ToastUtils.showShort(errorMsg);
-            }
-        });
-    }
+  private void initHeader() {
 
-    private void checkIntent() {
+    View header = getLayoutInflater().inflate(R.layout.header_news_detail, null);
 
-        Intent intent = getIntent();
-        PAGE_NEWS_ID = intent.getStringExtra(PARAMS_NEWS_ID);
-        PAGE_NEWS_TYPE = intent.getIntExtra(PARAMS_NEWS_TYPE, 0);
-    }
+    mWebView = header.findViewById(R.id.id_news_detail_web);
+    mTitleTv = header.findViewById(R.id.id_news_detail_title);
+    mKey1View = header.findViewById(R.id.id_keyword1);
+    mKey2View = header.findViewById(R.id.id_keyword2);
+    mKey3View = header.findViewById(R.id.id_keyword3);
+    mUpView = header.findViewById(R.id.id_up);
+    mDownView = header.findViewById(R.id.id_down);
+    mHeaderIv = header.findViewById(R.id.iv_avatar);
+    mHeaderName = header.findViewById(R.id.tv_name);
+    mHeaderIntro = header.findViewById(R.id.tv_intro);
+    mHeaderFocus = header.findViewById(R.id.tv_focus);
 
-    private void initHeader() {
+    configWebView();
+    mAdapter.addHeaderView(header);
+  }
 
-        View header = getLayoutInflater().inflate(R.layout.header_news_detail, null);
+  private void checkTitle() {
 
-        mWebView = header.findViewById(R.id.id_news_detail_web);
-        mTitleTv = header.findViewById(R.id.id_news_detail_title);
+    mTitleBar.setTitle("详情")
+            .setRightImage(R.drawable.ic_more_black)
+            .setTitleListener(new ILookTitleBar.TitleCallbackAdapter() {
+              @Override
+              public void onClickLeft(View view) {
+                super.onClickLeft(view);
+                finish();
+              }
 
-        configWebView();
-        mAdapter.addHeaderView(header);
-    }
+              @Override
+              public void onClickRightImage(View view) {
+                super.onClickRightImage(view);
+                ToastUtils.showShort("分享");
+              }
+            });
+  }
 
-    private void checkTitle() {
+  private void loadData(final int page) {
 
-        mTitleBar.setTitle("详情")
-                .setRightImage(R.drawable.ic_more_black)
-                .setTitleListener(new ILookTitleBar.TitleCallbackAdapter() {
-                    @Override
-                    public void onClickLeft(View view) {
-                        super.onClickLeft(view);
-                        finish();
-                    }
+    Call<HttpResult<NewsInfoWrapper>> call =
+            homeService.getNewsDetail(AppConstant.TEST_NEWS_USER_ID, PAGE_NEWS_ID, 2);
+    call.enqueue(new SimpleCallback<NewsInfoWrapper>() {
+      @Override
+      public void onSuccess(NewsInfoWrapper data) {
 
-                    @Override
-                    public void onClickRightImage(View view) {
-                        super.onClickRightImage(view);
-                        ToastUtils.showShort("分享");
-                    }
-                });
-    }
-
-    private void loadData(final int page) {
-
-        Call<HttpResult<NewsInfoWrapper>> call =
-                homeService.getNewsDetail(AppConstant.TEST_NEWS_USER_ID, PAGE_NEWS_ID, 2);
-        call.enqueue(new SimpleCallback<NewsInfoWrapper>() {
-            @Override
-            public void onSuccess(NewsInfoWrapper data) {
-
-                if (null == data) {
-                    return;
-                }
-
-                if (page == 1) {
-                    bindHeader(data.newInfo);
-                }
-
-                bindItem(data.commentlist);
-            }
-
-            @Override
-            public void onFail(String code, String errorMsg) {
-
-            }
-        });
-    }
-
-    private void bindItem(List<CommentBean> list) {
-
-        mRefreshHelper.setData(list);
-    }
-
-    /**
-     * 绑定新闻头部数据
-     */
-    private void bindHeader(@Nullable NewsInfo newInfo) {
-
-        if (null == newInfo) {
-            return;
+        if (null == data) {
+          return;
         }
 
-        mTitleTv.setText(newInfo.title);
-        mWebView.loadDataWithBaseURL("about:blank", HtmlUtil.getHtmlData(newInfo.content),
-                "text/html", "utf-8", null);
-    }
-
-    /**
-     * 配置 WebView
-     */
-    private void configWebView() {
-
-        // 配置 WebView
-        WebSettings settings = mWebView.getSettings();
-        settings.setJavaScriptEnabled(true);
-        settings.setDomStorageEnabled(true);
-        settings.setUseWideViewPort(true);
-        settings.setLoadWithOverviewMode(true);
-
-        //加载数据时先停止加载图片 防止卡顿
-        settings.setBlockNetworkImage(true);
-
-        mWebView.setWebViewClient(new MyWebViewClient());
-        mWebView.setWebChromeClient(new WebChromeClient());
-    }
-
-    @OnClick(R.id.id_send)
-    public void sendComment() {
-
-        String comment = mInputView.getText().toString().trim();
-        if (TextUtils.isEmpty(comment)) {
-            ToastUtils.showShort(R.string.comment_can_not_be_null);
-            return;
+        if (page == 1) {
+          bindHeader(data.newInfo);
         }
 
-        KeyboardUtils.hideSoftInput(this);
-        Call<HttpResult<JSONObject>> call =
-                homeService.postNewsComment(AppConstant.TEST_USER_ID, PAGE_NEWS_ID, PAGE_NEWS_TYPE,
-                        AppConstant.NONE_VALUE, comment);
-        call.enqueue(new SimpleCallback<JSONObject>() {
+        bindItem(data.commentlist);
+      }
 
-            @Override
-            public void onSuccess(JSONObject data) {
-                onCommentSuccess();
-            }
+      @Override
+      public void onFail(String code, String errorMsg) {
 
-            @Override
-            public void onFail(String code, String errorMsg) {
-                ToastUtils.showShort(errorMsg);
-            }
-        });
+      }
+    });
+  }
+
+  private void bindItem(List<CommentBean> list) {
+
+    mRefreshHelper.setData(list);
+  }
+
+  /**
+   * 绑定新闻头部数据
+   */
+  private void bindHeader(@Nullable NewsInfo newInfo) {
+
+    if (null == newInfo) {
+      return;
     }
 
-    /**
-     * 评论成功
-     */
-    private void onCommentSuccess() {
-        mInputView.setText("");
-        loadComment(1);
+    hasNewsPraise = TextUtils.equals(AppConstant.HAS_PRAISE, newInfo.isFollow);
+
+    mTitleTv.setText(newInfo.title);
+    mHeaderIv.setHeadImage(newInfo.userIcon);
+    mHeaderName.setText(newInfo.nickname);
+    mHeaderIntro.setText(AppConstant.TEST_SIGN);
+    mUpView.setText(String.valueOf(newInfo.like_count));
+    mDownView.setText(String.valueOf(newInfo.dislike_count));
+    mKey1View.setText("关键字1");
+    mKey2View.setText("关键字2");
+    mKey3View.setText("关键字3");
+
+    mWebView.loadDataWithBaseURL("about:blank", HtmlUtil.getHtmlData(newInfo.content), "text/html",
+            "utf-8", null);
+  }
+
+  /**
+   * 配置 WebView
+   */
+  private void configWebView() {
+
+    // 配置 WebView
+    WebSettings settings = mWebView.getSettings();
+    settings.setJavaScriptEnabled(true);
+    settings.setDomStorageEnabled(true);
+    settings.setUseWideViewPort(true);
+    settings.setLoadWithOverviewMode(true);
+
+    //加载数据时先停止加载图片 防止卡顿
+    settings.setBlockNetworkImage(true);
+
+    mWebView.setWebViewClient(new MyWebViewClient());
+    mWebView.setWebChromeClient(new WebChromeClient());
+  }
+
+  @OnClick(R.id.id_send)
+  public void sendComment() {
+
+    String comment = mInputView.getText().toString().trim();
+    if (TextUtils.isEmpty(comment)) {
+      ToastUtils.showShort(R.string.comment_can_not_be_null);
+      return;
     }
 
-    private void loadComment(int page) {
+    KeyboardUtils.hideSoftInput(this);
+    Call<HttpResult<JSONObject>> call =
+            homeService.postNewsComment(AppConstant.TEST_USER_ID, PAGE_NEWS_ID, PAGE_NEWS_TYPE,
+                    AppConstant.NONE_VALUE, comment);
+    call.enqueue(new SimpleCallback<JSONObject>() {
 
-        Call<HttpResult<NewsInfoWrapper>> call =
-                homeService.getNewsComment(AppConstant.TEST_USER_ID, PAGE_NEWS_ID, PAGE_NEWS_TYPE,
-                        AppConstant.NONE_VALUE, page, AppConstant.DEFAULT_PAGE_SIZE);
-        call.enqueue(new SimpleCallback<NewsInfoWrapper>() {
-            @Override
-            public void onSuccess(NewsInfoWrapper data) {
-                List<CommentBean> commentList = data.commentlist;
-                if (null != commentList) {
-                    bindItem(commentList);
-                }
-            }
+      @Override
+      public void onSuccess(JSONObject data) {
+        onCommentSuccess();
+      }
 
-            @Override
-            public void onFail(String code, String errorMsg) {
-                ToastUtils.showShort(errorMsg);
-            }
-        });
-    }
+      @Override
+      public void onFail(String code, String errorMsg) {
+        ToastUtils.showShort(errorMsg);
+      }
+    });
+  }
 
-    private class MyWebViewClient extends WebViewClient {
+  /**
+   * 评论成功
+   */
+  private void onCommentSuccess() {
+    mInputView.setText("");
+    loadComment(1);
+  }
 
-        @Override
-        public void onPageFinished(WebView view, String url) {
-            super.onPageFinished(view, url);
-            mWebView.getSettings().setBlockNetworkImage(false);
+  private void loadComment(int page) {
+
+    Call<HttpResult<NewsInfoWrapper>> call =
+            homeService.getNewsComment(AppConstant.TEST_USER_ID, PAGE_NEWS_ID, PAGE_NEWS_TYPE,
+                    AppConstant.NONE_VALUE, page, AppConstant.DEFAULT_PAGE_SIZE);
+    call.enqueue(new SimpleCallback<NewsInfoWrapper>() {
+      @Override
+      public void onSuccess(NewsInfoWrapper data) {
+        List<CommentBean> commentList = data.commentlist;
+        if (null != commentList) {
+          bindItem(commentList);
         }
+      }
+
+      @Override
+      public void onFail(String code, String errorMsg) {
+        ToastUtils.showShort(errorMsg);
+      }
+    });
+  }
+
+  private class MyWebViewClient extends WebViewClient {
+
+    @Override
+    public void onPageFinished(WebView view, String url) {
+      super.onPageFinished(view, url);
+      mWebView.getSettings().setBlockNetworkImage(false);
     }
+  }
 }

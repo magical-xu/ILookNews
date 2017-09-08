@@ -29,35 +29,14 @@
         android:textSize="@dimen/font_normal"
         tools:text="1/5  武汉奢华别墅区被洪水围困成孤岛" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:padding="@dimen/padding_small">
+    <include
+        layout="@layout/include_real_edit_bottom"
+        android:id="@+id/id_real_bottom"
+        android:visibility="gone" />
 
-      <EditText
-          android:id="@+id/id_edit"
-          android:layout_width="0dp"
-          android:layout_height="wrap_content"
-          android:layout_weight="1"
-          android:background="@drawable/bg_editor_gray"
-          android:hint="@string/hint_comments"
-          android:textColorHint="@color/alpha_50_white" />
-
-      <ImageView
-          android:id="@+id/id_comment"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:padding="@dimen/padding_small"
-          android:src="@drawable/ic_profile_collection" />
-
-      <ImageView
-          android:id="@+id/id_star"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:padding="@dimen/padding_small"
-          android:src="@drawable/ic_profile_collection" />
-    </LinearLayout>
+    <include
+        layout="@layout/include_fake_edit_bottom"
+        android:id="@+id/id_fake_bottom" />
   </LinearLayout>
 </RelativeLayout>
 

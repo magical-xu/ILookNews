@@ -23,6 +23,7 @@
   <dimen name="padding_main">12dp</dimen>
   <dimen name="padding_normal">16dp</dimen>
   <dimen name="padding_large">24dp</dimen>
+  <dimen name="padding_huge">30dp</dimen>
 
   <dimen name="title_height">44dp</dimen>
   <dimen name="divide_line_width">0.5dp</dimen>

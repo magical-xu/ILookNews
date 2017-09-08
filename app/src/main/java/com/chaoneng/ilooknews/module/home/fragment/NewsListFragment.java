@@ -13,7 +13,6 @@ import com.chaoneng.ilooknews.AppConstant;
 import com.chaoneng.ilooknews.R;
 import com.chaoneng.ilooknews.api.HomeService;
 import com.chaoneng.ilooknews.base.BaseFragment;
-import com.chaoneng.ilooknews.data.MockServer;
 import com.chaoneng.ilooknews.module.home.adapter.NewsListAdapter;
 import com.chaoneng.ilooknews.module.home.data.NewsListBean;
 import com.chaoneng.ilooknews.module.home.data.NewsListWrapper;
@@ -45,7 +44,6 @@ public class NewsListFragment extends BaseFragment {
 
   private NewsListAdapter mAdapter;
   private RefreshHelper mRefreshHelper;
-  private MockServer mockServer;
   private List<NewsListBean> mDataList = new ArrayList<>();
 
   private String mCid;    //频道标签类型
@@ -74,14 +72,12 @@ public class NewsListFragment extends BaseFragment {
     }
 
     mAdapter = new NewsListAdapter(mDataList);
-    //mockServer = MockServer.getInstance();
     mRefreshHelper = new RefreshHelper(mRefreshLayout, mAdapter, mRecyclerView) {
       @Override
       public void onRequest(int page) {
         load(page);
       }
     };
-    //mockServer.init(mRefreshHelper);
 
     mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
 
@@ -132,10 +128,10 @@ public class NewsListFragment extends BaseFragment {
         } else if (itemType == NewsListBean.TEXT) {
           IntentHelper.openNewsDetailPage(mContext, newId, itemType);
         } else if (itemType == NewsListBean.IMAGE) {
-          IntentHelper.openNewsPhotoDetailPage(mContext);
+          IntentHelper.openNewsPhotoDetailPage(mContext, newId, itemType);
         } else if (itemType == NewsListBean.AD) {
           //广告类跳转
-          IntentHelper.openNewsPhotoDetailPage(mContext);
+          IntentHelper.openNewsPhotoDetailPage(mContext, newId, itemType);
         } else if (itemType == NewsListBean.HTML) {
           //跳转类
           IntentHelper.openWebPage(getActivity(), AppConstant.TEST_WEB_URL);

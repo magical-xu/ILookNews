@@ -11,9 +11,16 @@ public interface AppConstant {
   String NONE_VALUE = "0";
 
   int DEFAULT_PAGE_SIZE = 10;   //列表页默认10条
+  int INVALIDATE = -1;
 
   String USER_FOLLOW = "1";     //已关注
   String USER_UN_FOLLOW = "0";  //未关注
+
+  String HAS_PRAISE = "1";
+  String UN_PRAISE = "0";
+
+  String PARAMS_NEWS_ID = "params_news_id";
+  String PARAMS_NEWS_TYPE = "params_news_type";
 
   String HOME_CURRENT_TAB_POSITION = "HOME_CURRENT_TAB_POSITION";
 
