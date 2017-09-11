@@ -3,7 +3,6 @@ package com.chaoneng.ilooknews.data;
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.google.gson.annotations.SerializedName;
 import org.greenrobot.greendao.annotation.Entity;
-import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Generated;
 
 /**
@@ -12,46 +11,44 @@ import org.greenrobot.greendao.annotation.Generated;
  */
 @Entity public class Channel implements MultiItemEntity {
 
-  public static final int TYPE_MY = 1;              //我的頻道
-  public static final int TYPE_OTHER = 2;           //推荐频道
+    public static final int TYPE_MY = 1;              //我的頻道
+    public static final int TYPE_OTHER = 2;           //推荐频道
 
-  public static final int TYPE_MY_CHANNEL = 3;      //我的频道列表
-  public static final int TYPE_OTHER_CHANNEL = 4;   //推荐频道列表
+    public static final int TYPE_MY_CHANNEL = 3;      //我的频道列表
+    public static final int TYPE_OTHER_CHANNEL = 4;   //推荐频道列表
 
-    @Id(autoincrement = true) public Long kId;
+    //@Id(autoincrement = true) public Long kId;
 
-  @SerializedName("id") public String code;     //用于 网络请求代码   cid
+    @SerializedName("id") public String code;     //用于 网络请求代码   cid
 
-  @SerializedName("menuName") public String title;
+    @SerializedName("menuName") public String title;
 
-  public String parentId;
-  public String parentName;
-  public int style;
-  public String createTime;
-  public int sort;
-  public String ishot;
-  public int isshow;
+    public String parentId;
+    public String parentName;
+    public int style;
+    public String createTime;
+    public int sort;
+    public String ishot;
+    public int isshow;
 
-  public int type;        //界面区分类型
+    public int type;        //界面区分类型
 
-  public boolean access;  //是否为默认 tab项
+    public boolean access;  //是否为默认 tab项
 
-  public Channel(int type, String title, String code) {
-    this.type = type;
-    this.title = title;
-    this.code = code;
-  }
+    public Channel(int type, String title, String code) {
+        this.type = type;
+        this.title = title;
+        this.code = code;
+    }
 
-  public Channel(int type, String title, String code, boolean access) {
-    this(type, title, code);
-    this.access = access;
-  }
+    public Channel(int type, String title, String code, boolean access) {
+        this(type, title, code);
+        this.access = access;
+    }
 
-    @Generated(hash = 870412446)
-    public Channel(Long kId, String code, String title, String parentId, String parentName,
-            int style, String createTime, int sort, String ishot, int isshow, int type,
-            boolean access) {
-        this.kId = kId;
+    @Generated(hash = 1898253669)
+    public Channel(String code, String title, String parentId, String parentName, int style,
+            String createTime, int sort, String ishot, int isshow, int type, boolean access) {
         this.code = code;
         this.title = title;
         this.parentId = parentId;
@@ -69,21 +66,13 @@ import org.greenrobot.greendao.annotation.Generated;
     public Channel() {
     }
 
-  @Override
-  public int getItemType() {
-    return type;
-  }
-
-  public void setItemType(int type) {
-    this.type = type;
-  }
-
-    public Long getKId() {
-        return this.kId;
+    @Override
+    public int getItemType() {
+        return type;
     }
 
-    public void setKId(Long kId) {
-        this.kId = kId;
+    public void setItemType(int type) {
+        this.type = type;
     }
 
     public String getCode() {
@@ -172,5 +161,5 @@ import org.greenrobot.greendao.annotation.Generated;
 
     public void setAccess(boolean access) {
         this.access = access;
-  }
+    }
 }

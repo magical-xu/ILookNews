@@ -117,6 +117,10 @@ public class HomeMainFragment extends BaseFragment implements OnChannelListener 
         dialogFragment.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
+
+                //update database
+                TabManager.getInstance().updateDb();
+
                 mPagerAdapter.updateTitle(
                         TabManager.getInstance().getTabNameList(getActivity(), false));
                 mPagerAdapter.notifyDataSetChanged();
@@ -136,9 +140,10 @@ public class HomeMainFragment extends BaseFragment implements OnChannelListener 
     @Override
     public void onMoveToMyChannel(int starPos, int endPos) {
 
-        // TODO: 17/8/28 may have trouble
         Channel channel = TabManager.getInstance().moveToMyChannel(starPos, endPos);
-        newsFragmentList.add(NewsListFragment.newInstance(channel.code));
+        if (null != channel) {
+            newsFragmentList.add(NewsListFragment.newInstance(channel.code));
+        }
     }
 
     @Override

@@ -8,6 +8,7 @@ import com.chaoneng.ilooknews.data.ChannelDao;
 import com.chaoneng.ilooknews.data.DaoMaster;
 import com.chaoneng.ilooknews.data.DaoSession;
 import java.util.List;
+import org.greenrobot.greendao.annotation.NotNull;
 import org.greenrobot.greendao.query.QueryBuilder;
 
 /**
@@ -133,6 +134,24 @@ public class DBManager {
     }
 
     /**
+     * 删除所有记录 并 插入新的集合
+     */
+    public void deleteAllAndInsertNew(String type, @NotNull List<Channel> list) {
+        DaoMaster daoMaster = new DaoMaster(getWritableDatabase(type));
+        DaoSession daoSession = daoMaster.newSession();
+        ChannelDao dao = daoSession.getChannelDao();
+        dao.deleteAll();
+        dao.insertInTx(list);
+    }
+
+    public void update(String type, Channel channel) {
+        DaoMaster daoMaster = new DaoMaster(getWritableDatabase(type));
+        DaoSession daoSession = daoMaster.newSession();
+        ChannelDao dao = daoSession.getChannelDao();
+        dao.update(channel);
+    }
+
+    /**
      * 判断是否有数据记录
      */
     public boolean hasData(String type) {
@@ -151,7 +170,8 @@ public class DBManager {
         DaoMaster daoMaster = new DaoMaster(getReadableDatabase(type));
         DaoSession daoSession = daoMaster.newSession();
         ChannelDao userDao = daoSession.getChannelDao();
-        QueryBuilder<Channel> qb = userDao.queryBuilder();
-        return qb.list();
+        return userDao.loadAll();
+        //QueryBuilder<Channel> qb = userDao.queryBuilder().orderAsc(ChannelDao.Properties.Sort);
+        //return qb.list();
     }
 }

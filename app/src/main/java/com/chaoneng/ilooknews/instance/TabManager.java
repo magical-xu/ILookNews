@@ -3,6 +3,7 @@ package com.chaoneng.ilooknews.instance;
 import android.content.Context;
 import android.support.annotation.Nullable;
 import com.chaoneng.ilooknews.AppConstant;
+import com.chaoneng.ilooknews.ILookApplication;
 import com.chaoneng.ilooknews.api.HomeService;
 import com.chaoneng.ilooknews.data.Channel;
 import com.chaoneng.ilooknews.data.TabBean;
@@ -23,8 +24,8 @@ import timber.log.Timber;
 
 public class TabManager {
 
-    private List<Channel> mTabList;
-    private List<Channel> otherChannelList;
+    private List<Channel> mTabList;             // temp list
+    private List<Channel> otherChannelList;     // temp list
     private List<Channel> mVideoChannelList;    // 视频的tab是单独拉的
     private boolean hasNewsInit;                // 新闻tab 是否初始化完毕
     private boolean hasVideoInit;               // 视频tab 是否初始化完毕
@@ -82,12 +83,22 @@ public class TabManager {
      * 拿到 tab 列表
      */
     public List<Channel> getTabList(Context context) {
+
+        if (null != mTabList) {
+            //之前查询过 直接返回临时列表 避免多次去查数据库
+            return mTabList;
+        }
+
+        //查库
         List<Channel> channels =
                 DBManager.getInstance(context).queryChannelList(DBManager.myChannelDb);
         if (EmptyUtils.isEmpty(channels)) {
-            return mTabList;
+            Timber.e(" the channel list is empty in my channel db.");
+            return mTabList;    //return an empty list
         } else {
-            return channels;
+            //只要重新查了 就重新赋一次值
+            mTabList = channels;
+            return mTabList;
         }
     }
 
@@ -95,12 +106,19 @@ public class TabManager {
      * 拿到 推荐标签列表
      */
     public List<Channel> getOtherList(Context context) {
+
+        if (null != otherChannelList) {
+            return otherChannelList;
+        }
+
         List<Channel> channels =
                 DBManager.getInstance(context).queryChannelList(DBManager.otherChannelDb);
         if (EmptyUtils.isEmpty(channels)) {
+            Timber.e(" the channel list is empty in other channel db.");
             return otherChannelList;
         } else {
-            return channels;
+            otherChannelList = channels;
+            return otherChannelList;
         }
     }
 
@@ -114,26 +132,19 @@ public class TabManager {
     /**
      * 移动到我的频道
      */
+    @Nullable
     public Channel moveToMyChannel(final int starPos, final int endPos) {
 
-        //Channel channel = otherChannelList.get(starPos);
-        //
-        //HomeService service = NetRequest.getInstance().create(HomeService.class);
-        //Call<HttpResult<String>> call = service.addMyChannel(AppConstant.TEST_USER_ID, channel.code);
-        //call.enqueue(new SimpleCallback<String>() {
-        //  @Override
-        //  public void onSuccess(String data) {
+        int size = otherChannelList.size();
+        if (starPos < 0 || starPos >= size) {
+            Timber.e(" invalidate position change.");
+            return null;
+        }
 
+        //仅操作临时列表 最后统一更改顺序和db
         Channel channel = otherChannelList.remove(starPos);
         channel.setItemType(Channel.TYPE_MY_CHANNEL);
         mTabList.add(endPos, channel);
-        //  }
-        //
-        //  @Override
-        //  public void onFail(String code, String errorMsg) {
-        //
-        //  }
-        //});
 
         return channel;
     }
@@ -141,25 +152,19 @@ public class TabManager {
     /**
      * 移动到推荐频道
      */
+    @Nullable
     public Channel moveToOtherChannel(final int starPos, final int endPos) {
 
-        //Channel channel = mTabList.get(starPos);
-        //
-        //HomeService service = NetRequest.getInstance().create(HomeService.class);
-        //Call<HttpResult<String>> call = service.deleteMyChannel(AppConstant.TEST_USER_ID, channel.code);
-        //call.enqueue(new Callback<HttpResult<String>>() {
-        //  @Override
-        //  public void onResponse(Call<HttpResult<String>> call, Response<HttpResult<String>> response) {
+        int size = mTabList.size();
+        if (starPos < 0 || starPos >= size) {
+            Timber.e(" invalidate position change.");
+            return null;
+        }
+
+        //仅操作临时列表 最后统一更改顺序和db
         Channel remove = mTabList.remove(starPos);
         remove.setItemType(Channel.TYPE_OTHER_CHANNEL);
         otherChannelList.add(endPos, remove);
-        //  }
-        //
-        //  @Override
-        //  public void onFailure(Call<HttpResult<String>> call, Throwable t) {
-        //
-        //  }
-        //});
 
         return remove;
     }
@@ -190,7 +195,10 @@ public class TabManager {
 
         //1.先查数据库有没有记录 判断一个表就好了
         if (DBManager.getInstance(context).hasData(DBManager.myChannelDb)) {
-            //do nothing 用到直接获取就好了
+            //为临时列表赋值
+            mTabList = DBManager.getInstance(context).queryChannelList(DBManager.myChannelDb);
+            otherChannelList =
+                    DBManager.getInstance(context).queryChannelList(DBManager.otherChannelDb);
             setHasInit(true);
             return;
         }
@@ -272,5 +280,13 @@ public class TabManager {
                 }
             }
         });
+    }
+
+    public void updateDb() {
+
+        DBManager.getInstance(ILookApplication.getAppContext())
+                .deleteAllAndInsertNew(DBManager.myChannelDb, mTabList);
+        DBManager.getInstance(ILookApplication.getAppContext())
+                .deleteAllAndInsertNew(DBManager.otherChannelDb, otherChannelList);
     }
 }
