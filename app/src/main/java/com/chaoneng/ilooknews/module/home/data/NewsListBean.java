@@ -2,6 +2,7 @@ package com.chaoneng.ilooknews.module.home.data;
 
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.google.gson.annotations.SerializedName;
+import java.util.List;
 
 /**
  * Created by magical on 17/8/20.
@@ -33,7 +34,7 @@ public class NewsListBean implements MultiItemEntity {
     public String nickname;
     public String userIcon;
     public String title;
-    public String coverpic;
+    public List<String> coverpic;
     public int commentCount;
     public int pic_count;
     public String createTime;

@@ -32,124 +32,126 @@ import java.util.List;
 
 public class HomeMainFragment extends BaseFragment implements OnChannelListener {
 
-  @BindView(R.id.iv_avatar) HeadImageView mHeadView;
-  @BindView(R.id.ll_search) LinearLayout mSearchView;
-  @BindView(R.id.iv_notify) ImageView mNotifyView;
-  @BindView(R.id.sliding_tabs) SlidingTabLayout mTabView;
-  @BindView(R.id.iv_edit_channel) ImageView mMorePlusView;
-  @BindView(R.id.id_view_pager) ViewPager mViewPager;
+    @BindView(R.id.iv_avatar) HeadImageView mHeadView;
+    @BindView(R.id.ll_search) LinearLayout mSearchView;
+    @BindView(R.id.iv_notify) ImageView mNotifyView;
+    @BindView(R.id.sliding_tabs) SlidingTabLayout mTabView;
+    @BindView(R.id.iv_edit_channel) ImageView mMorePlusView;
+    @BindView(R.id.id_view_pager) ViewPager mViewPager;
 
-  private BaseFragmentStateAdapter mPagerAdapter;
-  private List<Fragment> newsFragmentList = new ArrayList<>();
+    private BaseFragmentStateAdapter mPagerAdapter;
+    private List<Fragment> newsFragmentList = new ArrayList<>();
 
-  @Override
-  protected void beginLoadData() {
+    @Override
+    protected void beginLoadData() {
 
-    mHeadView.setHeadImage(AppConstant.TEST_AVATAR);
-  }
-
-  @Override
-  protected void doInit() {
-
-    if (TabManager.getInstance().hasNewsInit()) {
-      setUp();
-    } else {
-      TabManager.getInstance().getNewsChannel(new NotifyListener() {
-        @Override
-        public void onSuccess() {
-          setUp();
-        }
-
-        @Override
-        public void onFail() {
-        }
-      });
-    }
-  }
-
-  private void setUp() {
-    List<Channel> tabList = TabManager.getInstance().getTabList();
-
-    for (Channel subTab : tabList) {
-      newsFragmentList.add(NewsListFragment.newInstance(subTab.code));
+        mHeadView.setHeadImage(AppConstant.TEST_AVATAR);
     }
 
-    mPagerAdapter = new BaseFragmentStateAdapter(getChildFragmentManager(), newsFragmentList,
-            TabManager.getInstance().getTabNameList(false));
+    @Override
+    protected void doInit() {
 
-    mViewPager.setAdapter(mPagerAdapter);
-    mTabView.setViewPager(mViewPager);
+        if (TabManager.getInstance().hasNewsInit()) {
+            setUp();
+        } else {
+            TabManager.getInstance().getNewsChannel(getActivity(), new NotifyListener() {
+                @Override
+                public void onSuccess() {
+                    setUp();
+                }
 
-    mViewPager.addOnPageChangeListener(new OnPageChangeListener() {
-      @Override
-      public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-        GSYVideoPlayer.releaseAllVideos();
-      }
-    });
-  }
+                @Override
+                public void onFail() {
+                }
+            });
+        }
+    }
 
-  @Override
-  protected int getLayoutName() {
-    return R.layout.layout_main_home_fg;
-  }
+    private void setUp() {
+        List<Channel> tabList = TabManager.getInstance().getTabList(getActivity());
 
-  @OnClick(R.id.ll_search)
-  public void toSearchPage() {
-    IntentHelper.openSearchPage(getActivity());
-  }
+        for (Channel subTab : tabList) {
+            newsFragmentList.add(NewsListFragment.newInstance(subTab.code));
+        }
 
-  @OnClick(R.id.iv_avatar)
-  public void toUserCenterPage() {
-    IntentHelper.openUserCenterPage(getActivity());
-  }
+        mPagerAdapter = new BaseFragmentStateAdapter(getChildFragmentManager(), newsFragmentList,
+                TabManager.getInstance().getTabNameList(getActivity(), false));
 
-  @OnClick(R.id.iv_notify)
-  public void toNotifyPage() {
-    IntentHelper.openNotifyPage(getActivity());
-  }
+        mViewPager.setAdapter(mPagerAdapter);
+        mTabView.setViewPager(mViewPager);
 
-  @OnClick(R.id.iv_edit_channel)
-  public void toMoreTabPage() {
-    ChannelDialogFragment dialogFragment = ChannelDialogFragment.newInstance();
-    dialogFragment.setOnChannelListener(this);
-    dialogFragment.show(getChildFragmentManager(), "CHANNEL");
-    dialogFragment.setOnDismissListener(new DialogInterface.OnDismissListener() {
-      @Override
-      public void onDismiss(DialogInterface dialog) {
-        mPagerAdapter.updateTitle(TabManager.getInstance().getTabNameList(false));
-        mPagerAdapter.notifyDataSetChanged();
-        mTabView.notifyDataSetChanged();
-        //mVp.setOffscreenPageLimit(mSelectedDatas.size());
-        //tab.setCurrentItem(tab.getSelectedTabPosition());
-      }
-    });
-  }
+        mViewPager.addOnPageChangeListener(new OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset,
+                    int positionOffsetPixels) {
+                GSYVideoPlayer.releaseAllVideos();
+            }
+        });
+    }
 
-  @Override
-  public void onItemMove(int starPos, int endPos) {
-    listMove(TabManager.getInstance().getTabList(), starPos, endPos);
-    listMove(newsFragmentList, starPos, endPos);
-  }
+    @Override
+    protected int getLayoutName() {
+        return R.layout.layout_main_home_fg;
+    }
 
-  @Override
-  public void onMoveToMyChannel(int starPos, int endPos) {
+    @OnClick(R.id.ll_search)
+    public void toSearchPage() {
+        IntentHelper.openSearchPage(getActivity());
+    }
 
-    // TODO: 17/8/28 may have trouble
-    Channel channel = TabManager.getInstance().moveToMyChannel(starPos, endPos);
-    newsFragmentList.add(NewsListFragment.newInstance(channel.code));
-  }
+    @OnClick(R.id.iv_avatar)
+    public void toUserCenterPage() {
+        IntentHelper.openUserCenterPage(getActivity());
+    }
 
-  @Override
-  public void onMoveToOtherChannel(int starPos, int endPos) {
-    TabManager.getInstance().moveToOtherChannel(starPos, endPos);
-    newsFragmentList.remove(starPos);
-  }
+    @OnClick(R.id.iv_notify)
+    public void toNotifyPage() {
+        IntentHelper.openNotifyPage(getActivity());
+    }
 
-  private void listMove(List datas, int starPos, int endPos) {
-    Object o = datas.get(starPos);
-    //先删除之前的位置
-    datas.remove(starPos);
-    //添加到现在的位置
-    datas.add(endPos, o);
-  }
+    @OnClick(R.id.iv_edit_channel)
+    public void toMoreTabPage() {
+        ChannelDialogFragment dialogFragment = ChannelDialogFragment.newInstance();
+        dialogFragment.setOnChannelListener(this);
+        dialogFragment.show(getChildFragmentManager(), "CHANNEL");
+        dialogFragment.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                mPagerAdapter.updateTitle(
+                        TabManager.getInstance().getTabNameList(getActivity(), false));
+                mPagerAdapter.notifyDataSetChanged();
+                mTabView.notifyDataSetChanged();
+                //mVp.setOffscreenPageLimit(mSelectedDatas.size());
+                //tab.setCurrentItem(tab.getSelectedTabPosition());
+            }
+        });
+    }
+
+    @Override
+    public void onItemMove(int starPos, int endPos) {
+        listMove(TabManager.getInstance().getTabList(getActivity()), starPos, endPos);
+        listMove(newsFragmentList, starPos, endPos);
+    }
+
+    @Override
+    public void onMoveToMyChannel(int starPos, int endPos) {
+
+        // TODO: 17/8/28 may have trouble
+        Channel channel = TabManager.getInstance().moveToMyChannel(starPos, endPos);
+        newsFragmentList.add(NewsListFragment.newInstance(channel.code));
+    }
+
+    @Override
+    public void onMoveToOtherChannel(int starPos, int endPos) {
+        TabManager.getInstance().moveToOtherChannel(starPos, endPos);
+        newsFragmentList.remove(starPos);
+    }
+
+    private void listMove(List datas, int starPos, int endPos) {
+        Object o = datas.get(starPos);
+        //先删除之前的位置
+        datas.remove(starPos);
+        //添加到现在的位置
+        datas.add(endPos, o);
+    }
 }

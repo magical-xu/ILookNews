@@ -3,8 +3,6 @@ package com.chaoneng.ilooknews.instance;
 import android.content.Context;
 import android.support.annotation.Nullable;
 import com.chaoneng.ilooknews.AppConstant;
-import com.chaoneng.ilooknews.ILookApplication;
-import com.chaoneng.ilooknews.R;
 import com.chaoneng.ilooknews.api.HomeService;
 import com.chaoneng.ilooknews.data.Channel;
 import com.chaoneng.ilooknews.data.TabBean;
@@ -12,6 +10,7 @@ import com.chaoneng.ilooknews.net.callback.SimpleCallback;
 import com.chaoneng.ilooknews.net.client.NetRequest;
 import com.chaoneng.ilooknews.net.data.HttpResult;
 import com.chaoneng.ilooknews.util.NotifyListener;
+import com.magicalxu.library.blankj.EmptyUtils;
 import java.util.ArrayList;
 import java.util.List;
 import retrofit2.Call;
@@ -34,33 +33,6 @@ public class TabManager {
         mTabList = new ArrayList<>();
         otherChannelList = new ArrayList<>();
         mVideoChannelList = new ArrayList<>();
-        //initMyDefault();
-        //initOther();
-    }
-
-    @Deprecated
-    private void initOther() {
-        otherChannelList.add(new Channel(Channel.TYPE_OTHER_CHANNEL, "西瓜", "西瓜"));
-        otherChannelList.add(new Channel(Channel.TYPE_OTHER_CHANNEL, "橘子", "橘子"));
-        otherChannelList.add(new Channel(Channel.TYPE_OTHER_CHANNEL, "西红柿", "西红柿"));
-        otherChannelList.add(new Channel(Channel.TYPE_OTHER_CHANNEL, "土豆泥", "土豆泥"));
-        otherChannelList.add(new Channel(Channel.TYPE_OTHER_CHANNEL, "薯片", "薯片"));
-        otherChannelList.add(new Channel(Channel.TYPE_OTHER_CHANNEL, "牛肉", "牛肉"));
-    }
-
-    @Deprecated
-    private void initMyDefault() {
-        Context appContext = ILookApplication.getAppContext();
-        String recommend = appContext.getString(R.string.sub_tab_recommend);
-        String joke = appContext.getString(R.string.sub_tab_joke);
-        String music = appContext.getString(R.string.sub_tab_music);
-        String social = appContext.getString(R.string.sub_tab_social);
-
-        // add the default tab
-        mTabList.add(new Channel(Channel.TYPE_MY_CHANNEL, recommend, recommend, true));
-        mTabList.add(new Channel(Channel.TYPE_MY_CHANNEL, joke, joke, true));
-        mTabList.add(new Channel(Channel.TYPE_MY_CHANNEL, music, music, true));
-        mTabList.add(new Channel(Channel.TYPE_MY_CHANNEL, social, social, true));
     }
 
     public static TabManager getInstance() {
@@ -109,15 +81,27 @@ public class TabManager {
     /**
      * 拿到 tab 列表
      */
-    public List<Channel> getTabList() {
-        return mTabList;
+    public List<Channel> getTabList(Context context) {
+        List<Channel> channels =
+                DBManager.getInstance(context).queryChannelList(DBManager.myChannelDb);
+        if (EmptyUtils.isEmpty(channels)) {
+            return mTabList;
+        } else {
+            return channels;
+        }
     }
 
     /**
      * 拿到 推荐标签列表
      */
-    public List<Channel> getOtherList() {
-        return otherChannelList;
+    public List<Channel> getOtherList(Context context) {
+        List<Channel> channels =
+                DBManager.getInstance(context).queryChannelList(DBManager.otherChannelDb);
+        if (EmptyUtils.isEmpty(channels)) {
+            return otherChannelList;
+        } else {
+            return channels;
+        }
     }
 
     /**
@@ -183,13 +167,13 @@ public class TabManager {
     /**
      * 拿到 tab 名字列表
      */
-    public List<String> getTabNameList(boolean isVideo) {
+    public List<String> getTabNameList(Context context, boolean isVideo) {
 
         List<Channel> targetList;
         if (isVideo) {
             targetList = mVideoChannelList;
         } else {
-            targetList = mTabList;
+            targetList = getTabList(context);
         }
 
         List<String> nameList = new ArrayList<>();
@@ -202,7 +186,14 @@ public class TabManager {
     /**
      * 网络拉取 新闻类型 频道
      */
-    public void getNewsChannel(@Nullable final NotifyListener listener) {
+    public void getNewsChannel(final Context context, @Nullable final NotifyListener listener) {
+
+        //1.先查数据库有没有记录 判断一个表就好了
+        if (DBManager.getInstance(context).hasData(DBManager.myChannelDb)) {
+            //do nothing 用到直接获取就好了
+            setHasInit(true);
+            return;
+        }
 
         HomeService service = NetRequest.getInstance().create(HomeService.class);
         Call<HttpResult<TabBean>> call =
@@ -213,10 +204,15 @@ public class TabManager {
 
                 if (null != data) {
                     hasNewsInit = true;
+
                     mTabList = data.myChannels;
                     otherChannelList = data.myChannelsNot;
                     adaptMultiType(mTabList, true);
                     adaptMultiType(otherChannelList, false);
+                    DBManager.getInstance(context)
+                            .insertChannelList(DBManager.myChannelDb, mTabList);
+                    DBManager.getInstance(context)
+                            .insertChannelList(DBManager.otherChannelDb, otherChannelList);
 
                     if (null != listener) {
                         listener.onSuccess();

@@ -65,7 +65,7 @@ public class VideoMainFragment extends BaseTitleFragment {
         }
 
         mPagerAdapter = new BaseFragmentStateAdapter(getChildFragmentManager(), videoFragmentList,
-                TabManager.getInstance().getTabNameList(true));
+                TabManager.getInstance().getTabNameList(getActivity(), true));
 
         mViewPager.setAdapter(mPagerAdapter);
         mTabView.setViewPager(mViewPager);
@@ -107,5 +107,4 @@ public class VideoMainFragment extends BaseTitleFragment {
         }
         return false;
     }
-
 }

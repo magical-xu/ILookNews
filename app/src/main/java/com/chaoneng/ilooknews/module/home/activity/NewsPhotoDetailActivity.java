@@ -50,194 +50,194 @@ import static com.chaoneng.ilooknews.AppConstant.PARAMS_NEWS_TYPE;
 
 public class NewsPhotoDetailActivity extends BaseActivity {
 
-  private static final String TAG = "NewsPhotoDetailActivity";
+    private static final String TAG = "NewsPhotoDetailActivity";
 
-  @BindView(R.id.view_pager) ViewPagerFixed mViewPager;
-  @BindView(R.id.photo_detail_title_tv) TextView mContentTv;
-  @BindView(R.id.id_fake_bottom) ViewGroup mFakeBottom;
-  @BindView(R.id.id_real_bottom) ViewGroup mRealBottom;
+    @BindView(R.id.view_pager) ViewPagerFixed mViewPager;
+    @BindView(R.id.photo_detail_title_tv) TextView mContentTv;
+    @BindView(R.id.id_fake_bottom) ViewGroup mFakeBottom;
+    @BindView(R.id.id_real_bottom) ViewGroup mRealBottom;
 
-  @BindView(R.id.id_bottom_edit) TextView mFakeEdit;
-  @BindView(R.id.id_bottom_comment) ViewGroup mCommentView;
-  @BindView(R.id.id_bottom_star) ImageView mStarView;
-  @BindView(R.id.id_bottom_share) ImageView mShareView;
+    @BindView(R.id.id_bottom_edit) TextView mFakeEdit;
+    @BindView(R.id.id_bottom_comment) ViewGroup mCommentView;
+    @BindView(R.id.id_bottom_star) ImageView mStarView;
+    @BindView(R.id.id_bottom_share) ImageView mShareView;
 
-  @BindView(R.id.id_real_bottom_edit) EditText mInputView;
-  @BindView(R.id.id_send) TextView mSendView;
+    @BindView(R.id.id_real_bottom_edit) EditText mInputView;
+    @BindView(R.id.id_send) TextView mSendView;
 
-  private List<Fragment> mPhotoDetailFragmentList = new ArrayList<>();
-  private List<String> mDesList = new ArrayList<>();
-  private HomeService service;
+    private List<Fragment> mPhotoDetailFragmentList = new ArrayList<>();
+    private List<String> mDesList = new ArrayList<>();
+    private HomeService service;
 
-  private String PAGE_NEWS_ID;
-  private int PAGE_NEWS_TYPE;
+    private String PAGE_NEWS_ID;
+    private int PAGE_NEWS_TYPE;
 
-  public static void getInstance(Context context, @NonNull String newsId, int newsType) {
-    Intent intent = new Intent(context, NewsPhotoDetailActivity.class);
-    intent.putExtra(PARAMS_NEWS_ID, newsId);
-    intent.putExtra(PARAMS_NEWS_TYPE, newsType);
-    context.startActivity(intent);
-  }
+    public static void getInstance(Context context, @NonNull String newsId, int newsType) {
+        Intent intent = new Intent(context, NewsPhotoDetailActivity.class);
+        intent.putExtra(PARAMS_NEWS_ID, newsId);
+        intent.putExtra(PARAMS_NEWS_TYPE, newsType);
+        context.startActivity(intent);
+    }
 
-  @Override
-  public int getLayoutId() {
-    return R.layout.activity_news_photo_detail;
-  }
+    @Override
+    public int getLayoutId() {
+        return R.layout.activity_news_photo_detail;
+    }
 
-  @Override
-  protected boolean addTitleBar() {
-    return true;
-  }
+    @Override
+    protected boolean addTitleBar() {
+        return true;
+    }
 
-  @Override
-  public void handleChildPage(Bundle savedInstanceState) {
+    @Override
+    public void handleChildPage(Bundle savedInstanceState) {
 
-    checkIntent();
-    StatusBarUtil.setColor(this, CompatUtil.getColor(this, R.color.black));
-    loadData();
-    checkTitle();
-  }
+        checkIntent();
+        StatusBarUtil.setColor(this, CompatUtil.getColor(this, R.color.black));
+        loadData();
+        checkTitle();
+    }
 
-  private void checkIntent() {
+    private void checkIntent() {
 
-    Intent intent = getIntent();
-    PAGE_NEWS_ID = intent.getStringExtra(PARAMS_NEWS_ID);
-    PAGE_NEWS_TYPE = intent.getIntExtra(PARAMS_NEWS_TYPE, 0);
-  }
+        Intent intent = getIntent();
+        PAGE_NEWS_ID = intent.getStringExtra(PARAMS_NEWS_ID);
+        PAGE_NEWS_TYPE = intent.getIntExtra(PARAMS_NEWS_TYPE, 0);
+    }
 
-  private void loadData() {
+    private void loadData() {
 
-    service = NetRequest.getInstance().create(HomeService.class);
-    Call<HttpResult<NewsInfoWrapper>> call =
-            service.getNewsDetail(AppConstant.TEST_USER_ID, AppConstant.TEST_PHOTO_NEWS_ID, 3);
-    call.enqueue(new SimpleCallback<NewsInfoWrapper>() {
-      @Override
-      public void onSuccess(NewsInfoWrapper data) {
+        service = NetRequest.getInstance().create(HomeService.class);
+        Call<HttpResult<NewsInfoWrapper>> call =
+                service.getNewsDetail(AppConstant.TEST_USER_ID, AppConstant.TEST_PHOTO_NEWS_ID, 3);
+        call.enqueue(new SimpleCallback<NewsInfoWrapper>() {
+            @Override
+            public void onSuccess(NewsInfoWrapper data) {
 
-        if (null == data) {
-          Timber.e("data is null");
-          return;
+                if (null == data) {
+                    Timber.e("data is null");
+                    return;
+                }
+
+                NewsInfo newInfo = data.newInfo;
+                if (null == newInfo) {
+                    Timber.e("news info is null.");
+                    return;
+                }
+
+                config(newInfo.pictures);
+            }
+
+            @Override
+            public void onFail(String code, String errorMsg) {
+                ToastUtils.showShort(errorMsg);
+            }
+        });
+    }
+
+    private void checkTitle() {
+
+        mTitleBar.setTitleBg(android.R.color.black)
+                .setLeftImage(R.drawable.ic_back)
+                .setRightImage(R.drawable.ic_more_white)
+                .hideDivider()
+                .setTitleListener(new ILookTitleBar.TitleCallbackAdapter() {
+                    @Override
+                    public void onClickLeft(View view) {
+                        super.onClickLeft(view);
+                        finish();
+                    }
+
+                    @Override
+                    public void onClickRightImage(View view) {
+                        super.onClickRightImage(view);
+                        ToastUtils.showShort("分享");
+                    }
+                });
+    }
+
+    private void initViewPager() {
+        BaseFragmentAdapter photoPagerAdapter =
+                new BaseFragmentAdapter(getSupportFragmentManager(), mPhotoDetailFragmentList);
+        mViewPager.setAdapter(photoPagerAdapter);
+        mViewPager.setOffscreenPageLimit(5);
+        mViewPager.addOnPageChangeListener(new OnPageChangeListener() {
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+                updateDescription(position);
+            }
+        });
+        updateDescription(0);
+    }
+
+    private void config(List<ImageInfo> list) {
+        mPhotoDetailFragmentList.clear();
+        mDesList.clear();
+        for (ImageInfo imageInfo : list) {
+            PhotoDetailFragment fragment = new PhotoDetailFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString(AppConstant.PHOTO_DETAIL_IMGSRC, imageInfo.picUrl);
+            fragment.setArguments(bundle);
+            mPhotoDetailFragmentList.add(fragment);
+
+            mDesList.add(imageInfo.description);
         }
 
-        NewsInfo newInfo = data.newInfo;
-        if (null == newInfo) {
-          Timber.e("news info is null.");
-          return;
+        initViewPager();
+    }
+
+    public void updateDescription(int position) {
+        String title = mDesList.get(position);
+        mContentTv.setText(
+                getString(R.string.photo_detail_title, position + 1, mDesList.size(), title));
+    }
+
+    @OnClick(R.id.id_bottom_edit)
+    public void onClickInput(View view) {
+
+        BottomHelper.showKeyboard(mRealBottom, mFakeBottom, mInputView);
+    }
+
+    @OnClick(R.id.id_bottom_comment)
+    public void openCommentPage(View view) {
+
+        CommentDialogFragment.newInstance().show(getSupportFragmentManager(), TAG);
+    }
+
+    @OnClick(R.id.id_send)
+    public void onSendComment(View view) {
+
+        String comment = mInputView.getText().toString().trim();
+        if (TextUtils.isEmpty(comment)) {
+            ToastUtils.showShort(R.string.comment_can_not_be_null);
+            return;
         }
 
-        config(newInfo.pictures);
-      }
+        KeyboardUtils.hideSoftInput(this);
+        Call<HttpResult<JSONObject>> call =
+                service.postNewsComment(AppConstant.TEST_USER_ID, PAGE_NEWS_ID, PAGE_NEWS_TYPE,
+                        AppConstant.NONE_VALUE, comment);
+        call.enqueue(new SimpleCallback<JSONObject>() {
 
-      @Override
-      public void onFail(String code, String errorMsg) {
-        ToastUtils.showShort(errorMsg);
-      }
-    });
-  }
+            @Override
+            public void onSuccess(JSONObject data) {
+                //onCommentSuccess();
+            }
 
-  private void checkTitle() {
-
-    mTitleBar.setTitleBg(android.R.color.black)
-            .setLeftImage(R.drawable.ic_back)
-            .setRightImage(R.drawable.ic_more_white)
-            .hideDivider()
-            .setTitleListener(new ILookTitleBar.TitleCallbackAdapter() {
-              @Override
-              public void onClickLeft(View view) {
-                super.onClickLeft(view);
-                finish();
-              }
-
-              @Override
-              public void onClickRightImage(View view) {
-                super.onClickRightImage(view);
-                ToastUtils.showShort("分享");
-              }
-            });
-  }
-
-  private void initViewPager() {
-    BaseFragmentAdapter photoPagerAdapter =
-            new BaseFragmentAdapter(getSupportFragmentManager(), mPhotoDetailFragmentList);
-    mViewPager.setAdapter(photoPagerAdapter);
-    mViewPager.setOffscreenPageLimit(5);
-    mViewPager.addOnPageChangeListener(new OnPageChangeListener() {
-      @Override
-      public void onPageSelected(int position) {
-        super.onPageSelected(position);
-        updateDescription(position);
-      }
-    });
-    updateDescription(0);
-  }
-
-  private void config(List<ImageInfo> list) {
-    mPhotoDetailFragmentList.clear();
-    mDesList.clear();
-    for (ImageInfo imageInfo : list) {
-      PhotoDetailFragment fragment = new PhotoDetailFragment();
-      Bundle bundle = new Bundle();
-      bundle.putString(AppConstant.PHOTO_DETAIL_IMGSRC, imageInfo.picUrl);
-      fragment.setArguments(bundle);
-      mPhotoDetailFragmentList.add(fragment);
-
-      mDesList.add(imageInfo.description);
+            @Override
+            public void onFail(String code, String errorMsg) {
+                ToastUtils.showShort(errorMsg);
+            }
+        });
     }
 
-    initViewPager();
-  }
-
-  public void updateDescription(int position) {
-    String title = mDesList.get(position);
-    mContentTv.setText(
-            getString(R.string.photo_detail_title, position + 1, mDesList.size(), title));
-  }
-
-  @OnClick(R.id.id_bottom_edit)
-  public void onClickInput(View view) {
-
-    BottomHelper.showKeyboard(mRealBottom, mFakeBottom, mInputView);
-  }
-
-  @OnClick(R.id.id_bottom_comment)
-  public void openCommentPage(View view) {
-
-    CommentDialogFragment.newInstance().show(getSupportFragmentManager(), TAG);
-  }
-
-  @OnClick(R.id.id_send)
-  public void onSendComment(View view) {
-
-    String comment = mInputView.getText().toString().trim();
-    if (TextUtils.isEmpty(comment)) {
-      ToastUtils.showShort(R.string.comment_can_not_be_null);
-      return;
+    @Override
+    public void onBackPressed() {
+        if (BottomHelper.isKeyboardShow(mRealBottom)) {
+            BottomHelper.recoverNormalBottom(mRealBottom, mFakeBottom, mInputView);
+            return;
+        }
+        super.onBackPressed();
     }
-
-    KeyboardUtils.hideSoftInput(this);
-    Call<HttpResult<JSONObject>> call =
-            service.postNewsComment(AppConstant.TEST_USER_ID, PAGE_NEWS_ID, PAGE_NEWS_TYPE,
-                    AppConstant.NONE_VALUE, comment);
-    call.enqueue(new SimpleCallback<JSONObject>() {
-
-      @Override
-      public void onSuccess(JSONObject data) {
-        //onCommentSuccess();
-      }
-
-      @Override
-      public void onFail(String code, String errorMsg) {
-        ToastUtils.showShort(errorMsg);
-      }
-    });
-  }
-
-  @Override
-  public void onBackPressed() {
-    if (BottomHelper.isKeyboardShow(mRealBottom)) {
-      BottomHelper.recoverNormalBottom(mRealBottom, mFakeBottom, mInputView);
-      return;
-    }
-    super.onBackPressed();
-  }
 }

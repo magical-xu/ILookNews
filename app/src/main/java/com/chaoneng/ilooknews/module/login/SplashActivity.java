@@ -40,7 +40,7 @@ public class SplashActivity extends BaseActivity {
 
         // for init tab as early as possible
         TabManager tabManager = TabManager.getInstance();
-        tabManager.getNewsChannel(null);
+        tabManager.getNewsChannel(this, null);
         tabManager.getVideoChannel(null);
     }
 
