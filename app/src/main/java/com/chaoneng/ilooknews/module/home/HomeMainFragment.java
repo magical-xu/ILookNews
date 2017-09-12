@@ -125,10 +125,18 @@ public class HomeMainFragment extends BaseFragment implements OnChannelListener 
                         TabManager.getInstance().getTabNameList(getActivity(), false));
                 mPagerAdapter.notifyDataSetChanged();
                 mTabView.notifyDataSetChanged();
-                //mVp.setOffscreenPageLimit(mSelectedDatas.size());
-                //tab.setCurrentItem(tab.getSelectedTabPosition());
+                loadFirstPage();
             }
         });
+    }
+
+    private void loadFirstPage() {
+        if (mPagerAdapter.getCount() > 0) {
+
+            mViewPager.setCurrentItem(0);
+            mTabView.setCurrentTab(0);
+            mPagerAdapter.getItem(0).setUserVisibleHint(true);
+        }
     }
 
     @Override

@@ -43,7 +43,7 @@ public class VideoMainFragment extends BaseTitleFragment {
         if (tabManager.hasVideoInit()) {
             setUp();
         } else {
-            tabManager.getVideoChannel(new NotifyListener() {
+            tabManager.getVideoChannel(getActivity(), new NotifyListener() {
                 @Override
                 public void onSuccess() {
                     setUp();

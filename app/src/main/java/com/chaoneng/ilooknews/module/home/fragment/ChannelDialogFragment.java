@@ -43,6 +43,7 @@ public class ChannelDialogFragment extends DialogFragment implements OnChannelDr
     private List<Channel> mDatas = new ArrayList<>();
 
     private OnChannelListener mOnChannelListener;
+    private boolean hasChanged;     //判断是否有操作变化，否则不更新
 
     public void setOnChannelListener(OnChannelListener onChannelListener) {
         mOnChannelListener = onChannelListener;
@@ -133,7 +134,9 @@ public class ChannelDialogFragment extends DialogFragment implements OnChannelDr
     @Override
     public void onDismiss(DialogInterface dialog) {
         super.onDismiss(dialog);
-        if (mOnDismissListener != null) mOnDismissListener.onDismiss(dialog);
+        if (mOnDismissListener != null && hasChanged) {
+            mOnDismissListener.onDismiss(dialog);
+        }
     }
 
     @Override
@@ -153,6 +156,10 @@ public class ChannelDialogFragment extends DialogFragment implements OnChannelDr
     }
 
     private void onMove(int starPos, int endPos) {
+
+        //添加、删除、换位都会调到这里 所以我们在此改变标记
+        hasChanged = true;
+
         Channel startChannel = mDatas.get(starPos);
         //先删除之前的位置
         mDatas.remove(starPos);

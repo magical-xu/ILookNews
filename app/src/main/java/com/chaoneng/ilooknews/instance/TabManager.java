@@ -57,6 +57,10 @@ public class TabManager {
         return hasVideoInit;
     }
 
+    public void setHasVideoInit(boolean hasInit) {
+        this.hasVideoInit = hasInit;
+    }
+
     /**
      * 拿到有几个默认标签
      */
@@ -193,12 +197,13 @@ public class TabManager {
      */
     public void getNewsChannel(final Context context, @Nullable final NotifyListener listener) {
 
-        //1.先查数据库有没有记录 判断一个表就好了
-        if (DBManager.getInstance(context).hasData(DBManager.myChannelDb)) {
+        //1.先查数据库有没有记录 因为可以全部删除 所以判断两个表
+        final DBManager dbManager = DBManager.getInstance(context);
+        if (dbManager.hasData(DBManager.myChannelDb) || dbManager.hasData(
+                DBManager.otherChannelDb)) {
             //为临时列表赋值
-            mTabList = DBManager.getInstance(context).queryChannelList(DBManager.myChannelDb);
-            otherChannelList =
-                    DBManager.getInstance(context).queryChannelList(DBManager.otherChannelDb);
+            mTabList = dbManager.queryChannelList(DBManager.myChannelDb);
+            otherChannelList = dbManager.queryChannelList(DBManager.otherChannelDb);
             setHasInit(true);
             return;
         }
@@ -217,10 +222,8 @@ public class TabManager {
                     otherChannelList = data.myChannelsNot;
                     adaptMultiType(mTabList, true);
                     adaptMultiType(otherChannelList, false);
-                    DBManager.getInstance(context)
-                            .insertChannelList(DBManager.myChannelDb, mTabList);
-                    DBManager.getInstance(context)
-                            .insertChannelList(DBManager.otherChannelDb, otherChannelList);
+                    dbManager.insertChannelList(DBManager.myChannelDb, mTabList);
+                    dbManager.insertChannelList(DBManager.otherChannelDb, otherChannelList);
 
                     if (null != listener) {
                         listener.onSuccess();
@@ -250,7 +253,14 @@ public class TabManager {
     /**
      * 网络拉取 视频类型 频道
      */
-    public void getVideoChannel(@Nullable final NotifyListener listener) {
+    public void getVideoChannel(Context context, @Nullable final NotifyListener listener) {
+
+        //1.先查数据库有没有视频记录
+        final DBManager dbManager = DBManager.getInstance(context);
+        if (dbManager.hasData(DBManager.videoDb)) {
+            setHasVideoInit(true);
+            return;
+        }
 
         HomeService service = NetRequest.getInstance().create(HomeService.class);
         Call<HttpResult<TabBean>> call =
@@ -261,6 +271,7 @@ public class TabManager {
 
                 if (null != data) {
                     mVideoChannelList = data.myChannels;
+                    dbManager.insertChannelList(DBManager.videoDb, mVideoChannelList);
                     hasVideoInit = true;
 
                     if (null != listener) {
