@@ -4,23 +4,28 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+  <include layout="@layout/include_divider_rect" />
+
   <com.chaoneng.ilooknews.module.user.widget.SettingItemView
       android:id="@+id/id_modify_avatar"
       android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_marginTop="@dimen/padding_small" />
+      android:layout_height="wrap_content" />
 
   <include layout="@layout/include_left_margin_divider" />
 
   <com.chaoneng.ilooknews.module.user.widget.SettingItemView
       android:id="@+id/id_modify_nick"
       android:layout_width="match_parent"
-      android:layout_height="wrap_content" />
+      android:layout_height="wrap_content"
+      android:layout_marginTop="0.5dp" />
+
+  <include layout="@layout/include_divider_rect" />
 
   <com.chaoneng.ilooknews.module.user.widget.SettingItemView
       android:id="@+id/id_modify_sign"
       android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_marginTop="@dimen/padding_small" />
+      android:layout_height="wrap_content" />
+
+  <include layout="@layout/include_full_divider" />
 
 </LinearLayout>

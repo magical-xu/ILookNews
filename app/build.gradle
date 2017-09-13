@@ -59,4 +59,6 @@ dependencies {
   compile 'com.jaeger.statusbarutil:library:1.4.0'
   debugCompile 'com.amitshekhar.android:debug-db:1.0.1'
   compile 'org.greenrobot:greendao:3.2.2' // add library
+  compile 'com.qiniu:qiniu-android-sdk:7.3.9'
+  compile 'com.qmuiteam:qmui:1.0.2'
 }

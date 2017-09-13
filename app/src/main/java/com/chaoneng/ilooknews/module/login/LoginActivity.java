@@ -12,12 +12,14 @@ import com.chaoneng.ilooknews.R;
 import com.chaoneng.ilooknews.api.LoginService;
 import com.chaoneng.ilooknews.base.BaseActivity;
 import com.chaoneng.ilooknews.data.UserWrapper;
+import com.chaoneng.ilooknews.instance.AccountManager;
 import com.chaoneng.ilooknews.net.callback.SimpleCallback;
 import com.chaoneng.ilooknews.net.client.NetRequest;
 import com.chaoneng.ilooknews.net.data.HttpResult;
 import com.chaoneng.ilooknews.util.IntentHelper;
 import com.chaoneng.ilooknews.widget.edit.ClearEditText;
 import com.chaoneng.ilooknews.widget.edit.PasswordEditText;
+import com.magicalxu.library.blankj.KeyboardUtils;
 import com.magicalxu.library.blankj.ToastUtils;
 import org.json.JSONObject;
 import retrofit2.Call;
@@ -116,6 +118,7 @@ public class LoginActivity extends BaseActivity {
 
     private void onLogin() {
 
+        KeyboardUtils.hideSoftInput(this);
         if (showPage) {
             // mobile login
             onMobileLogin();
@@ -163,7 +166,8 @@ public class LoginActivity extends BaseActivity {
         call.enqueue(new SimpleCallback<UserWrapper>() {
             @Override
             public void onSuccess(UserWrapper data) {
-                ToastUtils.showShort(data.socialUser.id);
+                AccountManager.getInstance().saveUser(data.socialUser);
+                finish();
             }
 
             @Override

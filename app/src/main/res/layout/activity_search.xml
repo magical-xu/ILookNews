@@ -47,16 +47,8 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content" />
 
-  <!--<com.chaoneng.ilooknews.app.ui.widget.SettingRowView-->
-  <!--android:id="@+id/srv_history_del"-->
-  <!--style="@style/Srv.PaddingH16"-->
-  <!--custom:srv_main_text="@string/search_history"-->
-  <!--custom:srv_main_text_color="@color/three_text_color"-->
-  <!--custom:srv_icon_right="@drawable/selector_del_history"-->
-  <!--custom:srv_checked="false"-->
-  <!--custom:srv_underline="false"/>-->
-
   <com.google.android.flexbox.FlexboxLayout
+      android:id="@+id/id_history_container"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       custom:dividerDrawableHorizontal="@drawable/divider_line_horizontal"
@@ -65,40 +57,6 @@
       custom:showDividerHorizontal="middle"
       custom:showDividerVertical="middle">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/layout_height_normal"
-        android:gravity="center_vertical"
-        android:paddingLeft="@dimen/padding_small"
-        android:text="@string/test_text_short"
-        android:textColor="@color/one_text_color"
-        custom:layout_flexBasisPercent="49%" />
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/layout_height_normal"
-        android:gravity="center_vertical"
-        android:paddingLeft="@dimen/padding_small"
-        android:text="@string/test_text_short"
-        android:textColor="@color/one_text_color"
-        custom:layout_flexBasisPercent="49%" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/layout_height_normal"
-        android:gravity="center_vertical"
-        android:paddingLeft="@dimen/padding_small"
-        android:text="@string/test_text_short"
-        android:textColor="@color/one_text_color"
-        custom:layout_flexBasisPercent="49%" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/layout_height_normal"
-        android:gravity="center_vertical"
-        android:paddingLeft="@dimen/padding_small"
-        android:text="@string/test_text_short"
-        android:textColor="@color/one_text_color"
-        custom:layout_flexBasisPercent="49%" />
   </com.google.android.flexbox.FlexboxLayout>
 
 
@@ -107,16 +65,6 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content" />
 
-  <!--<com.chaoneng.ilooknews.app.ui.widget.SettingRowView-->
-  <!--android:id="@+id/srv_recommend"-->
-  <!--style="@style/Srv.PaddingH16"-->
-  <!--custom:srv_main_text="@string/search_recommend"-->
-  <!--custom:srv_main_text_color="@color/three_text_color"-->
-  <!--custom:srv_icon_right="@drawable/selector_eyes"-->
-  <!--custom:srv_checked="false"-->
-  <!--custom:srv_underline="false"/>-->
-
-
   <com.google.android.flexbox.FlexboxLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
@@ -133,59 +81,6 @@
         android:text="@string/test_text_short"
         android:textColor="@color/one_text_color"
         custom:layout_flexBasisPercent="49%" />
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/layout_height_normal"
-        android:gravity="center_vertical"
-        android:paddingLeft="@dimen/padding_small"
-        android:text="@string/test_text_short"
-        android:textColor="@color/one_text_color"
-        custom:layout_flexBasisPercent="49%" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/layout_height_normal"
-        android:gravity="center_vertical"
-        android:paddingLeft="@dimen/padding_small"
-        android:text="@string/test_text_short"
-        android:textColor="@color/one_text_color"
-        custom:layout_flexBasisPercent="49%" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/layout_height_normal"
-        android:gravity="center_vertical"
-        android:paddingLeft="@dimen/padding_small"
-        android:text="@string/test_text_short"
-        android:textColor="@color/one_text_color"
-        custom:layout_flexBasisPercent="49%" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/layout_height_normal"
-        android:gravity="center_vertical"
-        android:paddingLeft="@dimen/padding_small"
-        android:text="@string/test_text_short"
-        android:textColor="@color/one_text_color"
-        custom:layout_flexBasisPercent="49%" />
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/layout_height_normal"
-        android:gravity="center_vertical"
-        android:paddingLeft="@dimen/padding_small"
-        android:text="@string/test_text_short"
-        android:textColor="@color/one_text_color"
-        custom:layout_flexBasisPercent="49%" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/layout_height_normal"
-        android:gravity="center_vertical"
-        android:paddingLeft="@dimen/padding_small"
-        android:text="@string/test_text_short"
-        android:textColor="@color/one_text_color"
-        custom:layout_flexBasisPercent="49%" />
-
     <TextView
         android:layout_width="match_parent"
         android:layout_height="@dimen/layout_height_normal"

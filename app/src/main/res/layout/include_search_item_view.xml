@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="42dp"
+    android:orientation="horizontal">
+
+  <TextView
+      android:layout_width="0dp"
+      android:layout_height="@dimen/layout_height_normal"
+      android:layout_marginLeft="@dimen/padding_small"
+      android:layout_weight="1"
+      android:gravity="center_vertical"
+      android:maxLines="1"
+      android:text="@string/test_text_short"
+      android:textColor="@color/one_text_color"
+      tools:text="哈哈哈" />
+
+  <ImageView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center_vertical"
+      android:paddingLeft="@dimen/padding_small"
+      android:paddingRight="@dimen/padding_small"
+      android:src="@drawable/ic_delete_input" />
+</LinearLayout>

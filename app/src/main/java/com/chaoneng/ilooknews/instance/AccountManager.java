@@ -14,41 +14,54 @@ import com.magicalxu.library.blankj.SPUtils;
 
 public class AccountManager {
 
-  private BaseUser user;
+    private BaseUser user;
 
-  private AccountManager() {
-  }
+    private AccountManager() {
+    }
 
-  private static class SingletonHolder {
+    private static class SingletonHolder {
 
-    private static final AccountManager instance = new AccountManager();
-  }
+        private static final AccountManager instance = new AccountManager();
+    }
 
-  public static AccountManager getInstance() {
-    return SingletonHolder.instance;
-  }
+    public static AccountManager getInstance() {
+        return SingletonHolder.instance;
+    }
 
-  /**
-   * 保存用户ID到 sp 中
-   * 不安全
-   *
-   * @param user 登录后的
-   */
-  public void saveUser(@NonNull BaseUser user) {
-    SPUtils.getInstance().put(AppConstant.UID, user.id);
-    this.user = user;
-  }
+    /**
+     * 保存用户ID到 sp 中
+     * 不安全
+     *
+     * @param user 登录后的
+     */
+    public void saveUser(@NonNull BaseUser user) {
+        SPUtils.getInstance().put(AppConstant.UID, user.id);
+        this.user = user;
+    }
 
-  @Nullable
-  public String getUserId() {
-    return user == null ? null : user.id;
-  }
+    public void saveUser(BaseUser user, boolean saveId) {
+        if (saveId) {
+            saveUser(user);
+        } else {
+            this.user = user;
+        }
+    }
 
-  /**
-   * 暂时根据是否有存 uid 判断登录状态
-   */
-  public boolean hasLogin() {
-    String uid = SPUtils.getInstance().getString(AppConstant.UID);
-    return !TextUtils.isEmpty(uid);
-  }
+    @Nullable
+    public String getUserId() {
+        return SPUtils.getInstance().getString(AppConstant.UID);
+    }
+
+    @Nullable
+    public BaseUser getUser() {
+        return this.user;
+    }
+
+    /**
+     * 暂时根据是否有存 uid 判断登录状态
+     */
+    public boolean hasLogin() {
+        String uid = SPUtils.getInstance().getString(AppConstant.UID);
+        return !TextUtils.isEmpty(uid);
+    }
 }

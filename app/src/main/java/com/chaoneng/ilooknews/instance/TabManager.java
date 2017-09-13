@@ -129,8 +129,20 @@ public class TabManager {
     /**
      * 拿到 视频标签列表
      */
-    public List<Channel> getVideoList() {
-        return mVideoChannelList;
+    public List<Channel> getVideoList(Context context) {
+
+        if (null != mVideoChannelList && !EmptyUtils.isEmpty(mVideoChannelList)) {
+            return mVideoChannelList;
+        }
+
+        List<Channel> channels = DBManager.getInstance(context).queryChannelList(DBManager.videoDb);
+        if (EmptyUtils.isEmpty(channels)) {
+            Timber.e(" the channel list is empty in video channel db.");
+            return mVideoChannelList;
+        } else {
+            mVideoChannelList = channels;
+            return mVideoChannelList;
+        }
     }
 
     /**

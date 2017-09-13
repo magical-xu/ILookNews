@@ -1,18 +1,19 @@
-package com.chaoneng.ilooknews.module.home.fragment;
+package com.chaoneng.ilooknews.module.search;
 
+import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.View;
 import butterknife.BindView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chaoneng.ilooknews.AppConstant;
 import com.chaoneng.ilooknews.R;
-import com.chaoneng.ilooknews.api.HomeService;
-import com.chaoneng.ilooknews.base.BaseFragment;
+import com.chaoneng.ilooknews.api.SearchService;
+import com.chaoneng.ilooknews.base.BaseActivity;
 import com.chaoneng.ilooknews.module.home.adapter.NewsListAdapter;
 import com.chaoneng.ilooknews.module.home.data.NewsListBean;
 import com.chaoneng.ilooknews.module.home.data.NewsListWrapper;
@@ -22,6 +23,7 @@ import com.chaoneng.ilooknews.net.client.NetRequest;
 import com.chaoneng.ilooknews.net.data.HttpResult;
 import com.chaoneng.ilooknews.util.IntentHelper;
 import com.chaoneng.ilooknews.util.RefreshHelper;
+import com.chaoneng.ilooknews.widget.ilook.ILookTitleBar;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
@@ -30,14 +32,14 @@ import java.util.List;
 import retrofit2.Call;
 import timber.log.Timber;
 
-import static com.chaoneng.ilooknews.AppConstant.PAGE_TYPE;
-
 /**
- * Created by magical on 2017/8/14.
- * 首页新闻列表
+ * Created by magical on 17/9/12.
+ * Description : 搜索详情
  */
 
-public class NewsListFragment extends BaseFragment {
+public class SearchDetailActivity extends BaseActivity {
+
+    private static final String PARAMS_KEY = "keyword";
 
     @BindView(R.id.id_recycler) RecyclerView mRecyclerView;
     @BindView(R.id.id_refresh_layout) SmartRefreshLayout mRefreshLayout;
@@ -45,31 +47,52 @@ public class NewsListFragment extends BaseFragment {
     private NewsListAdapter mAdapter;
     private RefreshHelper mRefreshHelper;
     private List<NewsListBean> mDataList = new ArrayList<>();
-
-    private String mCid;    //频道标签类型
+    private SearchService service;
+    private String mKeyword;
     private boolean mFull;
 
-    public static NewsListFragment newInstance(String type) {
-        NewsListFragment fragment = new NewsListFragment();
-        Bundle bundle = new Bundle();
-        bundle.putString(PAGE_TYPE, type);
-        fragment.setArguments(bundle);
-        return fragment;
+    public static void getInstance(Context context, String keyword) {
+        Intent intent = new Intent(context, SearchDetailActivity.class);
+        intent.putExtra(PARAMS_KEY, keyword);
+        context.startActivity(intent);
     }
 
     @Override
-    protected void lazyLoad() {
-        super.lazyLoad();
-        mRefreshHelper.beginLoadData();
+    protected boolean addTitleBar() {
+        return true;
     }
 
     @Override
-    protected void doInit() {
+    public int getLayoutId() {
+        return R.layout.simple_recycler_list;
+    }
 
-        Bundle bundle = getArguments();
-        if (null != bundle) {
-            mCid = bundle.getString(PAGE_TYPE);
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        //如果旋转了就全屏
+        if (newConfig.orientation != ActivityInfo.SCREEN_ORIENTATION_USER) {
+            mFull = false;
+        } else {
+            mFull = true;
         }
+    }
+
+    @Override
+    public void handleChildPage(Bundle savedInstanceState) {
+
+        Intent intent = getIntent();
+        mKeyword = intent.getStringExtra(PARAMS_KEY);
+
+        mTitleBar.setTitle(mKeyword).setTitleListener(new ILookTitleBar.TitleCallbackAdapter() {
+            @Override
+            public void onClickLeft(View view) {
+                super.onClickLeft(view);
+                finish();
+            }
+        });
+
+        service = NetRequest.getInstance().create(SearchService.class);
 
         mAdapter = new NewsListAdapter(mDataList);
         mRefreshHelper = new RefreshHelper(mRefreshLayout, mAdapter, mRecyclerView) {
@@ -78,6 +101,8 @@ public class NewsListFragment extends BaseFragment {
                 load(page);
             }
         };
+
+        mRefreshHelper.beginLoadData();
 
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
 
@@ -125,17 +150,19 @@ public class NewsListFragment extends BaseFragment {
                 int itemType = bean.getItemType();
                 String newId = bean.newId;
                 if (itemType == NewsListBean.VIDEO) {
-                    IntentHelper.openVideoDetailPage(getActivity(), "");
+                    IntentHelper.openVideoDetailPage(SearchDetailActivity.this, "");
                 } else if (itemType == NewsListBean.TEXT) {
-                    IntentHelper.openNewsDetailPage(mContext, newId, itemType);
+                    IntentHelper.openNewsDetailPage(SearchDetailActivity.this, newId, itemType);
                 } else if (itemType == NewsListBean.IMAGE) {
-                    IntentHelper.openNewsPhotoDetailPage(mContext, newId, itemType);
+                    IntentHelper.openNewsPhotoDetailPage(SearchDetailActivity.this, newId,
+                            itemType);
                 } else if (itemType == NewsListBean.AD) {
                     //广告类跳转
-                    IntentHelper.openNewsPhotoDetailPage(mContext, newId, itemType);
+                    IntentHelper.openNewsPhotoDetailPage(SearchDetailActivity.this, newId,
+                            itemType);
                 } else if (itemType == NewsListBean.HTML) {
                     //跳转类
-                    IntentHelper.openWebPage(getActivity(), AppConstant.TEST_WEB_URL);
+                    IntentHelper.openWebPage(SearchDetailActivity.this, AppConstant.TEST_WEB_URL);
                 } else {
                     Timber.e("can't resolve jump type.");
                 }
@@ -145,19 +172,11 @@ public class NewsListFragment extends BaseFragment {
 
     private void load(final int page) {
 
-        if (TextUtils.isEmpty(mCid)) {
-            Timber.e(" cannot get page cid.");
-            return;
-        }
-
-        HomeService service = NetRequest.getInstance().create(HomeService.class);
         Call<HttpResult<NewsListWrapper>> call =
-                service.getNewsList(AppConstant.TEST_USER_ID, mCid, page,
-                        AppConstant.DEFAULT_PAGE_SIZE);
+                service.doSearch(AppConstant.TEST_USER_ID, mKeyword);
         call.enqueue(new SimpleCallback<NewsListWrapper>() {
             @Override
             public void onSuccess(NewsListWrapper data) {
-
                 if (page == 1) {
 
                     mRefreshHelper.finishRefresh();
@@ -184,39 +203,5 @@ public class NewsListFragment extends BaseFragment {
                 mRefreshHelper.onFail();
             }
         });
-    }
-
-    @Override
-    protected int getLayoutName() {
-        return R.layout.simple_recycler_list;
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        GSYVideoManager.onPause();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        GSYVideoManager.onResume();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        GSYVideoPlayer.releaseAllVideos();
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        //如果旋转了就全屏
-        if (newConfig.orientation != ActivityInfo.SCREEN_ORIENTATION_USER) {
-            mFull = false;
-        } else {
-            mFull = true;
-        }
     }
 }

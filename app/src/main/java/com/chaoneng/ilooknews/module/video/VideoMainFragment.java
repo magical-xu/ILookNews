@@ -58,7 +58,7 @@ public class VideoMainFragment extends BaseTitleFragment {
 
     private void setUp() {
 
-        List<Channel> tabList = TabManager.getInstance().getVideoList();
+        List<Channel> tabList = TabManager.getInstance().getVideoList(getActivity());
 
         for (Channel subTab : tabList) {
             videoFragmentList.add(VideoListFragment.newInstance(subTab.code));

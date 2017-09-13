@@ -1,5 +1,7 @@
 package com.chaoneng.ilooknews.api;
 
+import com.chaoneng.ilooknews.module.home.data.NewsListWrapper;
+import com.chaoneng.ilooknews.module.search.data.SearchHistory;
 import com.chaoneng.ilooknews.net.data.HttpResult;
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -12,15 +14,16 @@ import retrofit2.http.Query;
 
 public interface SearchService {
 
-  /**
-   * 搜索
-   */
-  @GET("doSearch")
-  Call<HttpResult<String>> doSearch(@Query("userid") String userId, @Query("keyText") String key);
+    /**
+     * 搜索
+     */
+    @GET("doSearch")
+    Call<HttpResult<NewsListWrapper>> doSearch(@Query("userid") String userId,
+            @Query("keyText") String key);
 
-  /**
-   * 获取搜索历史
-   */
-  @GET("beforeSearch")
-  Call<HttpResult<String>> getSearchHistory(@Query("userid") String userId);
+    /**
+     * 获取搜索历史
+     */
+    @GET("beforeSearch")
+    Call<HttpResult<SearchHistory>> getSearchHistory(@Query("userid") String userId);
 }

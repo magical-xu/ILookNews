@@ -68,6 +68,7 @@
         android:theme="@style/SimpleActivityTheme" />
     <activity
         android:name=".module.user.activity.ProfileActivity"
+        android:configChanges="orientation|screenSize|keyboard|keyboardHidden"
         android:screenOrientation="portrait"
         android:theme="@style/SimpleActivityTheme" />
     <activity
@@ -102,6 +103,11 @@
         android:theme="@style/SimpleActivityTheme" />
     <activity
         android:name=".SimpleWebActivity"
+        android:configChanges="orientation|screenSize|keyboard|keyboardHidden"
+        android:screenOrientation="portrait"
+        android:theme="@style/SimpleActivityTheme" />
+    <activity
+        android:name=".module.search.SearchDetailActivity"
         android:configChanges="orientation|screenSize|keyboard|keyboardHidden"
         android:screenOrientation="portrait"
         android:theme="@style/SimpleActivityTheme" />
