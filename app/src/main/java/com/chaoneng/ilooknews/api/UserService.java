@@ -1,6 +1,7 @@
 package com.chaoneng.ilooknews.api;
 
 import com.chaoneng.ilooknews.module.focus.data.FocusWrapper;
+import com.chaoneng.ilooknews.module.user.data.BrokeListWrapper;
 import com.chaoneng.ilooknews.module.user.data.NotifyDetail;
 import com.chaoneng.ilooknews.module.user.data.NotifyWrapper;
 import com.chaoneng.ilooknews.module.user.data.UserCenterWrapper;
@@ -123,8 +124,8 @@ public interface UserService {
      * 获取爆料列表
      */
     @GET("getBaoLiaoList")
-    Call<HttpResult<String>> getBaoLiaoList(@Query("userid") String userId, @Query("page") int page,
-            @Query("pageSize") int pageSize);
+    Call<HttpResult<BrokeListWrapper>> getBaoLiaoList(@Query("userid") String userId,
+            @Query("page") int page, @Query("pageSize") int pageSize);
 
     /**
      * 我的个人中心

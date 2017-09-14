@@ -26,6 +26,8 @@ import com.chaoneng.ilooknews.module.video.activity.VideoDetailActivity;
 
 public class IntentHelper {
 
+    public static final String PARAMS_ONE = "params_one";
+
     /**
      * 跳转 我的消息界面
      */
@@ -92,8 +94,10 @@ public class IntentHelper {
     /**
      * 跳转用户中心界面
      */
-    public static void openUserCenterPage(Context context) {
-        context.startActivity(new Intent(context, UserCenterActivity.class));
+    public static void openUserCenterPage(Context context, @NonNull String uid) {
+        Intent intent = new Intent(context, UserCenterActivity.class);
+        intent.putExtra(PARAMS_ONE, uid);
+        context.startActivity(intent);
     }
 
     /**

@@ -1,5 +1,6 @@
 package com.chaoneng.ilooknews.module.user.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -19,6 +20,7 @@ import com.chaoneng.ilooknews.module.user.fragment.StateListFragment;
 import com.chaoneng.ilooknews.net.callback.SimpleCallback;
 import com.chaoneng.ilooknews.net.client.NetRequest;
 import com.chaoneng.ilooknews.net.data.HttpResult;
+import com.chaoneng.ilooknews.util.IntentHelper;
 import com.chaoneng.ilooknews.widget.adapter.BaseFragmentAdapter;
 import com.chaoneng.ilooknews.widget.image.HeadImageView;
 import com.flyco.tablayout.SlidingTabLayout;
@@ -45,6 +47,7 @@ public class UserCenterActivity extends BaseActivity {
 
     private BaseFragmentAdapter baseFragmentAdapter;
     private UserService service;
+    private String pageUid;
 
     @Override
     public int getLayoutId() {
@@ -54,13 +57,16 @@ public class UserCenterActivity extends BaseActivity {
     @Override
     public void handleChildPage(Bundle savedInstanceState) {
 
+        Intent intent = getIntent();
+        pageUid = intent.getStringExtra(IntentHelper.PARAMS_ONE);
+
         service = NetRequest.getInstance().create(UserService.class);
+
         initView();
         loadData();
     }
 
     public void initView() {
-        //initUserInfo();
         setSupportActionBar(toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_back);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -71,8 +77,8 @@ public class UserCenterActivity extends BaseActivity {
         });
 
         ArrayList<Fragment> fragments = new ArrayList<>();
-        fragments.add(new StateListFragment());
-        fragments.add(new BrokeNewsListFragment());
+        fragments.add(StateListFragment.getInstance(pageUid));
+        fragments.add(BrokeNewsListFragment.getInstance(pageUid));
 
         List<String> titles = new ArrayList<>(2);
         titles.add("动态");

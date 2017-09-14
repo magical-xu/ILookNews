@@ -76,6 +76,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
+        android:layout_marginRight="@dimen/padding_small"
         android:textColor="@color/main_color"
         android:textSize="@dimen/font_main"
         android:visibility="gone"

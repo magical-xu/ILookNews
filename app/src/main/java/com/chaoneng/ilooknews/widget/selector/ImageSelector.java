@@ -23,74 +23,74 @@ import java.util.List;
 
 public class ImageSelector extends LinearLayout {
 
-  @BindView(R.id.id_recycler_view) RecyclerView mRecyclerView;
-  @BindView(R.id.id_count) TextView mCountView;
+    @BindView(R.id.id_recycler_view) RecyclerView mRecyclerView;
+    @BindView(R.id.id_count) TextView mCountView;
 
-  public static final int MAX = 9;
-  private ImageSelectorAdapter mAdapter;
-  private List<String> mDataList;
+    public static final int MAX = 9;
+    private ImageSelectorAdapter mAdapter;
+    private List<String> mDataList;
 
-  public ImageSelector(Context context) {
-    this(context, null);
-  }
+    public ImageSelector(Context context) {
+        this(context, null);
+    }
 
-  public ImageSelector(Context context, @Nullable AttributeSet attrs) {
-    this(context, attrs, 0);
-  }
+    public ImageSelector(Context context, @Nullable AttributeSet attrs) {
+        this(context, attrs, 0);
+    }
 
-  public ImageSelector(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
-    super(context, attrs, defStyleAttr);
-    initView();
-  }
+    public ImageSelector(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+        initView();
+    }
 
-  private void initView() {
+    private void initView() {
 
-    setOrientation(VERTICAL);
-    LayoutInflater.from(getContext()).inflate(R.layout.widget_image_selector, this, true);
-    ButterKnife.bind(this);
+        setOrientation(VERTICAL);
+        LayoutInflater.from(getContext()).inflate(R.layout.widget_image_selector, this, true);
+        ButterKnife.bind(this);
 
-    mDataList = new ArrayList<>();
+        mDataList = new ArrayList<>();
 
-    LinearLayoutManager manager = new LinearLayoutManager(getContext());
-    manager.setOrientation(LinearLayoutManager.HORIZONTAL);
-    mRecyclerView.setLayoutManager(manager);
-    mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-    mRecyclerView.setHasFixedSize(true);
-    mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(), HORIZONTAL));
+        LinearLayoutManager manager = new LinearLayoutManager(getContext());
+        manager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        mRecyclerView.setLayoutManager(manager);
+        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(), HORIZONTAL));
 
-    mAdapter = new ImageSelectorAdapter(getContext(), mDataList);
-    mRecyclerView.setAdapter(mAdapter);
-  }
+        mAdapter = new ImageSelectorAdapter(getContext(), mDataList);
+        mRecyclerView.setAdapter(mAdapter);
+    }
 
-  public void setImageCallback(ImageSelectorCallback callback) {
-    mAdapter.setOnImageCallback(callback);
-  }
+    public void setImageCallback(ImageSelectorCallback callback) {
+        mAdapter.setOnImageCallback(callback);
+    }
 
-  public void addImage(List<String> list) {
+    public void addImage(List<String> list) {
 
-    int itemCount = mAdapter.getItemCount();
-    int insertIndex = itemCount - 1;
+        int itemCount = mAdapter.getItemCount();
+        int insertIndex = itemCount - 1;
 
-    mDataList.addAll(insertIndex, list);
-    mAdapter.notifyDataSetChanged();
-    notifyBottomCount();
-    mRecyclerView.smoothScrollToPosition(mAdapter.getItemCount() - 1);
-  }
+        mDataList.addAll(insertIndex, list);
+        mAdapter.notifyDataSetChanged();
+        notifyBottomCount();
+        mRecyclerView.smoothScrollToPosition(mAdapter.getItemCount() - 1);
+    }
 
-  public void removeImage(int position) {
-    mDataList.remove(position);
-    mAdapter.notifyItemRemoved(position);
-    notifyBottomCount();
-  }
+    public void removeImage(int position) {
+        mDataList.remove(position);
+        mAdapter.notifyItemRemoved(position);
+        notifyBottomCount();
+    }
 
-  private void notifyBottomCount() {
+    private void notifyBottomCount() {
 
-    int size = mDataList.size();
-    String count = size + "/" + MAX;
-    mCountView.setText(count);
-  }
+        int size = mDataList.size();
+        String count = size + "/" + MAX;
+        mCountView.setText(count);
+    }
 
-  public List<String> getImageList() {
-    return mDataList;
-  }
+    public List<String> getImageList() {
+        return mDataList;
+    }
 }

@@ -3,6 +3,7 @@ package com.chaoneng.ilooknews.module.home;
 import android.content.DialogInterface;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.text.TextUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import butterknife.BindView;
@@ -11,6 +12,7 @@ import com.chaoneng.ilooknews.AppConstant;
 import com.chaoneng.ilooknews.R;
 import com.chaoneng.ilooknews.base.BaseFragment;
 import com.chaoneng.ilooknews.data.Channel;
+import com.chaoneng.ilooknews.instance.AccountManager;
 import com.chaoneng.ilooknews.instance.TabManager;
 import com.chaoneng.ilooknews.module.home.callback.OnChannelListener;
 import com.chaoneng.ilooknews.module.home.fragment.ChannelDialogFragment;
@@ -101,7 +103,14 @@ public class HomeMainFragment extends BaseFragment implements OnChannelListener 
 
     @OnClick(R.id.iv_avatar)
     public void toUserCenterPage() {
-        IntentHelper.openUserCenterPage(getActivity());
+        if (AccountManager.getInstance().hasLogin()) {
+            String userId = AccountManager.getInstance().getUserId();
+            if (!TextUtils.isEmpty(userId)) {
+                IntentHelper.openUserCenterPage(getActivity(), userId);
+            }
+        } else {
+            IntentHelper.openLoginPage(getActivity());
+        }
     }
 
     @OnClick(R.id.iv_notify)
