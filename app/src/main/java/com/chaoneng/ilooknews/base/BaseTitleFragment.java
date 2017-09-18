@@ -13,31 +13,31 @@ import com.chaoneng.ilooknews.widget.ilook.ILookTitleBar;
 
 public abstract class BaseTitleFragment extends BaseFragment {
 
-  protected FrameLayout mSubRootView;
+    protected FrameLayout mSubRootView;
 
-  protected ILookTitleBar mTitleBar;
+    protected ILookTitleBar mTitleBar;
 
-  @Override
-  protected void doInit() {
+    @Override
+    protected void doInit() {
 
-    mSubRootView = mRootView.findViewById(R.id.id_content_frame);
-    mTitleBar = mRootView.findViewById(R.id.id_title_bar);
-    mSubRootView.addView(LayoutInflater.from(mContext).inflate(getSubLayout(), null));
-    ButterKnife.bind(this, mSubRootView);
-    init();
-  }
+        mSubRootView = mRootView.findViewById(R.id.id_content_frame);
+        mTitleBar = mRootView.findViewById(R.id.id_title_bar);
+        mSubRootView.addView(LayoutInflater.from(mContext).inflate(getSubLayout(), null));
+        ButterKnife.bind(this, mSubRootView);
+        init();
+    }
 
-  @Override
-  public boolean bind() {
-    return false;
-  }
+    @Override
+    public boolean bind() {
+        return false;
+    }
 
-  @Override
-  protected int getLayoutName() {
-    return R.layout.layout_title_base_normal;
-  }
+    @Override
+    protected int getLayoutName() {
+        return R.layout.layout_title_base_normal;
+    }
 
-  public abstract void init();
+    public abstract void init();
 
-  public abstract int getSubLayout();
+    public abstract int getSubLayout();
 }

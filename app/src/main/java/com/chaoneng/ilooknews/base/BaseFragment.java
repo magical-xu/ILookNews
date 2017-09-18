@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import com.chaoneng.ilooknews.widget.DialogManager;
 
 /**
  * Created by magical on 2017/3/17.
@@ -24,6 +25,7 @@ public abstract class BaseFragment extends Fragment {
 
     protected View mRootView;
     protected Context mContext;
+    private DialogManager mDialogManager;
 
     public Unbinder unbinder;
 
@@ -135,5 +137,35 @@ public abstract class BaseFragment extends Fragment {
         if (null != unbinder) {
             unbinder.unbind();
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        if (null != mDialogManager) {
+            mDialogManager.dismissDialog();
+            mDialogManager = null;
+        }
+        super.onDestroy();
+    }
+
+    private void ensureDialogManager() {
+        if (null == mDialogManager) {
+            mDialogManager = new DialogManager(getActivity());
+        }
+    }
+
+    public void showLoading(String msg) {
+        ensureDialogManager();
+        mDialogManager.showDialog(msg);
+    }
+
+    public void showLoading() {
+        ensureDialogManager();
+        mDialogManager.showDialog("正在加载");
+    }
+
+    public void hideLoading() {
+        ensureDialogManager();
+        mDialogManager.dismissDialog();
     }
 }

@@ -12,6 +12,7 @@
       android:layout_width="match_parent"
       android:layout_height="@dimen/title_height"
       android:background="@color/white">
+
     <ImageView
         android:id="@+id/iv_back"
         android:layout_width="@dimen/title_btn_width"
@@ -42,54 +43,114 @@
         android:textColor="@color/main_color" />
   </LinearLayout>
 
-  <com.chaoneng.ilooknews.module.user.widget.SettingItemView
-      android:id="@+id/id_history"
+  <ScrollView
       android:layout_width="match_parent"
-      android:layout_height="wrap_content" />
+      android:layout_height="match_parent"
+      android:scrollbars="none">
 
-  <com.google.android.flexbox.FlexboxLayout
-      android:id="@+id/id_history_container"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      custom:dividerDrawableHorizontal="@drawable/divider_line_horizontal"
-      custom:dividerDrawableVertical="@drawable/divider_line_vertical"
-      custom:flexWrap="wrap"
-      custom:showDividerHorizontal="middle"
-      custom:showDividerVertical="middle">
-
-  </com.google.android.flexbox.FlexboxLayout>
-
-
-  <com.chaoneng.ilooknews.module.user.widget.SettingItemView
-      android:id="@+id/id_recommend"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content" />
-
-  <com.google.android.flexbox.FlexboxLayout
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      custom:dividerDrawableHorizontal="@drawable/divider_line_horizontal"
-      custom:dividerDrawableVertical="@drawable/divider_line_vertical"
-      custom:flexWrap="wrap"
-      custom:showDividerHorizontal="middle"
-      custom:showDividerVertical="middle">
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/layout_height_normal"
-        android:gravity="center_vertical"
-        android:paddingLeft="@dimen/padding_small"
-        android:text="@string/test_text_short"
-        android:textColor="@color/one_text_color"
-        custom:layout_flexBasisPercent="49%" />
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/layout_height_normal"
-        android:gravity="center_vertical"
-        android:paddingLeft="@dimen/padding_small"
-        android:text="@string/test_text_short"
-        android:textColor="@color/one_text_color"
-        custom:layout_flexBasisPercent="49%" />
+        android:layout_height="wrap_content"
+        android:divider="@drawable/divider_line_horizontal"
+        android:orientation="vertical"
+        android:showDividers="middle|end">
 
+      <com.chaoneng.ilooknews.module.user.widget.SettingItemView
+          android:id="@+id/id_history"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content" />
 
-  </com.google.android.flexbox.FlexboxLayout>
+      <com.google.android.flexbox.FlexboxLayout
+          android:id="@+id/id_history_container"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          custom:dividerDrawableHorizontal="@drawable/divider_line_horizontal"
+          custom:dividerDrawableVertical="@drawable/divider_line_vertical"
+          custom:flexWrap="wrap"
+          custom:showDividerHorizontal="middle"
+          custom:showDividerVertical="middle" />
+
+      <com.chaoneng.ilooknews.module.user.widget.SettingItemView
+          android:id="@+id/id_recommend"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content" />
+
+      <com.google.android.flexbox.FlexboxLayout
+          android:id="@+id/id_recommend_container"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          custom:dividerDrawableHorizontal="@drawable/divider_line_horizontal"
+          custom:dividerDrawableVertical="@drawable/divider_line_vertical"
+          custom:flexWrap="wrap"
+          custom:showDividerHorizontal="middle"
+          custom:showDividerVertical="middle">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/layout_height_normal"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/padding_small"
+            android:text="@string/test_text_short"
+            android:textColor="@color/one_text_color"
+            custom:layout_flexBasisPercent="49%" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/layout_height_normal"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/padding_small"
+            android:text="@string/test_text_short"
+            android:textColor="@color/one_text_color"
+            custom:layout_flexBasisPercent="49%" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/layout_height_normal"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/padding_small"
+            android:text="@string/test_text_short"
+            android:textColor="@color/one_text_color"
+            custom:layout_flexBasisPercent="49%" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/layout_height_normal"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/padding_small"
+            android:text="@string/test_text_short"
+            android:textColor="@color/one_text_color"
+            custom:layout_flexBasisPercent="49%" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/layout_height_normal"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/padding_small"
+            android:text="@string/test_text_short"
+            android:textColor="@color/one_text_color"
+            custom:layout_flexBasisPercent="49%" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/layout_height_normal"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/padding_small"
+            android:text="@string/test_text_short"
+            android:textColor="@color/one_text_color"
+            custom:layout_flexBasisPercent="49%" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/layout_height_normal"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/padding_small"
+            android:text="@string/test_text_short"
+            android:textColor="@color/one_text_color"
+            custom:layout_flexBasisPercent="49%" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/layout_height_normal"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/padding_small"
+            android:text="@string/test_text_short"
+            android:textColor="@color/one_text_color"
+            custom:layout_flexBasisPercent="49%" />
+      </com.google.android.flexbox.FlexboxLayout>
+    </LinearLayout>
+  </ScrollView>
+
 </LinearLayout>

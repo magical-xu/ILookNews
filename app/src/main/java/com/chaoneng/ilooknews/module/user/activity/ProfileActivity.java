@@ -131,12 +131,6 @@ public class ProfileActivity extends BaseActivity {
                 })
                 .show();
         rawDialog.setCanceledOnTouchOutside(false);
-        //rawDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-        //    @Override
-        //    public void onDismiss(DialogInterface dialogInterface) {
-        //        KeyboardUtils.hideSoftInput(builder.getEditText());
-        //    }
-        //});
     }
 
     private void showNickDialog() {
@@ -168,13 +162,6 @@ public class ProfileActivity extends BaseActivity {
                 .show();
 
         rawDialog.setCanceledOnTouchOutside(false);
-        //rawDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-        //    @Override
-        //    public void onDismiss(DialogInterface dialogInterface) {
-        //        //KeyboardUtils.hideSoftInput(ProfileActivity.this);
-        //        QMUIKeyboardHelper.hideKeyboard(modifyNick);
-        //    }
-        //});
     }
 
     /**

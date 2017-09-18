@@ -6,7 +6,9 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import butterknife.BindView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chaoneng.ilooknews.AppConstant;
@@ -48,6 +50,7 @@ public class NewsListFragment extends BaseFragment {
 
     private String mCid;    //频道标签类型
     private boolean mFull;
+    private View mEmptyView;
 
     public static NewsListFragment newInstance(String type) {
         NewsListFragment fragment = new NewsListFragment();
@@ -141,6 +144,9 @@ public class NewsListFragment extends BaseFragment {
                 }
             }
         });
+
+        mEmptyView = LayoutInflater.from(getActivity())
+                .inflate(R.layout.base_empty_view, (ViewGroup) mRecyclerView.getParent(), false);
     }
 
     private void load(final int page) {
@@ -150,6 +156,7 @@ public class NewsListFragment extends BaseFragment {
             return;
         }
 
+        showLoading();
         HomeService service = NetRequest.getInstance().create(HomeService.class);
         Call<HttpResult<NewsListWrapper>> call =
                 service.getNewsList(AppConstant.TEST_USER_ID, mCid, page,
@@ -157,6 +164,13 @@ public class NewsListFragment extends BaseFragment {
         call.enqueue(new SimpleCallback<NewsListWrapper>() {
             @Override
             public void onSuccess(NewsListWrapper data) {
+
+                hideLoading();
+
+                if (page == 1 && (null == data || null == data.list || data.list.size() == 0)) {
+                    mAdapter.setEmptyView(mEmptyView);
+                    return;
+                }
 
                 if (page == 1) {
 
@@ -182,6 +196,7 @@ public class NewsListFragment extends BaseFragment {
             @Override
             public void onFail(String code, String errorMsg) {
                 mRefreshHelper.onFail();
+                hideLoading();
             }
         });
     }

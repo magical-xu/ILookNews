@@ -2,6 +2,7 @@ package com.chaoneng.ilooknews.api;
 
 import com.chaoneng.ilooknews.module.home.data.NewsListWrapper;
 import com.chaoneng.ilooknews.module.search.data.SearchHistory;
+import com.chaoneng.ilooknews.module.search.data.SearchRecommend;
 import com.chaoneng.ilooknews.net.data.HttpResult;
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -26,4 +27,10 @@ public interface SearchService {
      */
     @GET("beforeSearch")
     Call<HttpResult<SearchHistory>> getSearchHistory(@Query("userid") String userId);
+
+    /**
+     * 获取搜索推荐
+     */
+    @GET("getSearchKeyWord")
+    Call<HttpResult<SearchRecommend>> getSearchRecommend();
 }

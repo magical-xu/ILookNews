@@ -18,6 +18,7 @@ import com.chaoneng.ilooknews.widget.ilook.ILookTitleBar;
 import com.chaoneng.ilooknews.widget.selector.ImageSelector;
 import com.chaoneng.ilooknews.widget.selector.ImageSelectorCallback;
 import com.chaoneng.ilooknews.widget.text.CountEditText;
+import com.magicalxu.library.blankj.KeyboardUtils;
 import com.magicalxu.library.blankj.SizeUtils;
 import com.magicalxu.library.blankj.ToastUtils;
 import java.util.ArrayList;
@@ -91,25 +92,36 @@ public class BrokeActivity extends BaseActivity {
     private void onSubmit() {
         ToastUtils.showShort(imageSelector.getImageList().size() + " 提交");
 
+        KeyboardUtils.hideSoftInput(editText);
         String text = editText.getText();
         if (TextUtils.isEmpty(text)) {
             return;
         }
 
-        String json = "";
         HashMap<String, String> params = new HashMap<>();
-        params.put("pitcUrl", json);
+        if (imageSelector.getImageList().size() == 0) {
+            // no image
+            params.put("picTotal", AppConstant.NONE_VALUE);
+        } else {
+            String json = "";
+            params.put("pitcUrl", json);
+        }
 
+        showLoading();
         Call<HttpResult<String>> call = service.addBaoLiao(AppConstant.TEST_USER_ID, text, params);
         call.enqueue(new SimpleCallback<String>() {
             @Override
             public void onSuccess(String data) {
 
+                hideLoading();
+                ToastUtils.showShort("爆料成功");
             }
 
             @Override
             public void onFail(String code, String errorMsg) {
 
+                hideLoading();
+                ToastUtils.showShort(errorMsg);
             }
         });
     }

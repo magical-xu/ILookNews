@@ -14,6 +14,7 @@ import com.chaoneng.ilooknews.R;
 import com.chaoneng.ilooknews.api.SearchService;
 import com.chaoneng.ilooknews.base.BaseActivity;
 import com.chaoneng.ilooknews.module.search.data.SearchHistory;
+import com.chaoneng.ilooknews.module.search.data.SearchRecommend;
 import com.chaoneng.ilooknews.module.user.widget.SettingItemView;
 import com.chaoneng.ilooknews.net.callback.SimpleCallback;
 import com.chaoneng.ilooknews.net.client.NetRequest;
@@ -39,6 +40,7 @@ public class SearchActivity extends BaseActivity {
     @BindView(R.id.id_history) SettingItemView mHistory;
     @BindView(R.id.id_recommend) SettingItemView mRecommend;
     @BindView(R.id.id_history_container) FlexboxLayout mHistoryContainer;
+    @BindView(R.id.id_recommend_container) FlexboxLayout mRecommendContainer;
 
     private SearchService service;
 
@@ -100,6 +102,27 @@ public class SearchActivity extends BaseActivity {
                 .setRightDrawable(R.drawable.ic_delete_history);
 
         loadHistory();
+        loadRecommend();
+    }
+
+    private void loadRecommend() {
+
+        Call<HttpResult<SearchRecommend>> call = service.getSearchRecommend();
+        call.enqueue(new SimpleCallback<SearchRecommend>() {
+            @Override
+            public void onSuccess(SearchRecommend data) {
+
+                if (null != data) {
+                    List<SearchRecommend.ListBean> list = data.list;
+                    addRecommendView(list);
+                }
+            }
+
+            @Override
+            public void onFail(String code, String errorMsg) {
+
+            }
+        });
     }
 
     private void loadHistory() {
@@ -142,6 +165,30 @@ public class SearchActivity extends BaseActivity {
                     ViewGroup.LayoutParams.MATCH_PARENT);
             params.setFlexBasisPercent(0.49f);
             mHistoryContainer.addView(view, params);
+        }
+    }
+
+    /**
+     * 将搜索推荐添加到 FlexboxLayout中
+     */
+    private void addRecommendView(List<SearchRecommend.ListBean> list) {
+
+        LayoutInflater inflater = getLayoutInflater();
+        for (int i = 0; i < list.size(); i++) {
+            SearchRecommend.ListBean listBean = list.get(i);
+            ViewGroup view = (ViewGroup) inflater.inflate(R.layout.include_search_item_view, null);
+
+            //TextView textView = new TextView(this);
+            //textView.setTextColor(CompatUtil.getColor(this, R.color.one_text_color));
+            TextView textView = (TextView) view.getChildAt(0);
+            textView.setText(listBean.keyText);
+            //textView.setPadding(SizeUtils.dp2px(8), 0, 0, 0);
+            //textView.setGravity(Gravity.CENTER_VERTICAL);
+
+            FlexboxLayout.LayoutParams params = new FlexboxLayout.LayoutParams(SizeUtils.dp2px(42),
+                    ViewGroup.LayoutParams.MATCH_PARENT);
+            params.setFlexBasisPercent(0.49f);
+            mRecommendContainer.addView(view, params);
         }
     }
 }

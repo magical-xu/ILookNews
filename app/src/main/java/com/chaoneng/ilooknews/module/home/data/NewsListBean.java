@@ -8,6 +8,7 @@ import java.util.List;
  * Created by magical on 17/8/20.
  * Description :
  * 1视频类 2 图文类 3 图片类 4 广告类 5 跳转类
+ * picStyle : 1:无图 2:三张图 3:一张图 4：视频类的图
  */
 
 public class NewsListBean implements MultiItemEntity {
@@ -41,4 +42,6 @@ public class NewsListBean implements MultiItemEntity {
     public int weight;
     public int adtype;
     public String appName;
+
+    public String picStyle;
 }

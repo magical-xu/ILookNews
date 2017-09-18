@@ -64,11 +64,11 @@
     <LinearLayout
         android:id="@+id/ll_three_container"
         android:layout_width="match_parent"
-        android:layout_height="120dp"
-        android:layout_marginLeft="@dimen/padding_normal"
+        android:layout_height="72dp"
+        android:layout_marginBottom="@dimen/padding_small"
         android:orientation="horizontal"
         android:visibility="gone"
-        tools:visibility="gone">
+        tools:visibility="visible">
 
       <ImageView
           android:id="@+id/iv_news_center_image1"
@@ -94,6 +94,11 @@
           tools:src="@drawable/ic_image_loading" />
     </LinearLayout>
 
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
     <include layout="@layout/include_list_bottom" />
 
   </LinearLayout>
@@ -101,9 +106,9 @@
   <ImageView
       android:id="@+id/iv_news_right"
       android:layout_width="114dp"
-      android:layout_height="76dp"
+      android:layout_height="72dp"
       android:layout_marginLeft="@dimen/padding_normal"
       android:visibility="gone"
       tools:src="@drawable/ic_image_loading"
-      tools:visibility="visible" />
+      tools:visibility="gone" />
 </LinearLayout>
