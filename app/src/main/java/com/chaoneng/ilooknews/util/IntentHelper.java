@@ -44,9 +44,11 @@ public class IntentHelper {
 
     /**
      * 跳转视频详情界面
+     *
+     * @param seek 播放进度
      */
-    public static void openVideoDetailPage(Context context, String vid) {
-        VideoDetailActivity.newInstance(context, vid);
+    public static void openVideoDetailPage(Context context, String vid, long seek) {
+        VideoDetailActivity.newInstance(context, vid, seek);
     }
 
     /**

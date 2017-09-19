@@ -44,4 +44,6 @@ public class NewsListBean implements MultiItemEntity {
     public String appName;
 
     public String picStyle;
+
+    public String video_url;
 }

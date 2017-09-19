@@ -6,9 +6,11 @@ import android.view.View;
 import com.bumptech.glide.request.RequestOptions;
 import com.chaoneng.ilooknews.AppConstant;
 import com.chaoneng.ilooknews.R;
+import com.chaoneng.ilooknews.instance.VideoManager;
 import com.chaoneng.ilooknews.library.glide.GlideApp;
 import com.chaoneng.ilooknews.library.gsyvideoplayer.listener.SampleListener;
 import com.magicalxu.library.blankj.KeyboardUtils;
+import com.magicalxu.library.blankj.SPUtils;
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder;
 import com.shuyu.gsyvideoplayer.listener.LockClickListener;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
@@ -24,17 +26,21 @@ public class VideoHelper {
     public static final String TAG = "VideoHelper";
 
     public static void initPlayer(final Context context,
-            final StandardGSYVideoPlayer gsyVideoPlayer, String title,
+            final StandardGSYVideoPlayer gsyVideoPlayer, String url, String title,
             final OrientationUtils orientationUtils) {
 
+        long progress = VideoManager.getInstance().getProgress(url);
+        gsyVideoPlayer.setSeekOnStart(progress);
+
         //wifi播放提醒
-        gsyVideoPlayer.setNeedShowWifiTip(true);
+        boolean needTip = SPUtils.getInstance().getBoolean(AppConstant.WIFI_4G_TIP, true);
+        gsyVideoPlayer.setNeedShowWifiTip(needTip);
 
         //滑动界面改变 进度、声音
         gsyVideoPlayer.setIsTouchWiget(false);
 
         //默认缓存路径 初始化播放器
-        gsyVideoPlayer.setUp(AppConstant.TEST_VIDEO_URL, true, null, title);
+        gsyVideoPlayer.setUp(url, true, null, title);
 
         //隐藏title
         gsyVideoPlayer.getTitleTextView().setVisibility(View.GONE);
@@ -83,6 +89,13 @@ public class VideoHelper {
             public void onEnterFullscreen(String url, Object... objects) {
                 super.onEnterFullscreen(url, objects);
             }
+
+            @Override
+            public void onClickStartIcon(String url, Object... objects) {
+                long progress = VideoManager.getInstance().getProgress(url);
+                gsyVideoPlayer.setSeekOnStart(progress);
+                super.onClickStartIcon(url, objects);
+            }
         });
 
         gsyVideoPlayer.setLockClickListener(new LockClickListener() {
@@ -105,7 +118,8 @@ public class VideoHelper {
     }
 
     public static void initDetailPage(final Context context, String url,
-            final StandardGSYVideoPlayer gsyVideoPlayer, final OrientationUtils orientationUtils) {
+            final StandardGSYVideoPlayer gsyVideoPlayer, final OrientationUtils orientationUtils,
+            long progress) {
 
         if (null == orientationUtils) {
             return;
@@ -114,12 +128,14 @@ public class VideoHelper {
         gsyVideoPlayer.getBackButton().setVisibility(View.GONE);
         gsyVideoPlayer.getTitleTextView().setVisibility(View.GONE);
 
+        long progress1 = VideoManager.getInstance().getProgress(url);
+
+        boolean needTip = SPUtils.getInstance().getBoolean(AppConstant.WIFI_4G_TIP, true);
         GSYVideoOptionBuilder gsyVideoOption = new GSYVideoOptionBuilder();
         gsyVideoOption
                 //.setThumbImageView(imageView)
-                .setIsTouchWiget(true)
-                .setNeedShowWifiTip(true)
-                .setRotateViewAuto(false)
+                .setIsTouchWiget(true).setNeedShowWifiTip(needTip)
+                .setRotateViewAuto(false).setSeekOnStart(progress1)
                 .setLockLand(false)
                 .setShowFullAnimation(false)
                 .setNeedLockFull(false)
@@ -176,5 +192,10 @@ public class VideoHelper {
                 gsyVideoPlayer.startWindowFullscreen(context, true, true);
             }
         });
+
+        if (progress1 != 0) {
+            //自动播放
+            gsyVideoPlayer.getStartButton().performClick();
+        }
     }
 }

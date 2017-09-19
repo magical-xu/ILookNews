@@ -150,7 +150,7 @@ public class SearchDetailActivity extends BaseActivity {
                 int itemType = bean.getItemType();
                 String newId = bean.newId;
                 if (itemType == NewsListBean.VIDEO) {
-                    IntentHelper.openVideoDetailPage(SearchDetailActivity.this, "");
+                    IntentHelper.openVideoDetailPage(SearchDetailActivity.this, "", 0);
                 } else if (itemType == NewsListBean.TEXT) {
                     IntentHelper.openNewsDetailPage(SearchDetailActivity.this, newId, itemType);
                 } else if (itemType == NewsListBean.IMAGE) {

@@ -9,7 +9,7 @@ import com.chaoneng.ilooknews.AppConstant;
 import com.chaoneng.ilooknews.R;
 import com.chaoneng.ilooknews.library.glide.ImageLoader;
 import com.chaoneng.ilooknews.library.gsyvideoplayer.VideoHelper;
-import com.chaoneng.ilooknews.module.video.data.VideoListBean;
+import com.chaoneng.ilooknews.module.home.data.NewsListBean;
 import com.chaoneng.ilooknews.widget.image.HeadImageView;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 
@@ -18,50 +18,52 @@ import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
  * Description : 视频列表适配器
  */
 
-public class VideoListAdapter extends BaseQuickAdapter<VideoListBean, BaseViewHolder> {
+public class VideoListAdapter extends BaseQuickAdapter<NewsListBean, BaseViewHolder> {
 
-  public static final String TAG = "VideoListAdapter";
+    public static final String TAG = "VideoListAdapter";
 
-  private ImageView imageView;
+    private ImageView imageView;
 
-  public VideoListAdapter(@LayoutRes int layoutResId) {
-    super(layoutResId);
-  }
-
-  @Override
-  public BaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-    imageView = new ImageView(parent.getContext());
-    return super.onCreateViewHolder(parent, viewType);
-  }
-
-  @Override
-  protected void convert(BaseViewHolder helper, VideoListBean item) {
-
-    configVideo(helper, item);
-
-    ((HeadImageView) helper.getView(R.id.iv_avatar)).setHeadImage(AppConstant.TEST_AVATAR);
-
-    helper.setText(R.id.tv_author, "magical");
-
-    helper.setText(R.id.tv_play_time, "1111次播放").setText(R.id.tv_comments, "123");
-
-    helper.addOnClickListener(R.id.id_focus_plus).addOnClickListener(R.id.tv_comments);
-  }
-
-  private void configVideo(BaseViewHolder helper, VideoListBean item) {
-
-    final StandardGSYVideoPlayer gsyVideoPlayer = helper.getView(R.id.video_player);
-
-    //增加封面
-    imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-    ImageLoader.loadImage(AppConstant.TEST_THUMB_URL, imageView);
-    if (imageView.getParent() != null) {
-      ViewGroup viewGroup = (ViewGroup) imageView.getParent();
-      viewGroup.removeView(imageView);
+    public VideoListAdapter(@LayoutRes int layoutResId) {
+        super(layoutResId);
     }
-    gsyVideoPlayer.setThumbImageView(imageView);
-    gsyVideoPlayer.setPlayPosition(helper.getAdapterPosition());
 
-    VideoHelper.initPlayer(mContext, gsyVideoPlayer, "嫂子真会玩", null);
-  }
+    @Override
+    public BaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        imageView = new ImageView(parent.getContext());
+        return super.onCreateViewHolder(parent, viewType);
+    }
+
+    @Override
+    protected void convert(BaseViewHolder helper, NewsListBean item) {
+
+        configVideo(helper, item);
+
+        ((HeadImageView) helper.getView(R.id.iv_avatar)).setHeadImage(AppConstant.TEST_AVATAR);
+
+        helper.setText(R.id.tv_author, "magical");
+
+        helper.setText(R.id.tv_play_time, "1111次播放").setText(R.id.tv_comments, "123");
+
+        helper.addOnClickListener(R.id.id_focus_plus).addOnClickListener(R.id.tv_comments);
+    }
+
+    private void configVideo(BaseViewHolder helper, NewsListBean item) {
+
+        final StandardGSYVideoPlayer gsyVideoPlayer = helper.getView(R.id.video_player);
+
+        String url = item.video_url;
+
+        //增加封面
+        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        ImageLoader.loadImage(AppConstant.TEST_THUMB_URL, imageView);
+        if (imageView.getParent() != null) {
+            ViewGroup viewGroup = (ViewGroup) imageView.getParent();
+            viewGroup.removeView(imageView);
+        }
+        gsyVideoPlayer.setThumbImageView(imageView);
+        gsyVideoPlayer.setPlayPosition(helper.getAdapterPosition());
+
+        VideoHelper.initPlayer(mContext, gsyVideoPlayer, url, "嫂子真会玩", null);
+    }
 }

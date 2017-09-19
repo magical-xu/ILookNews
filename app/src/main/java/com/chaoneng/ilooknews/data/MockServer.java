@@ -5,9 +5,9 @@ import com.chaoneng.ilooknews.api.Constant;
 import com.chaoneng.ilooknews.api.GankModel;
 import com.chaoneng.ilooknews.api.GankService;
 import com.chaoneng.ilooknews.module.focus.data.FocusBean;
+import com.chaoneng.ilooknews.module.home.data.NewsListBean;
 import com.chaoneng.ilooknews.module.user.data.BrokeNewsBean;
 import com.chaoneng.ilooknews.module.user.data.UserStateBean;
-import com.chaoneng.ilooknews.module.video.data.VideoListBean;
 import com.chaoneng.ilooknews.net.callback.SimpleJsonCallback;
 import com.chaoneng.ilooknews.net.client.NetRequest;
 import com.chaoneng.ilooknews.util.RefreshHelper;
@@ -30,10 +30,6 @@ public class MockServer<T> {
     public static MockServer getInstance() {
         return new MockServer();
     }
-
-    //private static class MockServerHolder {
-    //  private static final MockServer instance = new MockServer();
-    //}
 
     public void init(RefreshHelper helper) {
         this.mRefreshHelper = helper;
@@ -116,29 +112,26 @@ public class MockServer<T> {
         List<FocusBean> list = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
             FocusBean user = new FocusBean();
-            //user.avatar = AppConstant.TEST_AVATAR;
-            //user.name = "超能工作室";
-            //user.intro = "简介：我们不能改变潮水的方向，但总要试试。。。。。。。";
-            //user.time = "四天之前";
-            //user.content = "不论何时，做你认为最重要的事情";
             list.add(user);
         }
         return list;
     }
 
-    private List<VideoListBean> getVideoList() {
-        List<VideoListBean> list = new ArrayList<>();
+    private List<NewsListBean> getVideoList() {
+        List<NewsListBean> list = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
-            VideoListBean user = new VideoListBean();
+            NewsListBean user = new NewsListBean();
+            user.newId = String.valueOf(i);
+            user.video_url = AppConstant.TEST_VIDEO_URL;
             list.add(user);
         }
         return list;
     }
 
-  private List<CommentBean> getVideoComment() {
-    List<CommentBean> list = new ArrayList<>();
+    private List<CommentBean> getVideoComment() {
+        List<CommentBean> list = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
-          CommentBean user = new CommentBean();
+            CommentBean user = new CommentBean();
             list.add(user);
         }
         return list;
