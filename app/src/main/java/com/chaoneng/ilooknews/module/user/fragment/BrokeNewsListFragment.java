@@ -3,6 +3,9 @@ package com.chaoneng.ilooknews.module.user.fragment;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import butterknife.BindView;
 import com.chaoneng.ilooknews.AppConstant;
 import com.chaoneng.ilooknews.R;
@@ -22,7 +25,7 @@ import retrofit2.Call;
 
 /**
  * Created by magical on 2017/8/22.
- * Description : 爆料界面
+ * Description : 爆料列表 界面
  */
 
 public class BrokeNewsListFragment extends BaseFragment {
@@ -36,6 +39,8 @@ public class BrokeNewsListFragment extends BaseFragment {
     private UserService userService;
     private String pageUid;
 
+    private View mEmptyView;
+
     public static BrokeNewsListFragment getInstance(String uid) {
 
         BrokeNewsListFragment fragment = new BrokeNewsListFragment();
@@ -47,6 +52,11 @@ public class BrokeNewsListFragment extends BaseFragment {
 
     @Override
     protected void beginLoadData() {
+    }
+
+    @Override
+    protected void lazyLoad() {
+        super.lazyLoad();
 
         mRefreshHelper.beginLoadData();
     }
@@ -65,13 +75,15 @@ public class BrokeNewsListFragment extends BaseFragment {
         mRefreshHelper = new RefreshHelper(mRefreshLayout, mAdapter, mRecyclerView, true) {
             @Override
             public void onRequest(int page) {
-                mockServer.mockGankCall(page, MockServer.Type.USER_BROKE);
+                //mockServer.mockGankCall(page, MockServer.Type.USER_BROKE);
+                loadData(page);
             }
         };
-        mockServer = MockServer.getInstance();
-        mockServer.init(mRefreshHelper);
+        //mockServer = MockServer.getInstance();
+        //mockServer.init(mRefreshHelper);
 
-        loadData(1);
+        mEmptyView = LayoutInflater.from(getActivity())
+                .inflate(R.layout.base_empty_view, (ViewGroup) mRecyclerView.getParent(), false);
     }
 
     @Override
@@ -79,25 +91,53 @@ public class BrokeNewsListFragment extends BaseFragment {
         return R.layout.simple_recycler_list;
     }
 
-    public void loadData(int page) {
+    public void loadData(final int page) {
 
         String userId = AccountManager.getInstance().getUserId();
         if (TextUtils.isEmpty(userId) || TextUtils.isEmpty(pageUid)) {
             return;
         }
-        // TODO: 2017/9/14 替换测试的uid
+
+        showLoading();
         Call<HttpResult<BrokeListWrapper>> call =
-                userService.getBaoLiaoList(AppConstant.TEST_USER_ID, page,
-                        AppConstant.DEFAULT_PAGE_SIZE);
+                userService.getBaoLiaoList(pageUid, page, AppConstant.DEFAULT_PAGE_SIZE);
         call.enqueue(new SimpleCallback<BrokeListWrapper>() {
             @Override
             public void onSuccess(BrokeListWrapper data) {
 
+                hideLoading();
+                if (page == 1 && (null == data || null == data.list || data.list.size() == 0)) {
+                    mAdapter.setEmptyView(mEmptyView);
+                    mRefreshHelper.onFail();
+                    return;
+                }
+
+                if (page == 1) {
+
+                    mRefreshHelper.finishRefresh();
+                    mAdapter.setNewData(data.list);
+                } else {
+
+                    if (!data.haveNext) {
+                        mRefreshHelper.setNoMoreData();
+                        return;
+                    }
+
+                    if (data.list.size() < AppConstant.DEFAULT_PAGE_SIZE) {
+                        mRefreshHelper.setNoMoreData();
+                        return;
+                    }
+
+                    mRefreshHelper.finishLoadmore();
+                    mAdapter.addData(data.list);
+                }
             }
 
             @Override
             public void onFail(String code, String errorMsg) {
 
+                mRefreshHelper.onFail();
+                onSimpleError(errorMsg);
             }
         });
     }

@@ -61,6 +61,8 @@ public interface HomeService {
 
     /**
      * 获取评论
+     *
+     * @param parentId ==0时为一级评论=其他为父级的id
      */
     @GET("getNewsComment")
     Call<HttpResult<NewsInfoWrapper>> getNewsComment(@Query("userid") String userId,

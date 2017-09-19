@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import com.chaoneng.ilooknews.SimpleWebActivity;
 import com.chaoneng.ilooknews.module.focus.AddFollowListActivity;
+import com.chaoneng.ilooknews.module.home.activity.CommentActivity;
 import com.chaoneng.ilooknews.module.home.activity.NewsDetailActivity;
 import com.chaoneng.ilooknews.module.home.activity.NewsPhotoDetailActivity;
 import com.chaoneng.ilooknews.module.home.activity.NotifyActivity;
@@ -135,5 +136,12 @@ public class IntentHelper {
      */
     public static void openWebPage(Context context, @NonNull String url) {
         SimpleWebActivity.getInstance(context, url);
+    }
+
+    /**
+     * 跳转新闻评论 一级界面
+     */
+    public static void openNewsCommentPage(Context context, String newsId, int type) {
+        CommentActivity.getInstance(context, newsId, type);
     }
 }

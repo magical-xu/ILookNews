@@ -7,8 +7,8 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.chaoneng.ilooknews.AppConstant;
 import com.chaoneng.ilooknews.ILookApplication;
 import com.chaoneng.ilooknews.R;
+import com.chaoneng.ilooknews.data.NewsInfo;
 import com.chaoneng.ilooknews.library.glide.ImageLoader;
-import com.chaoneng.ilooknews.module.user.data.UserStateBean;
 import com.chaoneng.ilooknews.widget.image.HeadImageView;
 
 /**
@@ -16,14 +16,14 @@ import com.chaoneng.ilooknews.widget.image.HeadImageView;
  * Description :
  */
 
-public class StateAdapter extends BaseQuickAdapter<UserStateBean, BaseViewHolder> {
+public class StateAdapter extends BaseQuickAdapter<NewsInfo, BaseViewHolder> {
 
   public StateAdapter(@LayoutRes int layoutResId) {
     super(layoutResId);
   }
 
   @Override
-  protected void convert(BaseViewHolder helper, UserStateBean item) {
+  protected void convert(BaseViewHolder helper, NewsInfo item) {
 
     ((HeadImageView) helper.getView(R.id.iv_avatar)).setHeadImage(AppConstant.TEST_AVATAR);
     helper.setText(R.id.tv_name, "magical");

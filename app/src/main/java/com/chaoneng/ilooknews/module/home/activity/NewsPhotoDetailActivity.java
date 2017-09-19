@@ -20,13 +20,13 @@ import com.chaoneng.ilooknews.base.BaseActivity;
 import com.chaoneng.ilooknews.data.ImageInfo;
 import com.chaoneng.ilooknews.data.NewsInfo;
 import com.chaoneng.ilooknews.data.NewsInfoWrapper;
-import com.chaoneng.ilooknews.module.home.fragment.CommentDialogFragment;
 import com.chaoneng.ilooknews.module.home.fragment.PhotoDetailFragment;
 import com.chaoneng.ilooknews.net.callback.SimpleCallback;
 import com.chaoneng.ilooknews.net.client.NetRequest;
 import com.chaoneng.ilooknews.net.data.HttpResult;
 import com.chaoneng.ilooknews.util.BottomHelper;
 import com.chaoneng.ilooknews.util.CompatUtil;
+import com.chaoneng.ilooknews.util.IntentHelper;
 import com.chaoneng.ilooknews.widget.adapter.BaseFragmentAdapter;
 import com.chaoneng.ilooknews.widget.adapter.OnPageChangeListener;
 import com.chaoneng.ilooknews.widget.ilook.ILookTitleBar;
@@ -202,7 +202,9 @@ public class NewsPhotoDetailActivity extends BaseActivity {
     @OnClick(R.id.id_bottom_comment)
     public void openCommentPage(View view) {
 
-        CommentDialogFragment.newInstance().show(getSupportFragmentManager(), TAG);
+        //CommentDialogFragment.newInstance().show(getSupportFragmentManager(), TAG);
+        // 跳 一级评论页
+        IntentHelper.openNewsCommentPage(this, PAGE_NEWS_ID, PAGE_NEWS_TYPE);
     }
 
     @OnClick(R.id.id_send)

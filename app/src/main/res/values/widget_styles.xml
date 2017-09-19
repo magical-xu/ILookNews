@@ -52,7 +52,7 @@
     <item name="tl_indicator_margin_bottom">4dp</item>
     <item name="tl_indicator_width_equal_title">true</item>
     <item name="tl_tab_padding">@dimen/padding_small</item>
-    <item name="tl_tab_space_equal">true</item>
+    <!--<item name="tl_tab_space_equal">true</item>-->
     <item name="tl_textBold">SELECT</item>
     <item name="tl_textSelectColor">@color/main_color</item>
     <item name="tl_textUnselectColor">@color/three_text_color</item>

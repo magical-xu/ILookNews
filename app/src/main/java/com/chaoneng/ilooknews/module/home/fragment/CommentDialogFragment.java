@@ -13,77 +13,70 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.chaoneng.ilooknews.R;
-import com.chaoneng.ilooknews.module.home.callback.OnChannelListener;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 
 /**
  * Created by magical on 2017/8/18 .
- * 频道编辑的 fragment
+ * 二级评论界面
  */
 
 public class CommentDialogFragment extends DialogFragment {
 
-  @BindView(R.id.id_recycler) RecyclerView mRecyclerView;
-  @BindView(R.id.id_refresh_layout) SmartRefreshLayout mRefreshLayout;
-  @BindView(R.id.tv_title) TextView mTvTitle;
-  @BindView(R.id.iv_title_left) View mIvBack;
+    @BindView(R.id.id_recycler) RecyclerView mRecyclerView;
+    @BindView(R.id.id_refresh_layout) SmartRefreshLayout mRefreshLayout;
+    @BindView(R.id.tv_title) TextView mTvTitle;
+    @BindView(R.id.iv_title_left) View mIvBack;
 
-  private OnChannelListener mOnChannelListener;
-
-  public void setOnChannelListener(OnChannelListener onChannelListener) {
-    mOnChannelListener = onChannelListener;
-  }
-
-  public static CommentDialogFragment newInstance() {
-    CommentDialogFragment dialogFragment = new CommentDialogFragment();
-    return dialogFragment;
-  }
-
-  @Override
-  public void onCreate(@Nullable Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    setStyle(DialogFragment.STYLE_NORMAL, android.R.style.Theme_Black_NoTitleBar);
-  }
-
-  @Nullable
-  @Override
-  public View onCreateView(LayoutInflater inflater, ViewGroup container,
-      Bundle savedInstanceState) {
-    Dialog dialog = getDialog();
-    if (dialog != null && dialog.getWindow() != null) {
-      //添加动画
-      dialog.getWindow().setWindowAnimations(R.style.dialogSlideAnim);
+    public static CommentDialogFragment newInstance() {
+        CommentDialogFragment dialogFragment = new CommentDialogFragment();
+        return dialogFragment;
     }
-    return inflater.inflate(R.layout.fragment_comment_list, null);
-  }
 
-  @Override
-  public void onViewCreated(View view, Bundle savedInstanceState) {
-    super.onViewCreated(view, savedInstanceState);
-    ButterKnife.bind(this, view);
-    processLogic();
-  }
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setStyle(DialogFragment.STYLE_NORMAL, android.R.style.Theme_Black_NoTitleBar);
+    }
 
-  private void processLogic() {
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+            Bundle savedInstanceState) {
+        Dialog dialog = getDialog();
+        if (dialog != null && dialog.getWindow() != null) {
+            //添加动画
+            dialog.getWindow().setWindowAnimations(R.style.dialogSlideAnim);
+        }
+        return inflater.inflate(R.layout.fragment_comment_list, null);
+    }
 
-    mTvTitle.setText("楼层回复");
-    mIvBack.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View view) {
-        dismiss();
-      }
-    });
-  }
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        ButterKnife.bind(this, view);
+        processLogic();
+    }
 
-  private DialogInterface.OnDismissListener mOnDismissListener;
+    private void processLogic() {
 
-  public void setOnDismissListener(DialogInterface.OnDismissListener onDismissListener) {
-    mOnDismissListener = onDismissListener;
-  }
+        mTvTitle.setText("楼层回复");
+        mIvBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dismiss();
+            }
+        });
+    }
 
-  @Override
-  public void onDismiss(DialogInterface dialog) {
-    super.onDismiss(dialog);
-    if (mOnDismissListener != null) mOnDismissListener.onDismiss(dialog);
-  }
+    private DialogInterface.OnDismissListener mOnDismissListener;
+
+    public void setOnDismissListener(DialogInterface.OnDismissListener onDismissListener) {
+        mOnDismissListener = onDismissListener;
+    }
+
+    @Override
+    public void onDismiss(DialogInterface dialog) {
+        super.onDismiss(dialog);
+        if (mOnDismissListener != null) mOnDismissListener.onDismiss(dialog);
+    }
 }

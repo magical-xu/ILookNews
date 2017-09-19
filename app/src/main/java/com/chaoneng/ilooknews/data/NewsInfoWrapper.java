@@ -11,12 +11,13 @@ import java.util.List;
 
 public class NewsInfoWrapper implements Serializable {
 
-  public String newsId;
-  public String userid;
-  public int newstype;
+    public boolean haveNext;
+    public String newsId;
+    public String userid;
+    public int newstype;
 
-  @SerializedName(value = "newInfo", alternate = { "newsinfo", "newinfo" })
-  //@SerializedName("newsinfo")
-  public NewsInfo newInfo;
-  public List<CommentBean> commentlist;
+    @SerializedName(value = "newInfo", alternate = { "newsinfo", "newinfo" })
+    //@SerializedName("newsinfo")
+    public NewsInfo newInfo;
+    public List<CommentBean> commentlist;
 }

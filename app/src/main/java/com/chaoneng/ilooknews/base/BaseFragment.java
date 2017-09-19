@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import com.chaoneng.ilooknews.widget.DialogManager;
+import com.magicalxu.library.blankj.ToastUtils;
 
 /**
  * Created by magical on 2017/3/17.
@@ -167,5 +168,11 @@ public abstract class BaseFragment extends Fragment {
     public void hideLoading() {
         ensureDialogManager();
         mDialogManager.dismissDialog();
+    }
+
+    /*************** 以下为方便调用 ***************************/
+    protected void onSimpleError(String msg) {
+        hideLoading();
+        ToastUtils.showShort(msg);
     }
 }

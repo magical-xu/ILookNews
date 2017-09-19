@@ -1,5 +1,6 @@
 package com.chaoneng.ilooknews.api;
 
+import com.chaoneng.ilooknews.data.NewsInfoListWrapper;
 import com.chaoneng.ilooknews.module.focus.data.FocusWrapper;
 import com.chaoneng.ilooknews.module.user.data.BrokeListWrapper;
 import com.chaoneng.ilooknews.module.user.data.NotifyDetail;
@@ -116,7 +117,7 @@ public interface UserService {
      * 获取动态列表
      */
     @GET("getDongTaiList")
-    Call<HttpResult<String>> getDongTaiList(@Query("userid") String userId,
+    Call<HttpResult<NewsInfoListWrapper>> getDongTaiList(@Query("userid") String userId,
             @Query("targetId") String targetId, @Query("page") int page,
             @Query("pageSize") int pageSize);
 

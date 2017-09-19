@@ -16,6 +16,8 @@ public interface AppConstant {
     int DEFAULT_PAGE_SIZE = 10;   //列表页默认10条
     int INVALIDATE = -1;
 
+    String COMMENT_LEVEL_ONE = "0"; //表示为一级评论
+
     String USER_FOLLOW = "1";     //已关注
     String USER_UN_FOLLOW = "0";  //未关注
 

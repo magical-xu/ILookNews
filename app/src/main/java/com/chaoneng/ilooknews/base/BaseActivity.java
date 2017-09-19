@@ -12,6 +12,7 @@ import butterknife.ButterKnife;
 import com.chaoneng.ilooknews.R;
 import com.chaoneng.ilooknews.widget.DialogManager;
 import com.chaoneng.ilooknews.widget.ilook.ILookTitleBar;
+import com.magicalxu.library.blankj.ToastUtils;
 
 /**
  * Created by magical on 17/8/14.
@@ -152,5 +153,11 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
 
         super.onDestroy();
+    }
+
+    /*********************** 以下为方便调用使用 ***********************/
+    protected void onSimpleError(String msg) {
+        hideLoading();
+        ToastUtils.showShort(msg);
     }
 }

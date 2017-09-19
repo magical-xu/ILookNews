@@ -9,7 +9,7 @@ import com.chaoneng.ilooknews.AppConstant;
 import com.chaoneng.ilooknews.ILookApplication;
 import com.chaoneng.ilooknews.R;
 import com.chaoneng.ilooknews.library.glide.ImageLoader;
-import com.chaoneng.ilooknews.module.user.data.BrokeNewsBean;
+import com.chaoneng.ilooknews.module.user.data.BrokeListBean;
 import com.chaoneng.ilooknews.util.CompatUtil;
 import com.chaoneng.ilooknews.widget.image.HeadImageView;
 import com.google.android.flexbox.FlexboxLayout;
@@ -21,14 +21,14 @@ import com.magicalxu.library.blankj.SizeUtils;
  * Description :
  */
 
-public class BrokeNewsListAdapter extends BaseQuickAdapter<BrokeNewsBean, BaseViewHolder> {
+public class BrokeNewsListAdapter extends BaseQuickAdapter<BrokeListBean, BaseViewHolder> {
 
     public BrokeNewsListAdapter(@LayoutRes int layoutResId) {
         super(layoutResId);
     }
 
     @Override
-    protected void convert(BaseViewHolder helper, BrokeNewsBean item) {
+    protected void convert(BaseViewHolder helper, BrokeListBean item) {
 
         ((HeadImageView) helper.getView(R.id.iv_avatar)).setHeadImage(AppConstant.TEST_AVATAR);
 
