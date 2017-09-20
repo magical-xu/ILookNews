@@ -1,34 +1,70 @@
 package com.chaoneng.ilooknews.module.home.fragment;
 
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
+import com.chaoneng.ilooknews.AppConstant;
 import com.chaoneng.ilooknews.R;
+import com.chaoneng.ilooknews.api.HomeService;
+import com.chaoneng.ilooknews.base.BaseDialogFragment;
+import com.chaoneng.ilooknews.data.CommentBean;
+import com.chaoneng.ilooknews.data.NewsInfoWrapper;
+import com.chaoneng.ilooknews.module.video.adapter.CommentAdapter;
+import com.chaoneng.ilooknews.net.callback.SimpleCallback;
+import com.chaoneng.ilooknews.net.client.NetRequest;
+import com.chaoneng.ilooknews.net.data.HttpResult;
+import com.chaoneng.ilooknews.util.CompatUtil;
+import com.chaoneng.ilooknews.util.RefreshHelper;
+import com.magicalxu.library.blankj.KeyboardUtils;
+import com.magicalxu.library.blankj.ToastUtils;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import org.json.JSONObject;
+import retrofit2.Call;
 
 /**
  * Created by magical on 2017/8/18 .
  * 二级评论界面
  */
 
-public class CommentDialogFragment extends DialogFragment {
+public class CommentDialogFragment extends BaseDialogFragment {
 
     @BindView(R.id.id_recycler) RecyclerView mRecyclerView;
     @BindView(R.id.id_refresh_layout) SmartRefreshLayout mRefreshLayout;
     @BindView(R.id.tv_title) TextView mTvTitle;
     @BindView(R.id.iv_title_left) View mIvBack;
+    @BindView(R.id.id_edit) EditText mInputView;
+    @BindView(R.id.id_send) TextView mSendBtn;
 
-    public static CommentDialogFragment newInstance() {
+    private CommentAdapter mAdapter;
+    private RefreshHelper<CommentBean> mRefreshHelper;
+    private HomeService homeService;
+
+    private String PAGE_NEWS_ID;
+    private int PAGE_NEWS_TYPE;
+    private String PAGE_CID;
+
+    private View mEmptyView;
+
+    public static CommentDialogFragment newInstance(@NonNull String newsId, int newsType,
+            String cid) {
         CommentDialogFragment dialogFragment = new CommentDialogFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString(AppConstant.PARAMS_NEWS_ID, newsId);
+        bundle.putInt(AppConstant.PARAMS_NEWS_TYPE, newsType);
+        bundle.putString(AppConstant.PARAMS_COMMENT_ID, cid);
+        dialogFragment.setArguments(bundle);
         return dialogFragment;
     }
 
@@ -59,24 +95,117 @@ public class CommentDialogFragment extends DialogFragment {
 
     private void processLogic() {
 
+        Bundle arguments = getArguments();
+        PAGE_NEWS_ID = arguments.getString(AppConstant.PARAMS_NEWS_ID);
+        PAGE_NEWS_TYPE = arguments.getInt(AppConstant.PARAMS_NEWS_TYPE);
+        PAGE_CID = arguments.getString(AppConstant.PARAMS_COMMENT_ID);
+
         mTvTitle.setText("楼层回复");
+        mTvTitle.setTextColor(CompatUtil.getColor(getActivity(), R.color.one_text_color));
         mIvBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 dismiss();
             }
         });
-    }
 
-    private DialogInterface.OnDismissListener mOnDismissListener;
+        homeService = NetRequest.getInstance().create(HomeService.class);
 
-    public void setOnDismissListener(DialogInterface.OnDismissListener onDismissListener) {
-        mOnDismissListener = onDismissListener;
+        mAdapter = new CommentAdapter(true, R.layout.item_video_comment);
+        mRefreshHelper = new RefreshHelper<CommentBean>(mRefreshLayout, mAdapter, mRecyclerView) {
+            @Override
+            public void onRequest(int page) {
+                loadComment(page);
+            }
+        };
+
+        mEmptyView = LayoutInflater.from(getActivity())
+                .inflate(R.layout.base_empty_view, (ViewGroup) mRecyclerView.getParent(), false);
     }
 
     @Override
-    public void onDismiss(DialogInterface dialog) {
-        super.onDismiss(dialog);
-        if (mOnDismissListener != null) mOnDismissListener.onDismiss(dialog);
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        mRefreshHelper.beginLoadData();
+    }
+
+    private void loadComment(final int page) {
+
+        showLoading();
+        Call<HttpResult<NewsInfoWrapper>> call =
+                homeService.getNewsComment(AppConstant.TEST_USER_ID, PAGE_NEWS_ID, PAGE_NEWS_TYPE,
+                        PAGE_CID, page, AppConstant.DEFAULT_PAGE_SIZE);
+        call.enqueue(new SimpleCallback<NewsInfoWrapper>() {
+            @Override
+            public void onSuccess(NewsInfoWrapper data) {
+
+                hideLoading();
+                if (page == 1 && (null == data
+                        || null == data.commentlist
+                        || data.commentlist.size() == 0)) {
+                    mAdapter.setEmptyView(mEmptyView);
+                    return;
+                }
+
+                if (page == 1) {
+
+                    mRefreshHelper.finishRefresh();
+                    mAdapter.setNewData(data.commentlist);
+                } else {
+
+                    if (!data.haveNext) {
+                        mRefreshHelper.setNoMoreData();
+                        return;
+                    }
+
+                    if (data.commentlist.size() < AppConstant.DEFAULT_PAGE_SIZE) {
+                        mRefreshHelper.setNoMoreData();
+                        return;
+                    }
+
+                    mRefreshHelper.finishLoadmore();
+                    mAdapter.addData(data.commentlist);
+                }
+            }
+
+            @Override
+            public void onFail(String code, String errorMsg) {
+
+                mRefreshHelper.onFail();
+                onSimpleError(errorMsg);
+            }
+        });
+    }
+
+    @OnClick(R.id.id_send)
+    public void sendComment() {
+
+        String comment = mInputView.getText().toString().trim();
+        if (TextUtils.isEmpty(comment)) {
+            ToastUtils.showShort(R.string.comment_can_not_be_null);
+            return;
+        }
+
+        KeyboardUtils.hideSoftInput(getActivity());
+        Call<HttpResult<JSONObject>> call =
+                homeService.postNewsComment(AppConstant.TEST_USER_ID, PAGE_NEWS_ID, PAGE_NEWS_TYPE,
+                        PAGE_CID, comment);
+        call.enqueue(new SimpleCallback<JSONObject>() {
+
+            @Override
+            public void onSuccess(JSONObject data) {
+                onCommentSuccess();
+            }
+
+            @Override
+            public void onFail(String code, String errorMsg) {
+                ToastUtils.showShort(errorMsg);
+            }
+        });
+    }
+
+    private void onCommentSuccess() {
+        mInputView.setText("");
+        loadComment(1);
     }
 }

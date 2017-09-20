@@ -2,7 +2,7 @@
 <resources>
 
   <style mce_bogus="1" name="dialogSlideAnim" parent="android:Animation">
-    <item name="android:windowEnterAnimation">@anim/dialog_bottom_slide_in</item>
-    <item name="android:windowExitAnimation">@anim/dialog_bottom_slide_out</item>
+    <item name="android:windowEnterAnimation">@anim/wpk_fade_scale_in</item>
+    <item name="android:windowExitAnimation">@anim/wpk_fade_scale_out</item>
   </style>
 </resources>

@@ -100,7 +100,7 @@ public class NewsDetailActivity extends BaseActivity {
         checkIntent();
         checkTitle();
         homeService = NetRequest.getInstance().create(HomeService.class);
-        mAdapter = new CommentAdapter(R.layout.item_video_comment);
+        mAdapter = new CommentAdapter(false, R.layout.item_video_comment);
         mRefreshHelper = new RefreshHelper<CommentBean>(mRefreshLayout, mAdapter, mRecyclerView) {
             @Override
             public void onRequest(int page) {
@@ -112,7 +112,16 @@ public class NewsDetailActivity extends BaseActivity {
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
                 switch (view.getId()) {
                     case R.id.id_comment_count:
-                        CommentDialogFragment fragment = CommentDialogFragment.newInstance();
+                        CommentBean commentBean = mAdapter.getData().get(position);
+                        //int commentCount = commentBean.commentCount;
+                        //if (0 == commentCount) {
+                        //    return;
+                        //}
+
+                        String cid = commentBean.cid;
+                        CommentDialogFragment fragment =
+                                CommentDialogFragment.newInstance(PAGE_NEWS_ID, PAGE_NEWS_TYPE,
+                                        cid);
                         fragment.show(getSupportFragmentManager(), TAG);
                         break;
                     case R.id.tv_up:

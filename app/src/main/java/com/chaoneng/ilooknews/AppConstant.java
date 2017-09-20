@@ -26,6 +26,7 @@ public interface AppConstant {
 
     String PARAMS_NEWS_ID = "params_news_id";
     String PARAMS_NEWS_TYPE = "params_news_type";
+    String PARAMS_COMMENT_ID = "params_comment_id";
 
     String HOME_CURRENT_TAB_POSITION = "HOME_CURRENT_TAB_POSITION";
 

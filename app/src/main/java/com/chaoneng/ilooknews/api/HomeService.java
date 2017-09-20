@@ -53,6 +53,8 @@ public interface HomeService {
 
     /**
      * 发表评论
+     *
+     * @param parentId 默认为0， =0时评论的是新闻 其他值评论的是父类评论
      */
     @POST("addNewsComment")
     Call<HttpResult<JSONObject>> postNewsComment(@Query("userid") String userId,

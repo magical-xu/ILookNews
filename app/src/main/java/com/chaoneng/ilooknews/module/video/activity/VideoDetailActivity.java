@@ -91,7 +91,7 @@ public class VideoDetailActivity extends BaseActivity {
 
         checkIntent();
         checkTitle();
-        mAdapter = new CommentAdapter(R.layout.item_video_comment);
+        mAdapter = new CommentAdapter(false, R.layout.item_video_comment);
         mRefreshHelper = new RefreshHelper(mRefreshLayout, mAdapter, mRecyclerView) {
             @Override
             public void onRequest(int page) {

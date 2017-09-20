@@ -1,5 +1,8 @@
 package com.chaoneng.ilooknews.module.home.activity;
 
+import android.animation.Keyframe;
+import android.animation.ObjectAnimator;
+import android.animation.PropertyValuesHolder;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -82,7 +85,7 @@ public class CommentActivity extends BaseActivity {
         checkTitle();
         homeService = NetRequest.getInstance().create(HomeService.class);
 
-        mAdapter = new CommentAdapter(R.layout.item_video_comment);
+        mAdapter = new CommentAdapter(false, R.layout.item_video_comment);
         mRefreshHelper = new RefreshHelper<CommentBean>(mRefreshLayout, mAdapter, mRecyclerView) {
             @Override
             public void onRequest(int page) {
@@ -95,7 +98,17 @@ public class CommentActivity extends BaseActivity {
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
                 switch (view.getId()) {
                     case R.id.id_comment_count:
-                        CommentDialogFragment fragment = CommentDialogFragment.newInstance();
+                        CommentBean commentBean = mAdapter.getData().get(position);
+
+                        //int commentCount = commentBean.commentCount;
+                        //if (0 == commentCount) {
+                        //    return;
+                        //}
+
+                        String commentId = commentBean.cid;
+                        CommentDialogFragment fragment =
+                                CommentDialogFragment.newInstance(PAGE_NEWS_ID, PAGE_NEWS_TYPE,
+                                        commentId);
                         fragment.show(getSupportFragmentManager(), TAG);
                         break;
                     case R.id.tv_up:
@@ -212,6 +225,8 @@ public class CommentActivity extends BaseActivity {
 
     private void onPraise(final int position) {
 
+        showAnim(position);
+
         int type;
         final boolean hasPraise;
         String cid;
@@ -248,6 +263,9 @@ public class CommentActivity extends BaseActivity {
                         //点赞成功
                         ToastUtils.showShort("点赞成功");
                         //commentBean.isFollow = AppConstant.HAS_PRAISE;
+                        CommentBean commentBean1 = mAdapter.getData().get(position);
+                        commentBean1.careCount++;
+                        mAdapter.notifyDataSetChanged();
                     }
                 }
             }
@@ -257,5 +275,43 @@ public class CommentActivity extends BaseActivity {
                 ToastUtils.showShort(errorMsg);
             }
         });
+    }
+
+    private void showAnim(int position) {
+
+        View view = mAdapter.getViewByPosition(mRecyclerView, position, R.id.tv_up);
+        if (view == null) {
+            return;
+        }
+        //TODO 验证参数的有效性
+        float scaleSmall = 0.8f;
+        float scaleLarge = 1.2f;
+        float shakeDegrees = 10;
+        int duration = 1000;
+
+        //先变小后变大
+        PropertyValuesHolder scaleXValuesHolder =
+                PropertyValuesHolder.ofKeyframe(View.SCALE_X, Keyframe.ofFloat(0f, 1.0f),
+                        Keyframe.ofFloat(0.25f, scaleSmall), Keyframe.ofFloat(0.5f, scaleLarge),
+                        Keyframe.ofFloat(0.75f, scaleLarge), Keyframe.ofFloat(1.0f, 1.0f));
+        PropertyValuesHolder scaleYValuesHolder =
+                PropertyValuesHolder.ofKeyframe(View.SCALE_Y, Keyframe.ofFloat(0f, 1.0f),
+                        Keyframe.ofFloat(0.25f, scaleSmall), Keyframe.ofFloat(0.5f, scaleLarge),
+                        Keyframe.ofFloat(0.75f, scaleLarge), Keyframe.ofFloat(1.0f, 1.0f));
+
+        //先往左再往右
+        PropertyValuesHolder rotateValuesHolder =
+                PropertyValuesHolder.ofKeyframe(View.ROTATION, Keyframe.ofFloat(0f, 0f),
+                        Keyframe.ofFloat(0.1f, -shakeDegrees), Keyframe.ofFloat(0.2f, shakeDegrees),
+                        Keyframe.ofFloat(0.3f, -shakeDegrees), Keyframe.ofFloat(0.4f, shakeDegrees),
+                        Keyframe.ofFloat(0.5f, -shakeDegrees), Keyframe.ofFloat(0.6f, shakeDegrees),
+                        Keyframe.ofFloat(0.7f, -shakeDegrees), Keyframe.ofFloat(0.8f, shakeDegrees),
+                        Keyframe.ofFloat(0.9f, -shakeDegrees), Keyframe.ofFloat(1.0f, 0f));
+
+        ObjectAnimator objectAnimator =
+                ObjectAnimator.ofPropertyValuesHolder(view, scaleXValuesHolder, scaleYValuesHolder,
+                        rotateValuesHolder);
+        objectAnimator.setDuration(duration);
+        objectAnimator.start();
     }
 }
