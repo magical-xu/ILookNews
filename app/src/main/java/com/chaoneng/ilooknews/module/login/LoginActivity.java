@@ -13,12 +13,14 @@ import com.chaoneng.ilooknews.api.LoginService;
 import com.chaoneng.ilooknews.base.BaseActivity;
 import com.chaoneng.ilooknews.data.UserWrapper;
 import com.chaoneng.ilooknews.instance.AccountManager;
+import com.chaoneng.ilooknews.library.shareloginlib.ShareLoginHelper;
 import com.chaoneng.ilooknews.net.callback.SimpleCallback;
 import com.chaoneng.ilooknews.net.client.NetRequest;
 import com.chaoneng.ilooknews.net.data.HttpResult;
 import com.chaoneng.ilooknews.util.IntentHelper;
 import com.chaoneng.ilooknews.widget.edit.ClearEditText;
 import com.chaoneng.ilooknews.widget.edit.PasswordEditText;
+import com.liulishuo.share.type.SsoLoginType;
 import com.magicalxu.library.blankj.KeyboardUtils;
 import com.magicalxu.library.blankj.ToastUtils;
 import org.json.JSONObject;
@@ -81,14 +83,21 @@ public class LoginActivity extends BaseActivity {
                 break;
             case R.id.id_qq:
                 ToastUtils.showShort("QQ登录");
+                onThirdLogin(SsoLoginType.QQ);
                 break;
             case R.id.id_wei_bo:
                 ToastUtils.showShort("微博登录");
+                onThirdLogin(SsoLoginType.WEIBO);
                 break;
             case R.id.tv_send_msg:
                 sendVerifyCode();
                 break;
         }
+    }
+
+    private void onThirdLogin(String type) {
+
+        ShareLoginHelper.login(this, type);
     }
 
     /**

@@ -116,6 +116,11 @@
         android:configChanges="orientation|screenSize|keyboard|keyboardHidden"
         android:screenOrientation="portrait"
         android:theme="@style/SimpleActivityTheme" />
+    <activity
+        android:name=".module.share.ShareBoardActivity"
+        android:configChanges="orientation|screenSize|keyboard|keyboardHidden"
+        android:screenOrientation="portrait"
+        android:theme="@style/ThemeDialog.BottomWithAnim" />
   </application>
 
 </manifest>

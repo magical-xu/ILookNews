@@ -55,7 +55,7 @@ public interface UserService {
             @Query("pageSize") int size);
 
     @GET("getShare")
-    Call<HttpResult<String>> getShare(@Query("userid") String userId, @Query("nid") String nid,
+    Call<HttpResult<JSONObject>> getShare(@Query("userid") String userId, @Query("nid") String nid,
             @Query("shareType") int share, @Query("newsType") int news);
 
     /**

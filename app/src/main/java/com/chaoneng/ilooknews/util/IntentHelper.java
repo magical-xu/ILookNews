@@ -13,6 +13,7 @@ import com.chaoneng.ilooknews.module.login.LoginActivity;
 import com.chaoneng.ilooknews.module.login.RegisterActivity;
 import com.chaoneng.ilooknews.module.search.SearchActivity;
 import com.chaoneng.ilooknews.module.search.SearchDetailActivity;
+import com.chaoneng.ilooknews.module.share.ShareBoardActivity;
 import com.chaoneng.ilooknews.module.user.activity.BrokeActivity;
 import com.chaoneng.ilooknews.module.user.activity.FeedBackActivity;
 import com.chaoneng.ilooknews.module.user.activity.ProfileActivity;
@@ -143,5 +144,12 @@ public class IntentHelper {
      */
     public static void openNewsCommentPage(Context context, String newsId, int type) {
         CommentActivity.getInstance(context, newsId, type);
+    }
+
+    /**
+     * 底部弹出分享框
+     */
+    public static void openShareBottomPage(Context context, String newsId, int newsType) {
+        ShareBoardActivity.getInstance(context, newsId, newsType);
     }
 }

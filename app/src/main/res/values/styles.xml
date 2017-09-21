@@ -20,5 +20,18 @@
     <item name="android:windowContentOverlay">@null</item>
   </style>
 
+  <style name="ThemeDialog" parent="Theme.AppCompat.Dialog">
+    <item name="android:windowActionBar">false</item>
+    <item name="android:textColor">@color/one_text_color</item>
+    <item name="android:windowFrame">@null</item>
+    <item name="android:windowNoTitle">true</item>
+    <item name="android:windowContentOverlay">@null</item>
+    <item name="android:windowBackground">@android:color/transparent</item> <!--不加这行宽度不能占全屏-->
+  </style>
+
+  <style name="ThemeDialog.BottomWithAnim" parent="ThemeDialog">
+    <item name="android:windowAnimationStyle">@style/AnimBottom</item>
+  </style>
+
 
 </resources>

@@ -34,6 +34,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        beforeContentView();
         checkAnimation();
         checkTitleBar();
 
@@ -63,6 +64,10 @@ public abstract class BaseActivity extends AppCompatActivity {
     public void finish() {
         super.finish();
         checkExitAnimation();
+    }
+
+    protected void beforeContentView() {
+        // do nothing
     }
 
     /**

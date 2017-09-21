@@ -30,6 +30,7 @@ import com.chaoneng.ilooknews.net.callback.SimpleCallback;
 import com.chaoneng.ilooknews.net.client.NetRequest;
 import com.chaoneng.ilooknews.net.data.HttpResult;
 import com.chaoneng.ilooknews.util.HtmlUtil;
+import com.chaoneng.ilooknews.util.IntentHelper;
 import com.chaoneng.ilooknews.util.RefreshHelper;
 import com.chaoneng.ilooknews.widget.ilook.ILookTitleBar;
 import com.chaoneng.ilooknews.widget.image.HeadImageView;
@@ -225,6 +226,8 @@ public class NewsDetailActivity extends BaseActivity {
                     public void onClickRightImage(View view) {
                         super.onClickRightImage(view);
                         ToastUtils.showShort("分享");
+                        IntentHelper.openShareBottomPage(NewsDetailActivity.this, PAGE_NEWS_ID,
+                                PAGE_NEWS_TYPE);
                     }
                 });
     }

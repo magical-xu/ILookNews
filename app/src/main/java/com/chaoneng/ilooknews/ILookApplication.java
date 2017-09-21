@@ -5,6 +5,7 @@ import android.content.Context;
 import com.chaoneng.ilooknews.api.Constant;
 import com.chaoneng.ilooknews.library.boxing.BoxingHelper;
 import com.chaoneng.ilooknews.library.loadandretry.LoadingAndRetryManager;
+import com.chaoneng.ilooknews.library.shareloginlib.ShareLoginHelper;
 import com.chaoneng.ilooknews.net.client.NetRequest;
 import com.facebook.stetho.Stetho;
 import com.magicalxu.library.Utils;
@@ -80,6 +81,9 @@ public class ILookApplication extends Application {
 
         // init retrofit client
         NetRequest.getInstance().init(this, Constant.ILOOK_BASE_URL);
+
+        // init share and login lib
+        ShareLoginHelper.init(this);
     }
 
     public static Context getAppContext() {

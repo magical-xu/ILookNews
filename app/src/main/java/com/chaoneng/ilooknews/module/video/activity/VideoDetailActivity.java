@@ -155,8 +155,14 @@ public class VideoDetailActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 ToastUtils.showShort("分享");
+                onShowShare();
             }
         });
+    }
+
+    private void onShowShare() {
+
+        //IntentHelper.openShareBottomPage(this,PAGE_VID,);
     }
 
     private void loadData(int page) {
