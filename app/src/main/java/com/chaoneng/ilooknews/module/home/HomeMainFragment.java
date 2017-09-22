@@ -6,10 +6,12 @@ import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.OnClick;
 import com.chaoneng.ilooknews.AppConstant;
 import com.chaoneng.ilooknews.R;
+import com.chaoneng.ilooknews.api.HomeService;
 import com.chaoneng.ilooknews.base.BaseFragment;
 import com.chaoneng.ilooknews.data.Channel;
 import com.chaoneng.ilooknews.instance.AccountManager;
@@ -17,15 +19,20 @@ import com.chaoneng.ilooknews.instance.TabManager;
 import com.chaoneng.ilooknews.module.home.callback.OnChannelListener;
 import com.chaoneng.ilooknews.module.home.fragment.ChannelDialogFragment;
 import com.chaoneng.ilooknews.module.home.fragment.NewsListFragment;
+import com.chaoneng.ilooknews.net.callback.SimpleCallback;
+import com.chaoneng.ilooknews.net.client.NetRequest;
+import com.chaoneng.ilooknews.net.data.HttpResult;
 import com.chaoneng.ilooknews.util.IntentHelper;
 import com.chaoneng.ilooknews.util.NotifyListener;
 import com.chaoneng.ilooknews.widget.adapter.BaseFragmentStateAdapter;
 import com.chaoneng.ilooknews.widget.adapter.OnPageChangeListener;
 import com.chaoneng.ilooknews.widget.image.HeadImageView;
 import com.flyco.tablayout.SlidingTabLayout;
+import com.magicalxu.library.blankj.ToastUtils;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 import java.util.ArrayList;
 import java.util.List;
+import retrofit2.Call;
 
 /**
  * Created by magical on 17/8/15.
@@ -40,18 +47,44 @@ public class HomeMainFragment extends BaseFragment implements OnChannelListener 
     @BindView(R.id.sliding_tabs) SlidingTabLayout mTabView;
     @BindView(R.id.iv_edit_channel) ImageView mMorePlusView;
     @BindView(R.id.id_view_pager) ViewPager mViewPager;
+    @BindView(R.id.id_search_key) TextView mSearchKey;
 
     private BaseFragmentStateAdapter mPagerAdapter;
     private List<Fragment> newsFragmentList = new ArrayList<>();
+    private HomeService homeService;
 
     @Override
     protected void beginLoadData() {
 
+        loadSearchKey();
         mHeadView.setHeadImage(AppConstant.TEST_AVATAR);
+    }
+
+    /**
+     * 加载搜索提示
+     */
+    private void loadSearchKey() {
+
+        Call<HttpResult<String>> call = homeService.getSearchKey();
+        call.enqueue(new SimpleCallback<String>() {
+            @Override
+            public void onSuccess(String data) {
+                if (!TextUtils.isEmpty(data)) {
+                    mSearchKey.setText(data);
+                }
+            }
+
+            @Override
+            public void onFail(String code, String errorMsg) {
+                ToastUtils.showShort(errorMsg);
+            }
+        });
     }
 
     @Override
     protected void doInit() {
+
+        homeService = NetRequest.getInstance().create(HomeService.class);
 
         if (TabManager.getInstance().hasNewsInit()) {
             setUp();

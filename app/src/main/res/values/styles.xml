@@ -20,8 +20,9 @@
     <item name="android:windowContentOverlay">@null</item>
   </style>
 
-  <style name="ThemeDialog" parent="Theme.AppCompat.Dialog">
+  <style name="ThemeDialog" parent="android:Theme.Dialog">
     <item name="android:windowActionBar">false</item>
+    <item name="android:windowActionBarOverlay">false</item>
     <item name="android:textColor">@color/one_text_color</item>
     <item name="android:windowFrame">@null</item>
     <item name="android:windowNoTitle">true</item>

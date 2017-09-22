@@ -33,6 +33,7 @@
         android:showDividers="middle">
 
       <TextView
+          android:id="@+id/id_search_key"
           android:layout_width="0dp"
           android:layout_height="wrap_content"
           android:layout_marginLeft="@dimen/padding_normal"
@@ -73,10 +74,10 @@
         android:layout_width="0dp"
         android:layout_height="40dp"
         android:layout_weight="1"
-        style="@style/tab_indicator"
         app:tl_indicator_color="@color/white"
         app:tl_textSelectColor="@color/white"
-        app:tl_textUnselectColor="@color/alpha_75_white"/>
+        app:tl_textUnselectColor="@color/alpha_75_white"
+        style="@style/tab_indicator" />
 
     <ImageView
         android:id="@+id/iv_edit_channel"

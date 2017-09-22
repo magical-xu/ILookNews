@@ -1,98 +1,101 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:background="@color/white"
+    android:background="@color/transparent"
     android:orientation="vertical">
 
   <LinearLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:background="#F3F3F3"
       android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/tv_title"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="15dp"
-        android:layout_marginTop="15dp"
-        android:gravity="center"
-        android:text="分享"
-        android:textColor="#3C3C3C"
-        android:textSize="16sp" />
+        android:layout_height="65dp">
+
+      <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="58dp"
+          android:layout_gravity="bottom"
+          android:background="#F0F0F0" />
+
+      <ImageView
+          android:id="@+id/id_ad_image"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:layout_marginLeft="50dp"
+          android:layout_marginRight="50dp"
+          android:scaleType="fitXY"
+          tools:background="#f00" />
+
+      <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="bottom|right"
+          android:layout_marginBottom="@dimen/padding_small"
+          android:layout_marginRight="@dimen/padding_small"
+          android:text="广告"
+          android:textColor="@color/one_text_color"
+          android:textSize="11sp" />
+
+    </FrameLayout>
+
+    <include layout="@layout/include_full_divider" />
 
     <HorizontalScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="#F1F1F3"
         android:scrollbars="none">
 
       <LinearLayout
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:layout_marginBottom="20dp"
-          android:orientation="horizontal">
+          android:orientation="horizontal"
+          android:padding="10dp">
 
         <TextView
             android:id="@+id/tv_share_wx_friend"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="12dp"
-            android:layout_marginRight="25dp"
-            android:drawablePadding="7dp"
             android:drawableTop="@drawable/share_wx_friend"
-            android:gravity="center"
             android:text="微信好友"
-            android:textColor="@color/one_text_color"
-            android:textSize="11sp" />
+            style="@style/share_item" />
 
         <TextView
             android:id="@+id/tv_share_wx_circle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="25dp"
-            android:drawablePadding="7dp"
             android:drawableTop="@drawable/share_wx_timeline"
-            android:gravity="center"
             android:text="朋友圈"
-            android:textColor="@color/one_text_color"
-            android:textSize="11sp" />
+            style="@style/share_item" />
 
         <TextView
             android:id="@+id/tv_share_qq"
-            android:layout_width="60dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="25dp"
-            android:drawablePadding="7dp"
             android:drawableTop="@drawable/share_qq"
-            android:gravity="center"
             android:text="QQ好友"
-            android:textColor="@color/one_text_color"
-            android:textSize="11sp" />
+            style="@style/share_item" />
 
         <TextView
             android:id="@+id/tv_share_qzone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="25dp"
-            android:drawablePadding="7dp"
             android:drawableTop="@drawable/share_qzone"
-            android:gravity="center"
             android:text="QQ空间"
-            android:textColor="@color/one_text_color"
-            android:textSize="11sp" />
+            style="@style/share_item" />
 
         <TextView
             android:id="@+id/tv_share_sina"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="25dp"
-            android:drawablePadding="7dp"
             android:drawableTop="@drawable/share_sina"
-            android:gravity="center"
             android:text="新浪微博"
-            android:textColor="@color/one_text_color"
-            android:textSize="11sp" />
+            style="@style/share_item" />
       </LinearLayout>
     </HorizontalScrollView>
 
@@ -101,47 +104,40 @@
     <HorizontalScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="12dp"
+        android:background="#F1F1F3"
         android:scrollbars="none">
+
       <LinearLayout
           android:id="@+id/container_actions"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:layout_marginBottom="20dp"
-          android:layout_marginTop="20dp"
-          android:orientation="horizontal">
+          android:orientation="horizontal"
+          android:padding="10dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="25dp"
-            android:drawablePadding="7dp"
             android:drawableTop="@drawable/option_ic_link"
-            android:gravity="center"
             android:text="复制链接"
-            android:textColor="@color/one_text_color"
-            android:textSize="11sp" />
+            style="@style/share_item" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="25dp"
-            android:drawablePadding="7dp"
             android:drawableTop="@drawable/option_ic_violate"
-            android:gravity="center"
             android:text="举报"
-            android:textColor="@color/one_text_color"
-            android:textSize="11sp" />
+            style="@style/share_item" />
+
       </LinearLayout>
     </HorizontalScrollView>
   </LinearLayout>
 
+  <include layout="@layout/include_full_divider" />
+
   <TextView
       android:id="@+id/tv_cancel"
       android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_marginBottom="11dp"
-      android:layout_marginTop="9dp"
+      android:layout_height="44dp"
       android:background="@color/white"
       android:gravity="center"
       android:text="取消"

@@ -123,4 +123,10 @@ public interface HomeService {
      */
     @GET("getQiNiuToken")
     Call<ResponseBody> getUploadToken(@Query("certificate") String certificate);
+
+    /**
+     * 获取搜索框提示
+     */
+    @GET("getSearchInputKeyWord")
+    Call<HttpResult<String>> getSearchKey();
 }

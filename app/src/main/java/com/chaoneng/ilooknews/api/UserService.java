@@ -9,6 +9,7 @@ import com.chaoneng.ilooknews.module.user.data.UserCenterWrapper;
 import com.chaoneng.ilooknews.module.user.data.UserInfoWrapper;
 import com.chaoneng.ilooknews.net.data.HttpResult;
 import java.util.Map;
+import okhttp3.ResponseBody;
 import org.json.JSONObject;
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -54,9 +55,18 @@ public interface UserService {
             @Query("myid") String myId, @Query("type") int type, @Query("page") int page,
             @Query("pageSize") int size);
 
+    /**
+     * 获取分享信息
+     */
     @GET("getShare")
     Call<HttpResult<JSONObject>> getShare(@Query("userid") String userId, @Query("nid") String nid,
             @Query("shareType") int share, @Query("newsType") int news);
+
+    /**
+     * 获取分享广告图
+     */
+    @GET("getShareBeforeAds")
+    Call<ResponseBody> getShareAdImage();
 
     /**
      * 添加用户反馈信息

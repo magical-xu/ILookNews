@@ -1,23 +1,29 @@
 package com.chaoneng.ilooknews.module.share;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.chaoneng.ilooknews.AppConstant;
 import com.chaoneng.ilooknews.R;
 import com.chaoneng.ilooknews.api.UserService;
-import com.chaoneng.ilooknews.base.BaseActivity;
+import com.chaoneng.ilooknews.library.glide.ImageLoader;
 import com.chaoneng.ilooknews.net.callback.SimpleCallback;
+import com.chaoneng.ilooknews.net.callback.SimpleRawJsonCallback;
 import com.chaoneng.ilooknews.net.client.NetRequest;
 import com.chaoneng.ilooknews.net.data.HttpResult;
 import com.liulishuo.share.type.SsoShareType;
 import com.magicalxu.library.blankj.ToastUtils;
+import okhttp3.ResponseBody;
 import org.json.JSONObject;
 import retrofit2.Call;
 
@@ -26,7 +32,7 @@ import retrofit2.Call;
  * Description : 底部分享弹窗
  */
 
-public class ShareBoardActivity extends BaseActivity {
+public class ShareBoardActivity extends Activity {
 
     @BindView(R.id.tv_share_wx_friend) TextView tvShareWxFriend;
     @BindView(R.id.tv_share_wx_circle) TextView tvShareWxCircle;
@@ -34,6 +40,7 @@ public class ShareBoardActivity extends BaseActivity {
     @BindView(R.id.tv_share_qzone) TextView tvShareQzone;
     @BindView(R.id.tv_share_sina) TextView tvShareSina;
     @BindView(R.id.tv_cancel) TextView tvCancel;
+    @BindView(R.id.id_ad_image) ImageView mAdImage;
 
     private UserService service;
     private String SHARE_NID;
@@ -48,37 +55,56 @@ public class ShareBoardActivity extends BaseActivity {
     }
 
     @Override
-    public int getLayoutId() {
-        return R.layout.activity_share_board;
-    }
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-    @Override
-    protected boolean showPageAnimation() {
-        return false;
-    }
-
-    @Override
-    protected void beforeContentView() {
-        super.beforeContentView();
         WindowManager.LayoutParams lp = getWindow().getAttributes();
         lp.width = WindowManager.LayoutParams.MATCH_PARENT;
         lp.gravity = Gravity.BOTTOM;
         getWindow().setAttributes(lp);
+
+        setContentView(R.layout.activity_share_board);
+        ButterKnife.bind(this);
+
+        handleChildPage();
     }
 
-    @Override
-    public void handleChildPage(Bundle savedInstanceState) {
+    public void handleChildPage() {
 
         Intent intent = getIntent();
         SHARE_NID = intent.getStringExtra(AppConstant.PARAMS_NEWS_ID);
         NEWS_TYPE = intent.getIntExtra(AppConstant.PARAMS_NEWS_TYPE, AppConstant.INVALIDATE);
 
         service = NetRequest.getInstance().create(UserService.class);
+
+        loadAdImage();
+    }
+
+    /**
+     * 加载广告图
+     */
+    private void loadAdImage() {
+
+        Call<ResponseBody> call = service.getShareAdImage();
+        call.enqueue(new SimpleRawJsonCallback() {
+            @Override
+            public void onSuccess(JSONObject data) {
+
+                String imageUrl = data.optString("picUrl");
+                //ToastUtils.showShort(imageUrl);
+                ImageLoader.loadImage(imageUrl, mAdImage);
+            }
+
+            @Override
+            public void onFail(String code, String errorMsg) {
+                ToastUtils.showShort(errorMsg);
+            }
+        });
     }
 
     @OnClick({
             R.id.tv_share_wx_friend, R.id.tv_share_wx_circle, R.id.tv_share_qq, R.id.tv_share_qzone,
-            R.id.tv_share_sina
+            R.id.tv_share_sina, R.id.tv_cancel
     })
     public void onViewClicked(View view) {
         switch (view.getId()) {
@@ -96,6 +122,9 @@ public class ShareBoardActivity extends BaseActivity {
                 break;
             case R.id.tv_share_sina:
                 onGetShareContent(SsoShareType.WEIBO_TIME_LINE);
+                break;
+            case R.id.tv_cancel:
+                finish();
                 break;
         }
     }
