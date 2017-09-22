@@ -76,6 +76,23 @@ public class MainActivity extends BaseActivity {
 
         initTab();
         initFragment();
+        testInterface();
+    }
+
+    private void testInterface() {
+
+        //final QiNiuHelper helper = new QiNiuHelper();
+        //helper.getUpToken(new SimpleNotifyListener() {
+        //    @Override
+        //    public void onSuccess(String msg) {
+        //        helper.upload();
+        //    }
+        //
+        //    @Override
+        //    public void onFailed(String msg) {
+        //
+        //    }
+        //});
     }
 
     /**

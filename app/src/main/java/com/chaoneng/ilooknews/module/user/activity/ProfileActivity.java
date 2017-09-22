@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.text.InputType;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -17,10 +18,12 @@ import com.chaoneng.ilooknews.api.UserService;
 import com.chaoneng.ilooknews.base.BaseActivity;
 import com.chaoneng.ilooknews.data.BaseUser;
 import com.chaoneng.ilooknews.instance.AccountManager;
+import com.chaoneng.ilooknews.library.qiniu.QiNiuHelper;
 import com.chaoneng.ilooknews.module.user.widget.SettingItemView;
 import com.chaoneng.ilooknews.net.callback.SimpleCallback;
 import com.chaoneng.ilooknews.net.client.NetRequest;
 import com.chaoneng.ilooknews.net.data.HttpResult;
+import com.chaoneng.ilooknews.util.SimpleNotifyListener;
 import com.chaoneng.ilooknews.widget.ilook.ILookTitleBar;
 import com.magicalxu.library.blankj.EmptyUtils;
 import com.magicalxu.library.blankj.KeyboardUtils;
@@ -45,6 +48,7 @@ public class ProfileActivity extends BaseActivity {
     @BindView(R.id.id_modify_sign) SettingItemView modifySign;
 
     private UserService service;
+    private QiNiuHelper qiNiuHelper;
 
     @Override
     public int getLayoutId() {
@@ -60,6 +64,7 @@ public class ProfileActivity extends BaseActivity {
     public void handleChildPage(Bundle savedInstanceState) {
 
         service = NetRequest.getInstance().create(UserService.class);
+        qiNiuHelper = new QiNiuHelper();
 
         mTitleBar.setTitle("编辑资料");
         mTitleBar.setTitleListener(new ILookTitleBar.TitleCallbackAdapter() {
@@ -242,12 +247,38 @@ public class ProfileActivity extends BaseActivity {
     }
 
     /**
-     * 上传图片
+     * 上传图片到七牛
      */
     private void uploadImage(@NonNull BaseMedia baseMedia) {
-        modifyAvatar.setHead(baseMedia.getPath());
-        // TODO: 17/9/13 上传头像图片 拿到地址
+        final String localPath = baseMedia.getPath();
+        //界面上先设置上
+        modifyAvatar.setHead(localPath);
+
         //modifyAvatar(baseMedia.getPath());
+        qiNiuHelper.getUpToken(new SimpleNotifyListener() {
+            @Override
+            public void onSuccess(String msg) {
+
+                Log.i("qiniu", " get upload token success");
+                qiNiuHelper.upload(localPath, msg, new SimpleNotifyListener() {
+                    @Override
+                    public void onSuccess(String msg) {
+
+                        modifyAvatar(msg);
+                    }
+
+                    @Override
+                    public void onFailed(String msg) {
+
+                    }
+                });
+            }
+
+            @Override
+            public void onFailed(String msg) {
+
+            }
+        });
     }
 
     @Override

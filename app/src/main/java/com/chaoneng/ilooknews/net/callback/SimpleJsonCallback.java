@@ -12,25 +12,25 @@ import retrofit2.Response;
 
 public abstract class SimpleJsonCallback<T extends HttpResult> implements Callback<T> {
 
-  public int error_code = -1;
+    public int error_code = -1;
 
-  @Override
-  public void onResponse(Call<T> call, Response<T> response) {
+    @Override
+    public void onResponse(Call<T> call, Response<T> response) {
 
-    if (response.isSuccessful()) {
-      T body = response.body();
-      onSuccess(body);
-    } else {
-      onFailed(response.code(), response.message());
+        if (response.isSuccessful()) {
+            T body = response.body();
+            onSuccess(body);
+        } else {
+            onFailed(response.code(), response.message());
+        }
     }
-  }
 
-  @Override
-  public void onFailure(Call<T> call, Throwable t) {
-    onFailed(error_code, t.getMessage());
-  }
+    @Override
+    public void onFailure(Call<T> call, Throwable t) {
+        onFailed(error_code, t.getMessage());
+    }
 
-  public abstract void onSuccess(T data);
+    public abstract void onSuccess(T data);
 
-  public abstract void onFailed(int code, String message);
+    public abstract void onFailed(int code, String message);
 }

@@ -1,10 +1,11 @@
 package com.chaoneng.ilooknews.api;
 
-import com.chaoneng.ilooknews.data.TabBean;
 import com.chaoneng.ilooknews.data.NewsInfoWrapper;
+import com.chaoneng.ilooknews.data.TabBean;
 import com.chaoneng.ilooknews.module.home.data.NewsListWrapper;
 import com.chaoneng.ilooknews.net.data.HttpResult;
 import java.util.Map;
+import okhttp3.ResponseBody;
 import org.json.JSONObject;
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -116,4 +117,10 @@ public interface HomeService {
     Call<HttpResult<JSONObject>> optLike(@Query("fromUserid") String fromId,
             @Query("toUserid") String toId, @Query("type") int type, @Query("tempid") String tempId,
             @Query("subtype") int subType);
+
+    /**
+     * 获取上传凭证
+     */
+    @GET("getQiNiuToken")
+    Call<ResponseBody> getUploadToken(@Query("certificate") String certificate);
 }

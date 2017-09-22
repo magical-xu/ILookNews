@@ -13,41 +13,41 @@ import retrofit2.Response;
 
 public abstract class SimpleCallback<T> implements Callback<HttpResult<T>> {
 
-  private String SIMPLE_ERROR_CODE = "-1";
-  private String successCode = "8888";
-  private String err_network = "9001";
-  private String err_none_body = "9002";
+    private String SIMPLE_ERROR_CODE = "-1";
+    private String successCode = "8888";
+    private String err_network = "9001";
+    private String err_none_body = "9002";
 
-  @Override
-  public void onResponse(Call<HttpResult<T>> call, Response<HttpResult<T>> response) {
+    @Override
+    public void onResponse(Call<HttpResult<T>> call, Response<HttpResult<T>> response) {
 
-    if (!response.isSuccessful()) {
-      onFail(SIMPLE_ERROR_CODE, err_network);
-      return;
+        if (!response.isSuccessful()) {
+            onFail(SIMPLE_ERROR_CODE, err_network);
+            return;
+        }
+
+        HttpResult<T> raw = response.body();
+        if (null == raw) {
+            onFail(SIMPLE_ERROR_CODE, err_none_body);
+            return;
+        }
+
+        if (TextUtils.equals(raw.code, successCode)) {
+
+            T data = raw.data;
+            onSuccess(data);
+        } else {
+
+            onFail(raw.code, raw.msg);
+        }
     }
 
-    HttpResult<T> raw = response.body();
-    if (null == raw) {
-      onFail(SIMPLE_ERROR_CODE, err_none_body);
-      return;
+    @Override
+    public void onFailure(Call<HttpResult<T>> call, Throwable t) {
+        onFail(SIMPLE_ERROR_CODE, t.getMessage());
     }
 
-    if (TextUtils.equals(raw.code, successCode)) {
+    public abstract void onSuccess(T data);
 
-      T data = raw.data;
-      onSuccess(data);
-    } else {
-
-      onFail(raw.code, raw.msg);
-    }
-  }
-
-  @Override
-  public void onFailure(Call<HttpResult<T>> call, Throwable t) {
-    onFail(SIMPLE_ERROR_CODE, t.getMessage());
-  }
-
-  public abstract void onSuccess(T data);
-
-  public abstract void onFail(String code, String errorMsg);
+    public abstract void onFail(String code, String errorMsg);
 }
