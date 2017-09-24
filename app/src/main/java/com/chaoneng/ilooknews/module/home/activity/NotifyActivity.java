@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import butterknife.BindView;
-import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chaoneng.ilooknews.AppConstant;
 import com.chaoneng.ilooknews.R;
 import com.chaoneng.ilooknews.api.UserService;
@@ -74,12 +73,12 @@ public class NotifyActivity extends BaseActivity {
                 loadData(page);
             }
         };
-        mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                showMsgDetail(position);
-            }
-        });
+        //mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+        //    @Override
+        //    public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+        //        showMsgDetail(position);
+        //    }
+        //});
         mRefreshHelper.beginLoadData();
     }
 
@@ -87,7 +86,7 @@ public class NotifyActivity extends BaseActivity {
 
         showLoading();
         Call<HttpResult<NotifyWrapper>> call =
-                service.getMyMessageList(AppConstant.TEST_USER_ID, page,
+                service.getMyMessageList(AppConstant.TEST_NEWS_USER_ID, page,
                         AppConstant.DEFAULT_PAGE_SIZE);
         call.enqueue(new SimpleCallback<NotifyWrapper>() {
             @Override
@@ -102,13 +101,5 @@ public class NotifyActivity extends BaseActivity {
                 ToastUtils.showShort(errorMsg);
             }
         });
-    }
-
-    private void showMsgDetail(int position) {
-
-        NotifyBean notifyBean = mAdapter.getData().get(position);
-        String mid = notifyBean.mid;
-        // TODO: 17/9/4 跳转系统消息详情 界面暂时没有
-        ToastUtils.showShort(mid);
     }
 }

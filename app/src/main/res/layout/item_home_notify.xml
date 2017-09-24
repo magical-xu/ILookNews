@@ -1,48 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<com.mcxtzhang.swipemenulib.SwipeMenuLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/id_item_root"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:padding="@dimen/padding_normal">
+    android:clickable="true"
+    app:ios="true">
 
-  <com.chaoneng.ilooknews.widget.image.HeadImageView
-      android:layout_marginTop="@dimen/padding_tiny"
-      android:id="@+id/iv_avatar"
-      android:layout_width="40dp"
-      android:layout_height="40dp"
-      tools:background="@color/red" />
-
-  <LinearLayout
+  <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:tools="http://schemas.android.com/tools"
+      android:id="@+id/id_item_content"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_marginLeft="@dimen/padding_small"
-      android:orientation="vertical">
+      android:orientation="horizontal"
+      android:padding="@dimen/padding_normal">
 
-    <TextView
-        android:id="@+id/tv_notify_type"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:maxLines="1"
-        android:textColor="@color/red_warn"
-        android:textSize="@dimen/font_main"
-        tools:text="@string/app_name" />
-
-    <TextView
-        android:id="@+id/tv_notify_msg"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <com.chaoneng.ilooknews.widget.image.HeadImageView
+        android:id="@+id/iv_avatar"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_marginTop="@dimen/padding_tiny"
-        android:textSize="@dimen/font_main"
-        tools:text="@string/app_name" />
+        tools:background="@color/red" />
 
-    <TextView
-        android:id="@+id/tv_notify_time"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/padding_small"
-        android:textColor="@color/three_text_color"
-        android:textSize="@dimen/font_small"
-        tools:text="@string/test_time" />
+        android:layout_marginLeft="@dimen/padding_small"
+        android:orientation="vertical">
+
+      <TextView
+          android:id="@+id/tv_notify_type"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:maxLines="1"
+          android:textColor="@color/red_warn"
+          android:textSize="@dimen/font_main"
+          tools:text="@string/app_name" />
+
+      <TextView
+          android:id="@+id/tv_notify_msg"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="@dimen/padding_tiny"
+          android:textSize="@dimen/font_main"
+          tools:text="@string/app_name" />
+
+      <TextView
+          android:id="@+id/tv_notify_time"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="@dimen/padding_small"
+          android:textColor="@color/three_text_color"
+          android:textSize="@dimen/font_small"
+          tools:text="@string/test_time" />
+    </LinearLayout>
   </LinearLayout>
-</LinearLayout>
+
+  <TextView
+      android:id="@+id/id_item_del"
+      android:layout_width="60dp"
+      android:layout_height="match_parent"
+      android:background="@color/red_warn"
+      android:gravity="center"
+      android:text="删除"
+      android:textColor="@color/white"
+      android:textSize="@dimen/font_main" />
+
+
+</com.mcxtzhang.swipemenulib.SwipeMenuLayout>
