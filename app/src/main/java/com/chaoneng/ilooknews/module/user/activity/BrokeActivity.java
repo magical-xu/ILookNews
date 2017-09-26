@@ -3,6 +3,8 @@ package com.chaoneng.ilooknews.module.user.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
+import android.util.SparseArray;
 import android.view.View;
 import butterknife.BindView;
 import com.bilibili.boxing.model.entity.BaseMedia;
@@ -11,20 +13,25 @@ import com.chaoneng.ilooknews.R;
 import com.chaoneng.ilooknews.api.HomeService;
 import com.chaoneng.ilooknews.base.BaseActivity;
 import com.chaoneng.ilooknews.library.boxing.BoxingHelper;
+import com.chaoneng.ilooknews.library.qiniu.QiNiuHelper;
 import com.chaoneng.ilooknews.net.callback.SimpleCallback;
 import com.chaoneng.ilooknews.net.client.NetRequest;
 import com.chaoneng.ilooknews.net.data.HttpResult;
+import com.chaoneng.ilooknews.util.SimpleNotifyListener;
 import com.chaoneng.ilooknews.widget.ilook.ILookTitleBar;
 import com.chaoneng.ilooknews.widget.selector.ImageSelector;
 import com.chaoneng.ilooknews.widget.selector.ImageSelectorCallback;
 import com.chaoneng.ilooknews.widget.text.CountEditText;
+import com.magicalxu.library.blankj.EmptyUtils;
 import com.magicalxu.library.blankj.KeyboardUtils;
 import com.magicalxu.library.blankj.SizeUtils;
+import com.magicalxu.library.blankj.ThreadPoolUtils;
 import com.magicalxu.library.blankj.ToastUtils;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import retrofit2.Call;
+import timber.log.Timber;
 
 /**
  * Created by magical on 17/8/21.
@@ -38,6 +45,9 @@ public class BrokeActivity extends BaseActivity {
 
     private int selectSize;
     private HomeService service;
+    private QiNiuHelper qiNiuHelper;
+    private ThreadPoolUtils threadPoolUtils;
+    private SparseArray<String> remoteArray;
 
     @Override
     public int getLayoutId() {
@@ -51,6 +61,10 @@ public class BrokeActivity extends BaseActivity {
 
     @Override
     public void handleChildPage(Bundle savedInstanceState) {
+
+        remoteArray = new SparseArray<>();
+        qiNiuHelper = new QiNiuHelper();
+        threadPoolUtils = new ThreadPoolUtils(ThreadPoolUtils.FixedThread, 5);
 
         mTitleBar.setTitle("我要爆料")
                 .setRightText("提交")
@@ -89,8 +103,10 @@ public class BrokeActivity extends BaseActivity {
         });
     }
 
+    /**
+     * 提交按钮
+     */
     private void onSubmit() {
-        ToastUtils.showShort(imageSelector.getImageList().size() + " 提交");
 
         KeyboardUtils.hideSoftInput(editText);
         String text = editText.getText();
@@ -98,16 +114,122 @@ public class BrokeActivity extends BaseActivity {
             return;
         }
 
-        HashMap<String, String> params = new HashMap<>();
+        showLoading();
         if (imageSelector.getImageList().size() == 0) {
             // no image
+            HashMap<String, String> params = new HashMap<>();
             params.put("picTotal", AppConstant.NONE_VALUE);
+            handleSubmitBroke(text, params);
         } else {
-            String json = "";
-            params.put("pitcUrl", json);
+            getUploadToken();
+        }
+    }
+
+    /**
+     * 获取七牛的 token
+     */
+    private void getUploadToken() {
+
+        qiNiuHelper.getUpToken(new SimpleNotifyListener() {
+            @Override
+            public void onSuccess(String msg) {
+                uploadImage(msg);
+            }
+
+            @Override
+            public void onFailed(String msg) {
+                hideLoading();
+                ToastUtils.showShort(msg);
+            }
+        });
+    }
+
+    /**
+     * 开线程池上传图片 最大任务数量为5
+     */
+    private void uploadImage(final String token) {
+
+        List<String> localList = imageSelector.getImageList();
+        if (EmptyUtils.isEmpty(localList)) {
+            hideLoading();
+            return;
         }
 
-        showLoading();
+        int size = localList.size();
+        for (int i = 0; i < size; i++) {
+
+            final String path = localList.get(i);
+            final int finalI = i;
+            threadPoolUtils.execute(new Runnable() {
+                @Override
+                public void run() {
+
+                    handleUpload(token, path, finalI);
+                }
+            });
+        }
+    }
+
+    /**
+     * 真正调用七牛上传的方法
+     */
+    private void handleUpload(String token, String path, final int index) {
+
+        qiNiuHelper.upload(path, token, new SimpleNotifyListener() {
+            @Override
+            public void onSuccess(String msg) {
+
+                remoteArray.put(index, msg);
+                if (remoteArray.size() == imageSelector.getImageList().size()) {
+                    // 全部上传成功
+                    buildBrokeParams();
+                }
+            }
+
+            @Override
+            public void onFailed(String msg) {
+                Timber.e("upload to qi_niu failed by index : " + index);
+            }
+        });
+    }
+
+    /**
+     * 构造上传的json
+     */
+    private void buildBrokeParams() {
+
+        HashMap<String, String> params = new HashMap<>();
+        String text = editText.getText();
+
+        StringBuilder builder = new StringBuilder();
+        builder.append("[");
+        int size = remoteArray.size();
+        for (int i = 0; i < size; i++) {
+
+            String picUrl = remoteArray.get(i);
+            builder.append("\"");
+            builder.append(picUrl);
+            builder.append("\"");
+            if (i != remoteArray.size() - 1) {
+                builder.append(",");
+            }
+        }
+        builder.append("]");
+
+        String json = builder.toString();
+        Log.e("qiniu", " the upload json : " + json);
+        //Gson gson = new Gson();
+        //String json = gson.toJson(remotePathList);
+        params.put("pitcUrl", json);
+        params.put("picTotal", String.valueOf(size));
+        handleSubmitBroke(text, params);
+    }
+
+    /**
+     * 提交爆料
+     */
+    private void handleSubmitBroke(String text, HashMap<String, String> params) {
+
         Call<HttpResult<String>> call = service.addBaoLiao(AppConstant.TEST_USER_ID, text, params);
         call.enqueue(new SimpleCallback<String>() {
             @Override

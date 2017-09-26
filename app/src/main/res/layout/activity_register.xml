@@ -60,9 +60,11 @@
       android:gravity="center"
       android:text="获取验证码" />
 
-  <com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer
-      android:id="@+id/id_video_player"
-      android:layout_width="match_parent"
-      android:layout_height="200dp" />
+  <TextView
+      android:id="@+id/id_get_support"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="20dp"
+      android:text="MOB支持国家" />
 
 </LinearLayout>

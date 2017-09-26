@@ -44,3 +44,10 @@
 -dontwarn tv.danmaku.ijk.**
 -keep class com.shuyu.gsyvideoplayer.** { *; }
 -dontwarn com.shuyu.gsyvideoplayer.**
+
+# SMSSDK
+-dontwarn com.mob.**
+-keep class com.mob.**{*;}
+
+-dontwarn cn.smssdk.**
+-keep class cn.smssdk.**{*;}

@@ -11,6 +11,8 @@ public interface AppConstant {
     String WIFI_4G_TIP = "wifi_4g_tip";
     String NEWS_TEXT_SIZE = "news_text_size";
 
+    String REMOTE_HOST = "http://owfsbxql8.bkt.clouddn.com/";
+
     String NONE_VALUE = "0";
 
     int DEFAULT_PAGE_SIZE = 10;   //列表页默认10条

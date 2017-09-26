@@ -1,6 +1,7 @@
 package com.chaoneng.ilooknews.library.qiniu;
 
 import android.util.Log;
+import com.chaoneng.ilooknews.AppConstant;
 import com.chaoneng.ilooknews.api.HomeService;
 import com.chaoneng.ilooknews.net.client.NetRequest;
 import com.chaoneng.ilooknews.util.SimpleNotifyListener;
@@ -61,16 +62,27 @@ public class QiNiuHelper {
 
                 if (info.isOK()) {
 
+                    //Log.e("qiniu", TextUtils.isEmpty(key) ? " complete key is null" : key);
+                    //Log.e("qiniu", "response : " + (null == response ? "" : response.toString()));
+
                     //upload success
-                    String testUrl =
-                            "http://owfsbxql8.bkt.clouddn.com/13666430c7714b4bb7b55a1abda39ea4.png";
-                    Log.d("qiniu", response.toString());
-                    if (null != listener) {
-                        listener.onSuccess(testUrl);
+                    //String testUrl =
+                    //        "http://owfsbxql8.bkt.clouddn.com/13666430c7714b4bb7b55a1abda39ea4.png";
+                    if (null != response) {
+                        String imageKey = response.optString("key");
+                        if (null != listener) {
+                            listener.onSuccess(AppConstant.REMOTE_HOST + imageKey);
+                        }
+                    } else {
+                        if (null != listener) {
+                            listener.onFailed("response is null");
+                        }
                     }
                 } else {
-
                     Log.e("qiniu", " upload fail : " + info.error);
+                    if (null != listener) {
+                        listener.onFailed(info.error);
+                    }
                 }
             }
         }, new UploadOptions(params, "image", false, new UpProgressHandler() {
