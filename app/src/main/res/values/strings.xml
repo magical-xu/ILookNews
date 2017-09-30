@@ -166,6 +166,16 @@
   <string name="place_comment">%s 评论</string>
   <string name="place_reply">%s 条回复</string>
   <string name="comment_can_not_be_null">评论不能为空</string>
-
+  <string name="select_avatar">选择头像</string>
+  <string name="username">用户名</string>
+  <string name="back_to_login">返回登录页面</string>
+  <string name="register_by_mobile">手机号注册</string>
+  <string name="register">注册</string>
+  <string name="plz_input_mobile_first">请先输入电话号码！</string>
+  <string name="cannot_send_verify_code_in_60_seconds">60秒内不能重新发送！</string>
+  <string name="verify_code">验证码</string>
+  <string name="plz_input_mobile_and_code">请输入手机号、密码和验证码</string>
+  <string name="plz_input_username_and_pwd">请输入用户名和密码</string>
+  <string name="no_account_to_register">没有账号？注册</string>
 
 </resources>

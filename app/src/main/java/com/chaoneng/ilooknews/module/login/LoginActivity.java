@@ -46,6 +46,7 @@ public class LoginActivity extends BaseActivity {
     @BindView(R.id.id_qq) ImageView idQq;
     @BindView(R.id.id_wei_bo) ImageView idWeiBo;
     @BindView(R.id.id_login_type) TextView mLoginType;
+    @BindView(R.id.tv_to_register) TextView mRegisterTv;
 
     boolean showPage;
     private LoginService loginService;
@@ -63,13 +64,16 @@ public class LoginActivity extends BaseActivity {
 
     @OnClick({
             R.id.iv_finish, R.id.tv_change_login_type, R.id.tv_login, R.id.id_we_chat, R.id.id_qq,
-            R.id.id_wei_bo, R.id.tv_send_msg
+            R.id.id_wei_bo, R.id.tv_send_msg, R.id.tv_to_register
     })
     public void onClickView(View view) {
 
         switch (view.getId()) {
             case R.id.iv_finish:
                 finish();
+                break;
+            case R.id.tv_to_register:
+                IntentHelper.openRegisterPage(this);
                 break;
             case R.id.tv_change_login_type:
                 changeLoginType();
@@ -78,8 +82,8 @@ public class LoginActivity extends BaseActivity {
                 onLogin();
                 break;
             case R.id.id_we_chat:
-                //ToastUtils.showShort("微信登录");
-                IntentHelper.openRegisterPage(this);
+                ToastUtils.showShort("微信登录");
+                onThirdLogin(SsoLoginType.WEIXIN);
                 break;
             case R.id.id_qq:
                 ToastUtils.showShort("QQ登录");

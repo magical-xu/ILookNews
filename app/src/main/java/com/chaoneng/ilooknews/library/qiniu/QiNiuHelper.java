@@ -31,7 +31,15 @@ public class QiNiuHelper {
 
     private UploadManager uploadManager;
 
-    public QiNiuHelper() {
+    public static QiNiuHelper getInstance() {
+        return QiNiuHelperHolder.INSTANCE;
+    }
+
+    private static class QiNiuHelperHolder {
+        private static QiNiuHelper INSTANCE = new QiNiuHelper();
+    }
+
+    private QiNiuHelper() {
         //Configuration config =
         //        new Configuration.Builder().chunkSize(512 * 1024)        // 分片上传时，每片的大小。 默认256K
         //                .putThreshhold(1024 * 1024)   // 启用分片上传阀值。默认512K

@@ -48,7 +48,6 @@ public class ProfileActivity extends BaseActivity {
     @BindView(R.id.id_modify_sign) SettingItemView modifySign;
 
     private UserService service;
-    private QiNiuHelper qiNiuHelper;
 
     @Override
     public int getLayoutId() {
@@ -64,7 +63,6 @@ public class ProfileActivity extends BaseActivity {
     public void handleChildPage(Bundle savedInstanceState) {
 
         service = NetRequest.getInstance().create(UserService.class);
-        qiNiuHelper = new QiNiuHelper();
 
         mTitleBar.setTitle("编辑资料");
         mTitleBar.setTitleListener(new ILookTitleBar.TitleCallbackAdapter() {
@@ -255,12 +253,12 @@ public class ProfileActivity extends BaseActivity {
         modifyAvatar.setHead(localPath);
 
         //modifyAvatar(baseMedia.getPath());
-        qiNiuHelper.getUpToken(new SimpleNotifyListener() {
+        QiNiuHelper.getInstance().getUpToken(new SimpleNotifyListener() {
             @Override
             public void onSuccess(String msg) {
 
                 Log.i("qiniu", " get upload token success");
-                qiNiuHelper.upload(localPath, msg, new SimpleNotifyListener() {
+                QiNiuHelper.getInstance().upload(localPath, msg, new SimpleNotifyListener() {
                     @Override
                     public void onSuccess(String msg) {
 

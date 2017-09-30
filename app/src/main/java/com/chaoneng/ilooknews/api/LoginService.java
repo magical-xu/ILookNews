@@ -19,14 +19,14 @@ public interface LoginService {
      */
     @POST("registerByName")
     Call<HttpResult<UserWrapper>> registerByName(@Query("username") String userName,
-            @Query("userpwd") String pwd);
+            @Query("userpwd") String pwd, @Query("icon") String avatar);
 
     /**
      * 手机号注册
      */
     @POST("registerByPhone")
     Call<HttpResult<UserWrapper>> registerByPhone(@Query("mobile") String mobile,
-            @Query("veriCode") String verifyCode);
+            @Query("veriCode") String verifyCode, @Query("icon") String avatar);
 
     /**
      * 手机号登录

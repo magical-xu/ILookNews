@@ -57,16 +57,38 @@
       android:textColor="@color/white"
       android:textSize="@dimen/font_big" />
 
-  <TextView
-      android:id="@+id/tv_change_login_type"
-      android:layout_width="wrap_content"
+  <LinearLayout
+      android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_gravity="center_horizontal"
-      android:layout_marginTop="@dimen/padding_large"
-      android:padding="@dimen/padding_small"
-      android:text="@string/login_without_pwd_text"
-      android:textColor="@color/main_color"
-      android:textSize="@dimen/font_main" />
+      android:orientation="horizontal"
+      android:paddingLeft="@dimen/padding_large"
+      android:paddingRight="@dimen/padding_large"
+      android:paddingTop="@dimen/padding_small">
+
+    <TextView
+        android:id="@+id/tv_change_login_type"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/padding_small"
+        android:text="@string/login_without_pwd_text"
+        android:textColor="@color/main_color"
+        android:textSize="@dimen/font_main" />
+
+    <Space
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1" />
+
+    <TextView
+        android:id="@+id/tv_to_register"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/padding_small"
+        android:text="@string/no_account_to_register"
+        android:textColor="@color/main_color"
+        android:textSize="@dimen/font_main" />
+
+  </LinearLayout>
 
   <Space
       android:layout_width="match_parent"

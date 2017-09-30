@@ -45,7 +45,6 @@ public class BrokeActivity extends BaseActivity {
 
     private int selectSize;
     private HomeService service;
-    private QiNiuHelper qiNiuHelper;
     private ThreadPoolUtils threadPoolUtils;
     private SparseArray<String> remoteArray;
 
@@ -63,7 +62,6 @@ public class BrokeActivity extends BaseActivity {
     public void handleChildPage(Bundle savedInstanceState) {
 
         remoteArray = new SparseArray<>();
-        qiNiuHelper = new QiNiuHelper();
         threadPoolUtils = new ThreadPoolUtils(ThreadPoolUtils.FixedThread, 5);
 
         mTitleBar.setTitle("我要爆料")
@@ -130,7 +128,7 @@ public class BrokeActivity extends BaseActivity {
      */
     private void getUploadToken() {
 
-        qiNiuHelper.getUpToken(new SimpleNotifyListener() {
+        QiNiuHelper.getInstance().getUpToken(new SimpleNotifyListener() {
             @Override
             public void onSuccess(String msg) {
                 uploadImage(msg);
@@ -175,7 +173,7 @@ public class BrokeActivity extends BaseActivity {
      */
     private void handleUpload(String token, String path, final int index) {
 
-        qiNiuHelper.upload(path, token, new SimpleNotifyListener() {
+        QiNiuHelper.getInstance().upload(path, token, new SimpleNotifyListener() {
             @Override
             public void onSuccess(String msg) {
 
