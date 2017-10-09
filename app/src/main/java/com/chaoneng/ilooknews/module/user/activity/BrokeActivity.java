@@ -12,6 +12,7 @@ import com.chaoneng.ilooknews.AppConstant;
 import com.chaoneng.ilooknews.R;
 import com.chaoneng.ilooknews.api.HomeService;
 import com.chaoneng.ilooknews.base.BaseActivity;
+import com.chaoneng.ilooknews.instance.AccountManager;
 import com.chaoneng.ilooknews.library.boxing.BoxingHelper;
 import com.chaoneng.ilooknews.library.qiniu.QiNiuHelper;
 import com.chaoneng.ilooknews.net.callback.SimpleCallback;
@@ -228,7 +229,12 @@ public class BrokeActivity extends BaseActivity {
      */
     private void handleSubmitBroke(String text, HashMap<String, String> params) {
 
-        Call<HttpResult<String>> call = service.addBaoLiao(AppConstant.TEST_USER_ID, text, params);
+        String userId = AccountManager.getInstance().getUserId();
+        if (TextUtils.isEmpty(userId)) {
+            return;
+        }
+
+        Call<HttpResult<String>> call = service.addBaoLiao(userId, text, params);
         call.enqueue(new SimpleCallback<String>() {
             @Override
             public void onSuccess(String data) {

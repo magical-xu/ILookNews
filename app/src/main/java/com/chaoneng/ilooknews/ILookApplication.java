@@ -1,9 +1,9 @@
 package com.chaoneng.ilooknews;
 
 import android.content.Context;
+import android.support.multidex.MultiDex;
 import com.chaoneng.ilooknews.api.Constant;
 import com.chaoneng.ilooknews.library.boxing.BoxingHelper;
-import com.chaoneng.ilooknews.library.loadandretry.LoadingAndRetryManager;
 import com.chaoneng.ilooknews.library.shareloginlib.ShareLoginHelper;
 import com.chaoneng.ilooknews.net.client.NetRequest;
 import com.facebook.stetho.Stetho;
@@ -52,10 +52,12 @@ public class ILookApplication extends MobApplication {
                 return footer;
             }
         });
+    }
 
-        LoadingAndRetryManager.BASE_EMPTY_LAYOUT_ID = R.layout.base_empty;
-        LoadingAndRetryManager.BASE_LOADING_LAYOUT_ID = R.layout.base_loading;
-        LoadingAndRetryManager.BASE_RETRY_LAYOUT_ID = R.layout.base_retry;
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
     }
 
     @Override

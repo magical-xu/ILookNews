@@ -68,7 +68,7 @@
         android:layout_marginBottom="@dimen/padding_small"
         android:orientation="horizontal"
         android:visibility="gone"
-        tools:visibility="visible">
+        tools:visibility="gone">
 
       <ImageView
           android:id="@+id/iv_news_center_image1"
@@ -110,5 +110,5 @@
       android:layout_marginLeft="@dimen/padding_normal"
       android:visibility="gone"
       tools:src="@drawable/ic_image_loading"
-      tools:visibility="gone" />
+      tools:visibility="visible" />
 </LinearLayout>
