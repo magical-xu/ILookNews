@@ -177,5 +177,6 @@
   <string name="plz_input_mobile_and_code">请输入手机号、密码和验证码</string>
   <string name="plz_input_username_and_pwd">请输入用户名和密码</string>
   <string name="no_account_to_register">没有账号？注册</string>
+  <string name="plz_input_user_and_pwd">请输入用户名和密码！</string>
 
 </resources>

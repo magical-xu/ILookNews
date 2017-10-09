@@ -1,5 +1,6 @@
 package com.chaoneng.ilooknews.module.user.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -21,10 +22,10 @@ import com.chaoneng.ilooknews.net.callback.SimpleCallback;
 import com.chaoneng.ilooknews.net.client.NetRequest;
 import com.chaoneng.ilooknews.net.data.HttpResult;
 import com.chaoneng.ilooknews.util.IntentHelper;
+import com.chaoneng.ilooknews.util.StringHelper;
 import com.chaoneng.ilooknews.widget.adapter.BaseFragmentAdapter;
 import com.chaoneng.ilooknews.widget.image.HeadImageView;
 import com.flyco.tablayout.SlidingTabLayout;
-import com.magicalxu.library.blankj.ToastUtils;
 import java.util.ArrayList;
 import java.util.List;
 import retrofit2.Call;
@@ -49,6 +50,12 @@ public class UserCenterActivity extends BaseActivity {
     private UserService service;
     private String pageUid;
 
+    public static void getInstance(Context context,String userId){
+        Intent intent = new Intent(context,UserCenterActivity.class);
+        intent.putExtra(IntentHelper.PARAMS_ONE,userId);
+        context.startActivity(intent);
+    }
+
     @Override
     public int getLayoutId() {
         return R.layout.activity_user_center;
@@ -59,7 +66,6 @@ public class UserCenterActivity extends BaseActivity {
 
         Intent intent = getIntent();
         pageUid = intent.getStringExtra(IntentHelper.PARAMS_ONE);
-
         service = NetRequest.getInstance().create(UserService.class);
 
         initView();
@@ -92,30 +98,37 @@ public class UserCenterActivity extends BaseActivity {
 
     private void initUserInfo(UserInfoWrapper data) {
 
-        ivAvatar.setHeadImage(data.userIcon);
-        tvName.setText(data.nickname);
-        tvSignature.setText(
-                TextUtils.isEmpty(data.introduce) ? AppConstant.TEST_SIGN : data.introduce);
+        hideLoading();
+
+        ivAvatar.setHeadImage(StringHelper.getString(data.userIcon));
+        tvName.setText(StringHelper.getString(data.nickname));
+        tvSignature.setText(StringHelper.getString(data.introduce));
 
         focusView.setText(String.valueOf(data.followedNum));
         fansView.setText(String.valueOf(data.fansNum));
+
+        // TODO: 2017/10/9 差个关注
     }
 
     private void loadData() {
 
+        if (TextUtils.isEmpty(pageUid)) {
+            return;
+        }
+
+        showLoading();
         Call<HttpResult<UserInfoWrapper>> call =
-                service.getUserInfo(AppConstant.TEST_USER_ID, AppConstant.TEST_NEWS_USER_ID, 1, 1,
+                service.getUserInfo(pageUid, pageUid, 1, 1,
                         AppConstant.DEFAULT_PAGE_SIZE);
         call.enqueue(new SimpleCallback<UserInfoWrapper>() {
             @Override
             public void onSuccess(UserInfoWrapper data) {
-
                 initUserInfo(data);
             }
 
             @Override
             public void onFail(String code, String errorMsg) {
-                ToastUtils.showShort(errorMsg);
+                onSimpleError(errorMsg);
             }
         });
     }

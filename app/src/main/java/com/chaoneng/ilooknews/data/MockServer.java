@@ -48,7 +48,7 @@ public class MockServer<T> {
             return;
         }
 
-        mRefreshHelper.setData(getFakeData(type));
+        mRefreshHelper.setData(getFakeData(type),true);
     }
 
     public interface Type {

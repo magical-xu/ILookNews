@@ -2,12 +2,14 @@ package com.chaoneng.ilooknews.module.focus;
 
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import butterknife.BindView;
 import com.chaoneng.ilooknews.AppConstant;
 import com.chaoneng.ilooknews.R;
 import com.chaoneng.ilooknews.api.UserService;
 import com.chaoneng.ilooknews.base.BaseActivity;
+import com.chaoneng.ilooknews.instance.AccountManager;
 import com.chaoneng.ilooknews.module.focus.adapter.FocusAddAdapter;
 import com.chaoneng.ilooknews.module.focus.data.FocusBean;
 import com.chaoneng.ilooknews.module.focus.data.FocusWrapper;
@@ -16,7 +18,6 @@ import com.chaoneng.ilooknews.net.client.NetRequest;
 import com.chaoneng.ilooknews.net.data.HttpResult;
 import com.chaoneng.ilooknews.util.RefreshHelper;
 import com.chaoneng.ilooknews.widget.ilook.ILookTitleBar;
-import com.magicalxu.library.blankj.ToastUtils;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import retrofit2.Call;
 
@@ -75,19 +76,26 @@ public class AddFollowListActivity extends BaseActivity {
 
     private void loadData(int page) {
 
+        String userId = AccountManager.getInstance().getUserId();
+        if (TextUtils.isEmpty(userId)) {
+            return;
+        }
+
+        showLoading();
         Call<HttpResult<FocusWrapper>> call =
-                service.getNotFollowList(AppConstant.TEST_USER_ID, page,
-                        AppConstant.DEFAULT_PAGE_SIZE);
+                service.getNotFollowList(userId, page, AppConstant.DEFAULT_PAGE_SIZE);
         call.enqueue(new SimpleCallback<FocusWrapper>() {
             @Override
             public void onSuccess(FocusWrapper data) {
 
-                mRefreshHelper.setData(data.list);
+                hideLoading();
+                mRefreshHelper.setData(data.list,data.haveNext);
             }
 
             @Override
             public void onFail(String code, String errorMsg) {
-                ToastUtils.showShort(errorMsg);
+                mRefreshHelper.onFail();
+                onSimpleError(errorMsg);
             }
         });
     }

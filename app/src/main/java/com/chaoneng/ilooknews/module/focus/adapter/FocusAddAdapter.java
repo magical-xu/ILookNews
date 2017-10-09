@@ -12,6 +12,7 @@ import com.chaoneng.ilooknews.module.focus.data.FocusBean;
 import com.chaoneng.ilooknews.net.callback.SimpleCallback;
 import com.chaoneng.ilooknews.net.client.NetRequest;
 import com.chaoneng.ilooknews.net.data.HttpResult;
+import com.chaoneng.ilooknews.util.StringHelper;
 import com.chaoneng.ilooknews.widget.ilook.UserItemRowView;
 import com.magicalxu.library.blankj.ToastUtils;
 import retrofit2.Call;
@@ -38,10 +39,9 @@ public class FocusAddAdapter extends BaseQuickAdapter<FocusBean, BaseViewHolder>
         }
 
         UserItemRowView view = helper.getView(R.id.id_user_row);
-        view.setHead(AppConstant.TEST_AVATAR)
-                .setName(item.target_id)
-                .setIntro(
-                        TextUtils.isEmpty(item.introduce) ? AppConstant.TEST_SIGN : item.introduce)
+        view.setHead(StringHelper.getString(item.icon))
+                .setName(StringHelper.getString(item.nickname))
+                .setIntro(StringHelper.getString(item.introduce))
                 .setFocusListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {

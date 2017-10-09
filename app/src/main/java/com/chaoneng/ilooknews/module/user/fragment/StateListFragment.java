@@ -11,7 +11,6 @@ import com.chaoneng.ilooknews.AppConstant;
 import com.chaoneng.ilooknews.R;
 import com.chaoneng.ilooknews.api.UserService;
 import com.chaoneng.ilooknews.base.BaseFragment;
-import com.chaoneng.ilooknews.data.MockServer;
 import com.chaoneng.ilooknews.data.NewsInfoListWrapper;
 import com.chaoneng.ilooknews.instance.AccountManager;
 import com.chaoneng.ilooknews.module.user.adapter.StateAdapter;
@@ -35,7 +34,6 @@ public class StateListFragment extends BaseFragment {
 
     private RefreshHelper mRefreshHelper;
     private StateAdapter mAdapter;
-    private MockServer mockServer;
     private UserService userService;
     private String pageUid;
 
@@ -65,14 +63,11 @@ public class StateListFragment extends BaseFragment {
         mRefreshHelper = new RefreshHelper(mRefreshLayout, mAdapter, mRecyclerView, true) {
             @Override
             public void onRequest(int page) {
-                //mockServer.mockGankCall(page, MockServer.Type.USER_STATE);
                 loadData(page);
             }
         };
 
         userService = NetRequest.getInstance().create(UserService.class);
-        //mockServer = MockServer.getInstance();
-        //mockServer.init(mRefreshHelper);
 
         mEmptyView = LayoutInflater.from(getActivity())
                 .inflate(R.layout.base_empty_view, (ViewGroup) mRecyclerView.getParent(), false);
@@ -104,34 +99,17 @@ public class StateListFragment extends BaseFragment {
 
                 hideLoading();
                 if (page == 1 && (null == data || null == data.list || data.list.size() == 0)) {
+                    mRefreshHelper.finishRefresh();
                     mAdapter.setEmptyView(mEmptyView);
                     return;
                 }
 
-                if (page == 1) {
-
-                    mRefreshHelper.finishRefresh();
-                    mAdapter.setNewData(data.list);
-                } else {
-
-                    if (!data.haveNext) {
-                        mRefreshHelper.setNoMoreData();
-                        return;
-                    }
-
-                    if (data.list.size() < AppConstant.DEFAULT_PAGE_SIZE) {
-                        mRefreshHelper.setNoMoreData();
-                        return;
-                    }
-
-                    mRefreshHelper.finishLoadmore();
-                    mAdapter.addData(data.list);
-                }
+                //noinspection unchecked
+                mRefreshHelper.setData(data.list,data.haveNext);
             }
 
             @Override
             public void onFail(String code, String errorMsg) {
-
                 mRefreshHelper.onFail();
                 onSimpleError(errorMsg);
             }

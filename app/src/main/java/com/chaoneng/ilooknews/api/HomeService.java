@@ -42,8 +42,8 @@ public interface HomeService {
      * 获取新闻列表
      */
     @GET("getNewsByChannel")
-    Call<HttpResult<NewsListWrapper>> getNewsList(@Query("userid") String userId,
-            @Query("cId") String cid, @Query("page") int page, @Query("pageSize") int size);
+    Call<HttpResult<NewsListWrapper>> getNewsList(@Query("cId") String cid, @Query("page") int page,
+            @Query("pageSize") int size);
 
     /**
      * 获取新闻详情

@@ -99,9 +99,7 @@ public class IntentHelper {
      * 跳转用户中心界面
      */
     public static void openUserCenterPage(Context context, @NonNull String uid) {
-        Intent intent = new Intent(context, UserCenterActivity.class);
-        intent.putExtra(PARAMS_ONE, uid);
-        context.startActivity(intent);
+        UserCenterActivity.getInstance(context,uid);
     }
 
     /**

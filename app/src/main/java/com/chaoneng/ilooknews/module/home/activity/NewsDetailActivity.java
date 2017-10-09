@@ -248,7 +248,7 @@ public class NewsDetailActivity extends BaseActivity {
                     bindHeader(data.newInfo);
                 }
 
-                bindItem(data.commentlist);
+                bindItem(data.commentlist,data.haveNext);
             }
 
             @Override
@@ -258,9 +258,9 @@ public class NewsDetailActivity extends BaseActivity {
         });
     }
 
-    private void bindItem(List<CommentBean> list) {
+    private void bindItem(List<CommentBean> list,boolean haveNext) {
 
-        mRefreshHelper.setData(list);
+        mRefreshHelper.setData(list,haveNext);
     }
 
     /**
@@ -352,7 +352,7 @@ public class NewsDetailActivity extends BaseActivity {
             public void onSuccess(NewsInfoWrapper data) {
                 List<CommentBean> commentList = data.commentlist;
                 if (null != commentList) {
-                    bindItem(commentList);
+                    bindItem(commentList,data.haveNext);
                 }
             }
 

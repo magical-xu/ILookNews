@@ -71,17 +71,19 @@ public class VideoListFragment extends BaseFragment {
 
         showLoading();
         Call<HttpResult<NewsListWrapper>> call =
-                service.getNewsList(AppConstant.TEST_USER_ID, mCid, page,
-                        AppConstant.DEFAULT_PAGE_SIZE);
+                service.getNewsList(mCid, page, AppConstant.DEFAULT_PAGE_SIZE);
         call.enqueue(new SimpleCallback<NewsListWrapper>() {
             @Override
             public void onSuccess(NewsListWrapper data) {
 
+                hideLoading();
+                mRefreshHelper.finishRefresh();
             }
 
             @Override
             public void onFail(String code, String errorMsg) {
-
+                mRefreshHelper.onFail();
+                onSimpleError(errorMsg);
             }
         });
     }

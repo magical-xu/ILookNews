@@ -133,14 +133,15 @@ public class LoginActivity extends BaseActivity {
 
         KeyboardUtils.hideSoftInput(this);
         if (showPage) {
-            // mobile login
             onMobileLogin();
         } else {
-            // username pwd login
             onNameLogin();
         }
     }
 
+    /**
+     * 手机号登录
+     */
     private void onMobileLogin() {
 
         String mobile = idPage2Username.getText().toString().trim();
@@ -151,45 +152,63 @@ public class LoginActivity extends BaseActivity {
             return;
         }
 
+        showLoading();
         Call<HttpResult<UserWrapper>> call = loginService.loginByPhone(mobile, code);
         call.enqueue(new SimpleCallback<UserWrapper>() {
             @Override
             public void onSuccess(UserWrapper data) {
-                ToastUtils.showShort(data.socialUser.id);
+                onLoginSuccess(data);
             }
 
             @Override
             public void onFail(String code, String errorMsg) {
-                ToastUtils.showShort(errorMsg);
+                onSimpleError(errorMsg);
             }
         });
     }
 
+    /**
+     * 账号密码登录
+     */
     private void onNameLogin() {
 
         String username = idPage1Username.getText().toString().trim();
         String pwd = idPage1Pwd.getText().toString().trim();
 
         if (TextUtils.isEmpty(username) || TextUtils.isEmpty(pwd)) {
-            ToastUtils.showShort("请输入用户名和密码！");
+            ToastUtils.showShort(R.string.plz_input_user_and_pwd);
             return;
         }
 
+        showLoading();
         Call<HttpResult<UserWrapper>> call = loginService.loginByName(username, pwd);
         call.enqueue(new SimpleCallback<UserWrapper>() {
             @Override
             public void onSuccess(UserWrapper data) {
-                AccountManager.getInstance().saveUser(data.socialUser);
-                finish();
+                onLoginSuccess(data);
             }
 
             @Override
             public void onFail(String code, String errorMsg) {
-                ToastUtils.showShort(errorMsg);
+                onSimpleError(errorMsg);
             }
         });
     }
 
+    /**
+     * 登录成功
+     * @param data 用戶包裝信息
+     */
+    private void onLoginSuccess(UserWrapper data){
+
+        hideLoading();
+        AccountManager.getInstance().saveUser(data.socialUser);
+        finish();
+    }
+
+    /**
+     * 更换登录类型
+     */
     private void changeLoginType() {
 
         showPage = !showPage;

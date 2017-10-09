@@ -18,7 +18,7 @@ import com.magicalxu.library.blankj.SizeUtils;
 
 /**
  * Created by magical on 17/8/24.
- * Description :
+ * Description : 爆料列表Item
  */
 
 public class BrokeNewsListAdapter extends BaseQuickAdapter<BrokeListBean, BaseViewHolder> {

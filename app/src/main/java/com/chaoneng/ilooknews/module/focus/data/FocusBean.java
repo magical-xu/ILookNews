@@ -24,4 +24,7 @@ public class FocusBean implements Serializable {
     public int isVip;
     public String lastTitleVideo;
     public String introduce;
+
+    public String icon;
+    public String nickname;
 }

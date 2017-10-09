@@ -11,8 +11,6 @@ import com.chaoneng.ilooknews.AppConstant;
 import com.chaoneng.ilooknews.R;
 import com.chaoneng.ilooknews.api.UserService;
 import com.chaoneng.ilooknews.base.BaseFragment;
-import com.chaoneng.ilooknews.data.MockServer;
-import com.chaoneng.ilooknews.instance.AccountManager;
 import com.chaoneng.ilooknews.module.user.adapter.BrokeNewsListAdapter;
 import com.chaoneng.ilooknews.module.user.data.BrokeListWrapper;
 import com.chaoneng.ilooknews.net.callback.SimpleCallback;
@@ -35,7 +33,6 @@ public class BrokeNewsListFragment extends BaseFragment {
 
     private RefreshHelper mRefreshHelper;
     private BrokeNewsListAdapter mAdapter;
-    private MockServer mockServer;
     private UserService userService;
     private String pageUid;
 
@@ -75,12 +72,9 @@ public class BrokeNewsListFragment extends BaseFragment {
         mRefreshHelper = new RefreshHelper(mRefreshLayout, mAdapter, mRecyclerView, true) {
             @Override
             public void onRequest(int page) {
-                //mockServer.mockGankCall(page, MockServer.Type.USER_BROKE);
                 loadData(page);
             }
         };
-        //mockServer = MockServer.getInstance();
-        //mockServer.init(mRefreshHelper);
 
         mEmptyView = LayoutInflater.from(getActivity())
                 .inflate(R.layout.base_empty_view, (ViewGroup) mRecyclerView.getParent(), false);
@@ -93,8 +87,7 @@ public class BrokeNewsListFragment extends BaseFragment {
 
     public void loadData(final int page) {
 
-        String userId = AccountManager.getInstance().getUserId();
-        if (TextUtils.isEmpty(userId) || TextUtils.isEmpty(pageUid)) {
+        if (TextUtils.isEmpty(pageUid)) {
             return;
         }
 
@@ -107,35 +100,17 @@ public class BrokeNewsListFragment extends BaseFragment {
 
                 hideLoading();
                 if (page == 1 && (null == data || null == data.list || data.list.size() == 0)) {
+                    mRefreshHelper.finishRefresh();
                     mAdapter.setEmptyView(mEmptyView);
-                    mRefreshHelper.onFail();
                     return;
                 }
 
-                if (page == 1) {
-
-                    mRefreshHelper.finishRefresh();
-                    mAdapter.setNewData(data.list);
-                } else {
-
-                    if (!data.haveNext) {
-                        mRefreshHelper.setNoMoreData();
-                        return;
-                    }
-
-                    if (data.list.size() < AppConstant.DEFAULT_PAGE_SIZE) {
-                        mRefreshHelper.setNoMoreData();
-                        return;
-                    }
-
-                    mRefreshHelper.finishLoadmore();
-                    mAdapter.addData(data.list);
-                }
+                //noinspection unchecked
+                mRefreshHelper.setData(data.list,data.haveNext);
             }
 
             @Override
             public void onFail(String code, String errorMsg) {
-
                 mRefreshHelper.onFail();
                 onSimpleError(errorMsg);
             }

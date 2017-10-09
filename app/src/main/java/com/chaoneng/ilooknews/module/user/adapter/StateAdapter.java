@@ -13,7 +13,7 @@ import com.chaoneng.ilooknews.widget.image.HeadImageView;
 
 /**
  * Created by magical on 17/8/24.
- * Description :
+ * Description : 动态列表Item
  */
 
 public class StateAdapter extends BaseQuickAdapter<NewsInfo, BaseViewHolder> {

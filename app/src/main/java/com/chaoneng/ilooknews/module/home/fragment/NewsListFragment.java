@@ -159,8 +159,7 @@ public class NewsListFragment extends BaseFragment {
         showLoading();
         HomeService service = NetRequest.getInstance().create(HomeService.class);
         Call<HttpResult<NewsListWrapper>> call =
-                service.getNewsList(AppConstant.TEST_USER_ID, mCid, page,
-                        AppConstant.DEFAULT_PAGE_SIZE);
+                service.getNewsList(mCid, page, AppConstant.DEFAULT_PAGE_SIZE);
         call.enqueue(new SimpleCallback<NewsListWrapper>() {
             @Override
             public void onSuccess(NewsListWrapper data) {
@@ -168,29 +167,13 @@ public class NewsListFragment extends BaseFragment {
                 hideLoading();
 
                 if (page == 1 && (null == data || null == data.list || data.list.size() == 0)) {
+                    mRefreshHelper.finishRefresh();
                     mAdapter.setEmptyView(mEmptyView);
                     return;
                 }
 
-                if (page == 1) {
-
-                    mRefreshHelper.finishRefresh();
-                    mAdapter.setNewData(data.list);
-                } else {
-
-                    if (!data.havePage) {
-                        mRefreshHelper.setNoMoreData();
-                        return;
-                    }
-
-                    if (data.list.size() < AppConstant.DEFAULT_PAGE_SIZE) {
-                        mRefreshHelper.setNoMoreData();
-                        return;
-                    }
-
-                    mRefreshHelper.finishLoadmore();
-                    mAdapter.addData(data.list);
-                }
+                //noinspection unchecked
+                mRefreshHelper.setData(data.list,data.havePage);
             }
 
             @Override

@@ -5,6 +5,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
+import com.chaoneng.ilooknews.AppConstant;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadmoreListener;
@@ -116,11 +117,30 @@ public abstract class RefreshHelper<T> {
         }
     }
 
-    public void setData(List<T> data) {
+    public void setData(List<T> data,boolean hasMore) {
         if (curPage == 1) {
             finishRefresh();
             mAdapter.setNewData(data);
         } else {
+            finishLoadmore();
+            mAdapter.addData(data);
+        }
+
+        if (curPage == 1) {
+            finishRefresh();
+            mAdapter.setNewData(data);
+        } else {
+
+            if (!hasMore) {
+                setNoMoreData();
+                return;
+            }
+
+            if (data.size() < AppConstant.DEFAULT_PAGE_SIZE) {
+                setNoMoreData();
+                return;
+            }
+
             finishLoadmore();
             mAdapter.addData(data);
         }

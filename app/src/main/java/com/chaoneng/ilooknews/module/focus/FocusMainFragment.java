@@ -1,13 +1,15 @@
 package com.chaoneng.ilooknews.module.focus;
 
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import butterknife.BindView;
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chaoneng.ilooknews.AppConstant;
 import com.chaoneng.ilooknews.R;
 import com.chaoneng.ilooknews.api.UserService;
 import com.chaoneng.ilooknews.base.BaseTitleFragment;
-import com.chaoneng.ilooknews.data.MockServer;
+import com.chaoneng.ilooknews.instance.AccountManager;
 import com.chaoneng.ilooknews.module.focus.adapter.FocusAdapter;
 import com.chaoneng.ilooknews.module.focus.data.FocusBean;
 import com.chaoneng.ilooknews.module.focus.data.FocusWrapper;
@@ -17,8 +19,8 @@ import com.chaoneng.ilooknews.net.data.HttpResult;
 import com.chaoneng.ilooknews.util.IntentHelper;
 import com.chaoneng.ilooknews.util.RefreshHelper;
 import com.chaoneng.ilooknews.widget.ilook.ILookTitleBar;
-import com.magicalxu.library.blankj.ToastUtils;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import java.util.List;
 import retrofit2.Call;
 
 /**
@@ -33,7 +35,6 @@ public class FocusMainFragment extends BaseTitleFragment {
 
     private FocusAdapter mAdapter;
     private RefreshHelper<FocusBean> mRefreshHelper;
-    private MockServer mockServer;
     private UserService service;
 
     @Override
@@ -71,29 +72,59 @@ public class FocusMainFragment extends BaseTitleFragment {
         mRefreshHelper = new RefreshHelper<FocusBean>(mRefreshLayout, mAdapter, mRecyclerView) {
             @Override
             public void onRequest(int page) {
-                //mockServer.mockGankCall(page, MockServer.Type.FOCUS);
                 loadData(page);
             }
         };
-        //mockServer = MockServer.getInstance();
-        //mockServer.init(mRefreshHelper);
+
+        mAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+            @Override
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                onChildClick(view,position);
+            }
+        });
+    }
+
+    private void onChildClick(View view, int position) {
+
+        switch (view.getId()) {
+            case R.id.iv_avatar:
+
+                List<FocusBean> data = mAdapter.getData();
+                if (position < data.size()) {
+
+                    FocusBean item = data.get(position);
+                    String target_id = item.target_id;
+                    if (!TextUtils.isEmpty(target_id)) {
+                        IntentHelper.openUserCenterPage(getActivity(),target_id);
+                    }
+                }
+                break;
+            default:
+                break;
+        }
     }
 
     private void loadData(int page) {
 
+        String loginUserId = AccountManager.getInstance().getUserId();
+        if (TextUtils.isEmpty(loginUserId)) {
+            return;
+        }
+
+        showLoading();
         Call<HttpResult<FocusWrapper>> call =
-                service.getNotFollowList(AppConstant.TEST_USER_ID, page,
-                        AppConstant.DEFAULT_PAGE_SIZE);
+                service.getNotFollowList(loginUserId, page, AppConstant.DEFAULT_PAGE_SIZE);
         call.enqueue(new SimpleCallback<FocusWrapper>() {
             @Override
             public void onSuccess(FocusWrapper data) {
-
-                mRefreshHelper.setData(data.list);
+                hideLoading();
+                mRefreshHelper.setData(data.list, data.haveNext);
             }
 
             @Override
             public void onFail(String code, String errorMsg) {
-                ToastUtils.showShort(errorMsg);
+                mRefreshHelper.onFail();
+                onSimpleError(errorMsg);
             }
         });
     }
