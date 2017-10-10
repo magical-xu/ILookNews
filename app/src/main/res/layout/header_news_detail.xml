@@ -17,23 +17,15 @@
       android:textSize="@dimen/font_big"
       tools:text="@string/test_text_long" />
 
-  <WebView
-      android:id="@+id/id_news_detail_web"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_marginTop="@dimen/padding_normal" />
-
   <LinearLayout
       android:id="@+id/id_item_user_root"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_marginLeft="@dimen/padding_normal"
-      android:layout_marginRight="@dimen/padding_normal"
-      android:layout_marginTop="@dimen/padding_normal"
-      android:background="@color/main_divider_color"
+      android:layout_marginLeft="@dimen/padding_small"
+      android:layout_marginRight="@dimen/padding_small"
+      android:layout_marginTop="@dimen/padding_small"
       android:gravity="center_vertical"
-      android:orientation="horizontal"
-      android:padding="@dimen/padding_normal">
+      android:orientation="horizontal">
 
     <com.chaoneng.ilooknews.widget.image.HeadImageView
         android:id="@+id/iv_avatar"
@@ -82,6 +74,12 @@
         android:textSize="@dimen/font_main" />
   </LinearLayout>
 
+  <WebView
+      android:id="@+id/id_news_detail_web"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="@dimen/padding_normal" />
+
   <LinearLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
@@ -104,6 +102,7 @@
         android:layout_marginLeft="@dimen/padding_main"
         android:textColor="@color/one_text_color"
         android:textSize="@dimen/font_main"
+        android:visibility="gone"
         tools:text="关键字2" />
 
     <TextView
@@ -113,6 +112,7 @@
         android:layout_marginLeft="@dimen/padding_main"
         android:textColor="@color/one_text_color"
         android:textSize="@dimen/font_main"
+        android:visibility="gone"
         tools:text="关键字3" />
   </LinearLayout>
 

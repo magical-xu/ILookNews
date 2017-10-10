@@ -49,8 +49,8 @@ public interface HomeService {
      * 获取新闻详情
      */
     @GET("getNewsInfoByid")
-    Call<HttpResult<NewsInfoWrapper>> getNewsDetail(@Query("userid") String userId,
-            @Query("newsId") String newsId, @Query("newstype") int type);
+    Call<HttpResult<NewsInfoWrapper>> getNewsDetail(@Query("newsId") String newsId,
+            @Query("newstype") int type);
 
     /**
      * 发表评论
@@ -68,10 +68,9 @@ public interface HomeService {
      * @param parentId ==0时为一级评论=其他为父级的id
      */
     @GET("getNewsComment")
-    Call<HttpResult<NewsInfoWrapper>> getNewsComment(@Query("userid") String userId,
-            @Query("newsId") String newsId, @Query("newstype") int type,
-            @Query("parentId") String parentId, @Query("page") int page,
-            @Query("pagesize") int size);
+    Call<HttpResult<NewsInfoWrapper>> getNewsComment(@Query("newsId") String newsId,
+            @Query("newstype") int type, @Query("parentId") String parentId,
+            @Query("page") int page, @Query("pagesize") int size);
 
     /**
      * 删除评论

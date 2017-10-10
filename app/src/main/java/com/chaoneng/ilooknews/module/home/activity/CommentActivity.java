@@ -23,12 +23,14 @@ import com.chaoneng.ilooknews.api.HomeService;
 import com.chaoneng.ilooknews.base.BaseActivity;
 import com.chaoneng.ilooknews.data.CommentBean;
 import com.chaoneng.ilooknews.data.NewsInfoWrapper;
+import com.chaoneng.ilooknews.instance.AccountManager;
 import com.chaoneng.ilooknews.module.home.fragment.CommentDialogFragment;
 import com.chaoneng.ilooknews.module.video.adapter.CommentAdapter;
 import com.chaoneng.ilooknews.net.callback.SimpleCallback;
 import com.chaoneng.ilooknews.net.client.NetRequest;
 import com.chaoneng.ilooknews.net.data.HttpResult;
 import com.chaoneng.ilooknews.util.RefreshHelper;
+import com.chaoneng.ilooknews.util.StringHelper;
 import com.chaoneng.ilooknews.widget.ilook.ILookTitleBar;
 import com.magicalxu.library.blankj.KeyboardUtils;
 import com.magicalxu.library.blankj.ToastUtils;
@@ -147,7 +149,7 @@ public class CommentActivity extends BaseActivity {
 
         showLoading();
         Call<HttpResult<NewsInfoWrapper>> call =
-                homeService.getNewsComment(AppConstant.TEST_USER_ID, PAGE_NEWS_ID, PAGE_NEWS_TYPE,
+                homeService.getNewsComment(PAGE_NEWS_ID, PAGE_NEWS_TYPE,
                         AppConstant.COMMENT_LEVEL_ONE, page, AppConstant.DEFAULT_PAGE_SIZE);
         call.enqueue(new SimpleCallback<NewsInfoWrapper>() {
             @Override
@@ -157,29 +159,12 @@ public class CommentActivity extends BaseActivity {
                 if (page == 1 && (null == data
                         || null == data.commentlist
                         || data.commentlist.size() == 0)) {
+                    mRefreshHelper.finishRefresh();
                     mAdapter.setEmptyView(mEmptyView);
                     return;
                 }
 
-                if (page == 1) {
-
-                    mRefreshHelper.finishRefresh();
-                    mAdapter.setNewData(data.commentlist);
-                } else {
-
-                    if (!data.haveNext) {
-                        mRefreshHelper.setNoMoreData();
-                        return;
-                    }
-
-                    if (data.commentlist.size() < AppConstant.DEFAULT_PAGE_SIZE) {
-                        mRefreshHelper.setNoMoreData();
-                        return;
-                    }
-
-                    mRefreshHelper.finishLoadmore();
-                    mAdapter.addData(data.commentlist);
-                }
+                mRefreshHelper.setData(data.commentlist, data.haveNext);
             }
 
             @Override
@@ -200,10 +185,13 @@ public class CommentActivity extends BaseActivity {
             return;
         }
 
+        String userId = AccountManager.getInstance().getUserId();
+
         KeyboardUtils.hideSoftInput(this);
+        showLoading();
         Call<HttpResult<JSONObject>> call =
-                homeService.postNewsComment(AppConstant.TEST_USER_ID, PAGE_NEWS_ID, PAGE_NEWS_TYPE,
-                        AppConstant.NONE_VALUE, comment);
+                homeService.postNewsComment(StringHelper.getString(userId), PAGE_NEWS_ID,
+                        PAGE_NEWS_TYPE, AppConstant.NONE_VALUE, comment);
         call.enqueue(new SimpleCallback<JSONObject>() {
 
             @Override
@@ -219,6 +207,7 @@ public class CommentActivity extends BaseActivity {
     }
 
     private void onCommentSuccess() {
+        hideLoading();
         mInputView.setText("");
         loadComment(1);
     }

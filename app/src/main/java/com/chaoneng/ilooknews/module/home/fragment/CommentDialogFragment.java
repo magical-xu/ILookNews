@@ -21,12 +21,14 @@ import com.chaoneng.ilooknews.api.HomeService;
 import com.chaoneng.ilooknews.base.BaseDialogFragment;
 import com.chaoneng.ilooknews.data.CommentBean;
 import com.chaoneng.ilooknews.data.NewsInfoWrapper;
+import com.chaoneng.ilooknews.instance.AccountManager;
 import com.chaoneng.ilooknews.module.video.adapter.CommentAdapter;
 import com.chaoneng.ilooknews.net.callback.SimpleCallback;
 import com.chaoneng.ilooknews.net.client.NetRequest;
 import com.chaoneng.ilooknews.net.data.HttpResult;
 import com.chaoneng.ilooknews.util.CompatUtil;
 import com.chaoneng.ilooknews.util.RefreshHelper;
+import com.chaoneng.ilooknews.util.StringHelper;
 import com.magicalxu.library.blankj.KeyboardUtils;
 import com.magicalxu.library.blankj.ToastUtils;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
@@ -133,8 +135,8 @@ public class CommentDialogFragment extends BaseDialogFragment {
 
         showLoading();
         Call<HttpResult<NewsInfoWrapper>> call =
-                homeService.getNewsComment(AppConstant.TEST_USER_ID, PAGE_NEWS_ID, PAGE_NEWS_TYPE,
-                        PAGE_CID, page, AppConstant.DEFAULT_PAGE_SIZE);
+                homeService.getNewsComment(PAGE_NEWS_ID, PAGE_NEWS_TYPE, PAGE_CID, page,
+                        AppConstant.DEFAULT_PAGE_SIZE);
         call.enqueue(new SimpleCallback<NewsInfoWrapper>() {
             @Override
             public void onSuccess(NewsInfoWrapper data) {
@@ -147,25 +149,7 @@ public class CommentDialogFragment extends BaseDialogFragment {
                     return;
                 }
 
-                if (page == 1) {
-
-                    mRefreshHelper.finishRefresh();
-                    mAdapter.setNewData(data.commentlist);
-                } else {
-
-                    if (!data.haveNext) {
-                        mRefreshHelper.setNoMoreData();
-                        return;
-                    }
-
-                    if (data.commentlist.size() < AppConstant.DEFAULT_PAGE_SIZE) {
-                        mRefreshHelper.setNoMoreData();
-                        return;
-                    }
-
-                    mRefreshHelper.finishLoadmore();
-                    mAdapter.addData(data.commentlist);
-                }
+                mRefreshHelper.setData(data.commentlist, data.haveNext);
             }
 
             @Override
@@ -186,10 +170,12 @@ public class CommentDialogFragment extends BaseDialogFragment {
             return;
         }
 
+        String userId = AccountManager.getInstance().getUserId();
+
         KeyboardUtils.hideSoftInput(getActivity());
         Call<HttpResult<JSONObject>> call =
-                homeService.postNewsComment(AppConstant.TEST_USER_ID, PAGE_NEWS_ID, PAGE_NEWS_TYPE,
-                        PAGE_CID, comment);
+                homeService.postNewsComment(StringHelper.getString(userId), PAGE_NEWS_ID,
+                        PAGE_NEWS_TYPE, PAGE_CID, comment);
         call.enqueue(new SimpleCallback<JSONObject>() {
 
             @Override

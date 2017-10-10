@@ -76,7 +76,7 @@ public class ProfileActivity extends BaseActivity {
         AccountManager accountManager = AccountManager.getInstance();
         BaseUser user = accountManager.getUser();
         if (null != user) {
-            modifyAvatar.setHead(user.avatar);
+            modifyAvatar.setHead(user.icon);
             modifyNick.setRightText(EmptyUtils.isEmpty(user.username) ? "" : user.username);
             modifySign.setRightText(EmptyUtils.isEmpty(user.introduce) ? "" : user.introduce);
         }
@@ -95,7 +95,6 @@ public class ProfileActivity extends BaseActivity {
                 BoxingConfig config = new BoxingConfig(
                         BoxingConfig.Mode.SINGLE_IMG); // Mode：Mode.SINGLE_IMG, Mode.MULTI_IMG, Mode.VIDEO
                 Boxing.of(config).withIntent(this, BoxingActivity.class).start(this, 1024);
-
                 break;
             case R.id.id_modify_nick:
                 showNickDialog();
@@ -177,17 +176,20 @@ public class ProfileActivity extends BaseActivity {
             String uid = accountManager.getUserId();
             Map<String, String> params = new HashMap<>();
             params.put(UserService.PARAMS_NICK, text);
+
+            showLoading();
             Call<HttpResult<JSONObject>> call = service.modifyUserInfo(uid, 2, params);
             call.enqueue(new SimpleCallback<JSONObject>() {
                 @Override
                 public void onSuccess(JSONObject data) {
+                    hideLoading();
                     ToastUtils.showShort("更改昵称成功");
                     modifyNick.setRightText(text);
                 }
 
                 @Override
                 public void onFail(String code, String errorMsg) {
-                    ToastUtils.showShort(errorMsg);
+                    onSimpleError(errorMsg);
                 }
             });
         }
@@ -202,18 +204,21 @@ public class ProfileActivity extends BaseActivity {
         if (accountManager.hasLogin()) {
             String uid = accountManager.getUserId();
             Map<String, String> params = new HashMap<>();
-            params.put(UserService.PARAMS_NICK, text);
-            Call<HttpResult<JSONObject>> call = service.modifyUserInfo(uid, 2, params);
+            params.put(UserService.PARAMS_INTRODUCE, text);
+
+            showLoading();
+            Call<HttpResult<JSONObject>> call = service.modifyUserInfo(uid, 6, params);
             call.enqueue(new SimpleCallback<JSONObject>() {
                 @Override
                 public void onSuccess(JSONObject data) {
+                    hideLoading();
                     ToastUtils.showShort("更改签名成功");
                     modifySign.setRightText(text);
                 }
 
                 @Override
                 public void onFail(String code, String errorMsg) {
-                    ToastUtils.showShort(errorMsg);
+                    onSimpleError(errorMsg);
                 }
             });
         }
@@ -233,14 +238,17 @@ public class ProfileActivity extends BaseActivity {
             call.enqueue(new SimpleCallback<JSONObject>() {
                 @Override
                 public void onSuccess(JSONObject data) {
+                    hideLoading();
                     ToastUtils.showShort("更改头像成功");
                 }
 
                 @Override
                 public void onFail(String code, String errorMsg) {
-                    ToastUtils.showShort(errorMsg);
+                    onSimpleError(errorMsg);
                 }
             });
+        } else {
+            hideLoading();
         }
     }
 
@@ -252,7 +260,7 @@ public class ProfileActivity extends BaseActivity {
         //界面上先设置上
         modifyAvatar.setHead(localPath);
 
-        //modifyAvatar(baseMedia.getPath());
+        showLoading();
         QiNiuHelper.getInstance().getUpToken(new SimpleNotifyListener() {
             @Override
             public void onSuccess(String msg) {
@@ -267,14 +275,14 @@ public class ProfileActivity extends BaseActivity {
 
                     @Override
                     public void onFailed(String msg) {
-
+                        onSimpleError(msg);
                     }
                 });
             }
 
             @Override
             public void onFailed(String msg) {
-
+                onSimpleError(msg);
             }
         });
     }
@@ -283,7 +291,6 @@ public class ProfileActivity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         List<BaseMedia> medias = Boxing.getResult(data);
         if (null != medias) {
-            ToastUtils.showShort(medias.size() + "");
             BaseMedia baseMedia = medias.get(0);
             if (null != baseMedia) {
                 uploadImage(baseMedia);

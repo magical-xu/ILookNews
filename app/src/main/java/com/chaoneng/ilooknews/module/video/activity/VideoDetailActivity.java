@@ -167,8 +167,8 @@ public class VideoDetailActivity extends BaseActivity {
 
     private void loadData(int page) {
 
-        Call<HttpResult<NewsInfoWrapper>> call =
-                service.getNewsDetail(AppConstant.TEST_USER_ID, PAGE_VID, 1);
+        showLoading();
+        Call<HttpResult<NewsInfoWrapper>> call = service.getNewsDetail(PAGE_VID, 1);
         call.enqueue(new SimpleCallback<NewsInfoWrapper>() {
             @Override
             public void onSuccess(NewsInfoWrapper data) {
@@ -177,7 +177,7 @@ public class VideoDetailActivity extends BaseActivity {
 
             @Override
             public void onFail(String code, String errorMsg) {
-
+                onSimpleError(errorMsg);
             }
         });
     }

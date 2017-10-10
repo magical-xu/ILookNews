@@ -115,7 +115,7 @@ public class NewsListAdapter extends BaseMultiItemQuickAdapter<NewsListBean, Bas
         view.setVisibility(View.VISIBLE);
 
         List<String> list = item.coverpic;
-        if (null != list && list.size() > 1) {
+        if (null != list && list.size() >= 1) {
             String imageUrl = list.get(0);
             ImageLoader.loadImage(imageUrl, ((ImageView) view));
         }
@@ -135,14 +135,9 @@ public class NewsListAdapter extends BaseMultiItemQuickAdapter<NewsListBean, Bas
             bindSingleImg(helper, item);
         } else if (TextUtils.equals(picStyle, THREE_IMAGE)) {
             bindThreeImg(helper, item);
-        } else {
-
-            double random = Math.random();
-            if (random > 0.5) {
-                bindSingleImg(helper, item);
-            } else {
-                bindThreeImg(helper, item);
-            }
+        } else if (TextUtils.equals(picStyle, NONE_IMAGE)) {
+            helper.getView(R.id.ll_three_container).setVisibility(View.GONE);
+            helper.getView(R.id.iv_news_right).setVisibility(View.GONE);
         }
     }
 }

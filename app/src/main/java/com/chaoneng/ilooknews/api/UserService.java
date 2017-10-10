@@ -30,6 +30,7 @@ public interface UserService {
     String PARAMS_GENDER = "gender";                // 0男 1 女
     String PARAMS_BIRTH = "birth";                  // 生日 格式为'2013-10-10'
     String PARAMS_ADDRESS = "address";              // 地址
+    String PARAMS_INTRODUCE = "introduce";          // 个性签名
 
     /**
      * 加关注
@@ -79,7 +80,7 @@ public interface UserService {
      * 更改用户信息
      *
      * @param userId 登录用户ID
-     * @param type 1更改头像，=2昵称，=3性别 =4生日 =5地址
+     * @param type 1更改头像，=2昵称，=3性别 =4生日 =5地址 6签名
      */
     @POST("changeUserInfo")
     Call<HttpResult<JSONObject>> modifyUserInfo(@Query("userid") String userId,

@@ -105,8 +105,8 @@
 
   <ImageView
       android:id="@+id/iv_news_right"
-      android:layout_width="114dp"
-      android:layout_height="72dp"
+      android:layout_width="106dp"
+      android:layout_height="68dp"
       android:layout_marginLeft="@dimen/padding_normal"
       android:visibility="gone"
       tools:src="@drawable/ic_image_loading"

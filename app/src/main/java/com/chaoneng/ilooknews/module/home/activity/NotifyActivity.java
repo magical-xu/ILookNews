@@ -2,12 +2,14 @@ package com.chaoneng.ilooknews.module.home.activity;
 
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import butterknife.BindView;
 import com.chaoneng.ilooknews.AppConstant;
 import com.chaoneng.ilooknews.R;
 import com.chaoneng.ilooknews.api.UserService;
 import com.chaoneng.ilooknews.base.BaseActivity;
+import com.chaoneng.ilooknews.instance.AccountManager;
 import com.chaoneng.ilooknews.module.home.adapter.NotifyAdapter;
 import com.chaoneng.ilooknews.module.user.data.NotifyBean;
 import com.chaoneng.ilooknews.module.user.data.NotifyWrapper;
@@ -83,15 +85,19 @@ public class NotifyActivity extends BaseActivity {
 
     private void loadData(int page) {
 
+        String userId = AccountManager.getInstance().getUserId();
+        if (TextUtils.isEmpty(userId)) {
+            return;
+        }
+
         showLoading();
         Call<HttpResult<NotifyWrapper>> call =
-                service.getMyMessageList(AppConstant.TEST_NEWS_USER_ID, page,
-                        AppConstant.DEFAULT_PAGE_SIZE);
+                service.getMyMessageList(userId, page, AppConstant.DEFAULT_PAGE_SIZE);
         call.enqueue(new SimpleCallback<NotifyWrapper>() {
             @Override
             public void onSuccess(NotifyWrapper data) {
                 hideLoading();
-                mRefreshHelper.setData(data.systemMessageList,data.haveNext);
+                mRefreshHelper.setData(data.systemMessageList, data.haveNext);
             }
 
             @Override

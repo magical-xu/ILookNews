@@ -91,7 +91,6 @@ public class ShareBoardActivity extends Activity {
             public void onSuccess(JSONObject data) {
 
                 String imageUrl = data.optString("picUrl");
-                //ToastUtils.showShort(imageUrl);
                 ImageLoader.loadImage(imageUrl, mAdImage);
             }
 

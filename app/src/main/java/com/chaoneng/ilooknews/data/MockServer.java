@@ -100,7 +100,7 @@ public class MockServer<T> {
         List<BaseUser> list = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
             BaseUser user = new BaseUser();
-            user.avatar = AppConstant.TEST_AVATAR;
+            user.icon = AppConstant.TEST_AVATAR;
             user.username = "系统消息";
             user.introduce = "Shaun 关注了 你 -- > " + String.valueOf(mRefreshHelper.getCurPage());
             list.add(user);

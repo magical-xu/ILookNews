@@ -73,7 +73,7 @@ public class UserMainFragment extends BaseFragment {
     private void saveUserData(UserCenterWrapper data) {
 
         BaseUser user = new BaseUser();
-        user.avatar = data.userIcon;
+        user.icon = data.userIcon;
         user.username = data.nickname;
         user.address = data.address;
         user.city = data.city;

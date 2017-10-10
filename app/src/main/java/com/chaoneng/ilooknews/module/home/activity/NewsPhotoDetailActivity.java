@@ -109,7 +109,7 @@ public class NewsPhotoDetailActivity extends BaseActivity {
 
         service = NetRequest.getInstance().create(HomeService.class);
         Call<HttpResult<NewsInfoWrapper>> call =
-                service.getNewsDetail(AppConstant.TEST_USER_ID, AppConstant.TEST_PHOTO_NEWS_ID, 3);
+                service.getNewsDetail(AppConstant.TEST_PHOTO_NEWS_ID, 3);
         call.enqueue(new SimpleCallback<NewsInfoWrapper>() {
             @Override
             public void onSuccess(NewsInfoWrapper data) {

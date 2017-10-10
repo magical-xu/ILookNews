@@ -1,11 +1,13 @@
 package com.chaoneng.ilooknews.module.login;
 
 import android.os.Bundle;
+import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import butterknife.BindView;
+import butterknife.OnClick;
 import com.chaoneng.ilooknews.BuildConfig;
 import com.chaoneng.ilooknews.MainActivity;
 import com.chaoneng.ilooknews.R;
@@ -55,18 +57,34 @@ public class SplashActivity extends BaseActivity {
 
     private void countDown() {
         int durationMs = 3 * 1000;
-        if (BuildConfig.DEBUG) durationMs = 0; // speed up under debug
 
         mTimeCountdown = new TimeCountdown(durationMs, 1000) {
             @Override
             public void countdownListener(int currentValue, boolean isEnd) {
                 if (isEnd) {
-                    MainActivity.startAction(SplashActivity.this);
-                    finish();
+                    onTimeEnd();
                 } else {
                     mTimer.setText(String.format("跳过 %s", currentValue / 1000));
                 }
             }
         };
+    }
+
+    private void onTimeEnd() {
+        MainActivity.startAction(SplashActivity.this);
+        finish();
+    }
+
+    @OnClick(R.id.tv_count_down)
+    public void onClickJump(View view) {
+        onTimeEnd();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (null != mTimeCountdown) {
+            mTimeCountdown.removeCallback();
+        }
     }
 }

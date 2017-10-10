@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:paddingBottom="@dimen/padding_normal"
     android:paddingLeft="@dimen/padding_normal"
     android:paddingRight="@dimen/padding_normal"
     android:paddingTop="@dimen/padding_large">
@@ -45,11 +46,11 @@
       tools:text="@string/test_text_long" />
 
   <com.google.android.flexbox.FlexboxLayout
+      android:visibility="gone"
       android:id="@+id/fl_body"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_below="@id/tv_title"
-      android:layout_marginBottom="32dp"
       android:layout_marginTop="@dimen/padding_normal"
       app:flexWrap="wrap" />
 </RelativeLayout>

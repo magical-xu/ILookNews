@@ -13,6 +13,7 @@ import com.chaoneng.ilooknews.AppConstant;
 import com.chaoneng.ilooknews.R;
 import com.chaoneng.ilooknews.api.HomeService;
 import com.chaoneng.ilooknews.base.BaseFragment;
+import com.chaoneng.ilooknews.data.BaseUser;
 import com.chaoneng.ilooknews.data.Channel;
 import com.chaoneng.ilooknews.instance.AccountManager;
 import com.chaoneng.ilooknews.instance.TabManager;
@@ -24,10 +25,12 @@ import com.chaoneng.ilooknews.net.client.NetRequest;
 import com.chaoneng.ilooknews.net.data.HttpResult;
 import com.chaoneng.ilooknews.util.IntentHelper;
 import com.chaoneng.ilooknews.util.NotifyListener;
+import com.chaoneng.ilooknews.util.StringHelper;
 import com.chaoneng.ilooknews.widget.adapter.BaseFragmentStateAdapter;
 import com.chaoneng.ilooknews.widget.adapter.OnPageChangeListener;
 import com.chaoneng.ilooknews.widget.image.HeadImageView;
 import com.flyco.tablayout.SlidingTabLayout;
+import com.magicalxu.library.blankj.SPUtils;
 import com.magicalxu.library.blankj.ToastUtils;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 import java.util.ArrayList;
@@ -57,7 +60,25 @@ public class HomeMainFragment extends BaseFragment implements OnChannelListener 
     protected void beginLoadData() {
 
         loadSearchKey();
-        mHeadView.setHeadImage(AppConstant.TEST_AVATAR);
+
+        setUserIcon();
+    }
+
+    private void setUserIcon() {
+
+        String avatar;
+
+        //先从 sp 里 拿头像
+        avatar = SPUtils.getInstance().getString(AppConstant.USER_ICON);
+
+        BaseUser user = AccountManager.getInstance().getUser();
+        if (null != user) {
+            //登录过就拿一下 最新的
+            avatar = user.icon;
+        }
+
+        //都没有也没关系 显示默认图
+        mHeadView.setHeadImage(StringHelper.getString(avatar));
     }
 
     /**

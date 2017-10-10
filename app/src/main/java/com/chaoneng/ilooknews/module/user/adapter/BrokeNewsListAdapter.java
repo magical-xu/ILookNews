@@ -2,19 +2,23 @@ package com.chaoneng.ilooknews.module.user.adapter;
 
 import android.content.Context;
 import android.support.annotation.LayoutRes;
+import android.text.TextUtils;
+import android.view.View;
 import android.widget.ImageView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.chaoneng.ilooknews.AppConstant;
-import com.chaoneng.ilooknews.ILookApplication;
 import com.chaoneng.ilooknews.R;
 import com.chaoneng.ilooknews.library.glide.ImageLoader;
 import com.chaoneng.ilooknews.module.user.data.BrokeListBean;
 import com.chaoneng.ilooknews.util.CompatUtil;
+import com.chaoneng.ilooknews.util.StringHelper;
 import com.chaoneng.ilooknews.widget.image.HeadImageView;
 import com.google.android.flexbox.FlexboxLayout;
 import com.magicalxu.library.blankj.ScreenUtils;
 import com.magicalxu.library.blankj.SizeUtils;
+import org.json.JSONArray;
+import org.json.JSONException;
 
 /**
  * Created by magical on 17/8/24.
@@ -33,18 +37,37 @@ public class BrokeNewsListAdapter extends BaseQuickAdapter<BrokeListBean, BaseVi
         ((HeadImageView) helper.getView(R.id.iv_avatar)).setHeadImage(AppConstant.TEST_AVATAR);
 
         helper.setText(R.id.tv_name, "超能工作室");
-        helper.setText(R.id.tv_time, "04-25 23:00");
-        helper.setText(R.id.tv_title, ILookApplication.getLocalString(R.string.test_text_long));
-        FlexboxLayout flexboxLayout = helper.getView(R.id.fl_body);
+        helper.setText(R.id.tv_time, StringHelper.getString(item.createtime));
+        helper.setText(R.id.tv_title, StringHelper.getString(item.context));
 
+        FlexboxLayout flexboxLayout = helper.getView(R.id.fl_body);
         flexboxLayout.removeAllViews();
-        for (int i = 0; i < 9; i++) {
-            ImageView img = new ImageView(mContext);
-            int wh = calcImgWidth(mContext);
-            CompatUtil.resize(flexboxLayout, img, wh, wh);
-            img.setPadding(0, 0, SizeUtils.dp2px(8), SizeUtils.dp2px(8));
-            ImageLoader.loadImage(AppConstant.TEST_AVATAR, img);
-            flexboxLayout.addView(img);
+        String picUrl = item.picUrl;
+        if (TextUtils.isEmpty(picUrl)) {
+            flexboxLayout.setVisibility(View.GONE);
+            return;
+        }
+
+        try {
+            JSONArray images = new JSONArray(picUrl);
+            int size = images.length();
+            for (int i = 0; i < size; i++) {
+
+                String path = (String) images.opt(i);
+                ImageView img = new ImageView(mContext);
+                img.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                int wh = calcImgWidth(mContext);
+                CompatUtil.resize(flexboxLayout, img, wh, wh);
+                img.setPadding(0, 0, SizeUtils.dp2px(8), SizeUtils.dp2px(8));
+                ImageLoader.loadImage(path, img);
+                flexboxLayout.addView(img);
+            }
+
+            flexboxLayout.setVisibility(size == 0 ? View.GONE : View.VISIBLE);
+
+        } catch (JSONException e) {
+            flexboxLayout.setVisibility(View.GONE);
+            e.printStackTrace();
         }
     }
 

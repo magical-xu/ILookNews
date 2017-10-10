@@ -64,5 +64,5 @@ public class BaseUser implements Serializable {
     public int wechat_code;
 
     //add by magical to test
-    public String avatar;
+    public String icon;
 }

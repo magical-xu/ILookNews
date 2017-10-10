@@ -12,12 +12,14 @@ import com.chaoneng.ilooknews.AppConstant;
 import com.chaoneng.ilooknews.R;
 import com.chaoneng.ilooknews.api.HomeService;
 import com.chaoneng.ilooknews.base.BaseActivity;
+import com.chaoneng.ilooknews.data.ImageBean;
 import com.chaoneng.ilooknews.instance.AccountManager;
 import com.chaoneng.ilooknews.library.boxing.BoxingHelper;
 import com.chaoneng.ilooknews.library.qiniu.QiNiuHelper;
 import com.chaoneng.ilooknews.net.callback.SimpleCallback;
 import com.chaoneng.ilooknews.net.client.NetRequest;
 import com.chaoneng.ilooknews.net.data.HttpResult;
+import com.chaoneng.ilooknews.util.PathHelper;
 import com.chaoneng.ilooknews.util.SimpleNotifyListener;
 import com.chaoneng.ilooknews.widget.ilook.ILookTitleBar;
 import com.chaoneng.ilooknews.widget.selector.ImageSelector;
@@ -28,11 +30,16 @@ import com.magicalxu.library.blankj.KeyboardUtils;
 import com.magicalxu.library.blankj.SizeUtils;
 import com.magicalxu.library.blankj.ThreadPoolUtils;
 import com.magicalxu.library.blankj.ToastUtils;
+import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import retrofit2.Call;
 import timber.log.Timber;
+import top.zibin.luban.Luban;
+import top.zibin.luban.OnCompressListener;
 
 /**
  * Created by magical on 17/8/21.
@@ -48,6 +55,7 @@ public class BrokeActivity extends BaseActivity {
     private HomeService service;
     private ThreadPoolUtils threadPoolUtils;
     private SparseArray<String> remoteArray;
+    private ArrayList<ImageBean> sortCompressList;
 
     @Override
     public int getLayoutId() {
@@ -62,6 +70,7 @@ public class BrokeActivity extends BaseActivity {
     @Override
     public void handleChildPage(Bundle savedInstanceState) {
 
+        sortCompressList = new ArrayList<>();
         remoteArray = new SparseArray<>();
         threadPoolUtils = new ThreadPoolUtils(ThreadPoolUtils.FixedThread, 5);
 
@@ -137,15 +146,11 @@ public class BrokeActivity extends BaseActivity {
 
             @Override
             public void onFailed(String msg) {
-                hideLoading();
-                ToastUtils.showShort(msg);
+                onSimpleError(msg);
             }
         });
     }
 
-    /**
-     * 开线程池上传图片 最大任务数量为5
-     */
     private void uploadImage(final String token) {
 
         List<String> localList = imageSelector.getImageList();
@@ -154,10 +159,25 @@ public class BrokeActivity extends BaseActivity {
             return;
         }
 
-        int size = localList.size();
+        //开启压缩
+        compressImage(localList,token);
+    }
+
+    /**
+     * 开线程池上传图片 最大任务数量为5
+     */
+    private void startUpload(final String token) {
+
+        if (sortCompressList == null || sortCompressList.size() < 1) {
+            return;
+        }
+
+        int size = sortCompressList.size();
+        Collections.sort(sortCompressList,new MyComparator());
+
         for (int i = 0; i < size; i++) {
 
-            final String path = localList.get(i);
+            final String path = sortCompressList.get(i).path;
             final int finalI = i;
             threadPoolUtils.execute(new Runnable() {
                 @Override
@@ -166,6 +186,51 @@ public class BrokeActivity extends BaseActivity {
                     handleUpload(token, path, finalI);
                 }
             });
+        }
+    }
+
+    /**
+     * 压缩图片
+     * @param localList 本地图片地址集合
+     */
+    private void compressImage(List<String> localList, final String token) {
+
+        final int size = localList.size();
+        for (int i = 0; i < size; i++) {
+
+            String localPath = localList.get(i);
+            final int finalI = i;
+            Luban.with(this)
+                    .load(localPath)
+                    .ignoreBy(100)
+                    .setTargetDir(PathHelper.getCachePath())
+                    .setCompressListener(new OnCompressListener() {
+                        @Override
+                        public void onStart() {
+                            Timber.d("start to compress image");
+                        }
+
+                        @Override
+                        public void onSuccess(File file) {
+                            if (null == file || !file.exists()) {
+                                return;
+                            }
+                            String compressedPath = file.getAbsolutePath();
+                            sortCompressList.add(new ImageBean(compressedPath, finalI));
+
+                            if (sortCompressList.size() == size) {
+                                //全部压缩完毕 开始上传
+                                startUpload(token);
+                            }
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            Timber.e("failed to compress image");
+                            hideLoading();
+                        }
+                    })
+                    .launch();
         }
     }
 
@@ -264,6 +329,14 @@ public class BrokeActivity extends BaseActivity {
             }
             imageSelector.addImage(list);
             selectSize += list.size();
+        }
+    }
+
+    class MyComparator implements Comparator<ImageBean> {
+
+        @Override
+        public int compare(ImageBean t1, ImageBean t2) {
+            return t1.sort > t2.sort ? 1 : -1;
         }
     }
 }

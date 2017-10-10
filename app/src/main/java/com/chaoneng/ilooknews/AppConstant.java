@@ -8,6 +8,7 @@ package com.chaoneng.ilooknews;
 public interface AppConstant {
 
     String UID = "UID";
+    String USER_ICON = "USER_ICON";
     String WIFI_4G_TIP = "wifi_4g_tip";
     String NEWS_TEXT_SIZE = "news_text_size";
 

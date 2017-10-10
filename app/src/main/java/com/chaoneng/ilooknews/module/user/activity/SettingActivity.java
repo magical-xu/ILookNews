@@ -13,6 +13,7 @@ import butterknife.OnClick;
 import com.chaoneng.ilooknews.AppConstant;
 import com.chaoneng.ilooknews.R;
 import com.chaoneng.ilooknews.base.BaseActivity;
+import com.chaoneng.ilooknews.instance.AccountManager;
 import com.chaoneng.ilooknews.module.user.widget.SettingItemView;
 import com.chaoneng.ilooknews.util.DataCleanUtil;
 import com.chaoneng.ilooknews.util.IntentHelper;
@@ -73,7 +74,7 @@ public class SettingActivity extends BaseActivity {
         idEdit.setTitle("个人资料编辑");
 
         idToggleText.setTitle("字体大小").hideRightArrow();
-        setSystemTextSize(SPUtils.getInstance().getInt(AppConstant.NEWS_TEXT_SIZE));
+        setSystemTextSize(SPUtils.getInstance().getInt(AppConstant.NEWS_TEXT_SIZE, 1));
 
         idClearCache.setTitle("清除缓存").hideRightArrow();
 
@@ -82,7 +83,7 @@ public class SettingActivity extends BaseActivity {
         idWifi.getToggle().setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                ToastUtils.showShort(b ? "打开" : "关闭");
+                ToastUtils.showShort(b ? "已开启WIFI播放提醒" : "已关闭WIFI播放提醒");
                 SPUtils.getInstance().put(AppConstant.WIFI_4G_TIP, b);
             }
         });
@@ -128,6 +129,7 @@ public class SettingActivity extends BaseActivity {
                 ToastUtils.showShort("关于");
                 break;
             case R.id.tv_logout:
+                AccountManager.getInstance().logout();
                 IntentHelper.openLoginPage(this);
                 break;
         }

@@ -24,6 +24,7 @@ import com.chaoneng.ilooknews.base.BaseActivity;
 import com.chaoneng.ilooknews.data.CommentBean;
 import com.chaoneng.ilooknews.data.NewsInfo;
 import com.chaoneng.ilooknews.data.NewsInfoWrapper;
+import com.chaoneng.ilooknews.instance.AccountManager;
 import com.chaoneng.ilooknews.module.home.fragment.CommentDialogFragment;
 import com.chaoneng.ilooknews.module.video.adapter.CommentAdapter;
 import com.chaoneng.ilooknews.net.callback.SimpleCallback;
@@ -32,6 +33,7 @@ import com.chaoneng.ilooknews.net.data.HttpResult;
 import com.chaoneng.ilooknews.util.HtmlUtil;
 import com.chaoneng.ilooknews.util.IntentHelper;
 import com.chaoneng.ilooknews.util.RefreshHelper;
+import com.chaoneng.ilooknews.util.StringHelper;
 import com.chaoneng.ilooknews.widget.ilook.ILookTitleBar;
 import com.chaoneng.ilooknews.widget.image.HeadImageView;
 import com.magicalxu.library.blankj.KeyboardUtils;
@@ -61,8 +63,8 @@ public class NewsDetailActivity extends BaseActivity {
     private WebView mWebView;
     private TextView mTitleTv;
     private TextView mKey1View;
-    private TextView mKey2View;
-    private TextView mKey3View;
+    //private TextView mKey2View;
+    //private TextView mKey3View;
     private TextView mUpView;
     private TextView mDownView;
     private HeadImageView mHeaderIv;
@@ -198,8 +200,8 @@ public class NewsDetailActivity extends BaseActivity {
         mWebView = header.findViewById(R.id.id_news_detail_web);
         mTitleTv = header.findViewById(R.id.id_news_detail_title);
         mKey1View = header.findViewById(R.id.id_keyword1);
-        mKey2View = header.findViewById(R.id.id_keyword2);
-        mKey3View = header.findViewById(R.id.id_keyword3);
+        //mKey2View = header.findViewById(R.id.id_keyword2);
+        //mKey3View = header.findViewById(R.id.id_keyword3);
         mUpView = header.findViewById(R.id.id_up);
         mDownView = header.findViewById(R.id.id_down);
         mHeaderIv = header.findViewById(R.id.iv_avatar);
@@ -234,12 +236,13 @@ public class NewsDetailActivity extends BaseActivity {
 
     private void loadData(final int page) {
 
-        Call<HttpResult<NewsInfoWrapper>> call =
-                homeService.getNewsDetail(AppConstant.TEST_NEWS_USER_ID, PAGE_NEWS_ID, 2);
+        showLoading();
+        Call<HttpResult<NewsInfoWrapper>> call = homeService.getNewsDetail(PAGE_NEWS_ID, 2);
         call.enqueue(new SimpleCallback<NewsInfoWrapper>() {
             @Override
             public void onSuccess(NewsInfoWrapper data) {
 
+                hideLoading();
                 if (null == data) {
                     return;
                 }
@@ -248,19 +251,18 @@ public class NewsDetailActivity extends BaseActivity {
                     bindHeader(data.newInfo);
                 }
 
-                bindItem(data.commentlist,data.haveNext);
+                bindItem(data.commentlist, data.haveNext);
             }
 
             @Override
             public void onFail(String code, String errorMsg) {
-
+                onSimpleError(errorMsg);
             }
         });
     }
 
-    private void bindItem(List<CommentBean> list,boolean haveNext) {
-
-        mRefreshHelper.setData(list,haveNext);
+    private void bindItem(List<CommentBean> list, boolean haveNext) {
+        mRefreshHelper.setData(list, haveNext);
     }
 
     /**
@@ -274,15 +276,18 @@ public class NewsDetailActivity extends BaseActivity {
 
         hasNewsPraise = TextUtils.equals(AppConstant.HAS_PRAISE, newInfo.isFollow);
 
-        mTitleTv.setText(newInfo.title);
-        mHeaderIv.setHeadImage(newInfo.userIcon);
-        mHeaderName.setText(newInfo.nickname);
-        mHeaderIntro.setText(AppConstant.TEST_SIGN);
+        mTitleTv.setText(StringHelper.getString(newInfo.title));
+        mHeaderIv.setHeadImage(StringHelper.getString(newInfo.userIcon));
+        mHeaderName.setText(StringHelper.getString(newInfo.nickname));
+        mHeaderIntro.setText(StringHelper.getString(newInfo.createTime));
         mUpView.setText(String.valueOf(newInfo.like_count));
         mDownView.setText(String.valueOf(newInfo.dislike_count));
-        mKey1View.setText("关键字1");
-        mKey2View.setText("关键字2");
-        mKey3View.setText("关键字3");
+
+        String keyword = String.format(getResources().getString(R.string.key_word_pre),
+                StringHelper.getString(newInfo.text_key));
+        mKey1View.setText(keyword);
+        //mKey2View.setText("关键字2");
+        //mKey3View.setText("关键字3");
 
         mWebView.loadDataWithBaseURL("about:blank", HtmlUtil.getHtmlData(newInfo.content),
                 "text/html", "utf-8", null);
@@ -316,14 +321,18 @@ public class NewsDetailActivity extends BaseActivity {
             return;
         }
 
+        String userId = AccountManager.getInstance().getUserId();
+
         KeyboardUtils.hideSoftInput(this);
+        showLoading();
         Call<HttpResult<JSONObject>> call =
-                homeService.postNewsComment(AppConstant.TEST_USER_ID, PAGE_NEWS_ID, PAGE_NEWS_TYPE,
-                        AppConstant.NONE_VALUE, comment);
+                homeService.postNewsComment(StringHelper.getString(userId), PAGE_NEWS_ID,
+                        PAGE_NEWS_TYPE, AppConstant.NONE_VALUE, comment);
         call.enqueue(new SimpleCallback<JSONObject>() {
 
             @Override
             public void onSuccess(JSONObject data) {
+                hideLoading();
                 onCommentSuccess();
             }
 
@@ -344,21 +353,23 @@ public class NewsDetailActivity extends BaseActivity {
 
     private void loadComment(int page) {
 
+        showLoading();
         Call<HttpResult<NewsInfoWrapper>> call =
-                homeService.getNewsComment(AppConstant.TEST_USER_ID, PAGE_NEWS_ID, PAGE_NEWS_TYPE,
-                        AppConstant.NONE_VALUE, page, AppConstant.DEFAULT_PAGE_SIZE);
+                homeService.getNewsComment(PAGE_NEWS_ID, PAGE_NEWS_TYPE, AppConstant.NONE_VALUE,
+                        page, AppConstant.DEFAULT_PAGE_SIZE);
         call.enqueue(new SimpleCallback<NewsInfoWrapper>() {
             @Override
             public void onSuccess(NewsInfoWrapper data) {
+                hideLoading();
                 List<CommentBean> commentList = data.commentlist;
                 if (null != commentList) {
-                    bindItem(commentList,data.haveNext);
+                    bindItem(commentList, data.haveNext);
                 }
             }
 
             @Override
             public void onFail(String code, String errorMsg) {
-                ToastUtils.showShort(errorMsg);
+                onSimpleError(errorMsg);
             }
         });
     }

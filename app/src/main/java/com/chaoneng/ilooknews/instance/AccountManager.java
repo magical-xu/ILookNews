@@ -35,7 +35,9 @@ public class AccountManager {
      * @param user 登录后的
      */
     public void saveUser(@NonNull BaseUser user) {
-        SPUtils.getInstance().put(AppConstant.UID, user.id);
+        SPUtils spUtils = SPUtils.getInstance();
+        spUtils.put(AppConstant.UID, user.id);
+        spUtils.put(AppConstant.USER_ICON, user.icon);
         this.user = user;
     }
 
@@ -63,5 +65,15 @@ public class AccountManager {
     public boolean hasLogin() {
         String uid = SPUtils.getInstance().getString(AppConstant.UID);
         return !TextUtils.isEmpty(uid);
+    }
+
+    /**
+     * 登出
+     */
+    public void logout() {
+        this.user = null;
+        SPUtils spUtils = SPUtils.getInstance();
+        spUtils.put(AppConstant.UID, "");
+        spUtils.put(AppConstant.USER_ICON, "");
     }
 }

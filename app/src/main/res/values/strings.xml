@@ -16,6 +16,7 @@
   <string name="tips_input_feed_and_contact">请输入反馈内容和联系方式后提交！</string>
   <string name="tips_input">请输入内容</string>
 
+  <string name="key_word_pre">关键字：%s</string>
 
   <!--User -->
   <string name="user_feeds">动态</string>

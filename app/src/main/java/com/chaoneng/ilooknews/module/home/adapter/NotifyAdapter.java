@@ -8,10 +8,12 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.chaoneng.ilooknews.AppConstant;
 import com.chaoneng.ilooknews.R;
 import com.chaoneng.ilooknews.api.UserService;
+import com.chaoneng.ilooknews.instance.AccountManager;
 import com.chaoneng.ilooknews.module.user.data.NotifyBean;
 import com.chaoneng.ilooknews.net.callback.SimpleCallback;
 import com.chaoneng.ilooknews.net.client.NetRequest;
 import com.chaoneng.ilooknews.net.data.HttpResult;
+import com.chaoneng.ilooknews.util.StringHelper;
 import com.chaoneng.ilooknews.widget.image.HeadImageView;
 import com.magicalxu.library.blankj.ToastUtils;
 import com.mcxtzhang.swipemenulib.SwipeMenuLayout;
@@ -38,10 +40,11 @@ public class NotifyAdapter extends BaseQuickAdapter<NotifyBean, BaseViewHolder> 
         final int pos = helper.getLayoutPosition();
         final SwipeMenuLayout root = helper.getView(R.id.id_item_root);
 
+        // TODO: 2017/10/10 系统消息 缺个头像
         ((HeadImageView) helper.getView(R.id.iv_avatar)).setHeadImage(AppConstant.TEST_AVATAR);
-        helper.setText(R.id.tv_notify_type, item.message_type);
-        helper.setText(R.id.tv_notify_msg, item.content);
-        helper.setText(R.id.tv_notify_time, item.created_time);
+        helper.setText(R.id.tv_notify_type, StringHelper.getString(item.title));
+        helper.setText(R.id.tv_notify_msg, StringHelper.getString(item.content));
+        helper.setText(R.id.tv_notify_time, StringHelper.getString(item.created_time));
 
         View contentView = helper.getView(R.id.id_item_content);
         contentView.setOnClickListener(new View.OnClickListener() {
@@ -69,8 +72,12 @@ public class NotifyAdapter extends BaseQuickAdapter<NotifyBean, BaseViewHolder> 
             return;
         }
 
-        Call<HttpResult<JSONObject>> call =
-                service.deleteMyMessageByid(AppConstant.TEST_USER_ID, mid);
+        String userId = AccountManager.getInstance().getUserId();
+        if (TextUtils.isEmpty(userId)) {
+            return;
+        }
+
+        Call<HttpResult<JSONObject>> call = service.deleteMyMessageByid(userId, mid);
         call.enqueue(new SimpleCallback<JSONObject>() {
             @Override
             public void onSuccess(JSONObject data) {
