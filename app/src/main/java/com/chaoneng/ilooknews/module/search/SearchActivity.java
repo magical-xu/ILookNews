@@ -96,13 +96,26 @@ public class SearchActivity extends BaseActivity {
 
         mHistory.setTitle("历史记录")
                 .setTitleColor(R.color.three_text_color)
-                .setRightDrawable(R.drawable.ic_delete_history);
-        mRecommend.setTitle("猜你想搜的")
-                .setTitleColor(R.color.three_text_color)
-                .setRightDrawable(R.drawable.ic_delete_history);
+                .setRightDrawable(R.drawable.ic_delete_history)
+                .setRightDrawableClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        onDelHistory();
+                    }
+                });
+        mRecommend.setTitle("猜你想搜的").setTitleColor(R.color.three_text_color)
+                //.setRightDrawable(R.drawable.ic_delete_history)
+                .hideRightArrow();
 
         loadHistory();
         loadRecommend();
+    }
+
+    /**
+     * 删除搜索历史
+     */
+    private void onDelHistory() {
+
     }
 
     private void loadRecommend() {
@@ -120,7 +133,7 @@ public class SearchActivity extends BaseActivity {
 
             @Override
             public void onFail(String code, String errorMsg) {
-
+                onSimpleError(errorMsg);
             }
         });
     }

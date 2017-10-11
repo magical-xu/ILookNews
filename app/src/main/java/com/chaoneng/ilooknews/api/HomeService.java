@@ -29,7 +29,7 @@ public interface HomeService {
      * @param type 1 ：新闻 ， 2：视频
      */
     @GET("getMyChannel")
-    Call<HttpResult<TabBean>> getChannel(@Query("userid") String userId, @Query("type") int type);
+    Call<HttpResult<TabBean>> getChannel(@Query("type") int type);
 
     @POST("addMyChannel")
     Call<HttpResult<String>> addMyChannel(@Query("userid") String userId, @Query("cid") String cid);

@@ -2,7 +2,6 @@ package com.chaoneng.ilooknews.instance;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
-import com.chaoneng.ilooknews.AppConstant;
 import com.chaoneng.ilooknews.ILookApplication;
 import com.chaoneng.ilooknews.api.HomeService;
 import com.chaoneng.ilooknews.data.Channel;
@@ -221,8 +220,7 @@ public class TabManager {
         }
 
         HomeService service = NetRequest.getInstance().create(HomeService.class);
-        Call<HttpResult<TabBean>> call =
-                service.getChannel(AppConstant.TEST_USER_ID, HomeService.NEWS);
+        Call<HttpResult<TabBean>> call = service.getChannel(HomeService.NEWS);
         call.enqueue(new SimpleCallback<TabBean>() {
             @Override
             public void onSuccess(TabBean data) {
@@ -275,8 +273,7 @@ public class TabManager {
         }
 
         HomeService service = NetRequest.getInstance().create(HomeService.class);
-        Call<HttpResult<TabBean>> call =
-                service.getChannel(AppConstant.TEST_USER_ID, HomeService.VIDEO);
+        Call<HttpResult<TabBean>> call = service.getChannel(HomeService.VIDEO);
         call.enqueue(new SimpleCallback<TabBean>() {
             @Override
             public void onSuccess(TabBean data) {
