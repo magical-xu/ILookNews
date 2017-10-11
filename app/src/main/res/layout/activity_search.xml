@@ -83,74 +83,17 @@
           custom:dividerDrawableVertical="@drawable/divider_line_vertical"
           custom:flexWrap="wrap"
           custom:showDividerHorizontal="middle"
-          custom:showDividerVertical="middle">
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/layout_height_normal"
-            android:gravity="center_vertical"
-            android:paddingLeft="@dimen/padding_small"
-            android:text="@string/test_text_short"
-            android:textColor="@color/one_text_color"
-            custom:layout_flexBasisPercent="49%" />
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/layout_height_normal"
-            android:gravity="center_vertical"
-            android:paddingLeft="@dimen/padding_small"
-            android:text="@string/test_text_short"
-            android:textColor="@color/one_text_color"
-            custom:layout_flexBasisPercent="49%" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/layout_height_normal"
-            android:gravity="center_vertical"
-            android:paddingLeft="@dimen/padding_small"
-            android:text="@string/test_text_short"
-            android:textColor="@color/one_text_color"
-            custom:layout_flexBasisPercent="49%" />
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/layout_height_normal"
-            android:gravity="center_vertical"
-            android:paddingLeft="@dimen/padding_small"
-            android:text="@string/test_text_short"
-            android:textColor="@color/one_text_color"
-            custom:layout_flexBasisPercent="49%" />
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/layout_height_normal"
-            android:gravity="center_vertical"
-            android:paddingLeft="@dimen/padding_small"
-            android:text="@string/test_text_short"
-            android:textColor="@color/one_text_color"
-            custom:layout_flexBasisPercent="49%" />
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/layout_height_normal"
-            android:gravity="center_vertical"
-            android:paddingLeft="@dimen/padding_small"
-            android:text="@string/test_text_short"
-            android:textColor="@color/one_text_color"
-            custom:layout_flexBasisPercent="49%" />
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/layout_height_normal"
-            android:gravity="center_vertical"
-            android:paddingLeft="@dimen/padding_small"
-            android:text="@string/test_text_short"
-            android:textColor="@color/one_text_color"
-            custom:layout_flexBasisPercent="49%" />
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/layout_height_normal"
-            android:gravity="center_vertical"
-            android:paddingLeft="@dimen/padding_small"
-            android:text="@string/test_text_short"
-            android:textColor="@color/one_text_color"
-            custom:layout_flexBasisPercent="49%" />
-      </com.google.android.flexbox.FlexboxLayout>
+          custom:showDividerVertical="middle" />
     </LinearLayout>
   </ScrollView>
+
+  <!--<TextView-->
+  <!--android:layout_width="match_parent"-->
+  <!--android:layout_height="@dimen/layout_height_normal"-->
+  <!--android:gravity="center_vertical"-->
+  <!--android:paddingLeft="@dimen/padding_small"-->
+  <!--android:text="@string/test_text_short"-->
+  <!--android:textColor="@color/one_text_color"-->
+  <!--custom:layout_flexBasisPercent="49%" />-->
 
 </LinearLayout>

@@ -21,7 +21,6 @@ public class DBManager {
     public final static String myChannelDb = "my_channel_db";
     public final static String otherChannelDb = "other_channel_db";
     public final static String videoDb = "video_ch_db";
-    public final static String historyDb = "history_db";
 
     private static DBManager mInstance;
     private DaoMaster.DevOpenHelper myHelper;
@@ -35,7 +34,6 @@ public class DBManager {
         myHelper = new DaoMaster.DevOpenHelper(context, myChannelDb, null);
         otherHelper = new DaoMaster.DevOpenHelper(context, otherChannelDb, null);
         videoHelper = new DaoMaster.DevOpenHelper(context, videoDb, null);
-        historyHelper = new DaoMaster.DevOpenHelper(context, historyDb, null);
     }
 
     /**
@@ -68,16 +66,11 @@ public class DBManager {
                 otherHelper = new DaoMaster.DevOpenHelper(context, otherChannelDb, null);
             }
             db = otherHelper.getReadableDatabase();
-        } else if (TextUtils.equals(type, videoDb)) {
+        } else {
             if (videoHelper == null) {
                 videoHelper = new DaoMaster.DevOpenHelper(context, videoDb, null);
             }
             db = videoHelper.getReadableDatabase();
-        } else {
-            if (historyHelper == null) {
-                historyHelper = new DaoMaster.DevOpenHelper(context, historyDb, null);
-            }
-            db = historyHelper.getReadableDatabase();
         }
 
         return db;
@@ -98,16 +91,11 @@ public class DBManager {
                 otherHelper = new DaoMaster.DevOpenHelper(context, otherChannelDb, null);
             }
             db = otherHelper.getWritableDatabase();
-        } else if (TextUtils.equals(type, videoDb)) {
+        } else {
             if (videoHelper == null) {
                 videoHelper = new DaoMaster.DevOpenHelper(context, videoDb, null);
             }
             db = videoHelper.getWritableDatabase();
-        } else {
-            if (historyHelper == null) {
-                historyHelper = new DaoMaster.DevOpenHelper(context, historyDb, null);
-            }
-            db = historyHelper.getWritableDatabase();
         }
 
         return db;

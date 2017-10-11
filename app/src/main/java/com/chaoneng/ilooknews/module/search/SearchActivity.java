@@ -23,10 +23,16 @@ import com.chaoneng.ilooknews.util.CompatUtil;
 import com.chaoneng.ilooknews.util.IntentHelper;
 import com.chaoneng.ilooknews.widget.adapter.AbsTextWatcher;
 import com.google.android.flexbox.FlexboxLayout;
+import com.magicalxu.library.blankj.SPUtils;
 import com.magicalxu.library.blankj.SizeUtils;
-import com.magicalxu.library.blankj.ToastUtils;
+import com.qmuiteam.qmui.widget.dialog.QMUIDialog;
+import com.qmuiteam.qmui.widget.dialog.QMUIDialogAction;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import retrofit2.Call;
+
+import static com.chaoneng.ilooknews.AppConstant.SEARCH_HISTORY;
 
 /**
  * Created by magical on 2017/8/23.
@@ -43,6 +49,8 @@ public class SearchActivity extends BaseActivity {
     @BindView(R.id.id_recommend_container) FlexboxLayout mRecommendContainer;
 
     private SearchService service;
+    private ArrayList<String> historyList;
+    private QMUIDialog mClearDialog;
 
     @OnClick({ R.id.iv_back, R.id.btn_search })
     public void onViewClicked(View view) {
@@ -52,7 +60,6 @@ public class SearchActivity extends BaseActivity {
                 break;
             case R.id.btn_search:
                 if (btnSearch.isClickable()) {
-                    ToastUtils.showShort("搜索");
                     handleSearch();
                 }
                 break;
@@ -66,6 +73,14 @@ public class SearchActivity extends BaseActivity {
             return;
         }
 
+        saveSearchHistory(keyword);
+
+        IntentHelper.openSearchDetailPage(this, keyword);
+    }
+
+    private void handleSearch(String keyword) {
+
+        saveSearchHistory(keyword);
         IntentHelper.openSearchDetailPage(this, keyword);
     }
 
@@ -76,6 +91,8 @@ public class SearchActivity extends BaseActivity {
 
     @Override
     public void handleChildPage(Bundle savedInstanceState) {
+
+        initHistorySearch();
 
         service = NetRequest.getInstance().create(SearchService.class);
         btnSearch.setClickable(false);
@@ -107,8 +124,27 @@ public class SearchActivity extends BaseActivity {
                 //.setRightDrawable(R.drawable.ic_delete_history)
                 .hideRightArrow();
 
-        loadHistory();
+        //loadHistory();
         loadRecommend();
+    }
+
+    private void initHistorySearch() {
+        String longHistory = SPUtils.getInstance().getString(AppConstant.SEARCH_HISTORY, "");
+        String[] tmpHistory = longHistory.split(",");                            //split后长度为1有一个空串对象
+        historyList = new ArrayList<>(Arrays.asList(tmpHistory));
+
+        if (historyList.size() == 1 && historyList.get(0)
+                .equals("")) {          //如果没有搜索记录，split之后第0位是个空串的情况下
+            historyList.clear();        //清空集合，这个很关键
+        }
+
+        if (historyList.size() > 0) {
+            mHistory.setVisibility(View.VISIBLE);
+        } else {
+            mHistory.setVisibility(View.GONE);
+        }
+
+        addHistoryView(historyList);
     }
 
     /**
@@ -116,6 +152,28 @@ public class SearchActivity extends BaseActivity {
      */
     private void onDelHistory() {
 
+        if (null == mClearDialog) {
+            mClearDialog = new QMUIDialog.MessageDialogBuilder(this).setTitle("提示")
+                    .setMessage("确定删除搜索历史吗")
+                    .addAction("取消", new QMUIDialogAction.ActionListener() {
+                        @Override
+                        public void onClick(QMUIDialog dialog, int index) {
+                            dialog.dismiss();
+                        }
+                    })
+                    .addAction("确定", new QMUIDialogAction.ActionListener() {
+                        @Override
+                        public void onClick(QMUIDialog dialog, int index) {
+                            dialog.dismiss();
+                            historyList.clear();                            //清空集合
+                            SPUtils.getInstance().remove(SEARCH_HISTORY);   //清空sp
+                            mHistoryContainer.removeAllViews();
+                            mHistory.setVisibility(View.GONE);
+                        }
+                    })
+                    .create();
+        }
+        mClearDialog.show();
     }
 
     private void loadRecommend() {
@@ -138,6 +196,7 @@ public class SearchActivity extends BaseActivity {
         });
     }
 
+    @Deprecated
     private void loadHistory() {
 
         Call<HttpResult<SearchHistory>> searchHistory =
@@ -147,7 +206,7 @@ public class SearchActivity extends BaseActivity {
             public void onSuccess(SearchHistory data) {
 
                 List<SearchHistory.ListBean> list = data.list;
-                addHistoryView(list);
+                //addHistoryView(list);
             }
 
             @Override
@@ -160,17 +219,23 @@ public class SearchActivity extends BaseActivity {
     /**
      * 将搜索历史添加到 FlexboxLayout中
      */
-    private void addHistoryView(List<SearchHistory.ListBean> list) {
+    private void addHistoryView(List<String> list) {
 
         LayoutInflater inflater = getLayoutInflater();
         for (int i = 0; i < list.size(); i++) {
-            SearchHistory.ListBean listBean = list.get(i);
+            final String keyword = list.get(i);
             ViewGroup view = (ViewGroup) inflater.inflate(R.layout.include_search_item_view, null);
 
             //TextView textView = new TextView(this);
             //textView.setTextColor(CompatUtil.getColor(this, R.color.one_text_color));
             TextView textView = (TextView) view.getChildAt(0);
-            textView.setText(listBean.keyText);
+            textView.setText(keyword);
+            textView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    handleSearch(keyword);
+                }
+            });
             //textView.setPadding(SizeUtils.dp2px(8), 0, 0, 0);
             //textView.setGravity(Gravity.CENTER_VERTICAL);
 
@@ -188,13 +253,19 @@ public class SearchActivity extends BaseActivity {
 
         LayoutInflater inflater = getLayoutInflater();
         for (int i = 0; i < list.size(); i++) {
-            SearchRecommend.ListBean listBean = list.get(i);
+            final SearchRecommend.ListBean listBean = list.get(i);
             ViewGroup view = (ViewGroup) inflater.inflate(R.layout.include_search_item_view, null);
 
             //TextView textView = new TextView(this);
             //textView.setTextColor(CompatUtil.getColor(this, R.color.one_text_color));
             TextView textView = (TextView) view.getChildAt(0);
             textView.setText(listBean.keyText);
+            textView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    handleSearch(listBean.keyText);
+                }
+            });
             //textView.setPadding(SizeUtils.dp2px(8), 0, 0, 0);
             //textView.setGravity(Gravity.CENTER_VERTICAL);
 
@@ -202,6 +273,52 @@ public class SearchActivity extends BaseActivity {
                     ViewGroup.LayoutParams.MATCH_PARENT);
             params.setFlexBasisPercent(0.49f);
             mRecommendContainer.addView(view, params);
+        }
+    }
+
+    /**
+     * 保存搜索记录
+     *
+     * @param inputText 输入的历史记录
+     */
+    private void saveSearchHistory(String inputText) {
+
+        if (TextUtils.isEmpty(inputText)) {
+            return;
+        }
+
+        String longHistory = SPUtils.getInstance()
+                .getString(AppConstant.SEARCH_HISTORY, "");        //获取之前保存的历史记录
+
+        String[] tmpHistory = longHistory.split(",");              //逗号截取 保存在数组中
+
+        historyList = new ArrayList<>(Arrays.asList(tmpHistory));          //将改数组转换成ArrayList
+
+        if (historyList.size() > 0) {
+            //移除之前重复添加的元素
+            for (int i = 0; i < historyList.size(); i++) {
+                if (inputText.equals(historyList.get(i))) {
+                    historyList.remove(i);
+                    break;
+                }
+            }
+
+            historyList.add(0, inputText);                           //将新输入的文字添加集合的第0位也就是最前面
+
+            if (historyList.size() > 6) {
+                historyList.remove(historyList.size() - 1);         //最多保存6条搜索记录 删除最早搜索的那一项
+            }
+
+            //逗号拼接
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < historyList.size(); i++) {
+                sb.append(historyList.get(i)).append(",");
+            }
+            //保存到sp
+            SPUtils.getInstance().put(AppConstant.SEARCH_HISTORY, sb.toString());
+        } else {
+            //之前未添加过
+            SPUtils.getInstance().put(AppConstant.SEARCH_HISTORY, inputText + ",");
         }
     }
 }

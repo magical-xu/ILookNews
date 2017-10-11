@@ -22,5 +22,6 @@
       android:layout_gravity="center_vertical"
       android:paddingLeft="@dimen/padding_small"
       android:paddingRight="@dimen/padding_small"
-      android:src="@drawable/ic_delete_input" />
+      android:src="@drawable/ic_delete_input"
+      android:visibility="gone" />
 </LinearLayout>
