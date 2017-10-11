@@ -128,7 +128,7 @@ public class NewsListFragment extends BaseFragment {
                 int itemType = bean.getItemType();
                 String newId = bean.newId;
                 if (itemType == NewsListBean.VIDEO) {
-                    IntentHelper.openVideoDetailPage(getActivity(), "", 0);
+                    IntentHelper.openVideoDetailPage(getActivity(), "", 0, bean.type);
                 } else if (itemType == NewsListBean.TEXT) {
                     IntentHelper.openNewsDetailPage(mContext, newId, itemType);
                 } else if (itemType == NewsListBean.IMAGE) {
@@ -173,7 +173,7 @@ public class NewsListFragment extends BaseFragment {
                 }
 
                 //noinspection unchecked
-                mRefreshHelper.setData(data.list,data.havePage);
+                mRefreshHelper.setData(data.list, data.havePage);
             }
 
             @Override

@@ -49,8 +49,9 @@ public class IntentHelper {
      *
      * @param seek 播放进度
      */
-    public static void openVideoDetailPage(Context context, String vid, long seek) {
-        VideoDetailActivity.newInstance(context, vid, seek);
+    public static void openVideoDetailPage(Context context, String vid, long seek,
+            int newsType) {
+        VideoDetailActivity.newInstance(context, vid, seek, newsType);
     }
 
     /**
@@ -99,7 +100,7 @@ public class IntentHelper {
      * 跳转用户中心界面
      */
     public static void openUserCenterPage(Context context, @NonNull String uid) {
-        UserCenterActivity.getInstance(context,uid);
+        UserCenterActivity.getInstance(context, uid);
     }
 
     /**

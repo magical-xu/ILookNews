@@ -44,6 +44,7 @@ public class NewsInfo implements Serializable {
 
     //视频多出来的
     public String video_url;
+    public int play_count;
 
     //图文多出来的
     public String content;

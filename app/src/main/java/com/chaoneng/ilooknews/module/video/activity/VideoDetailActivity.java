@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ import com.chaoneng.ilooknews.R;
 import com.chaoneng.ilooknews.api.HomeService;
 import com.chaoneng.ilooknews.base.BaseActivity;
 import com.chaoneng.ilooknews.data.MockServer;
+import com.chaoneng.ilooknews.data.NewsInfo;
 import com.chaoneng.ilooknews.data.NewsInfoWrapper;
 import com.chaoneng.ilooknews.instance.VideoManager;
 import com.chaoneng.ilooknews.library.gsyvideoplayer.VideoHelper;
@@ -26,9 +28,10 @@ import com.chaoneng.ilooknews.net.callback.SimpleCallback;
 import com.chaoneng.ilooknews.net.client.NetRequest;
 import com.chaoneng.ilooknews.net.data.HttpResult;
 import com.chaoneng.ilooknews.util.BottomHelper;
+import com.chaoneng.ilooknews.util.IntentHelper;
 import com.chaoneng.ilooknews.util.RefreshHelper;
+import com.chaoneng.ilooknews.util.StringHelper;
 import com.chaoneng.ilooknews.widget.image.HeadImageView;
-import com.magicalxu.library.blankj.ToastUtils;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
@@ -70,14 +73,17 @@ public class VideoDetailActivity extends BaseActivity {
     private boolean isPause;
 
     private OrientationUtils orientationUtils;
+    private String PAGE_VIDEO_URL;
 
     private String PAGE_VID;        //新闻 vid
     private long PAGE_PROGRESS;     //当前播放进度
+    private int PAGE_NEWS_TYPE;
 
-    public static void newInstance(Context context, String vid, long seek) {
+    public static void newInstance(Context context, String vid, long seek, int newsType) {
         Intent intent = new Intent(context, VideoDetailActivity.class);
         intent.putExtra(AppConstant.PAGE_TYPE, vid);
         intent.putExtra(AppConstant.PAGE_PROGRESS, seek);
+        intent.putExtra(AppConstant.PARAMS_NEWS_TYPE, newsType);
         context.startActivity(intent);
     }
 
@@ -95,20 +101,12 @@ public class VideoDetailActivity extends BaseActivity {
         mRefreshHelper = new RefreshHelper(mRefreshLayout, mAdapter, mRecyclerView) {
             @Override
             public void onRequest(int page) {
-                mockServer.mockGankCall(page, MockServer.Type.VIDEO_COMMENT);
+                //mockServer.mockGankCall(page, MockServer.Type.VIDEO_COMMENT);
+                loadData(page);
             }
         };
 
         service = NetRequest.getInstance().create(HomeService.class);
-        mockServer = MockServer.getInstance();
-        mockServer.init(mRefreshHelper);
-        bindHeader();
-
-        orientationUtils = new OrientationUtils(this, mVideoPlayer);
-        orientationUtils.setEnable(false);
-        VideoHelper.initDetailPage(this, AppConstant.TEST_VIDEO_URL, mVideoPlayer, orientationUtils,
-                PAGE_PROGRESS);
-
         mRefreshHelper.beginLoadData();
     }
 
@@ -118,10 +116,16 @@ public class VideoDetailActivity extends BaseActivity {
         if (null != intent) {
             PAGE_VID = intent.getStringExtra(AppConstant.PAGE_TYPE);
             PAGE_PROGRESS = intent.getLongExtra(AppConstant.PAGE_PROGRESS, 0);
+            PAGE_NEWS_TYPE = intent.getIntExtra(AppConstant.PARAMS_NEWS_TYPE, 0);
         }
     }
 
-    private void bindHeader() {
+    private void bindHeader(NewsInfo info) {
+
+        if (null == info) {
+            return;
+        }
+
         View view = getLayoutInflater().inflate(R.layout.header_video_coments, null);
 
         mHeaderTitle = view.findViewById(R.id.tv_title);
@@ -132,14 +136,21 @@ public class VideoDetailActivity extends BaseActivity {
         mHeaderName = view.findViewById(R.id.id_header_name);
         mHeaderFocus = view.findViewById(R.id.id_header_focus);
 
-        mHeaderIv.setHeadImage(AppConstant.TEST_AVATAR);
-        mHeaderDown.setText("123");
-        mHeaderUp.setText("35");
+        mHeaderIv.setHeadImage(StringHelper.getString(info.userIcon));
+        mHeaderDown.setText(String.valueOf(info.dislike_count));
+        mHeaderUp.setText(String.valueOf(info.like_count));
         mHeaderFocus.setText("关注");
-        mHeaderName.setText("magical");
-        mHeaderNum.setText("3333次播放");
-        mHeaderTitle.setText("繁华过后你还有我");
+        mHeaderName.setText(StringHelper.getString(info.nickname));
+        mHeaderNum.setText(String.format(getString(R.string.video_play_times),
+                String.valueOf(info.play_count)));
+        mHeaderTitle.setText(StringHelper.getString(info.title));
         mAdapter.addHeaderView(view);
+
+        PAGE_VIDEO_URL = info.video_url;
+        orientationUtils = new OrientationUtils(this, mVideoPlayer);
+        orientationUtils.setEnable(false);
+        VideoHelper.initDetailPage(this, info.video_url, mVideoPlayer, orientationUtils,
+                PAGE_PROGRESS);
     }
 
     private void checkTitle() {
@@ -154,7 +165,6 @@ public class VideoDetailActivity extends BaseActivity {
         mTitleShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ToastUtils.showShort("分享");
                 onShowShare();
             }
         });
@@ -162,10 +172,10 @@ public class VideoDetailActivity extends BaseActivity {
 
     private void onShowShare() {
 
-        //IntentHelper.openShareBottomPage(this,PAGE_VID,);
+        IntentHelper.openShareBottomPage(this, PAGE_VID, PAGE_NEWS_TYPE);
     }
 
-    private void loadData(int page) {
+    private void loadData(final int page) {
 
         showLoading();
         Call<HttpResult<NewsInfoWrapper>> call = service.getNewsDetail(PAGE_VID, 1);
@@ -173,10 +183,18 @@ public class VideoDetailActivity extends BaseActivity {
             @Override
             public void onSuccess(NewsInfoWrapper data) {
 
+                hideLoading();
+                if (page == 1) {
+                    bindHeader(data.newInfo);
+                }
+
+                //noinspection unchecked
+                mRefreshHelper.setData(data.commentlist, data.haveNext);
             }
 
             @Override
             public void onFail(String code, String errorMsg) {
+                mRefreshHelper.onFail();
                 onSimpleError(errorMsg);
             }
         });
@@ -206,7 +224,9 @@ public class VideoDetailActivity extends BaseActivity {
         long progress = GSYVideoManager.instance().getMediaPlayer().getCurrentPosition();
         Log.d("magical", " detail : " + progress);
         //if (-1 != progress) {
-        VideoManager.getInstance().putProgress(AppConstant.TEST_VIDEO_URL, progress);
+        if (!TextUtils.isEmpty(PAGE_VIDEO_URL)) {
+            VideoManager.getInstance().putProgress(AppConstant.TEST_VIDEO_URL, progress);
+        }
         //}
 
         mVideoPlayer.getCurrentPlayer().release();

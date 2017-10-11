@@ -122,7 +122,7 @@ public class MockServer<T> {
         for (int i = 0; i < 10; i++) {
             NewsListBean user = new NewsListBean();
             user.newId = String.valueOf(i);
-            user.video_url = AppConstant.TEST_VIDEO_URL;
+            user.videoUrl = AppConstant.TEST_VIDEO_URL;
             list.add(user);
         }
         return list;

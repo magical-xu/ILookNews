@@ -69,7 +69,7 @@ public class NewsListAdapter extends BaseMultiItemQuickAdapter<NewsListBean, Bas
         helper.setText(R.id.id_bottom_time, item.createTime);
 
         StandardGSYVideoPlayer mVideoPlayer = helper.getView(R.id.videoplayer);
-        VideoHelper.initPlayer(mContext, mVideoPlayer, item.video_url, item.title, null);
+        VideoHelper.initPlayer(mContext, mVideoPlayer, item.videoUrl, item.title, null);
     }
 
     private void bindThreeImg(BaseViewHolder helper, NewsListBean item) {

@@ -13,6 +13,8 @@ public interface AppConstant {
     String NEWS_TEXT_SIZE = "news_text_size";
     String SEARCH_HISTORY = "search_history";
 
+    String VIDEO_SUFFIX = "?vframe/jpg/offset/1/w/640/h/360";
+
     String REMOTE_HOST = "http://owfsbxql8.bkt.clouddn.com/";
 
     String NONE_VALUE = "0";

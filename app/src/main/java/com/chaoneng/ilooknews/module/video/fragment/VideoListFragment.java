@@ -7,7 +7,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import butterknife.BindView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chaoneng.ilooknews.AppConstant;
@@ -52,6 +54,8 @@ public class VideoListFragment extends BaseFragment {
     private String mCid;
     private HomeService service;
 
+    private View mEmptyView;
+
     public static VideoListFragment newInstance(String type) {
         VideoListFragment fragment = new VideoListFragment();
         Bundle bundle = new Bundle();
@@ -64,10 +68,10 @@ public class VideoListFragment extends BaseFragment {
     protected void lazyLoad() {
         super.lazyLoad();
         mRefreshHelper.beginLoadData();
-        load(1);
+        //load(1);
     }
 
-    private void load(int page) {
+    private void load(final int page) {
 
         showLoading();
         Call<HttpResult<NewsListWrapper>> call =
@@ -77,7 +81,15 @@ public class VideoListFragment extends BaseFragment {
             public void onSuccess(NewsListWrapper data) {
 
                 hideLoading();
-                mRefreshHelper.finishRefresh();
+
+                if (page == 1 && (null == data || null == data.list || data.list.size() == 0)) {
+                    mRefreshHelper.finishRefresh();
+                    mAdapter.setEmptyView(mEmptyView);
+                    return;
+                }
+
+                //noinspection unchecked
+                mRefreshHelper.setData(data.list, data.havePage);
             }
 
             @Override
@@ -97,11 +109,12 @@ public class VideoListFragment extends BaseFragment {
         mRefreshHelper = new RefreshHelper(mRefreshLayout, mAdapter, mRecyclerView) {
             @Override
             public void onRequest(int page) {
-                mockServer.mockGankCall(page, MockServer.Type.VIDEO_LIST);
+                //mockServer.mockGankCall(page, MockServer.Type.VIDEO_LIST);
+                load(page);
             }
         };
-        mockServer = MockServer.getInstance();
-        mockServer.init(mRefreshHelper);
+        //mockServer = MockServer.getInstance();
+        //mockServer.init(mRefreshHelper);
 
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
 
@@ -161,6 +174,9 @@ public class VideoListFragment extends BaseFragment {
                 handleItemClick(position);
             }
         });
+
+        mEmptyView = LayoutInflater.from(getActivity())
+                .inflate(R.layout.base_empty_view, (ViewGroup) mRecyclerView.getParent(), false);
     }
 
     private void handleItemClick(int position) {
@@ -178,6 +194,7 @@ public class VideoListFragment extends BaseFragment {
         }
 
         String newsId = videoListBean.newId;
+        int newsType = videoListBean.type;
 
         long progress = 0;
         //int curPos = GSYVideoManager.instance().getPlayPosition();
@@ -196,7 +213,7 @@ public class VideoListFragment extends BaseFragment {
         int playPos = GSYVideoManager.instance().getPlayPosition();
         Log.d("magical", " play pos : " + playPos);
         if (playPos != VideoManager.ERROR_PLAY_POS && data.size() > playPos) {
-            String url = data.get(playPos).video_url;
+            String url = data.get(playPos).videoUrl;
             Log.d("magical", " play url : " + url);
 
             if (!TextUtils.isEmpty(url)) {
@@ -207,7 +224,7 @@ public class VideoListFragment extends BaseFragment {
         }
 
         // 跳转视频详情播放
-        IntentHelper.openVideoDetailPage(getActivity(), newsId, progress);
+        IntentHelper.openVideoDetailPage(getActivity(), newsId, progress, newsType);
     }
 
     private void checkBundle() {
