@@ -7,7 +7,6 @@ import android.view.View;
 import android.widget.ImageView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
-import com.chaoneng.ilooknews.AppConstant;
 import com.chaoneng.ilooknews.R;
 import com.chaoneng.ilooknews.library.glide.ImageLoader;
 import com.chaoneng.ilooknews.module.user.data.BrokeListBean;
@@ -34,9 +33,10 @@ public class BrokeNewsListAdapter extends BaseQuickAdapter<BrokeListBean, BaseVi
     @Override
     protected void convert(BaseViewHolder helper, BrokeListBean item) {
 
-        ((HeadImageView) helper.getView(R.id.iv_avatar)).setHeadImage(AppConstant.TEST_AVATAR);
+        ((HeadImageView) helper.getView(R.id.iv_avatar)).setHeadImage(
+                StringHelper.getString(item.userIcon));
 
-        helper.setText(R.id.tv_name, "超能工作室");
+        helper.setText(R.id.tv_name, StringHelper.getString(item.nickname));
         helper.setText(R.id.tv_time, StringHelper.getString(item.createtime));
         helper.setText(R.id.tv_title, StringHelper.getString(item.context));
 
@@ -64,7 +64,6 @@ public class BrokeNewsListAdapter extends BaseQuickAdapter<BrokeListBean, BaseVi
             }
 
             flexboxLayout.setVisibility(size == 0 ? View.GONE : View.VISIBLE);
-
         } catch (JSONException e) {
             flexboxLayout.setVisibility(View.GONE);
             e.printStackTrace();

@@ -107,7 +107,10 @@ public class NewsDetailActivity extends BaseActivity {
         mRefreshHelper = new RefreshHelper<CommentBean>(mRefreshLayout, mAdapter, mRecyclerView) {
             @Override
             public void onRequest(int page) {
-                loadData(page);
+                if (page == 1) {
+                    loadData(1);//加载新闻
+                }
+                loadComment(page);
             }
         };
         mAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
@@ -158,32 +161,65 @@ public class NewsDetailActivity extends BaseActivity {
         }
 
         int subType = hasPraise ? 2 : 1;
+
+        String userId = AccountManager.getInstance().getUserId();
+        showLoading();
         Call<HttpResult<JSONObject>> call =
-                homeService.optLike(AppConstant.TEST_USER_ID, null, type, cid, subType);
+                homeService.optLike(StringHelper.getString(userId), null, type, cid, subType);
         call.enqueue(new SimpleCallback<JSONObject>() {
             @Override
             public void onSuccess(JSONObject data) {
 
+                hideLoading();
                 if (position == AppConstant.INVALIDATE) {
 
+                    onOptLikeSuccess(hasPraise);
                 } else {
-                    if (hasPraise) {
-                        //取消点赞成功
-                        ToastUtils.showShort("取消点赞成功");
-                        //commentBean.isFollow = AppConstant.UN_PRAISE;
-                    } else {
-                        //点赞成功
-                        ToastUtils.showShort("点赞成功");
-                        //commentBean.isFollow = AppConstant.HAS_PRAISE;
+
+                    List<CommentBean> listData = mAdapter.getData();
+                    if (listData.size() > position) {
+                        CommentBean commentBean = listData.get(position);
+                        if (hasPraise) {
+                            //取消点赞成功
+                            ToastUtils.showShort("取消点赞成功");
+                            commentBean.isFollow = AppConstant.UN_PRAISE;
+                            commentBean.careCount--;
+                            mAdapter.notifyDataSetChanged();
+                        } else {
+                            //点赞成功
+                            ToastUtils.showShort("点赞成功");
+                            commentBean.isFollow = AppConstant.HAS_PRAISE;
+                            commentBean.careCount++;
+                            mAdapter.notifyDataSetChanged();
+                        }
                     }
                 }
             }
 
             @Override
             public void onFail(String code, String errorMsg) {
-                ToastUtils.showShort(errorMsg);
+                onSimpleError(errorMsg);
             }
         });
+    }
+
+    private void onOptLikeSuccess(boolean hasPraise) {
+
+        if (hasPraise) {
+            //不喜欢+1
+            String disLikeCount = mDownView.getText().toString();
+            if (TextUtils.isDigitsOnly(disLikeCount)) {
+                int disCount = Integer.parseInt(disLikeCount);
+                mDownView.setText(String.valueOf(disCount + 1));
+            }
+        } else {
+            //喜欢+1
+            String likeCount = mUpView.getText().toString();
+            if (TextUtils.isDigitsOnly(likeCount)) {
+                int lCount = Integer.parseInt(likeCount);
+                mUpView.setText(String.valueOf(lCount + 1));
+            }
+        }
     }
 
     private void checkIntent() {
@@ -209,6 +245,23 @@ public class NewsDetailActivity extends BaseActivity {
         mHeaderIntro = header.findViewById(R.id.tv_intro);
         mHeaderFocus = header.findViewById(R.id.tv_focus);
 
+        mUpView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // like
+                hasNewsPraise = false;
+                onPraise(AppConstant.INVALIDATE);
+            }
+        });
+        mDownView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // dislike
+                hasNewsPraise = true;
+                onPraise(AppConstant.INVALIDATE);
+            }
+        });
+
         configWebView();
         mAdapter.addHeaderView(header);
     }
@@ -227,7 +280,6 @@ public class NewsDetailActivity extends BaseActivity {
                     @Override
                     public void onClickRightImage(View view) {
                         super.onClickRightImage(view);
-                        ToastUtils.showShort("分享");
                         IntentHelper.openShareBottomPage(NewsDetailActivity.this, PAGE_NEWS_ID,
                                 PAGE_NEWS_TYPE);
                     }
@@ -251,7 +303,7 @@ public class NewsDetailActivity extends BaseActivity {
                     bindHeader(data.newInfo);
                 }
 
-                bindItem(data.commentlist, data.haveNext);
+                //bindItem(data.commentlist, data.haveNext);
             }
 
             @Override
@@ -354,6 +406,7 @@ public class NewsDetailActivity extends BaseActivity {
     private void loadComment(int page) {
 
         showLoading();
+        mRefreshHelper.setCurPage(page);
         Call<HttpResult<NewsInfoWrapper>> call =
                 homeService.getNewsComment(PAGE_NEWS_ID, PAGE_NEWS_TYPE, AppConstant.NONE_VALUE,
                         page, AppConstant.DEFAULT_PAGE_SIZE);

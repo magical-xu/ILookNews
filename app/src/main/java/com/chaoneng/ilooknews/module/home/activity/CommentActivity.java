@@ -235,12 +235,16 @@ public class CommentActivity extends BaseActivity {
         //}
 
         int subType = hasPraise ? 2 : 1;
+
+        String userId = AccountManager.getInstance().getUserId();
+        showLoading();
         Call<HttpResult<JSONObject>> call =
-                homeService.optLike(AppConstant.TEST_USER_ID, null, type, cid, subType);
+                homeService.optLike(StringHelper.getString(userId), null, type, cid, subType);
         call.enqueue(new SimpleCallback<JSONObject>() {
             @Override
             public void onSuccess(JSONObject data) {
 
+                hideLoading();
                 if (position == AppConstant.INVALIDATE) {
 
                 } else {
@@ -261,7 +265,7 @@ public class CommentActivity extends BaseActivity {
 
             @Override
             public void onFail(String code, String errorMsg) {
-                ToastUtils.showShort(errorMsg);
+                onSimpleError(errorMsg);
             }
         });
     }

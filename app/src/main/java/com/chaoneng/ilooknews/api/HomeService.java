@@ -83,7 +83,8 @@ public interface HomeService {
      * 收藏
      */
     @POST("addCollection")
-    Call<HttpResult<String>> addCollection(@Query("userid") String userId, @Query("nid") String nid,
+    Call<HttpResult<JSONObject>> addCollection(@Query("userid") String userId,
+            @Query("nid") String nid,
             @Query("newtype") int type);
 
     /**

@@ -20,6 +20,7 @@ import com.chaoneng.ilooknews.base.BaseActivity;
 import com.chaoneng.ilooknews.data.ImageInfo;
 import com.chaoneng.ilooknews.data.NewsInfo;
 import com.chaoneng.ilooknews.data.NewsInfoWrapper;
+import com.chaoneng.ilooknews.instance.AccountManager;
 import com.chaoneng.ilooknews.module.home.fragment.PhotoDetailFragment;
 import com.chaoneng.ilooknews.net.callback.SimpleCallback;
 import com.chaoneng.ilooknews.net.client.NetRequest;
@@ -27,6 +28,7 @@ import com.chaoneng.ilooknews.net.data.HttpResult;
 import com.chaoneng.ilooknews.util.BottomHelper;
 import com.chaoneng.ilooknews.util.CompatUtil;
 import com.chaoneng.ilooknews.util.IntentHelper;
+import com.chaoneng.ilooknews.util.StringHelper;
 import com.chaoneng.ilooknews.widget.adapter.BaseFragmentAdapter;
 import com.chaoneng.ilooknews.widget.adapter.OnPageChangeListener;
 import com.chaoneng.ilooknews.widget.ilook.ILookTitleBar;
@@ -108,12 +110,13 @@ public class NewsPhotoDetailActivity extends BaseActivity {
     private void loadData() {
 
         service = NetRequest.getInstance().create(HomeService.class);
-        Call<HttpResult<NewsInfoWrapper>> call =
-                service.getNewsDetail(AppConstant.TEST_PHOTO_NEWS_ID, 3);
+        showLoading();
+        Call<HttpResult<NewsInfoWrapper>> call = service.getNewsDetail(PAGE_NEWS_ID, 3);
         call.enqueue(new SimpleCallback<NewsInfoWrapper>() {
             @Override
             public void onSuccess(NewsInfoWrapper data) {
 
+                hideLoading();
                 if (null == data) {
                     Timber.e("data is null");
                     return;
@@ -130,7 +133,7 @@ public class NewsPhotoDetailActivity extends BaseActivity {
 
             @Override
             public void onFail(String code, String errorMsg) {
-                ToastUtils.showShort(errorMsg);
+                onSimpleError(errorMsg);
             }
         });
     }
@@ -145,13 +148,15 @@ public class NewsPhotoDetailActivity extends BaseActivity {
                     @Override
                     public void onClickLeft(View view) {
                         super.onClickLeft(view);
+                        KeyboardUtils.hideSoftInput(NewsPhotoDetailActivity.this);
                         finish();
                     }
 
                     @Override
                     public void onClickRightImage(View view) {
                         super.onClickRightImage(view);
-                        ToastUtils.showShort("分享");
+                        IntentHelper.openShareBottomPage(NewsPhotoDetailActivity.this, PAGE_NEWS_ID,
+                                PAGE_NEWS_TYPE);
                     }
                 });
     }
@@ -207,6 +212,27 @@ public class NewsPhotoDetailActivity extends BaseActivity {
         IntentHelper.openNewsCommentPage(this, PAGE_NEWS_ID, PAGE_NEWS_TYPE);
     }
 
+    @OnClick(R.id.id_bottom_star)
+    public void onClickStar(View view) {
+
+        String userId = AccountManager.getInstance().getUserId();
+        showLoading();
+        Call<HttpResult<JSONObject>> call =
+                service.addCollection(StringHelper.getString(userId), PAGE_NEWS_ID, PAGE_NEWS_TYPE);
+        call.enqueue(new SimpleCallback<JSONObject>() {
+            @Override
+            public void onSuccess(JSONObject data) {
+                hideLoading();
+                ToastUtils.showShort("收藏成功");
+            }
+
+            @Override
+            public void onFail(String code, String errorMsg) {
+                onSimpleError(errorMsg);
+            }
+        });
+    }
+
     @OnClick(R.id.id_send)
     public void onSendComment(View view) {
 
@@ -216,20 +242,24 @@ public class NewsPhotoDetailActivity extends BaseActivity {
             return;
         }
 
+        String userId = AccountManager.getInstance().getUserId();
+
         KeyboardUtils.hideSoftInput(this);
+        showLoading();
         Call<HttpResult<JSONObject>> call =
-                service.postNewsComment(AppConstant.TEST_USER_ID, PAGE_NEWS_ID, PAGE_NEWS_TYPE,
-                        AppConstant.NONE_VALUE, comment);
+                service.postNewsComment(StringHelper.getString(userId), PAGE_NEWS_ID,
+                        PAGE_NEWS_TYPE, AppConstant.NONE_VALUE, comment);
         call.enqueue(new SimpleCallback<JSONObject>() {
 
             @Override
             public void onSuccess(JSONObject data) {
+                hideLoading();
                 //onCommentSuccess();
             }
 
             @Override
             public void onFail(String code, String errorMsg) {
-                ToastUtils.showShort(errorMsg);
+                onSimpleError(errorMsg);
             }
         });
     }

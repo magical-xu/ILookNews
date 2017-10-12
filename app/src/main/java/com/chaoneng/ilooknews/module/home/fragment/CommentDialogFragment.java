@@ -15,6 +15,7 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chaoneng.ilooknews.AppConstant;
 import com.chaoneng.ilooknews.R;
 import com.chaoneng.ilooknews.api.HomeService;
@@ -32,6 +33,7 @@ import com.chaoneng.ilooknews.util.StringHelper;
 import com.magicalxu.library.blankj.KeyboardUtils;
 import com.magicalxu.library.blankj.ToastUtils;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import java.util.List;
 import org.json.JSONObject;
 import retrofit2.Call;
 
@@ -121,8 +123,68 @@ public class CommentDialogFragment extends BaseDialogFragment {
             }
         };
 
+        mAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+            @Override
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                switch (view.getId()) {
+                    case R.id.tv_up:
+                        onPraise(position);
+                        break;
+                }
+            }
+        });
+
         mEmptyView = LayoutInflater.from(getActivity())
                 .inflate(R.layout.base_empty_view, (ViewGroup) mRecyclerView.getParent(), false);
+    }
+
+    private void onPraise(final int position) {
+        int type;
+        final boolean hasPraise;
+        String cid;
+        //操作 评论列表
+
+        type = 11;
+        CommentBean commentBean = mAdapter.getData().get(position);
+        cid = commentBean.cid;
+        hasPraise = TextUtils.equals(AppConstant.HAS_PRAISE, commentBean.isFollow);
+
+        int subType = hasPraise ? 2 : 1;
+
+        String userId = AccountManager.getInstance().getUserId();
+        showLoading();
+        Call<HttpResult<JSONObject>> call =
+                homeService.optLike(StringHelper.getString(userId), null, type, cid, subType);
+        call.enqueue(new SimpleCallback<JSONObject>() {
+            @Override
+            public void onSuccess(JSONObject data) {
+
+                hideLoading();
+
+                List<CommentBean> listData = mAdapter.getData();
+                if (listData.size() > position) {
+                    CommentBean commentBean = listData.get(position);
+                    if (hasPraise) {
+                        //取消点赞成功
+                        ToastUtils.showShort("取消点赞成功");
+                        commentBean.isFollow = AppConstant.UN_PRAISE;
+                        commentBean.careCount--;
+                        mAdapter.notifyDataSetChanged();
+                    } else {
+                        //点赞成功
+                        ToastUtils.showShort("点赞成功");
+                        commentBean.isFollow = AppConstant.HAS_PRAISE;
+                        commentBean.careCount++;
+                        mAdapter.notifyDataSetChanged();
+                    }
+                }
+            }
+
+            @Override
+            public void onFail(String code, String errorMsg) {
+                onSimpleError(errorMsg);
+            }
+        });
     }
 
     @Override
@@ -164,6 +226,10 @@ public class CommentDialogFragment extends BaseDialogFragment {
     @OnClick(R.id.id_send)
     public void sendComment() {
 
+        if (isLoading()) {
+            return;
+        }
+
         String comment = mInputView.getText().toString().trim();
         if (TextUtils.isEmpty(comment)) {
             ToastUtils.showShort(R.string.comment_can_not_be_null);
@@ -173,6 +239,7 @@ public class CommentDialogFragment extends BaseDialogFragment {
         String userId = AccountManager.getInstance().getUserId();
 
         KeyboardUtils.hideSoftInput(getActivity());
+        showLoading();
         Call<HttpResult<JSONObject>> call =
                 homeService.postNewsComment(StringHelper.getString(userId), PAGE_NEWS_ID,
                         PAGE_NEWS_TYPE, PAGE_CID, comment);
@@ -185,12 +252,13 @@ public class CommentDialogFragment extends BaseDialogFragment {
 
             @Override
             public void onFail(String code, String errorMsg) {
-                ToastUtils.showShort(errorMsg);
+                onSimpleError(errorMsg);
             }
         });
     }
 
     private void onCommentSuccess() {
+        hideLoading();
         mInputView.setText("");
         loadComment(1);
     }

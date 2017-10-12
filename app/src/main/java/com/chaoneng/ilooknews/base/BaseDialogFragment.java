@@ -43,6 +43,11 @@ public class BaseDialogFragment extends DialogFragment {
         mDialogManager.dismissDialog();
     }
 
+    public boolean isLoading() {
+        ensureDialogManager();
+        return mDialogManager.isShowing();
+    }
+
     /*************** 以下为方便调用 ***************************/
     protected void onSimpleError(String msg) {
         hideLoading();

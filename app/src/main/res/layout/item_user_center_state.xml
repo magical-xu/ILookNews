@@ -91,7 +91,7 @@
           android:layout_width="wrap_content"
           android:layout_height="match_parent"
           android:layout_marginRight="@dimen/padding_normal"
-          android:drawableLeft="@drawable/ic_profile_talk"
+          android:drawableLeft="@drawable/ic_up"
           android:drawablePadding="@dimen/padding_small"
           android:gravity="center_vertical"
           tools:text="123" />

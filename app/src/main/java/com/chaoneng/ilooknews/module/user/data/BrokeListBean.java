@@ -40,4 +40,6 @@ public class BrokeListBean {
     public String createtime;
     public int isdelete;
     public String remark;
+    public String nickname;
+    public String userIcon;
 }
