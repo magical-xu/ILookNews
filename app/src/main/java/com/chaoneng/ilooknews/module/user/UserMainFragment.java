@@ -131,7 +131,7 @@ public class UserMainFragment extends BaseFragment {
                 IntentHelper.openNotifyPage(getActivity());
                 break;
             case R.id.id_item_collect:
-                ToastUtils.showShort("我的收藏");
+                IntentHelper.openCollectionPage(getActivity());
                 break;
             case R.id.id_item_broke:
                 IntentHelper.openBrokePage(getActivity());

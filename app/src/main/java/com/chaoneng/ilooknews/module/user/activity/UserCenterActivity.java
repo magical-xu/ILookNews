@@ -50,9 +50,9 @@ public class UserCenterActivity extends BaseActivity {
     private UserService service;
     private String pageUid;
 
-    public static void getInstance(Context context,String userId){
-        Intent intent = new Intent(context,UserCenterActivity.class);
-        intent.putExtra(IntentHelper.PARAMS_ONE,userId);
+    public static void getInstance(Context context, String userId) {
+        Intent intent = new Intent(context, UserCenterActivity.class);
+        intent.putExtra(IntentHelper.PARAMS_ONE, userId);
         context.startActivity(intent);
     }
 
@@ -118,8 +118,7 @@ public class UserCenterActivity extends BaseActivity {
 
         showLoading();
         Call<HttpResult<UserInfoWrapper>> call =
-                service.getUserInfo(pageUid, pageUid, 1, 1,
-                        AppConstant.DEFAULT_PAGE_SIZE);
+                service.getUserInfo(pageUid, pageUid, 1, 1, AppConstant.DEFAULT_PAGE_SIZE);
         call.enqueue(new SimpleCallback<UserInfoWrapper>() {
             @Override
             public void onSuccess(UserInfoWrapper data) {

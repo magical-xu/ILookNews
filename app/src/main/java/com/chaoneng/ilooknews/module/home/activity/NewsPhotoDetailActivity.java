@@ -28,7 +28,9 @@ import com.chaoneng.ilooknews.net.data.HttpResult;
 import com.chaoneng.ilooknews.util.BottomHelper;
 import com.chaoneng.ilooknews.util.CompatUtil;
 import com.chaoneng.ilooknews.util.IntentHelper;
+import com.chaoneng.ilooknews.util.SimpleNotifyListener;
 import com.chaoneng.ilooknews.util.StringHelper;
+import com.chaoneng.ilooknews.util.UserOptionHelper;
 import com.chaoneng.ilooknews.widget.adapter.BaseFragmentAdapter;
 import com.chaoneng.ilooknews.widget.adapter.OnPageChangeListener;
 import com.chaoneng.ilooknews.widget.ilook.ILookTitleBar;
@@ -63,6 +65,7 @@ public class NewsPhotoDetailActivity extends BaseActivity {
     @BindView(R.id.id_bottom_comment) ViewGroup mCommentView;
     @BindView(R.id.id_bottom_star) ImageView mStarView;
     @BindView(R.id.id_bottom_share) ImageView mShareView;
+    @BindView(R.id.id_bottom_comment_count) TextView mCommentCountView;
 
     @BindView(R.id.id_real_bottom_edit) EditText mInputView;
     @BindView(R.id.id_send) TextView mSendView;
@@ -126,6 +129,13 @@ public class NewsPhotoDetailActivity extends BaseActivity {
                 if (null == newInfo) {
                     Timber.e("news info is null.");
                     return;
+                }
+
+                if (newInfo.commentCount == 0) {
+                    mCommentCountView.setVisibility(View.GONE);
+                } else {
+                    mCommentCountView.setVisibility(View.VISIBLE);
+                    mCommentCountView.setText(String.valueOf(newInfo.commentCount));
                 }
 
                 config(newInfo.pictures);
@@ -215,22 +225,19 @@ public class NewsPhotoDetailActivity extends BaseActivity {
     @OnClick(R.id.id_bottom_star)
     public void onClickStar(View view) {
 
-        String userId = AccountManager.getInstance().getUserId();
         showLoading();
-        Call<HttpResult<JSONObject>> call =
-                service.addCollection(StringHelper.getString(userId), PAGE_NEWS_ID, PAGE_NEWS_TYPE);
-        call.enqueue(new SimpleCallback<JSONObject>() {
-            @Override
-            public void onSuccess(JSONObject data) {
-                hideLoading();
-                ToastUtils.showShort("收藏成功");
-            }
+        UserOptionHelper.onClickStar(service, PAGE_NEWS_ID, PAGE_NEWS_TYPE,
+                new SimpleNotifyListener() {
+                    @Override
+                    public void onSuccess(String msg) {
+                        hideLoading();
+                    }
 
-            @Override
-            public void onFail(String code, String errorMsg) {
-                onSimpleError(errorMsg);
-            }
-        });
+                    @Override
+                    public void onFailed(String msg) {
+                        onSimpleError(msg);
+                    }
+                });
     }
 
     @OnClick(R.id.id_send)
@@ -254,7 +261,7 @@ public class NewsPhotoDetailActivity extends BaseActivity {
             @Override
             public void onSuccess(JSONObject data) {
                 hideLoading();
-                //onCommentSuccess();
+                onCommentSuccess();
             }
 
             @Override
@@ -271,5 +278,14 @@ public class NewsPhotoDetailActivity extends BaseActivity {
             return;
         }
         super.onBackPressed();
+    }
+
+    /**
+     * 评论成功
+     */
+    private void onCommentSuccess() {
+        mInputView.setText("");
+        ToastUtils.showShort("评论成功");
+        onBackPressed();
     }
 }

@@ -33,7 +33,9 @@ import com.chaoneng.ilooknews.net.data.HttpResult;
 import com.chaoneng.ilooknews.util.HtmlUtil;
 import com.chaoneng.ilooknews.util.IntentHelper;
 import com.chaoneng.ilooknews.util.RefreshHelper;
+import com.chaoneng.ilooknews.util.SimplePreNotifyListener;
 import com.chaoneng.ilooknews.util.StringHelper;
+import com.chaoneng.ilooknews.util.UserOptionHelper;
 import com.chaoneng.ilooknews.widget.ilook.ILookTitleBar;
 import com.chaoneng.ilooknews.widget.image.HeadImageView;
 import com.magicalxu.library.blankj.KeyboardUtils;
@@ -366,6 +368,24 @@ public class NewsDetailActivity extends BaseActivity {
 
     @OnClick(R.id.id_send)
     public void sendComment() {
+
+        UserOptionHelper.onSendComment(mInputView, homeService, PAGE_NEWS_ID, PAGE_NEWS_TYPE,
+                new SimplePreNotifyListener() {
+                    @Override
+                    public void onPreToDo() {
+
+                    }
+
+                    @Override
+                    public void onSuccess(String msg) {
+
+                    }
+
+                    @Override
+                    public void onFailed(String msg) {
+
+                    }
+                });
 
         String comment = mInputView.getText().toString().trim();
         if (TextUtils.isEmpty(comment)) {

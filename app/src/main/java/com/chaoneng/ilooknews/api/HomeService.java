@@ -84,8 +84,7 @@ public interface HomeService {
      */
     @POST("addCollection")
     Call<HttpResult<JSONObject>> addCollection(@Query("userid") String userId,
-            @Query("nid") String nid,
-            @Query("newtype") int type);
+            @Query("nid") String nid, @Query("newtype") int type);
 
     /**
      * 我要爆料
@@ -101,7 +100,7 @@ public interface HomeService {
      * 我的收藏列表
      */
     @GET("getCollectionList")
-    Call<HttpResult<String>> getCollectionList(@Query("userid") String userId,
+    Call<HttpResult<NewsListWrapper>> getCollectionList(@Query("userid") String userId,
             @Query("page") int page, @Query("pageSize") int pageSize);
 
     /**

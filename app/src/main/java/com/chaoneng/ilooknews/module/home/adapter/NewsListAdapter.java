@@ -2,6 +2,7 @@ package com.chaoneng.ilooknews.module.home.adapter;
 
 import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
@@ -11,6 +12,7 @@ import com.chaoneng.ilooknews.R;
 import com.chaoneng.ilooknews.library.glide.ImageLoader;
 import com.chaoneng.ilooknews.library.gsyvideoplayer.VideoHelper;
 import com.chaoneng.ilooknews.module.home.data.NewsListBean;
+import com.chaoneng.ilooknews.util.StringHelper;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 import java.util.List;
 
@@ -69,7 +71,32 @@ public class NewsListAdapter extends BaseMultiItemQuickAdapter<NewsListBean, Bas
         helper.setText(R.id.id_bottom_time, item.createTime);
 
         StandardGSYVideoPlayer mVideoPlayer = helper.getView(R.id.videoplayer);
-        VideoHelper.initPlayer(mContext, mVideoPlayer, item.videoUrl, item.title, null);
+        String url = item.videoUrl;
+
+        //增加封面
+        List<String> coverList = item.coverpic;
+        String coverPicUrl;
+        if (coverList != null && coverList.size() > 0) {
+            coverPicUrl = coverList.get(0);
+            if (TextUtils.isEmpty(coverPicUrl)) {
+                coverPicUrl = item.videoUrl + AppConstant.VIDEO_SUFFIX;
+            }
+        } else {
+            coverPicUrl = item.videoUrl + AppConstant.VIDEO_SUFFIX;
+        }
+
+        ImageView imageView = new ImageView(mContext);
+        imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        ImageLoader.loadImage(coverPicUrl, imageView);
+        if (imageView.getParent() != null) {
+            ViewGroup viewGroup = (ViewGroup) imageView.getParent();
+            viewGroup.removeView(imageView);
+        }
+        mVideoPlayer.setThumbImageView(imageView);
+        mVideoPlayer.setPlayPosition(helper.getAdapterPosition());
+
+        VideoHelper.initPlayer(mContext, mVideoPlayer, url, StringHelper.getString(item.title),
+                null);
     }
 
     private void bindThreeImg(BaseViewHolder helper, NewsListBean item) {

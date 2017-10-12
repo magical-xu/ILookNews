@@ -14,15 +14,19 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.OnClick;
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chaoneng.ilooknews.AppConstant;
 import com.chaoneng.ilooknews.R;
 import com.chaoneng.ilooknews.api.HomeService;
 import com.chaoneng.ilooknews.base.BaseActivity;
-import com.chaoneng.ilooknews.data.MockServer;
+import com.chaoneng.ilooknews.data.CommentBean;
 import com.chaoneng.ilooknews.data.NewsInfo;
 import com.chaoneng.ilooknews.data.NewsInfoWrapper;
+import com.chaoneng.ilooknews.instance.AccountManager;
 import com.chaoneng.ilooknews.instance.VideoManager;
+import com.chaoneng.ilooknews.library.glide.ImageLoader;
 import com.chaoneng.ilooknews.library.gsyvideoplayer.VideoHelper;
+import com.chaoneng.ilooknews.module.home.fragment.CommentDialogFragment;
 import com.chaoneng.ilooknews.module.video.adapter.CommentAdapter;
 import com.chaoneng.ilooknews.net.callback.SimpleCallback;
 import com.chaoneng.ilooknews.net.client.NetRequest;
@@ -30,12 +34,19 @@ import com.chaoneng.ilooknews.net.data.HttpResult;
 import com.chaoneng.ilooknews.util.BottomHelper;
 import com.chaoneng.ilooknews.util.IntentHelper;
 import com.chaoneng.ilooknews.util.RefreshHelper;
+import com.chaoneng.ilooknews.util.SimpleNotifyListener;
+import com.chaoneng.ilooknews.util.SimplePreNotifyListener;
 import com.chaoneng.ilooknews.util.StringHelper;
+import com.chaoneng.ilooknews.util.UserOptionHelper;
 import com.chaoneng.ilooknews.widget.image.HeadImageView;
+import com.magicalxu.library.blankj.KeyboardUtils;
+import com.magicalxu.library.blankj.ToastUtils;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
+import java.util.List;
+import org.json.JSONObject;
 import retrofit2.Call;
 
 /**
@@ -44,6 +55,8 @@ import retrofit2.Call;
  */
 
 public class VideoDetailActivity extends BaseActivity {
+
+    private static final String TAG = "VideoDetailActivity";
 
     @BindView(R.id.video_player) StandardGSYVideoPlayer mVideoPlayer;
     @BindView(R.id.id_title_back) ImageView mTitleBack;
@@ -55,6 +68,9 @@ public class VideoDetailActivity extends BaseActivity {
     @BindView(R.id.id_real_bottom_edit) EditText mRealInputView;
     @BindView(R.id.id_real_bottom) ViewGroup mRealBottomView;
     @BindView(R.id.id_fake_bottom) ViewGroup mFakeBottomView;
+    @BindView(R.id.id_bottom_comment_count) TextView mCommentCountView;
+
+    @BindView(R.id.id_send) TextView mSendView;
 
     TextView mHeaderTitle;
     TextView mHeaderNum;
@@ -66,11 +82,12 @@ public class VideoDetailActivity extends BaseActivity {
 
     private CommentAdapter mAdapter;
     private RefreshHelper mRefreshHelper;
-    private MockServer mockServer;
     private HomeService service;
 
     //private boolean isPlay;
     private boolean isPause;
+    private boolean hasNewsPraise;
+    private boolean hasHeaderAdd;
 
     private OrientationUtils orientationUtils;
     private String PAGE_VIDEO_URL;
@@ -101,13 +118,123 @@ public class VideoDetailActivity extends BaseActivity {
         mRefreshHelper = new RefreshHelper(mRefreshLayout, mAdapter, mRecyclerView) {
             @Override
             public void onRequest(int page) {
-                //mockServer.mockGankCall(page, MockServer.Type.VIDEO_COMMENT);
-                loadData(page);
+                if (page == 1) {
+                    loadData(page);
+                }
+                loadComment(page);
             }
         };
 
+        mAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+            @Override
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+
+                switch (view.getId()) {
+                    case R.id.id_comment_count:
+                        CommentBean commentBean = mAdapter.getData().get(position);
+
+                        //int commentCount = commentBean.commentCount;
+                        //if (0 == commentCount) {
+                        //    return;
+                        //}
+
+                        String commentId = commentBean.cid;
+                        CommentDialogFragment fragment =
+                                CommentDialogFragment.newInstance(PAGE_VID, PAGE_NEWS_TYPE,
+                                        commentId);
+                        fragment.show(getSupportFragmentManager(), TAG);
+                        break;
+                    case R.id.tv_up:
+                        onPraise(position);
+                        break;
+                }
+            }
+        });
+
         service = NetRequest.getInstance().create(HomeService.class);
         mRefreshHelper.beginLoadData();
+    }
+
+    private void onPraise(final int position) {
+
+        int type;
+        final boolean hasPraise;
+        String cid;
+        if (position == AppConstant.INVALIDATE) {
+            //操作 新闻
+
+            type = PAGE_NEWS_TYPE;
+            hasPraise = hasNewsPraise;
+            cid = PAGE_VID;
+        } else {
+            //操作 评论列表
+
+            type = 11;
+            CommentBean commentBean = mAdapter.getData().get(position);
+            cid = commentBean.cid;
+            hasPraise = TextUtils.equals(AppConstant.HAS_PRAISE, commentBean.isFollow);
+        }
+
+        int subType = hasPraise ? 2 : 1;
+
+        String userId = AccountManager.getInstance().getUserId();
+        showLoading();
+        Call<HttpResult<JSONObject>> call =
+                service.optLike(StringHelper.getString(userId), null, type, cid, subType);
+        call.enqueue(new SimpleCallback<JSONObject>() {
+            @Override
+            public void onSuccess(JSONObject data) {
+
+                hideLoading();
+                if (position == AppConstant.INVALIDATE) {
+
+                    onOptLikeSuccess(hasPraise);
+                } else {
+
+                    List<CommentBean> listData = mAdapter.getData();
+                    if (listData.size() > position) {
+                        CommentBean commentBean = listData.get(position);
+                        if (hasPraise) {
+                            //取消点赞成功
+                            ToastUtils.showShort("取消点赞成功");
+                            commentBean.isFollow = AppConstant.UN_PRAISE;
+                            commentBean.careCount--;
+                            mAdapter.notifyDataSetChanged();
+                        } else {
+                            //点赞成功
+                            ToastUtils.showShort("点赞成功");
+                            commentBean.isFollow = AppConstant.HAS_PRAISE;
+                            commentBean.careCount++;
+                            mAdapter.notifyDataSetChanged();
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onFail(String code, String errorMsg) {
+                onSimpleError(errorMsg);
+            }
+        });
+    }
+
+    private void onOptLikeSuccess(boolean hasPraise) {
+
+        //if (hasPraise) {
+        //    //不喜欢+1
+        //    String disLikeCount = mDownView.getText().toString();
+        //    if (TextUtils.isDigitsOnly(disLikeCount)) {
+        //        int disCount = Integer.parseInt(disLikeCount);
+        //        mDownView.setText(String.valueOf(disCount + 1));
+        //    }
+        //} else {
+        //    //喜欢+1
+        //    String likeCount = mUpView.getText().toString();
+        //    if (TextUtils.isDigitsOnly(likeCount)) {
+        //        int lCount = Integer.parseInt(likeCount);
+        //        mUpView.setText(String.valueOf(lCount + 1));
+        //    }
+        //}
     }
 
     private void checkIntent() {
@@ -126,15 +253,45 @@ public class VideoDetailActivity extends BaseActivity {
             return;
         }
 
-        View view = getLayoutInflater().inflate(R.layout.header_video_coments, null);
+        if (!hasHeaderAdd) {
+            View view = getLayoutInflater().inflate(R.layout.header_video_coments, null);
+            mHeaderTitle = view.findViewById(R.id.tv_title);
+            mHeaderNum = view.findViewById(R.id.tv_play_num);
+            mHeaderUp = view.findViewById(R.id.tv_up);
+            mHeaderDown = view.findViewById(R.id.tv_down);
+            mHeaderIv = view.findViewById(R.id.id_header_iv);
+            mHeaderName = view.findViewById(R.id.id_header_name);
+            mHeaderFocus = view.findViewById(R.id.id_header_focus);
+            mAdapter.addHeaderView(view);
 
-        mHeaderTitle = view.findViewById(R.id.tv_title);
-        mHeaderNum = view.findViewById(R.id.tv_play_num);
-        mHeaderUp = view.findViewById(R.id.tv_up);
-        mHeaderDown = view.findViewById(R.id.tv_down);
-        mHeaderIv = view.findViewById(R.id.id_header_iv);
-        mHeaderName = view.findViewById(R.id.id_header_name);
-        mHeaderFocus = view.findViewById(R.id.id_header_focus);
+            PAGE_VIDEO_URL = info.video_url;
+            orientationUtils = new OrientationUtils(this, mVideoPlayer);
+            orientationUtils.setEnable(false);
+            //增加封面
+            List<String> coverList = info.coverpic;
+            String coverPicUrl;
+            if (coverList != null && coverList.size() > 0) {
+                coverPicUrl = coverList.get(0);
+                if (TextUtils.isEmpty(coverPicUrl)) {
+                    coverPicUrl = info.video_url + AppConstant.VIDEO_SUFFIX;
+                }
+            } else {
+                coverPicUrl = info.video_url + AppConstant.VIDEO_SUFFIX;
+            }
+            ImageView imageView = new ImageView(this);
+            imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+            ImageLoader.loadImage(coverPicUrl, imageView);
+            if (imageView.getParent() != null) {
+                ViewGroup viewGroup = (ViewGroup) imageView.getParent();
+                viewGroup.removeView(imageView);
+            }
+            mVideoPlayer.setThumbImageView(imageView);
+            //mVideoPlayer.setPlayPosition(helper.getAdapterPosition());
+            VideoHelper.initDetailPage(this, info.video_url, mVideoPlayer, orientationUtils,
+                    PAGE_PROGRESS);
+        }
+
+        hasHeaderAdd = true;
 
         mHeaderIv.setHeadImage(StringHelper.getString(info.userIcon));
         mHeaderDown.setText(String.valueOf(info.dislike_count));
@@ -144,13 +301,13 @@ public class VideoDetailActivity extends BaseActivity {
         mHeaderNum.setText(String.format(getString(R.string.video_play_times),
                 String.valueOf(info.play_count)));
         mHeaderTitle.setText(StringHelper.getString(info.title));
-        mAdapter.addHeaderView(view);
 
-        PAGE_VIDEO_URL = info.video_url;
-        orientationUtils = new OrientationUtils(this, mVideoPlayer);
-        orientationUtils.setEnable(false);
-        VideoHelper.initDetailPage(this, info.video_url, mVideoPlayer, orientationUtils,
-                PAGE_PROGRESS);
+        if (info.commentCount == 0) {
+            mCommentCountView.setVisibility(View.GONE);
+        } else {
+            mCommentCountView.setVisibility(View.VISIBLE);
+            mCommentCountView.setText(String.valueOf(info.commentCount));
+        }
     }
 
     private void checkTitle() {
@@ -187,14 +344,35 @@ public class VideoDetailActivity extends BaseActivity {
                 if (page == 1) {
                     bindHeader(data.newInfo);
                 }
-
-                //noinspection unchecked
-                mRefreshHelper.setData(data.commentlist, data.haveNext);
             }
 
             @Override
             public void onFail(String code, String errorMsg) {
-                mRefreshHelper.onFail();
+                onSimpleError(errorMsg);
+            }
+        });
+    }
+
+    private void loadComment(int page) {
+
+        showLoading();
+        mRefreshHelper.setCurPage(page);
+        Call<HttpResult<NewsInfoWrapper>> call =
+                service.getNewsComment(PAGE_VID, PAGE_NEWS_TYPE, AppConstant.NONE_VALUE, page,
+                        AppConstant.DEFAULT_PAGE_SIZE);
+        call.enqueue(new SimpleCallback<NewsInfoWrapper>() {
+            @Override
+            public void onSuccess(NewsInfoWrapper data) {
+                hideLoading();
+                List<CommentBean> commentList = data.commentlist;
+                if (null != commentList) {
+                    //noinspection unchecked
+                    mRefreshHelper.setData(data.commentlist, data.haveNext);
+                }
+            }
+
+            @Override
+            public void onFail(String code, String errorMsg) {
                 onSimpleError(errorMsg);
             }
         });
@@ -263,5 +441,56 @@ public class VideoDetailActivity extends BaseActivity {
     public void onUserInput() {
 
         BottomHelper.showKeyboard(mRealBottomView, mFakeBottomView, mRealInputView);
+    }
+
+    @OnClick(R.id.id_send)
+    public void onSendComment(View view) {
+
+        UserOptionHelper.onSendComment(mRealInputView, service, PAGE_VID, PAGE_NEWS_TYPE,
+                new SimplePreNotifyListener() {
+                    @Override
+                    public void onPreToDo() {
+                        KeyboardUtils.hideSoftInput(VideoDetailActivity.this);
+                        showLoading();
+                    }
+
+                    @Override
+                    public void onSuccess(String msg) {
+                        onCommentSuccess();
+                    }
+
+                    @Override
+                    public void onFailed(String msg) {
+                        onSimpleError(msg);
+                    }
+                });
+    }
+
+    /**
+     * 评论成功
+     */
+    private void onCommentSuccess() {
+        hideLoading();
+        mRealInputView.setText("");
+        ToastUtils.showShort("评论成功");
+        onBackPressed();
+        loadComment(1);
+    }
+
+    @OnClick(R.id.id_bottom_star)
+    public void onClickStar(View view) {
+
+        showLoading();
+        UserOptionHelper.onClickStar(service, PAGE_VID, PAGE_NEWS_TYPE, new SimpleNotifyListener() {
+            @Override
+            public void onSuccess(String msg) {
+                hideLoading();
+            }
+
+            @Override
+            public void onFailed(String msg) {
+                onSimpleError(msg);
+            }
+        });
     }
 }

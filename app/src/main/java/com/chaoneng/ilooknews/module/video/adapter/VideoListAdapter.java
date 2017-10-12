@@ -74,7 +74,7 @@ public class VideoListAdapter extends BaseQuickAdapter<NewsListBean, BaseViewHol
         } else {
             coverPicUrl = item.videoUrl + AppConstant.VIDEO_SUFFIX;
         }
-        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
         ImageLoader.loadImage(coverPicUrl, imageView);
         if (imageView.getParent() != null) {
             ViewGroup viewGroup = (ViewGroup) imageView.getParent();

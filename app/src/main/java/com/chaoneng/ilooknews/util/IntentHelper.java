@@ -15,6 +15,7 @@ import com.chaoneng.ilooknews.module.search.SearchActivity;
 import com.chaoneng.ilooknews.module.search.SearchDetailActivity;
 import com.chaoneng.ilooknews.module.share.ShareBoardActivity;
 import com.chaoneng.ilooknews.module.user.activity.BrokeActivity;
+import com.chaoneng.ilooknews.module.user.activity.CollectionActivity;
 import com.chaoneng.ilooknews.module.user.activity.FeedBackActivity;
 import com.chaoneng.ilooknews.module.user.activity.ProfileActivity;
 import com.chaoneng.ilooknews.module.user.activity.SettingActivity;
@@ -49,8 +50,7 @@ public class IntentHelper {
      *
      * @param seek 播放进度
      */
-    public static void openVideoDetailPage(Context context, String vid, long seek,
-            int newsType) {
+    public static void openVideoDetailPage(Context context, String vid, long seek, int newsType) {
         VideoDetailActivity.newInstance(context, vid, seek, newsType);
     }
 
@@ -150,5 +150,12 @@ public class IntentHelper {
      */
     public static void openShareBottomPage(Context context, String newsId, int newsType) {
         ShareBoardActivity.getInstance(context, newsId, newsType);
+    }
+
+    /**
+     * 跳转 收藏界面
+     */
+    public static void openCollectionPage(Context context) {
+        context.startActivity(new Intent(context, CollectionActivity.class));
     }
 }

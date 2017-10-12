@@ -149,6 +149,11 @@
         android:configChanges="orientation|screenSize|keyboard|keyboardHidden"
         android:screenOrientation="portrait"
         android:theme="@style/ThemeDialog.BottomWithAnim" />
+    <activity
+        android:name=".module.user.activity.CollectionActivity"
+        android:configChanges="orientation|screenSize|keyboard|keyboardHidden"
+        android:screenOrientation="portrait"
+        android:theme="@style/SimpleActivityTheme" />
   </application>
 
 </manifest>

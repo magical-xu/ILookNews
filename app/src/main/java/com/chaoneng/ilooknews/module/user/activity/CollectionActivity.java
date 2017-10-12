@@ -1,4 +1,4 @@
-package com.chaoneng.ilooknews.module.home.fragment;
+package com.chaoneng.ilooknews.module.user.activity;
 
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
@@ -14,7 +14,8 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chaoneng.ilooknews.AppConstant;
 import com.chaoneng.ilooknews.R;
 import com.chaoneng.ilooknews.api.HomeService;
-import com.chaoneng.ilooknews.base.BaseFragment;
+import com.chaoneng.ilooknews.base.BaseActivity;
+import com.chaoneng.ilooknews.instance.AccountManager;
 import com.chaoneng.ilooknews.module.home.adapter.NewsListAdapter;
 import com.chaoneng.ilooknews.module.home.data.NewsListBean;
 import com.chaoneng.ilooknews.module.home.data.NewsListWrapper;
@@ -24,6 +25,7 @@ import com.chaoneng.ilooknews.net.client.NetRequest;
 import com.chaoneng.ilooknews.net.data.HttpResult;
 import com.chaoneng.ilooknews.util.IntentHelper;
 import com.chaoneng.ilooknews.util.RefreshHelper;
+import com.chaoneng.ilooknews.widget.ilook.ILookTitleBar;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
@@ -32,14 +34,12 @@ import java.util.List;
 import retrofit2.Call;
 import timber.log.Timber;
 
-import static com.chaoneng.ilooknews.AppConstant.PAGE_TYPE;
-
 /**
- * Created by magical on 2017/8/14.
- * 首页新闻列表
+ * Created by magical on 2017/10/12.
+ * Description : 收藏列表
  */
 
-public class NewsListFragment extends BaseFragment {
+public class CollectionActivity extends BaseActivity {
 
     @BindView(R.id.id_recycler) RecyclerView mRecyclerView;
     @BindView(R.id.id_refresh_layout) SmartRefreshLayout mRefreshLayout;
@@ -48,31 +48,30 @@ public class NewsListFragment extends BaseFragment {
     private RefreshHelper mRefreshHelper;
     private List<NewsListBean> mDataList = new ArrayList<>();
 
-    private String mCid;    //频道标签类型
     private boolean mFull;
     private View mEmptyView;
 
-    public static NewsListFragment newInstance(String type) {
-        NewsListFragment fragment = new NewsListFragment();
-        Bundle bundle = new Bundle();
-        bundle.putString(PAGE_TYPE, type);
-        fragment.setArguments(bundle);
-        return fragment;
+    @Override
+    public int getLayoutId() {
+        return R.layout.simple_recycler_list;
     }
 
     @Override
-    protected void lazyLoad() {
-        super.lazyLoad();
-        mRefreshHelper.beginLoadData();
+    protected boolean addTitleBar() {
+        return true;
     }
 
     @Override
-    protected void doInit() {
+    public void handleChildPage(Bundle savedInstanceState) {
 
-        Bundle bundle = getArguments();
-        if (null != bundle) {
-            mCid = bundle.getString(PAGE_TYPE);
-        }
+        mTitleBar.setTitle("我的收藏");
+        mTitleBar.setTitleListener(new ILookTitleBar.TitleCallbackAdapter() {
+            @Override
+            public void onClickLeft(View view) {
+                super.onClickLeft(view);
+                finish();
+            }
+        });
 
         mAdapter = new NewsListAdapter(mDataList);
         mRefreshHelper = new RefreshHelper(mRefreshLayout, mAdapter, mRecyclerView) {
@@ -128,38 +127,40 @@ public class NewsListFragment extends BaseFragment {
                 int itemType = bean.getItemType();
                 String newId = bean.newId;
                 if (itemType == NewsListBean.VIDEO) {
-                    IntentHelper.openVideoDetailPage(getActivity(), newId, 0, bean.type);
+                    IntentHelper.openVideoDetailPage(CollectionActivity.this, "", 0, bean.type);
                 } else if (itemType == NewsListBean.TEXT) {
-                    IntentHelper.openNewsDetailPage(mContext, newId, itemType);
+                    IntentHelper.openNewsDetailPage(CollectionActivity.this, newId, itemType);
                 } else if (itemType == NewsListBean.IMAGE) {
-                    IntentHelper.openNewsPhotoDetailPage(mContext, newId, itemType);
+                    IntentHelper.openNewsPhotoDetailPage(CollectionActivity.this, newId, itemType);
                 } else if (itemType == NewsListBean.AD) {
                     //广告类跳转
-                    IntentHelper.openNewsPhotoDetailPage(mContext, newId, itemType);
+                    IntentHelper.openNewsPhotoDetailPage(CollectionActivity.this, newId, itemType);
                 } else if (itemType == NewsListBean.HTML) {
                     //跳转类
-                    IntentHelper.openWebPage(getActivity(), AppConstant.TEST_WEB_URL);
+                    IntentHelper.openWebPage(CollectionActivity.this, AppConstant.TEST_WEB_URL);
                 } else {
                     Timber.e("can't resolve jump type.");
                 }
             }
         });
 
-        mEmptyView = LayoutInflater.from(getActivity())
+        mEmptyView = LayoutInflater.from(this)
                 .inflate(R.layout.base_empty_view, (ViewGroup) mRecyclerView.getParent(), false);
+
+        mRefreshHelper.beginLoadData();
     }
 
     private void load(final int page) {
 
-        if (TextUtils.isEmpty(mCid)) {
-            Timber.e(" cannot get page cid.");
+        String userId = AccountManager.getInstance().getUserId();
+        if (TextUtils.isEmpty(userId)) {
             return;
         }
 
         showLoading();
         HomeService service = NetRequest.getInstance().create(HomeService.class);
         Call<HttpResult<NewsListWrapper>> call =
-                service.getNewsList(mCid, page, AppConstant.DEFAULT_PAGE_SIZE);
+                service.getCollectionList(userId, page, AppConstant.DEFAULT_PAGE_SIZE);
         call.enqueue(new SimpleCallback<NewsListWrapper>() {
             @Override
             public void onSuccess(NewsListWrapper data) {
@@ -182,11 +183,6 @@ public class NewsListFragment extends BaseFragment {
                 hideLoading();
             }
         });
-    }
-
-    @Override
-    protected int getLayoutName() {
-        return R.layout.simple_recycler_list;
     }
 
     @Override
