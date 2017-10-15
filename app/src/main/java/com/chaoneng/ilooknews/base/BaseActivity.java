@@ -9,9 +9,11 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import butterknife.ButterKnife;
+import com.chaoneng.ilooknews.AppConstant;
 import com.chaoneng.ilooknews.R;
 import com.chaoneng.ilooknews.widget.DialogManager;
 import com.chaoneng.ilooknews.widget.ilook.ILookTitleBar;
+import com.magicalxu.library.blankj.SPUtils;
 import com.magicalxu.library.blankj.ToastUtils;
 
 /**
@@ -68,6 +70,14 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     protected void beforeContentView() {
         // do nothing
+        int size = SPUtils.getInstance().getInt(AppConstant.NEWS_TEXT_SIZE);
+        if (size == 0) {
+            setTheme(R.style.text_style_small);
+        } else if (size == 1) {
+            setTheme(R.style.text_style_normal);
+        } else {
+            setTheme(R.style.text_style_big);
+        }
     }
 
     /**
@@ -134,17 +144,22 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
     }
 
-    protected void showLoading(String msg) {
+    public void showLoading(String msg) {
         ensureDialogManager();
         mDialogManager.showDialog(msg);
     }
 
-    protected void showLoading() {
+    public void showLoading() {
         ensureDialogManager();
         mDialogManager.showDialog("正在加载");
     }
 
-    protected void hideLoading() {
+    public boolean isLoading() {
+        ensureDialogManager();
+        return mDialogManager.isShowing();
+    }
+
+    public void hideLoading() {
         ensureDialogManager();
         mDialogManager.dismissDialog();
     }

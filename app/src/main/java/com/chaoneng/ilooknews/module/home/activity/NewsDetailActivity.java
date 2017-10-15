@@ -290,8 +290,11 @@ public class NewsDetailActivity extends BaseActivity {
 
     private void loadData(final int page) {
 
+        String userId = AccountManager.getInstance().getUserId();
+
         showLoading();
-        Call<HttpResult<NewsInfoWrapper>> call = homeService.getNewsDetail(PAGE_NEWS_ID, 2);
+        Call<HttpResult<NewsInfoWrapper>> call =
+                homeService.getNewsDetail(StringHelper.getString(userId), PAGE_NEWS_ID, 2);
         call.enqueue(new SimpleCallback<NewsInfoWrapper>() {
             @Override
             public void onSuccess(NewsInfoWrapper data) {

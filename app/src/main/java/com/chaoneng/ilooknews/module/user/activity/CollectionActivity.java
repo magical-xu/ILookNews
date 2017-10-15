@@ -127,7 +127,7 @@ public class CollectionActivity extends BaseActivity {
                 int itemType = bean.getItemType();
                 String newId = bean.newId;
                 if (itemType == NewsListBean.VIDEO) {
-                    IntentHelper.openVideoDetailPage(CollectionActivity.this, "", 0, bean.type);
+                    IntentHelper.openVideoDetailPage(CollectionActivity.this, newId, 0, bean.type);
                 } else if (itemType == NewsListBean.TEXT) {
                     IntentHelper.openNewsDetailPage(CollectionActivity.this, newId, itemType);
                 } else if (itemType == NewsListBean.IMAGE) {

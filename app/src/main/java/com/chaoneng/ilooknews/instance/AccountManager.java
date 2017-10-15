@@ -1,10 +1,12 @@
 package com.chaoneng.ilooknews.instance;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import com.chaoneng.ilooknews.AppConstant;
 import com.chaoneng.ilooknews.data.BaseUser;
+import com.chaoneng.ilooknews.util.IntentHelper;
 import com.magicalxu.library.blankj.SPUtils;
 
 /**
@@ -65,6 +67,15 @@ public class AccountManager {
     public boolean hasLogin() {
         String uid = SPUtils.getInstance().getString(AppConstant.UID);
         return !TextUtils.isEmpty(uid);
+    }
+
+    public boolean checkLogin(Context context) {
+        if (hasLogin()) {
+            return false;
+        } else {
+            IntentHelper.openLoginPage(context);
+            return true;
+        }
     }
 
     /**

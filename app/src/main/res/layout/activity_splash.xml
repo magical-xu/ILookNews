@@ -25,6 +25,7 @@
         android:gravity="center"
         android:textColor="@color/white"
         android:textSize="@dimen/font_normal"
+        android:visibility="gone"
         tools:text="跳过 3" />
 
     <TextView
@@ -36,7 +37,8 @@
         android:gravity="center"
         android:text="广告"
         android:textColor="@color/white"
-        android:textSize="@dimen/font_tiny" />
+        android:textSize="@dimen/font_tiny"
+        android:visibility="gone" />
   </RelativeLayout>
 
   <TextView

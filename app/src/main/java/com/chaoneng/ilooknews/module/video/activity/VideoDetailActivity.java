@@ -18,6 +18,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chaoneng.ilooknews.AppConstant;
 import com.chaoneng.ilooknews.R;
 import com.chaoneng.ilooknews.api.HomeService;
+import com.chaoneng.ilooknews.api.UserService;
 import com.chaoneng.ilooknews.base.BaseActivity;
 import com.chaoneng.ilooknews.data.CommentBean;
 import com.chaoneng.ilooknews.data.NewsInfo;
@@ -71,6 +72,7 @@ public class VideoDetailActivity extends BaseActivity {
     @BindView(R.id.id_bottom_comment_count) TextView mCommentCountView;
 
     @BindView(R.id.id_send) TextView mSendView;
+    @BindView(R.id.id_bottom_star) ImageView mStarView;
 
     TextView mHeaderTitle;
     TextView mHeaderNum;
@@ -83,11 +85,14 @@ public class VideoDetailActivity extends BaseActivity {
     private CommentAdapter mAdapter;
     private RefreshHelper mRefreshHelper;
     private HomeService service;
+    private UserService userService;
 
     //private boolean isPlay;
     private boolean isPause;
     private boolean hasNewsPraise;
     private boolean hasHeaderAdd;
+    private boolean hasCollected;
+    private boolean hasFollowed;
 
     private OrientationUtils orientationUtils;
     private String PAGE_VIDEO_URL;
@@ -95,6 +100,7 @@ public class VideoDetailActivity extends BaseActivity {
     private String PAGE_VID;        //新闻 vid
     private long PAGE_PROGRESS;     //当前播放进度
     private int PAGE_NEWS_TYPE;
+    private String NEWS_PUBLISHER;  //新闻发布者ID
 
     public static void newInstance(Context context, String vid, long seek, int newsType) {
         Intent intent = new Intent(context, VideoDetailActivity.class);
@@ -152,6 +158,7 @@ public class VideoDetailActivity extends BaseActivity {
         });
 
         service = NetRequest.getInstance().create(HomeService.class);
+        userService = NetRequest.getInstance().create(UserService.class);
         mRefreshHelper.beginLoadData();
     }
 
@@ -264,6 +271,18 @@ public class VideoDetailActivity extends BaseActivity {
             mHeaderFocus = view.findViewById(R.id.id_header_focus);
             mAdapter.addHeaderView(view);
 
+            NEWS_PUBLISHER = info.userid;
+            hasCollected = TextUtils.equals(AppConstant.HAS_PRAISE, info.isCollection);
+            mStarView.setSelected(hasCollected);
+            hasFollowed = TextUtils.equals(AppConstant.HAS_PRAISE, info.isFollow);
+            changeFollowState(hasFollowed);
+            mHeaderFocus.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    onFollowUser(view);
+                }
+            });
+
             PAGE_VIDEO_URL = info.video_url;
             orientationUtils = new OrientationUtils(this, mVideoPlayer);
             orientationUtils.setEnable(false);
@@ -296,7 +315,7 @@ public class VideoDetailActivity extends BaseActivity {
         mHeaderIv.setHeadImage(StringHelper.getString(info.userIcon));
         mHeaderDown.setText(String.valueOf(info.dislike_count));
         mHeaderUp.setText(String.valueOf(info.like_count));
-        mHeaderFocus.setText("关注");
+        mHeaderFocus.setText(hasFollowed ? "已关注" : "关注");
         mHeaderName.setText(StringHelper.getString(info.nickname));
         mHeaderNum.setText(String.format(getString(R.string.video_play_times),
                 String.valueOf(info.play_count)));
@@ -322,20 +341,17 @@ public class VideoDetailActivity extends BaseActivity {
         mTitleShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onShowShare();
+                IntentHelper.openShareBottomPage(VideoDetailActivity.this, PAGE_VID,
+                        PAGE_NEWS_TYPE);
             }
         });
     }
 
-    private void onShowShare() {
-
-        IntentHelper.openShareBottomPage(this, PAGE_VID, PAGE_NEWS_TYPE);
-    }
-
     private void loadData(final int page) {
 
+        String userId = AccountManager.getInstance().getUserId();
         showLoading();
-        Call<HttpResult<NewsInfoWrapper>> call = service.getNewsDetail(PAGE_VID, 1);
+        Call<HttpResult<NewsInfoWrapper>> call = service.getNewsDetail(userId, PAGE_VID, 1);
         call.enqueue(new SimpleCallback<NewsInfoWrapper>() {
             @Override
             public void onSuccess(NewsInfoWrapper data) {
@@ -480,17 +496,118 @@ public class VideoDetailActivity extends BaseActivity {
     @OnClick(R.id.id_bottom_star)
     public void onClickStar(View view) {
 
-        showLoading();
-        UserOptionHelper.onClickStar(service, PAGE_VID, PAGE_NEWS_TYPE, new SimpleNotifyListener() {
-            @Override
-            public void onSuccess(String msg) {
-                hideLoading();
-            }
+        if (AccountManager.getInstance().checkLogin(this)) {
+            return;
+        }
 
-            @Override
-            public void onFailed(String msg) {
-                onSimpleError(msg);
-            }
-        });
+        if (isLoading()) {
+            return;
+        }
+
+        showLoading();
+        if (hasCollected) {
+            UserOptionHelper.onCancelStar(service, PAGE_VID, PAGE_NEWS_TYPE,
+                    new SimplePreNotifyListener() {
+                        @Override
+                        public void onPreToDo() {
+                        }
+
+                        @Override
+                        public void onSuccess(String msg) {
+                            hideLoading();
+                            changeStarState(false);
+                        }
+
+                        @Override
+                        public void onFailed(String msg) {
+                            onSimpleError(msg);
+                        }
+                    });
+        } else {
+            UserOptionHelper.onClickStar(service, PAGE_VID, PAGE_NEWS_TYPE,
+                    new SimplePreNotifyListener() {
+
+                        @Override
+                        public void onPreToDo() {
+                        }
+
+                        @Override
+                        public void onSuccess(String msg) {
+                            hideLoading();
+                            changeStarState(true);
+                        }
+
+                        @Override
+                        public void onFailed(String msg) {
+                            onSimpleError(msg);
+                        }
+                    });
+        }
+    }
+
+    /**
+     * 关注操作
+     */
+    public void onFollowUser(View view) {
+
+        if (AccountManager.getInstance().checkLogin(this)) {
+            return;
+        }
+
+        if (TextUtils.isEmpty(NEWS_PUBLISHER)) {
+            return;
+        }
+
+        if (isLoading()) {
+            return;
+        }
+
+        showLoading();
+        if (hasFollowed) {
+            // cancel follow
+            UserOptionHelper.onCancelFollow(userService, NEWS_PUBLISHER,
+                    new SimpleNotifyListener() {
+                        @Override
+                        public void onSuccess(String msg) {
+                            hideLoading();
+                            changeFollowState(false);
+                        }
+
+                        @Override
+                        public void onFailed(String msg) {
+                            onSimpleError(msg);
+                        }
+                    });
+        } else {
+            // add follow
+            UserOptionHelper.onFollow(userService, NEWS_PUBLISHER, new SimpleNotifyListener() {
+                @Override
+                public void onSuccess(String msg) {
+                    hideLoading();
+                    changeFollowState(true);
+                }
+
+                @Override
+                public void onFailed(String msg) {
+                    onSimpleError(msg);
+                }
+            });
+        }
+    }
+
+    /**
+     * 更改 Star 状态
+     */
+    private void changeStarState(boolean collected) {
+        hasCollected = collected;
+        mStarView.setSelected(hasCollected);
+    }
+
+    /**
+     * 更改 Follow 状态
+     */
+    private void changeFollowState(boolean hasFollowed) {
+        this.hasFollowed = hasFollowed;
+        mHeaderFocus.setText(this.hasFollowed ? "已关注" : "关注");
     }
 }

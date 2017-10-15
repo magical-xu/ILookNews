@@ -2,6 +2,7 @@ package com.chaoneng.ilooknews.module.login;
 
 import android.os.Bundle;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.RelativeLayout;
@@ -46,6 +47,13 @@ public class SplashActivity extends BaseActivity {
         tabManager.getVideoChannel(this, null);
     }
 
+    @Override
+    protected void beforeContentView() {
+        super.beforeContentView();
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+    }
+
     private void alphaAnimation() {
         long durationMs = 200;
         if (BuildConfig.DEBUG) durationMs = 0; // speed up under debug
@@ -56,7 +64,7 @@ public class SplashActivity extends BaseActivity {
     }
 
     private void countDown() {
-        int durationMs = 3 * 1000;
+        int durationMs = 2 * 1000;
 
         mTimeCountdown = new TimeCountdown(durationMs, 1000) {
             @Override

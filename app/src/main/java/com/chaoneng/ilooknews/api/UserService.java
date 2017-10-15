@@ -36,13 +36,14 @@ public interface UserService {
      * 加关注
      */
     @POST("addFollow")
-    Call<HttpResult<String>> follow(@Query("userid") String userId, @Query("fid") String fid);
+    Call<HttpResult<JSONObject>> follow(@Query("userid") String userId, @Query("fid") String fid);
 
     /**
      * 取消关注
      */
     @POST("deleteFollow")
-    Call<HttpResult<String>> cancelFollow(@Query("userid") String userId, @Query("fid") String fid);
+    Call<HttpResult<JSONObject>> cancelFollow(@Query("userid") String userId,
+            @Query("fid") String fid);
 
     /**
      * 获取关系列表

@@ -28,7 +28,7 @@ import com.chaoneng.ilooknews.net.data.HttpResult;
 import com.chaoneng.ilooknews.util.BottomHelper;
 import com.chaoneng.ilooknews.util.CompatUtil;
 import com.chaoneng.ilooknews.util.IntentHelper;
-import com.chaoneng.ilooknews.util.SimpleNotifyListener;
+import com.chaoneng.ilooknews.util.SimplePreNotifyListener;
 import com.chaoneng.ilooknews.util.StringHelper;
 import com.chaoneng.ilooknews.util.UserOptionHelper;
 import com.chaoneng.ilooknews.widget.adapter.BaseFragmentAdapter;
@@ -77,6 +77,8 @@ public class NewsPhotoDetailActivity extends BaseActivity {
     private String PAGE_NEWS_ID;
     private int PAGE_NEWS_TYPE;
 
+    private boolean hasCollected;
+
     public static void getInstance(Context context, @NonNull String newsId, int newsType) {
         Intent intent = new Intent(context, NewsPhotoDetailActivity.class);
         intent.putExtra(PARAMS_NEWS_ID, newsId);
@@ -99,6 +101,7 @@ public class NewsPhotoDetailActivity extends BaseActivity {
 
         checkIntent();
         StatusBarUtil.setColor(this, CompatUtil.getColor(this, R.color.black));
+        service = NetRequest.getInstance().create(HomeService.class);
         loadData();
         checkTitle();
     }
@@ -112,9 +115,10 @@ public class NewsPhotoDetailActivity extends BaseActivity {
 
     private void loadData() {
 
-        service = NetRequest.getInstance().create(HomeService.class);
+        String userId = AccountManager.getInstance().getUserId();
         showLoading();
-        Call<HttpResult<NewsInfoWrapper>> call = service.getNewsDetail(PAGE_NEWS_ID, 3);
+        Call<HttpResult<NewsInfoWrapper>> call =
+                service.getNewsDetail(StringHelper.getString(userId), PAGE_NEWS_ID, 3);
         call.enqueue(new SimpleCallback<NewsInfoWrapper>() {
             @Override
             public void onSuccess(NewsInfoWrapper data) {
@@ -129,6 +133,9 @@ public class NewsPhotoDetailActivity extends BaseActivity {
                 if (null == newInfo) {
                     Timber.e("news info is null.");
                     return;
+                } else {
+                    hasCollected = TextUtils.equals(AppConstant.HAS_PRAISE, newInfo.isCollection);
+                    changeStarState(hasCollected);
                 }
 
                 if (newInfo.commentCount == 0) {
@@ -225,19 +232,49 @@ public class NewsPhotoDetailActivity extends BaseActivity {
     @OnClick(R.id.id_bottom_star)
     public void onClickStar(View view) {
 
-        showLoading();
-        UserOptionHelper.onClickStar(service, PAGE_NEWS_ID, PAGE_NEWS_TYPE,
-                new SimpleNotifyListener() {
-                    @Override
-                    public void onSuccess(String msg) {
-                        hideLoading();
-                    }
+        if (AccountManager.getInstance().checkLogin(this)) {
+            return;
+        }
 
-                    @Override
-                    public void onFailed(String msg) {
-                        onSimpleError(msg);
-                    }
-                });
+        showLoading();
+        if (hasCollected) {
+            UserOptionHelper.onCancelStar(service, PAGE_NEWS_ID, PAGE_NEWS_TYPE,
+                    new SimplePreNotifyListener() {
+                        @Override
+                        public void onPreToDo() {
+                        }
+
+                        @Override
+                        public void onSuccess(String msg) {
+                            hideLoading();
+                            changeStarState(false);
+                        }
+
+                        @Override
+                        public void onFailed(String msg) {
+                            onSimpleError(msg);
+                        }
+                    });
+        } else {
+            UserOptionHelper.onClickStar(service, PAGE_NEWS_ID, PAGE_NEWS_TYPE,
+                    new SimplePreNotifyListener() {
+
+                        @Override
+                        public void onPreToDo() {
+                        }
+
+                        @Override
+                        public void onSuccess(String msg) {
+                            hideLoading();
+                            changeStarState(true);
+                        }
+
+                        @Override
+                        public void onFailed(String msg) {
+                            onSimpleError(msg);
+                        }
+                    });
+        }
     }
 
     @OnClick(R.id.id_send)
@@ -287,5 +324,13 @@ public class NewsPhotoDetailActivity extends BaseActivity {
         mInputView.setText("");
         ToastUtils.showShort("评论成功");
         onBackPressed();
+    }
+
+    /**
+     * 更新 收藏状态
+     */
+    private void changeStarState(boolean collected) {
+        hasCollected = collected;
+        mStarView.setSelected(hasCollected);
     }
 }

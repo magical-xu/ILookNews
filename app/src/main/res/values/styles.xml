@@ -8,6 +8,17 @@
     <item name="colorAccent">@color/main_color</item>
   </style>
 
+  <style name="text_style_small" parent="SimpleActivityTheme">
+    <item name="iTextSize">@dimen/font_small</item>
+  </style>
+
+  <style name="text_style_normal" parent="SimpleActivityTheme">
+    <item name="iTextSize">@dimen/font_main</item>
+  </style>
+
+  <style name="text_style_big" parent="SimpleActivityTheme">
+    <item name="iTextSize">@dimen/font_big</item>
+  </style>
 
   <style name="SimpleActivityTheme" parent="AppTheme">
     <item name="android:exported">false</item>
@@ -18,6 +29,8 @@
     <item name="android:windowFullscreen">true</item>
     <item name="android:windowIsTranslucent">true</item>
     <item name="android:windowContentOverlay">@null</item>
+    <item name="windowNoTitle">true</item>
+    <item name="android:windowFrame">@null</item>
   </style>
 
   <style name="ThemeDialog" parent="android:Theme.Dialog">

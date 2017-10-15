@@ -49,8 +49,8 @@ public interface HomeService {
      * 获取新闻详情
      */
     @GET("getNewsInfoByid")
-    Call<HttpResult<NewsInfoWrapper>> getNewsDetail(@Query("newsId") String newsId,
-            @Query("newstype") int type);
+    Call<HttpResult<NewsInfoWrapper>> getNewsDetail(@Query("userid") String userId,
+            @Query("newsId") String newsId, @Query("newstype") int type);
 
     /**
      * 发表评论
@@ -84,6 +84,13 @@ public interface HomeService {
      */
     @POST("addCollection")
     Call<HttpResult<JSONObject>> addCollection(@Query("userid") String userId,
+            @Query("nid") String nid, @Query("newtype") int type);
+
+    /**
+     * 取消收藏
+     */
+    @POST("cancelCollection")
+    Call<HttpResult<JSONObject>> cancelCollection(@Query("userid") String userId,
             @Query("nid") String nid, @Query("newtype") int type);
 
     /**

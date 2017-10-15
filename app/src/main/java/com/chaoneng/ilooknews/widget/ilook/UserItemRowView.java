@@ -62,4 +62,9 @@ public class UserItemRowView extends LinearLayout {
         tvFocus.setOnClickListener(listener);
         return this;
     }
+
+    public UserItemRowView changeFollowState(boolean hasFollowed) {
+        tvFocus.setText(hasFollowed ? "已关注" : "关注");
+        return this;
+    }
 }

@@ -59,13 +59,13 @@
   </LinearLayout>
 
   <LinearLayout
-      android:paddingLeft="@dimen/padding_normal"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_gravity="center_vertical"
       android:layout_marginTop="8dp"
+      android:orientation="horizontal"
       android:paddingBottom="@dimen/padding_small"
-      android:orientation="horizontal">
+      android:paddingLeft="@dimen/padding_normal">
 
     <com.chaoneng.ilooknews.widget.image.HeadImageView
         android:id="@+id/id_header_iv"
@@ -94,12 +94,15 @@
 
     <TextView
         android:id="@+id/id_header_focus"
-        android:layout_width="64dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:layout_marginRight="8dp"
         android:background="@drawable/bg_btn_focus"
+        android:ellipsize="end"
         android:gravity="center"
+        android:maxLines="1"
+        android:minWidth="64dp"
         android:text="@string/focus_add"
         android:textColor="@color/main_color"
         android:textSize="@dimen/font_normal" />
