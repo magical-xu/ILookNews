@@ -20,6 +20,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chaoneng.ilooknews.AppConstant;
 import com.chaoneng.ilooknews.R;
 import com.chaoneng.ilooknews.api.HomeService;
+import com.chaoneng.ilooknews.api.UserService;
 import com.chaoneng.ilooknews.base.BaseActivity;
 import com.chaoneng.ilooknews.data.CommentBean;
 import com.chaoneng.ilooknews.data.NewsInfo;
@@ -33,6 +34,7 @@ import com.chaoneng.ilooknews.net.data.HttpResult;
 import com.chaoneng.ilooknews.util.HtmlUtil;
 import com.chaoneng.ilooknews.util.IntentHelper;
 import com.chaoneng.ilooknews.util.RefreshHelper;
+import com.chaoneng.ilooknews.util.SimpleNotifyListener;
 import com.chaoneng.ilooknews.util.SimplePreNotifyListener;
 import com.chaoneng.ilooknews.util.StringHelper;
 import com.chaoneng.ilooknews.util.UserOptionHelper;
@@ -51,6 +53,9 @@ import static com.chaoneng.ilooknews.AppConstant.PARAMS_NEWS_TYPE;
 /**
  * Created by magical on 17/8/27.
  * Description : 新闻详情页
+ * 关注 ok
+ * 赞  note: 多次操作 再次点赞的时候 返回码有问题
+ * 评论 ok
  */
 
 public class NewsDetailActivity extends BaseActivity {
@@ -79,8 +84,12 @@ public class NewsDetailActivity extends BaseActivity {
     private String PAGE_NEWS_ID;
     private int PAGE_NEWS_TYPE;
     private HomeService homeService;
+    private UserService userService;
+
+    private String NEWS_PUBLISHER;
 
     private boolean hasNewsPraise;
+    private boolean hasFollowed;
 
     public static void getInstance(Context context, @NonNull String newsId, int newsType) {
         Intent intent = new Intent(context, NewsDetailActivity.class);
@@ -105,6 +114,7 @@ public class NewsDetailActivity extends BaseActivity {
         checkIntent();
         checkTitle();
         homeService = NetRequest.getInstance().create(HomeService.class);
+        userService = NetRequest.getInstance().create(UserService.class);
         mAdapter = new CommentAdapter(false, R.layout.item_video_comment);
         mRefreshHelper = new RefreshHelper<CommentBean>(mRefreshLayout, mAdapter, mRecyclerView) {
             @Override
@@ -143,6 +153,10 @@ public class NewsDetailActivity extends BaseActivity {
     }
 
     private void onPraise(final int position) {
+
+        if (AccountManager.getInstance().checkLogin(this)) {
+            return;
+        }
 
         int type;
         final boolean hasPraise;
@@ -185,14 +199,14 @@ public class NewsDetailActivity extends BaseActivity {
                             //取消点赞成功
                             ToastUtils.showShort("取消点赞成功");
                             commentBean.isFollow = AppConstant.UN_PRAISE;
-                            commentBean.careCount--;
-                            mAdapter.notifyDataSetChanged();
+                            --commentBean.careCount;
+                            mAdapter.notifyItemChanged(position + mAdapter.getHeaderLayoutCount());
                         } else {
                             //点赞成功
                             ToastUtils.showShort("点赞成功");
                             commentBean.isFollow = AppConstant.HAS_PRAISE;
-                            commentBean.careCount++;
-                            mAdapter.notifyDataSetChanged();
+                            ++commentBean.careCount;
+                            mAdapter.notifyItemChanged(position + mAdapter.getHeaderLayoutCount());
                         }
                     }
                 }
@@ -263,9 +277,59 @@ public class NewsDetailActivity extends BaseActivity {
                 onPraise(AppConstant.INVALIDATE);
             }
         });
+        mHeaderFocus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onOptFollow();
+            }
+        });
 
         configWebView();
         mAdapter.addHeaderView(header);
+    }
+
+    /**
+     * 操作关注关系
+     */
+    private void onOptFollow() {
+
+        if (AccountManager.getInstance().checkLogin(this)) {
+            return;
+        }
+
+        if (isLoading()) {
+            return;
+        }
+
+        showLoading();
+        if (hasFollowed) {
+            UserOptionHelper.onCancelFollow(userService, NEWS_PUBLISHER,
+                    new SimpleNotifyListener() {
+                        @Override
+                        public void onSuccess(String msg) {
+                            hideLoading();
+                            changeFollowState(false);
+                        }
+
+                        @Override
+                        public void onFailed(String msg) {
+                            onSimpleError(msg);
+                        }
+                    });
+        } else {
+            UserOptionHelper.onFollow(userService, NEWS_PUBLISHER, new SimpleNotifyListener() {
+                @Override
+                public void onSuccess(String msg) {
+                    hideLoading();
+                    changeFollowState(true);
+                }
+
+                @Override
+                public void onFailed(String msg) {
+                    onSimpleError(msg);
+                }
+            });
+        }
     }
 
     private void checkTitle() {
@@ -307,8 +371,6 @@ public class NewsDetailActivity extends BaseActivity {
                 if (page == 1) {
                     bindHeader(data.newInfo);
                 }
-
-                //bindItem(data.commentlist, data.haveNext);
             }
 
             @Override
@@ -331,7 +393,10 @@ public class NewsDetailActivity extends BaseActivity {
             return;
         }
 
+        NEWS_PUBLISHER = newInfo.userid;
         hasNewsPraise = TextUtils.equals(AppConstant.HAS_PRAISE, newInfo.isFollow);
+        hasFollowed = TextUtils.equals(AppConstant.USER_FOLLOW, newInfo.isFollow);
+        changeFollowState(hasFollowed);
 
         mTitleTv.setText(StringHelper.getString(newInfo.title));
         mHeaderIv.setHeadImage(StringHelper.getString(newInfo.userIcon));
@@ -343,11 +408,15 @@ public class NewsDetailActivity extends BaseActivity {
         String keyword = String.format(getResources().getString(R.string.key_word_pre),
                 StringHelper.getString(newInfo.text_key));
         mKey1View.setText(keyword);
-        //mKey2View.setText("关键字2");
-        //mKey3View.setText("关键字3");
 
         mWebView.loadDataWithBaseURL("about:blank", HtmlUtil.getHtmlData(newInfo.content),
                 "text/html", "utf-8", null);
+    }
+
+    private void changeFollowState(boolean hasFollowed) {
+
+        this.hasFollowed = hasFollowed;
+        mHeaderFocus.setText(this.hasFollowed ? "已关注" : "关注");
     }
 
     /**
@@ -376,46 +445,21 @@ public class NewsDetailActivity extends BaseActivity {
                 new SimplePreNotifyListener() {
                     @Override
                     public void onPreToDo() {
-
+                        KeyboardUtils.hideSoftInput(NewsDetailActivity.this);
+                        showLoading();
                     }
 
                     @Override
                     public void onSuccess(String msg) {
-
+                        hideLoading();
+                        onCommentSuccess();
                     }
 
                     @Override
                     public void onFailed(String msg) {
-
+                        onSimpleError(msg);
                     }
                 });
-
-        String comment = mInputView.getText().toString().trim();
-        if (TextUtils.isEmpty(comment)) {
-            ToastUtils.showShort(R.string.comment_can_not_be_null);
-            return;
-        }
-
-        String userId = AccountManager.getInstance().getUserId();
-
-        KeyboardUtils.hideSoftInput(this);
-        showLoading();
-        Call<HttpResult<JSONObject>> call =
-                homeService.postNewsComment(StringHelper.getString(userId), PAGE_NEWS_ID,
-                        PAGE_NEWS_TYPE, AppConstant.NONE_VALUE, comment);
-        call.enqueue(new SimpleCallback<JSONObject>() {
-
-            @Override
-            public void onSuccess(JSONObject data) {
-                hideLoading();
-                onCommentSuccess();
-            }
-
-            @Override
-            public void onFail(String code, String errorMsg) {
-                ToastUtils.showShort(errorMsg);
-            }
-        });
     }
 
     /**

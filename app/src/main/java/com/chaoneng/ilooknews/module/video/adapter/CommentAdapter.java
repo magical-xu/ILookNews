@@ -23,6 +23,18 @@ public class CommentAdapter extends BaseQuickAdapter<CommentBean, BaseViewHolder
         isSubPage = subPage;
     }
 
+    //@Override
+    //public void onBindViewHolder(BaseViewHolder holder, int position, List<Object> payloads) {
+    //    super.onBindViewHolder(holder, position, payloads);
+    //    //if (payloads.isEmpty()) {
+    //    //
+    //    //} else {
+    //    //
+    //    //    CommentBean commentBean = getData().get(position);
+    //    //    ((TextView) holder.getView(R.id.tv_up)).setText(String.valueOf(commentBean.careCount));
+    //    //}
+    //}
+
     @Override
     protected void convert(BaseViewHolder helper, CommentBean item) {
 
