@@ -68,6 +68,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/bg_btn_focus"
+        android:ellipsize="end"
+        android:maxLines="1"
         android:text="@string/focus_add"
         android:textColor="@color/main_color"
         android:textSize="@dimen/font_main" />
