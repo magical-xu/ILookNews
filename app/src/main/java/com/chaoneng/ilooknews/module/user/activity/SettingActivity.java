@@ -114,6 +114,9 @@ public class SettingActivity extends BaseActivity {
 
         switch (view.getId()) {
             case R.id.id_edit:
+                if (AccountManager.getInstance().checkLogin(this)) {
+                    return;
+                }
                 IntentHelper.openProfilePage(this);
                 break;
             case R.id.id_toggle_text:

@@ -99,6 +99,6 @@ public class NotifyAdapter extends BaseQuickAdapter<NotifyBean, BaseViewHolder> 
         NotifyBean notifyBean = getData().get(position);
         String mid = notifyBean.mid;
         // TODO: 17/9/4 跳转系统消息详情 界面暂时没有
-        ToastUtils.showShort(mid);
+        //ToastUtils.showShort(mid);
     }
 }

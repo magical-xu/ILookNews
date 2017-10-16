@@ -1,13 +1,16 @@
 package com.chaoneng.ilooknews.module.login;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
 import butterknife.BindView;
 import butterknife.OnClick;
+import com.chaoneng.ilooknews.AppConstant;
 import com.chaoneng.ilooknews.R;
 import com.chaoneng.ilooknews.api.LoginService;
 import com.chaoneng.ilooknews.base.BaseActivity;
@@ -197,9 +200,10 @@ public class LoginActivity extends BaseActivity {
 
     /**
      * 登录成功
+     *
      * @param data 用戶包裝信息
      */
-    private void onLoginSuccess(UserWrapper data){
+    private void onLoginSuccess(UserWrapper data) {
 
         hideLoading();
         AccountManager.getInstance().saveUser(data.socialUser);
@@ -216,5 +220,15 @@ public class LoginActivity extends BaseActivity {
         idToggle.setDisplayedChild(showPage ? 1 : 0);
         mLoginType.setText(showPage ? "免密码登录" : "账号密码登录");
         tvChangeLoginType.setText(showPage ? "账号密码登录" : "免密码登录");
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == AppConstant.REQUEST_CODE && resultCode == RESULT_OK) {
+            // register success
+            Log.d("magical", " onActivityResult : back from register page");
+            finish();
+        }
     }
 }

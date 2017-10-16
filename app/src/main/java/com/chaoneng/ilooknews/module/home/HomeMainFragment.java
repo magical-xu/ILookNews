@@ -1,6 +1,10 @@
 package com.chaoneng.ilooknews.module.home;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
@@ -24,6 +28,7 @@ import com.chaoneng.ilooknews.net.callback.SimpleCallback;
 import com.chaoneng.ilooknews.net.client.NetRequest;
 import com.chaoneng.ilooknews.net.data.HttpResult;
 import com.chaoneng.ilooknews.util.IntentHelper;
+import com.chaoneng.ilooknews.util.LocalBroadcastUtil;
 import com.chaoneng.ilooknews.util.NotifyListener;
 import com.chaoneng.ilooknews.util.StringHelper;
 import com.chaoneng.ilooknews.widget.adapter.BaseFragmentStateAdapter;
@@ -55,13 +60,20 @@ public class HomeMainFragment extends BaseFragment implements OnChannelListener 
     private BaseFragmentStateAdapter mPagerAdapter;
     private List<Fragment> newsFragmentList = new ArrayList<>();
     private HomeService homeService;
+    private IntentFilter filter;
 
     @Override
     protected void beginLoadData() {
 
         loadSearchKey();
-
         setUserIcon();
+    }
+
+    private void initFilter() {
+        filter = new IntentFilter();
+        filter.addAction(LocalBroadcastUtil.LOGIN);
+        filter.addAction(LocalBroadcastUtil.LOGOUT);
+        filter.addAction(LocalBroadcastUtil.UPDATE_USER_INFO);
     }
 
     private void setUserIcon() {
@@ -106,6 +118,11 @@ public class HomeMainFragment extends BaseFragment implements OnChannelListener 
     protected void doInit() {
 
         homeService = NetRequest.getInstance().create(HomeService.class);
+
+        initFilter();
+        if (null != receiver && null != filter) {
+            LocalBroadcastUtil.register(receiver, filter);
+        }
 
         if (TabManager.getInstance().hasNewsInit()) {
             setUp();
@@ -230,4 +247,39 @@ public class HomeMainFragment extends BaseFragment implements OnChannelListener 
         //添加到现在的位置
         datas.add(endPos, o);
     }
+
+    private void updateAvatar(String newAvatar) {
+        mHeadView.setHeadImage(newAvatar);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (null != receiver) {
+            LocalBroadcastUtil.unRegister(receiver);
+        }
+    }
+
+    private BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            if (TextUtils.equals(intent.getAction(), LocalBroadcastUtil.UPDATE_USER_INFO)) {
+
+                int intExtra = intent.getIntExtra(LocalBroadcastUtil.UPDATE_USER_INFO, -1);
+                if (intExtra == LocalBroadcastUtil.UPDATE_AVATAR) {
+
+                    String stringExtra = intent.getStringExtra(LocalBroadcastUtil.UPDATE_CONTENT);
+                    if (!TextUtils.isEmpty(stringExtra)) {
+                        updateAvatar(stringExtra);
+                    }
+                }
+            } else if (TextUtils.equals(intent.getAction(), LocalBroadcastUtil.LOGOUT)) {
+                updateAvatar("");
+            } else if (TextUtils.equals(intent.getAction(), LocalBroadcastUtil.LOGIN)) {
+                BaseUser user = AccountManager.getInstance().getUser();
+                if (null != user) updateAvatar(user.icon);
+            }
+        }
+    };
 }

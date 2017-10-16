@@ -76,23 +76,6 @@ public class MainActivity extends BaseActivity {
 
         initTab();
         initFragment();
-        testInterface();
-    }
-
-    private void testInterface() {
-
-        //final QiNiuHelper helper = new QiNiuHelper();
-        //helper.getUpToken(new SimpleNotifyListener() {
-        //    @Override
-        //    public void onSuccess(String msg) {
-        //        helper.upload();
-        //    }
-        //
-        //    @Override
-        //    public void onFailed(String msg) {
-        //
-        //    }
-        //});
     }
 
     /**
@@ -107,7 +90,7 @@ public class MainActivity extends BaseActivity {
         mTabLayout.setOnTabSelectListener(new OnTabSelectListener() {
             @Override
             public void onTabSelect(int position) {
-                if (position < TAB_FOCUS || AccountManager.getInstance().hasLogin()) {
+                if (position != TAB_FOCUS || AccountManager.getInstance().hasLogin()) {
                     mLastTabPos = position;
                     loadPage(position);
                 } else {

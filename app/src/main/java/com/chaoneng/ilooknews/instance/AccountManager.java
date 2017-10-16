@@ -4,9 +4,11 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.util.Log;
 import com.chaoneng.ilooknews.AppConstant;
 import com.chaoneng.ilooknews.data.BaseUser;
 import com.chaoneng.ilooknews.util.IntentHelper;
+import com.chaoneng.ilooknews.util.LocalBroadcastUtil;
 import com.magicalxu.library.blankj.SPUtils;
 
 /**
@@ -41,6 +43,8 @@ public class AccountManager {
         spUtils.put(AppConstant.UID, user.id);
         spUtils.put(AppConstant.USER_ICON, user.icon);
         this.user = user;
+        LocalBroadcastUtil.sendUserLogin();
+        Log.d("magical", " save user data ");
     }
 
     public void saveUser(BaseUser user, boolean saveId) {
@@ -86,5 +90,6 @@ public class AccountManager {
         SPUtils spUtils = SPUtils.getInstance();
         spUtils.put(AppConstant.UID, "");
         spUtils.put(AppConstant.USER_ICON, "");
+        LocalBroadcastUtil.sendUserLogout();
     }
 }

@@ -72,7 +72,7 @@
         android:configChanges="orientation|screenSize|keyboard|keyboardHidden"
         android:exported="false"
         android:screenOrientation="portrait"
-        android:theme="@style/SimpleActivityTheme" />
+        android:theme="@style/text_style_normal" />
     <activity
         android:name=".module.home.activity.NotifyActivity"
         android:screenOrientation="portrait"

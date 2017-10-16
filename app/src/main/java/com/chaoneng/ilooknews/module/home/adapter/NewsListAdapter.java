@@ -95,8 +95,10 @@ public class NewsListAdapter extends BaseMultiItemQuickAdapter<NewsListBean, Bas
         mVideoPlayer.setThumbImageView(imageView);
         mVideoPlayer.setPlayPosition(helper.getAdapterPosition());
 
-        VideoHelper.initPlayer(mContext, mVideoPlayer, url, StringHelper.getString(item.title),
-                null);
+        if (!TextUtils.isEmpty(url)) {
+            VideoHelper.initPlayer(mContext, mVideoPlayer, url, StringHelper.getString(item.title),
+                    null);
+        }
     }
 
     private void bindThreeImg(BaseViewHolder helper, NewsListBean item) {

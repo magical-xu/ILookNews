@@ -70,7 +70,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     protected void beforeContentView() {
         // do nothing
-        int size = SPUtils.getInstance().getInt(AppConstant.NEWS_TEXT_SIZE);
+        int size = SPUtils.getInstance().getInt(AppConstant.NEWS_TEXT_SIZE, 1);
         if (size == 0) {
             setTheme(R.style.text_style_small);
         } else if (size == 1) {

@@ -7,6 +7,8 @@ package com.chaoneng.ilooknews;
 
 public interface AppConstant {
 
+    int REQUEST_CODE = 1001;
+
     String UID = "UID";
     String USER_ICON = "USER_ICON";
     String WIFI_4G_TIP = "wifi_4g_tip";

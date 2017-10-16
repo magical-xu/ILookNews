@@ -12,6 +12,7 @@ import com.chaoneng.ilooknews.instance.AccountManager;
 import com.chaoneng.ilooknews.net.callback.SimpleCallback;
 import com.chaoneng.ilooknews.net.client.NetRequest;
 import com.chaoneng.ilooknews.net.data.HttpResult;
+import com.chaoneng.ilooknews.util.StringHelper;
 import com.chaoneng.ilooknews.widget.ilook.ILookTitleBar;
 import com.magicalxu.library.blankj.KeyboardUtils;
 import com.magicalxu.library.blankj.ToastUtils;
@@ -70,6 +71,11 @@ public class FeedBackActivity extends BaseActivity {
      */
     private void onSubmit() {
 
+        String userId = AccountManager.getInstance().getUserId();
+        if (AccountManager.getInstance().checkLogin(this)) {
+            return;
+        }
+
         String feed = mFeedbackEt.getText().toString().trim();
         String contact = mContactEt.getText().toString().trim();
         if (TextUtils.isEmpty(feed) || TextUtils.isEmpty(contact)) {
@@ -78,15 +84,8 @@ public class FeedBackActivity extends BaseActivity {
         }
 
         KeyboardUtils.hideSoftInput(this);
-
-        String userId = AccountManager.getInstance().getUserId();
-        if (TextUtils.isEmpty(userId)) {
-            ToastUtils.showShort("请先登录！");
-            return;
-        }
-
         showLoading();
-        Call<HttpResult<String>> call = service.addFeedback(userId, feed);
+        Call<HttpResult<String>> call = service.addFeedback(StringHelper.getString(userId), feed);
         call.enqueue(new SimpleCallback<String>() {
             @Override
             public void onSuccess(String data) {

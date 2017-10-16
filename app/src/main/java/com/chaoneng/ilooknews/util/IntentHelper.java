@@ -1,8 +1,10 @@
 package com.chaoneng.ilooknews.util;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import com.chaoneng.ilooknews.AppConstant;
 import com.chaoneng.ilooknews.SimpleWebActivity;
 import com.chaoneng.ilooknews.module.focus.AddFollowListActivity;
 import com.chaoneng.ilooknews.module.home.activity.CommentActivity;
@@ -120,8 +122,9 @@ public class IntentHelper {
     /**
      * 跳转注册界面
      */
-    public static void openRegisterPage(Context context) {
-        context.startActivity(new Intent(context, RegisterActivity.class));
+    public static void openRegisterPage(Activity context) {
+        context.startActivityForResult(new Intent(context, RegisterActivity.class),
+                AppConstant.REQUEST_CODE);
     }
 
     /**

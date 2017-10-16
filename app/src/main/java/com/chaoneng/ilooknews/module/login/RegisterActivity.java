@@ -18,6 +18,7 @@ import com.chaoneng.ilooknews.api.LoginService;
 import com.chaoneng.ilooknews.api.UserService;
 import com.chaoneng.ilooknews.base.BaseActivity;
 import com.chaoneng.ilooknews.data.UserWrapper;
+import com.chaoneng.ilooknews.instance.AccountManager;
 import com.chaoneng.ilooknews.library.boxing.BoxingHelper;
 import com.chaoneng.ilooknews.library.mob.MobHelper;
 import com.chaoneng.ilooknews.library.qiniu.QiNiuHelper;
@@ -113,6 +114,7 @@ public class RegisterActivity extends BaseActivity {
             }
         };
 
+        mHeadIv.setHeadImage("");
         MobHelper.register(eventHandler);
     }
 
@@ -235,8 +237,7 @@ public class RegisterActivity extends BaseActivity {
 
             @Override
             public void onFailed(String msg) {
-                hideLoading();
-                ToastUtils.showShort(msg);
+                onSimpleError(msg);
             }
         });
     }
@@ -255,9 +256,13 @@ public class RegisterActivity extends BaseActivity {
             }
 
             @Override
-            public void onFailed(String msg) {
-                hideLoading();
-                ToastUtils.showShort(msg);
+            public void onFailed(final String msg) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        onSimpleError(msg);
+                    }
+                });
             }
         });
     }
@@ -329,14 +334,12 @@ public class RegisterActivity extends BaseActivity {
         call.enqueue(new SimpleCallback<UserWrapper>() {
             @Override
             public void onSuccess(UserWrapper data) {
-                hideLoading();
-                showShort(data.socialUser.id);
+                onRegisterSuccess(data);
             }
 
             @Override
             public void onFail(String code, String errorMsg) {
-                showShort(errorMsg);
-                hideLoading();
+                onSimpleError(errorMsg);
             }
         });
     }
@@ -360,16 +363,23 @@ public class RegisterActivity extends BaseActivity {
         call.enqueue(new SimpleCallback<UserWrapper>() {
             @Override
             public void onSuccess(UserWrapper data) {
-                hideLoading();
-                showShort(data.socialUser.id);
+                onRegisterSuccess(data);
             }
 
             @Override
             public void onFail(String code, String errorMsg) {
-                showShort(errorMsg);
-                hideLoading();
+                onSimpleError(errorMsg);
             }
         });
+    }
+
+    private void onRegisterSuccess(UserWrapper data) {
+        hideLoading();
+        if (null != data) {
+            AccountManager.getInstance().saveUser(data.socialUser);
+            setResult(RESULT_OK);
+            finish();
+        }
     }
 
     /**

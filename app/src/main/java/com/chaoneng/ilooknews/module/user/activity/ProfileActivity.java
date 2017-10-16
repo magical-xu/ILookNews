@@ -23,6 +23,7 @@ import com.chaoneng.ilooknews.module.user.widget.SettingItemView;
 import com.chaoneng.ilooknews.net.callback.SimpleCallback;
 import com.chaoneng.ilooknews.net.client.NetRequest;
 import com.chaoneng.ilooknews.net.data.HttpResult;
+import com.chaoneng.ilooknews.util.LocalBroadcastUtil;
 import com.chaoneng.ilooknews.util.SimpleNotifyListener;
 import com.chaoneng.ilooknews.widget.ilook.ILookTitleBar;
 import com.magicalxu.library.blankj.EmptyUtils;
@@ -227,7 +228,7 @@ public class ProfileActivity extends BaseActivity {
     /**
      * 修改头像
      */
-    private void modifyAvatar(String avatarUrl) {
+    private void modifyAvatar(final String avatarUrl) {
 
         AccountManager accountManager = AccountManager.getInstance();
         if (accountManager.hasLogin()) {
@@ -240,6 +241,8 @@ public class ProfileActivity extends BaseActivity {
                 public void onSuccess(JSONObject data) {
                     hideLoading();
                     ToastUtils.showShort("更改头像成功");
+                    LocalBroadcastUtil.sendUpdateUserInfo(LocalBroadcastUtil.UPDATE_AVATAR,
+                            avatarUrl);
                 }
 
                 @Override

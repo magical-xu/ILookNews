@@ -87,6 +87,7 @@ public class NotifyActivity extends BaseActivity {
 
         String userId = AccountManager.getInstance().getUserId();
         if (TextUtils.isEmpty(userId)) {
+            mRefreshHelper.onFail();
             return;
         }
 
@@ -102,6 +103,7 @@ public class NotifyActivity extends BaseActivity {
 
             @Override
             public void onFail(String code, String errorMsg) {
+                mRefreshHelper.onFail();
                 onSimpleError(errorMsg);
             }
         });
