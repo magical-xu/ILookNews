@@ -7,7 +7,9 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -31,6 +33,7 @@ import com.chaoneng.ilooknews.module.video.adapter.CommentAdapter;
 import com.chaoneng.ilooknews.net.callback.SimpleCallback;
 import com.chaoneng.ilooknews.net.client.NetRequest;
 import com.chaoneng.ilooknews.net.data.HttpResult;
+import com.chaoneng.ilooknews.util.AnimHelper;
 import com.chaoneng.ilooknews.util.HtmlUtil;
 import com.chaoneng.ilooknews.util.IntentHelper;
 import com.chaoneng.ilooknews.util.RefreshHelper;
@@ -54,7 +57,7 @@ import static com.chaoneng.ilooknews.AppConstant.PARAMS_NEWS_TYPE;
  * Created by magical on 17/8/27.
  * Description : 新闻详情页
  * 关注 ok
- * 赞  note: 多次操作 再次点赞的时候 返回码有问题
+ * 赞  ok
  * 评论 ok
  */
 
@@ -78,6 +81,8 @@ public class NewsDetailActivity extends BaseActivity {
     private TextView mHeaderName;
     private TextView mHeaderIntro;
     private TextView mHeaderFocus;
+
+    private View mEmptyView;
 
     private CommentAdapter mAdapter;
     private RefreshHelper<CommentBean> mRefreshHelper;
@@ -116,6 +121,7 @@ public class NewsDetailActivity extends BaseActivity {
         homeService = NetRequest.getInstance().create(HomeService.class);
         userService = NetRequest.getInstance().create(UserService.class);
         mAdapter = new CommentAdapter(false, R.layout.item_video_comment);
+        mAdapter.setHeaderAndEmpty(true);
         mRefreshHelper = new RefreshHelper<CommentBean>(mRefreshLayout, mAdapter, mRecyclerView) {
             @Override
             public void onRequest(int page) {
@@ -149,6 +155,9 @@ public class NewsDetailActivity extends BaseActivity {
             }
         });
         initHeader();
+        mEmptyView = LayoutInflater.from(this)
+                .inflate(R.layout.base_comment_empty_view, (ViewGroup) mRecyclerView.getParent(),
+                        false);
         mRefreshHelper.beginLoadData();
     }
 
@@ -173,7 +182,12 @@ public class NewsDetailActivity extends BaseActivity {
             type = 11;
             CommentBean commentBean = mAdapter.getData().get(position);
             cid = commentBean.cid;
-            hasPraise = TextUtils.equals(AppConstant.HAS_PRAISE, commentBean.isFollow);
+            //hasPraise = TextUtils.equals(AppConstant.HAS_PRAISE, commentBean.isFollow);
+            //评论不许取消点赞
+            hasPraise = false;
+
+            AnimHelper.showAnim(mAdapter.getViewByPosition(mRecyclerView,
+                    position + mAdapter.getHeaderLayoutCount(), R.id.tv_up));
         }
 
         int subType = hasPraise ? 2 : 1;
@@ -196,11 +210,11 @@ public class NewsDetailActivity extends BaseActivity {
                     if (listData.size() > position) {
                         CommentBean commentBean = listData.get(position);
                         if (hasPraise) {
-                            //取消点赞成功
-                            ToastUtils.showShort("取消点赞成功");
-                            commentBean.isFollow = AppConstant.UN_PRAISE;
-                            --commentBean.careCount;
-                            mAdapter.notifyItemChanged(position + mAdapter.getHeaderLayoutCount());
+                            ////取消点赞成功
+                            //ToastUtils.showShort("取消点赞成功");
+                            //commentBean.isFollow = AppConstant.UN_PRAISE;
+                            //--commentBean.careCount;
+                            //mAdapter.notifyItemChanged(position + mAdapter.getHeaderLayoutCount());
                         } else {
                             //点赞成功
                             ToastUtils.showShort("点赞成功");
@@ -470,7 +484,7 @@ public class NewsDetailActivity extends BaseActivity {
         loadComment(1);
     }
 
-    private void loadComment(int page) {
+    private void loadComment(final int page) {
 
         showLoading();
         mRefreshHelper.setCurPage(page);
@@ -481,6 +495,15 @@ public class NewsDetailActivity extends BaseActivity {
             @Override
             public void onSuccess(NewsInfoWrapper data) {
                 hideLoading();
+
+                if (page == 1 && (null == data
+                        || null == data.commentlist
+                        || data.commentlist.size() == 0)) {
+                    mRefreshHelper.finishRefresh();
+                    mAdapter.setEmptyView(mEmptyView);
+                    return;
+                }
+
                 List<CommentBean> commentList = data.commentlist;
                 if (null != commentList) {
                     bindItem(commentList, data.haveNext);

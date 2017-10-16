@@ -9,6 +9,7 @@
       android:layout_height="wrap_content"
       android:layout_gravity="center"
       android:text="暂无数据"
+      android:textColor="@color/black"
       android:textSize="@dimen/font_main" />
 
 </FrameLayout>

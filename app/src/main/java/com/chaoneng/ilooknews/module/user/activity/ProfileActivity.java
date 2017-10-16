@@ -186,6 +186,7 @@ public class ProfileActivity extends BaseActivity {
                     hideLoading();
                     ToastUtils.showShort("更改昵称成功");
                     modifyNick.setRightText(text);
+                    LocalBroadcastUtil.sendUpdateUserInfo(LocalBroadcastUtil.UPDATE_NICK, text);
                 }
 
                 @Override
@@ -215,6 +216,7 @@ public class ProfileActivity extends BaseActivity {
                     hideLoading();
                     ToastUtils.showShort("更改签名成功");
                     modifySign.setRightText(text);
+                    LocalBroadcastUtil.sendUpdateUserInfo(LocalBroadcastUtil.UPDATE_SIGN, text);
                 }
 
                 @Override
@@ -277,8 +279,13 @@ public class ProfileActivity extends BaseActivity {
                     }
 
                     @Override
-                    public void onFailed(String msg) {
-                        onSimpleError(msg);
+                    public void onFailed(final String msg) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                onSimpleError(msg);
+                            }
+                        });
                     }
                 });
             }

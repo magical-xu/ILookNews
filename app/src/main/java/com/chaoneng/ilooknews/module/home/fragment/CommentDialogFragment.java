@@ -27,6 +27,7 @@ import com.chaoneng.ilooknews.module.video.adapter.CommentAdapter;
 import com.chaoneng.ilooknews.net.callback.SimpleCallback;
 import com.chaoneng.ilooknews.net.client.NetRequest;
 import com.chaoneng.ilooknews.net.data.HttpResult;
+import com.chaoneng.ilooknews.util.AnimHelper;
 import com.chaoneng.ilooknews.util.CompatUtil;
 import com.chaoneng.ilooknews.util.RefreshHelper;
 import com.chaoneng.ilooknews.util.StringHelper;
@@ -40,6 +41,8 @@ import retrofit2.Call;
 /**
  * Created by magical on 2017/8/18 .
  * 二级评论界面
+ * 评论：ok
+ * 点赞：ok
  */
 
 public class CommentDialogFragment extends BaseDialogFragment {
@@ -139,6 +142,9 @@ public class CommentDialogFragment extends BaseDialogFragment {
     }
 
     private void onPraise(final int position) {
+
+        AnimHelper.showAnim(mAdapter.getViewByPosition(mRecyclerView, position, R.id.tv_up));
+
         int type;
         final boolean hasPraise;
         String cid;
@@ -147,7 +153,8 @@ public class CommentDialogFragment extends BaseDialogFragment {
         type = 11;
         CommentBean commentBean = mAdapter.getData().get(position);
         cid = commentBean.cid;
-        hasPraise = TextUtils.equals(AppConstant.HAS_PRAISE, commentBean.isFollow);
+        //hasPraise = TextUtils.equals(AppConstant.HAS_PRAISE, commentBean.isFollow);
+        hasPraise = false;
 
         int subType = hasPraise ? 2 : 1;
 
@@ -166,16 +173,16 @@ public class CommentDialogFragment extends BaseDialogFragment {
                     CommentBean commentBean = listData.get(position);
                     if (hasPraise) {
                         //取消点赞成功
-                        ToastUtils.showShort("取消点赞成功");
-                        commentBean.isFollow = AppConstant.UN_PRAISE;
-                        commentBean.careCount--;
-                        mAdapter.notifyDataSetChanged();
+                        //ToastUtils.showShort("取消点赞成功");
+                        //commentBean.isFollow = AppConstant.UN_PRAISE;
+                        //commentBean.careCount--;
+                        //mAdapter.notifyDataSetChanged();
                     } else {
                         //点赞成功
                         ToastUtils.showShort("点赞成功");
                         commentBean.isFollow = AppConstant.HAS_PRAISE;
-                        commentBean.careCount++;
-                        mAdapter.notifyDataSetChanged();
+                        ++commentBean.careCount;
+                        mAdapter.notifyItemChanged(position + mAdapter.getHeaderLayoutCount());
                     }
                 }
             }

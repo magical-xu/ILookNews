@@ -1,8 +1,5 @@
 package com.chaoneng.ilooknews.module.home.activity;
 
-import android.animation.Keyframe;
-import android.animation.ObjectAnimator;
-import android.animation.PropertyValuesHolder;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -29,12 +26,14 @@ import com.chaoneng.ilooknews.module.video.adapter.CommentAdapter;
 import com.chaoneng.ilooknews.net.callback.SimpleCallback;
 import com.chaoneng.ilooknews.net.client.NetRequest;
 import com.chaoneng.ilooknews.net.data.HttpResult;
+import com.chaoneng.ilooknews.util.AnimHelper;
 import com.chaoneng.ilooknews.util.RefreshHelper;
 import com.chaoneng.ilooknews.util.StringHelper;
 import com.chaoneng.ilooknews.widget.ilook.ILookTitleBar;
 import com.magicalxu.library.blankj.KeyboardUtils;
 import com.magicalxu.library.blankj.ToastUtils;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import java.util.List;
 import org.json.JSONObject;
 import retrofit2.Call;
 
@@ -44,6 +43,8 @@ import static com.chaoneng.ilooknews.AppConstant.PARAMS_NEWS_TYPE;
 /**
  * Created by magical on 17/9/19.
  * Description : 一级评论界面
+ * 评论 ok
+ * 点赞
  */
 
 public class CommentActivity extends BaseActivity {
@@ -214,7 +215,7 @@ public class CommentActivity extends BaseActivity {
 
     private void onPraise(final int position) {
 
-        showAnim(position);
+        AnimHelper.showAnim(mAdapter.getViewByPosition(mRecyclerView, position, R.id.tv_up));
 
         int type;
         final boolean hasPraise;
@@ -231,7 +232,8 @@ public class CommentActivity extends BaseActivity {
         type = 11;
         CommentBean commentBean = mAdapter.getData().get(position);
         cid = commentBean.cid;
-        hasPraise = TextUtils.equals(AppConstant.HAS_PRAISE, commentBean.isFollow);
+        //hasPraise = TextUtils.equals(AppConstant.HAS_PRAISE, commentBean.isFollow);
+        hasPraise = false;
         //}
 
         int subType = hasPraise ? 2 : 1;
@@ -248,17 +250,17 @@ public class CommentActivity extends BaseActivity {
                 if (position == AppConstant.INVALIDATE) {
 
                 } else {
-                    if (hasPraise) {
-                        //取消点赞成功
-                        ToastUtils.showShort("取消点赞成功");
-                        //commentBean.isFollow = AppConstant.UN_PRAISE;
-                    } else {
-                        //点赞成功
-                        ToastUtils.showShort("点赞成功");
-                        //commentBean.isFollow = AppConstant.HAS_PRAISE;
-                        CommentBean commentBean1 = mAdapter.getData().get(position);
-                        commentBean1.careCount++;
-                        mAdapter.notifyDataSetChanged();
+                    List<CommentBean> listData = mAdapter.getData();
+                    if (listData.size() > position) {
+                        CommentBean commentBean = listData.get(position);
+                        if (hasPraise) {
+                        } else {
+                            //点赞成功
+                            ToastUtils.showShort("点赞成功");
+                            commentBean.isFollow = AppConstant.HAS_PRAISE;
+                            ++commentBean.careCount;
+                            mAdapter.notifyItemChanged(position + mAdapter.getHeaderLayoutCount());
+                        }
                     }
                 }
             }
@@ -268,43 +270,5 @@ public class CommentActivity extends BaseActivity {
                 onSimpleError(errorMsg);
             }
         });
-    }
-
-    private void showAnim(int position) {
-
-        View view = mAdapter.getViewByPosition(mRecyclerView, position, R.id.tv_up);
-        if (view == null) {
-            return;
-        }
-        //TODO 验证参数的有效性
-        float scaleSmall = 0.8f;
-        float scaleLarge = 1.2f;
-        float shakeDegrees = 10;
-        int duration = 1000;
-
-        //先变小后变大
-        PropertyValuesHolder scaleXValuesHolder =
-                PropertyValuesHolder.ofKeyframe(View.SCALE_X, Keyframe.ofFloat(0f, 1.0f),
-                        Keyframe.ofFloat(0.25f, scaleSmall), Keyframe.ofFloat(0.5f, scaleLarge),
-                        Keyframe.ofFloat(0.75f, scaleLarge), Keyframe.ofFloat(1.0f, 1.0f));
-        PropertyValuesHolder scaleYValuesHolder =
-                PropertyValuesHolder.ofKeyframe(View.SCALE_Y, Keyframe.ofFloat(0f, 1.0f),
-                        Keyframe.ofFloat(0.25f, scaleSmall), Keyframe.ofFloat(0.5f, scaleLarge),
-                        Keyframe.ofFloat(0.75f, scaleLarge), Keyframe.ofFloat(1.0f, 1.0f));
-
-        //先往左再往右
-        PropertyValuesHolder rotateValuesHolder =
-                PropertyValuesHolder.ofKeyframe(View.ROTATION, Keyframe.ofFloat(0f, 0f),
-                        Keyframe.ofFloat(0.1f, -shakeDegrees), Keyframe.ofFloat(0.2f, shakeDegrees),
-                        Keyframe.ofFloat(0.3f, -shakeDegrees), Keyframe.ofFloat(0.4f, shakeDegrees),
-                        Keyframe.ofFloat(0.5f, -shakeDegrees), Keyframe.ofFloat(0.6f, shakeDegrees),
-                        Keyframe.ofFloat(0.7f, -shakeDegrees), Keyframe.ofFloat(0.8f, shakeDegrees),
-                        Keyframe.ofFloat(0.9f, -shakeDegrees), Keyframe.ofFloat(1.0f, 0f));
-
-        ObjectAnimator objectAnimator =
-                ObjectAnimator.ofPropertyValuesHolder(view, scaleXValuesHolder, scaleYValuesHolder,
-                        rotateValuesHolder);
-        objectAnimator.setDuration(duration);
-        objectAnimator.start();
     }
 }
