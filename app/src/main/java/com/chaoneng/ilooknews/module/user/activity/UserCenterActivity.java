@@ -15,6 +15,7 @@ import com.chaoneng.ilooknews.AppConstant;
 import com.chaoneng.ilooknews.R;
 import com.chaoneng.ilooknews.api.UserService;
 import com.chaoneng.ilooknews.base.BaseActivity;
+import com.chaoneng.ilooknews.instance.AccountManager;
 import com.chaoneng.ilooknews.module.user.data.UserInfoWrapper;
 import com.chaoneng.ilooknews.module.user.fragment.BrokeNewsListFragment;
 import com.chaoneng.ilooknews.module.user.fragment.StateListFragment;
@@ -22,7 +23,9 @@ import com.chaoneng.ilooknews.net.callback.SimpleCallback;
 import com.chaoneng.ilooknews.net.client.NetRequest;
 import com.chaoneng.ilooknews.net.data.HttpResult;
 import com.chaoneng.ilooknews.util.IntentHelper;
+import com.chaoneng.ilooknews.util.SimpleNotifyListener;
 import com.chaoneng.ilooknews.util.StringHelper;
+import com.chaoneng.ilooknews.util.UserOptionHelper;
 import com.chaoneng.ilooknews.widget.adapter.BaseFragmentAdapter;
 import com.chaoneng.ilooknews.widget.image.HeadImageView;
 import com.flyco.tablayout.SlidingTabLayout;
@@ -49,6 +52,7 @@ public class UserCenterActivity extends BaseActivity {
     private BaseFragmentAdapter baseFragmentAdapter;
     private UserService service;
     private String pageUid;
+    private boolean hasFollowed;
 
     public static void getInstance(Context context, String userId) {
         Intent intent = new Intent(context, UserCenterActivity.class);
@@ -82,6 +86,13 @@ public class UserCenterActivity extends BaseActivity {
             }
         });
 
+        String userId = AccountManager.getInstance().getUserId();
+        if (TextUtils.equals(userId, pageUid)) {
+            tvFocus.setVisibility(View.GONE);
+        } else {
+            tvFocus.setVisibility(View.VISIBLE);
+        }
+
         ArrayList<Fragment> fragments = new ArrayList<>();
         fragments.add(StateListFragment.getInstance(pageUid));
         fragments.add(BrokeNewsListFragment.getInstance(pageUid));
@@ -107,7 +118,13 @@ public class UserCenterActivity extends BaseActivity {
         focusView.setText(String.valueOf(data.followedNum));
         fansView.setText(String.valueOf(data.fansNum));
 
-        // TODO: 2017/10/9 差个关注
+        hasFollowed = AppConstant.USER_FOLLOW_INT == data.isfollow;
+        checkFollowState(hasFollowed);
+    }
+
+    private void checkFollowState(boolean isFollow) {
+
+        tvFocus.setText(isFollow ? "已关注" : "关注");
     }
 
     private void loadData() {
@@ -138,7 +155,51 @@ public class UserCenterActivity extends BaseActivity {
             case R.id.iv_avatar:
                 break;
             case R.id.tv_focus:
+                onClickFocus();
                 break;
+        }
+    }
+
+    private void onClickFocus() {
+
+        if (AccountManager.getInstance().checkLogin(this)) {
+            return;
+        }
+
+        if (isLoading()) {
+            return;
+        }
+
+        if (hasFollowed) {
+            //操作取消关注
+            UserOptionHelper.onCancelFollow(service, pageUid, new SimpleNotifyListener() {
+                @Override
+                public void onSuccess(String msg) {
+                    hideLoading();
+                    hasFollowed = false;
+                    checkFollowState(hasFollowed);
+                }
+
+                @Override
+                public void onFailed(String msg) {
+                    onSimpleError(msg);
+                }
+            });
+        } else {
+            //操作关注
+            UserOptionHelper.onFollow(service, pageUid, new SimpleNotifyListener() {
+                @Override
+                public void onSuccess(String msg) {
+                    hideLoading();
+                    hasFollowed = true;
+                    checkFollowState(hasFollowed);
+                }
+
+                @Override
+                public void onFailed(String msg) {
+                    onSimpleError(msg);
+                }
+            });
         }
     }
 }

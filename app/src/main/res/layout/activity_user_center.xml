@@ -117,9 +117,10 @@
 
             <TextView
                 android:id="@+id/tv_focus"
-                android:layout_width="64dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
+                android:maxLines="1"
                 android:layout_marginRight="@dimen/padding_normal"
                 android:background="@drawable/bg_btn_focus_white"
                 android:gravity="center"

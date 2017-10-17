@@ -146,4 +146,10 @@ public interface UserService {
     @GET("getMyCenter")
     Call<HttpResult<UserCenterWrapper>> getMyCenter(@Query("userid") String userId,
             @Query("page") int page, @Query("pageSize") int pageSize);
+
+    /**
+     * 添加视频播放次数
+     */
+    @POST("addPlayCount")
+    Call<HttpResult<JSONObject>> addVideoPlayCount(@Query("newsId") String newsId);
 }

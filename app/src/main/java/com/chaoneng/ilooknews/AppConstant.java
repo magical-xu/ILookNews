@@ -28,6 +28,7 @@ public interface AppConstant {
 
     String USER_FOLLOW = "1";     //已关注
     String USER_UN_FOLLOW = "0";  //未关注
+    int USER_FOLLOW_INT = 1;
 
     String HAS_PRAISE = "1";
     String UN_PRAISE = "0";

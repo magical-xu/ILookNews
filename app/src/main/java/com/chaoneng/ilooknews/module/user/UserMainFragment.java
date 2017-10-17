@@ -182,16 +182,12 @@ public class UserMainFragment extends BaseFragment {
                 IntentHelper.openSettingPage(getActivity());
                 break;
             case R.id.credit_topic:
-                ToastUtils.showShort("动态");
                 break;
             case R.id.credit_following:
-                ToastUtils.showShort("关注");
                 break;
             case R.id.credit_fans:
-                ToastUtils.showShort("粉丝");
                 break;
             case R.id.credit_visitors:
-                ToastUtils.showShort("访客");
                 break;
         }
     }

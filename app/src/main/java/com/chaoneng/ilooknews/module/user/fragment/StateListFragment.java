@@ -7,10 +7,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import butterknife.BindView;
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chaoneng.ilooknews.AppConstant;
 import com.chaoneng.ilooknews.R;
 import com.chaoneng.ilooknews.api.UserService;
 import com.chaoneng.ilooknews.base.BaseFragment;
+import com.chaoneng.ilooknews.data.NewsInfo;
 import com.chaoneng.ilooknews.data.NewsInfoListWrapper;
 import com.chaoneng.ilooknews.instance.AccountManager;
 import com.chaoneng.ilooknews.module.user.adapter.StateAdapter;
@@ -20,6 +22,7 @@ import com.chaoneng.ilooknews.net.data.HttpResult;
 import com.chaoneng.ilooknews.util.IntentHelper;
 import com.chaoneng.ilooknews.util.RefreshHelper;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import java.util.List;
 import retrofit2.Call;
 
 /**
@@ -66,6 +69,20 @@ public class StateListFragment extends BaseFragment {
                 loadData(page);
             }
         };
+        mAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+            @Override
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                if (view.getId() == R.id.tv_share) {
+                    List<NewsInfo> data = mAdapter.getData();
+                    if (data.size() > position) {
+                        NewsInfo newsInfo = data.get(position);
+
+                        IntentHelper.openShareBottomPage(getActivity(), newsInfo.newId,
+                                newsInfo.newstype);
+                    }
+                }
+            }
+        });
 
         userService = NetRequest.getInstance().create(UserService.class);
 
@@ -105,7 +122,7 @@ public class StateListFragment extends BaseFragment {
                 }
 
                 //noinspection unchecked
-                mRefreshHelper.setData(data.list,data.haveNext);
+                mRefreshHelper.setData(data.list, data.haveNext);
             }
 
             @Override

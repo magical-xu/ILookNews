@@ -37,6 +37,7 @@ public class NewsInfo implements Serializable {
     public String isFollow;
     public String isCollection;
     public int like_count;
+    public int likeCount;
     public int dislike_count;
     public int newstype;
 
