@@ -11,10 +11,19 @@ public class UpdateUtil {
 
     public static final String VIDEO_CHANNEL_UPDATE_TIME = "video_channel_update_time";
     public static final String NEWS_CHANNEL_UPDATE_TIME = "news_channel_update_time";
+    public static final String NEWS_CHANNEL_TOTAL_SIZE = "news_channel_total_size";
 
-    public static long TIME_GAP_FOR_NEWS = 6L * 60L * 60L * 1000L;      //新闻以6小时为一次更新标准
+    public static long TIME_GAP_FOR_NEWS = 2L * 60L * 60L * 1000L;      //新闻以6小时为一次更新标准
     public static long TIME_GAP_FOR_VIDEO = 24L * 60L * 60L * 1000L;    //以一天为时间更新间隙
     public static long TIME_GAP_FOR_TEST = 60L * 1000L;       //便于调试 60s
+
+    public static void setNewsChannelTotalSize(int size) {
+        SPUtils.getInstance().put(NEWS_CHANNEL_TOTAL_SIZE, size);
+    }
+
+    public static int getNewsChannelTotalSize() {
+        return SPUtils.getInstance().getInt(NEWS_CHANNEL_TOTAL_SIZE, 0);
+    }
 
     /**
      * 设置 新闻或视频频道 最近一次 更新时间

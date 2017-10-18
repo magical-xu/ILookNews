@@ -206,23 +206,39 @@ public class TabManager {
 
     /**
      * 网络拉取 新闻类型 频道
+     * 2小时检查一次
+     * 先查数据库 记录db里频道总数
+     * 如果 小于2小时 直接返回数据库内容
+     * 如果 大于2小时 拉取网络
+     * 网络的回调结果 取频道总数 与 刚才数据库拿到的总数对比
+     * 如果 不一致 ，说明后台有更新 删除原数据 保存新数据并返回
+     * 如果 一致 说明无更新 从数据库拿 这样保证是用户排过序的
      */
     public void getNewsChannel(final Context context, @Nullable final NotifyListener listener) {
 
-        //1.先查数据库有没有记录 因为可以全部删除 所以判断两个表
+        boolean ignoreDb = UpdateUtil.needUpdateChannel(false);
         final DBManager dbManager = DBManager.getInstance(context);
+        int dbTotalSize = 0;
         if (dbManager.hasData(DBManager.myChannelDb) || dbManager.hasData(
                 DBManager.otherChannelDb)) {
             //为临时列表赋值
             mTabList = dbManager.queryChannelList(DBManager.myChannelDb);
             otherChannelList = dbManager.queryChannelList(DBManager.otherChannelDb);
-            setHasInit(true);
-            if (null != listener) {
-                listener.onSuccess();
+            //1.先记录数据库 频道总数
+            dbTotalSize = mTabList.size() + otherChannelList.size();
+
+            if (!ignoreDb) {
+                //2.如果小于2小时 直接返回数据库内容
+                setHasInit(true);
+                if (null != listener) {
+                    listener.onSuccess();
+                }
+                return;
             }
-            return;
         }
 
+        final int finalDbSize = dbTotalSize;
+        //走到这里说明 执行 3.大于2小时 进行网络拉取
         HomeService service = NetRequest.getInstance().create(HomeService.class);
         Call<HttpResult<TabBean>> call = service.getChannel(HomeService.NEWS);
         call.enqueue(new SimpleCallback<TabBean>() {
@@ -230,26 +246,40 @@ public class TabManager {
             public void onSuccess(TabBean data) {
 
                 if (null != data) {
-                    hasNewsInit = true;
 
                     mTabList = data.myChannels;
                     otherChannelList = data.myChannelsNot;
                     adaptMultiType(mTabList, true);
                     adaptMultiType(otherChannelList, false);
-                    dbManager.insertChannelList(DBManager.myChannelDb, mTabList);
-                    dbManager.insertChannelList(DBManager.otherChannelDb, otherChannelList);
+
+                    int netSize = data.myChannels.size() + data.myChannelsNot.size();
+                    if (netSize != finalDbSize) {
+                        //数量不一致 说明后台有更新
+                        updateNewsDb();
+                    } else {
+                        //从db拿 因为这个是用户排过序的
+                        mTabList = dbManager.queryChannelList(DBManager.myChannelDb);
+                        otherChannelList = dbManager.queryChannelList(DBManager.otherChannelDb);
+                    }
+                    hasNewsInit = true;
+
+                    //dbManager.insertChannelList(DBManager.myChannelDb, mTabList);
+                    //dbManager.insertChannelList(DBManager.otherChannelDb, otherChannelList);
 
                     if (null != listener) {
                         listener.onSuccess();
                     }
                 } else {
                     Timber.e(" can't get tab data.");
+                    hasNewsInit = false;
+                    if (null != listener) {
+                        listener.onFail();
+                    }
                 }
             }
 
             @Override
             public void onFail(String code, String errorMsg) {
-
                 hasNewsInit = false;
                 if (null != listener) {
                     listener.onFail();
@@ -320,6 +350,8 @@ public class TabManager {
                 .deleteAllAndInsertNew(DBManager.myChannelDb, mTabList);
         DBManager.getInstance(ILookApplication.getAppContext())
                 .deleteAllAndInsertNew(DBManager.otherChannelDb, otherChannelList);
+
+        UpdateUtil.setChannelUpdateTime(false);
     }
 
     public void updateVideoDb() {
