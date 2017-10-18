@@ -10,6 +10,7 @@ import com.chaoneng.ilooknews.net.callback.SimpleCallback;
 import com.chaoneng.ilooknews.net.client.NetRequest;
 import com.chaoneng.ilooknews.net.data.HttpResult;
 import com.chaoneng.ilooknews.util.NotifyListener;
+import com.chaoneng.ilooknews.util.UpdateUtil;
 import com.magicalxu.library.blankj.EmptyUtils;
 import java.util.ArrayList;
 import java.util.List;
@@ -216,6 +217,9 @@ public class TabManager {
             mTabList = dbManager.queryChannelList(DBManager.myChannelDb);
             otherChannelList = dbManager.queryChannelList(DBManager.otherChannelDb);
             setHasInit(true);
+            if (null != listener) {
+                listener.onSuccess();
+            }
             return;
         }
 
@@ -265,11 +269,16 @@ public class TabManager {
      */
     public void getVideoChannel(Context context, @Nullable final NotifyListener listener) {
 
-        //1.先查数据库有没有视频记录
+        boolean ignoreDb = UpdateUtil.needUpdateChannel(true);
+
         final DBManager dbManager = DBManager.getInstance(context);
-        if (dbManager.hasData(DBManager.videoDb)) {
-            setHasVideoInit(true);
-            return;
+        if (!ignoreDb) {
+
+            //1.先查数据库有没有视频记录
+            if (dbManager.hasData(DBManager.videoDb)) {
+                setHasVideoInit(true);
+                return;
+            }
         }
 
         HomeService service = NetRequest.getInstance().create(HomeService.class);
@@ -280,8 +289,11 @@ public class TabManager {
 
                 if (null != data) {
                     mVideoChannelList = data.myChannels;
-                    dbManager.insertChannelList(DBManager.videoDb, mVideoChannelList);
+                    //dbManager.insertChannelList(DBManager.videoDb, mVideoChannelList);
+                    //删除之前 db里的重新插入
+                    updateVideoDb();
                     hasVideoInit = true;
+                    UpdateUtil.setChannelUpdateTime(true);
 
                     if (null != listener) {
                         listener.onSuccess();
@@ -302,11 +314,17 @@ public class TabManager {
         });
     }
 
-    public void updateDb() {
+    public void updateNewsDb() {
 
         DBManager.getInstance(ILookApplication.getAppContext())
                 .deleteAllAndInsertNew(DBManager.myChannelDb, mTabList);
         DBManager.getInstance(ILookApplication.getAppContext())
                 .deleteAllAndInsertNew(DBManager.otherChannelDb, otherChannelList);
+    }
+
+    public void updateVideoDb() {
+
+        DBManager.getInstance(ILookApplication.getAppContext())
+                .deleteAllAndInsertNew(DBManager.videoDb, mVideoChannelList);
     }
 }

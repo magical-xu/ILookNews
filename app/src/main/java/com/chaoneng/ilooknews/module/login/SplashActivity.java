@@ -14,6 +14,7 @@ import com.chaoneng.ilooknews.MainActivity;
 import com.chaoneng.ilooknews.R;
 import com.chaoneng.ilooknews.base.BaseActivity;
 import com.chaoneng.ilooknews.instance.TabManager;
+import com.chaoneng.ilooknews.util.NotifyListener;
 import com.chaoneng.ilooknews.util.TimeCountdown;
 
 /**
@@ -39,11 +40,23 @@ public class SplashActivity extends BaseActivity {
     public void handleChildPage(Bundle savedInstanceState) {
 
         alphaAnimation();
-        countDown();
+        //countDown();
 
         // for init tab as early as possible
-        TabManager tabManager = TabManager.getInstance();
-        tabManager.getNewsChannel(this, null);
+        final TabManager tabManager = TabManager.getInstance();
+        tabManager.getNewsChannel(this, new NotifyListener() {
+            @Override
+            public void onSuccess() {
+                tabManager.setHasInit(true);
+                onTimeEnd();
+            }
+
+            @Override
+            public void onFail() {
+                tabManager.setHasInit(false);
+                onTimeEnd();
+            }
+        });
         tabManager.getVideoChannel(this, null);
     }
 

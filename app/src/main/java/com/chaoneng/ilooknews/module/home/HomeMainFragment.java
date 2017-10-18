@@ -199,7 +199,7 @@ public class HomeMainFragment extends BaseFragment implements OnChannelListener 
             public void onDismiss(DialogInterface dialog) {
 
                 //update database
-                TabManager.getInstance().updateDb();
+                TabManager.getInstance().updateNewsDb();
 
                 mPagerAdapter.updateTitle(
                         TabManager.getInstance().getTabNameList(getActivity(), false));
