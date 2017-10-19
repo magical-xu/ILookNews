@@ -22,14 +22,22 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/padding_normal"
-        tools:text="@string/user_name" />
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:paddingLeft="@dimen/padding_large"
+        android:paddingRight="@dimen/padding_large"
+        tools:text="jfiaifjifjiaejfaoe ieaifeifaleiajfielaiefaiefaleifaiealfleaeiflaeliaf" />
 
     <TextView
         android:id="@+id/id_sign"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/padding_small"
-        tools:text="@string/signature" />
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:paddingLeft="@dimen/padding_large"
+        android:paddingRight="@dimen/padding_large"
+        tools:text="jfiaejififaiefoajiofae jfieiafje eifjaieaoiefjaioe aeifaiejfieaflfiejafjaiefjiaoefaifeofjoaei jfieiafiejfaei" />
 
     <include layout="@layout/include_relation_view" />
 

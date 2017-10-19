@@ -16,7 +16,6 @@ import com.chaoneng.ilooknews.AppConstant;
 import com.chaoneng.ilooknews.R;
 import com.chaoneng.ilooknews.api.HomeService;
 import com.chaoneng.ilooknews.base.BaseFragment;
-import com.chaoneng.ilooknews.data.MockServer;
 import com.chaoneng.ilooknews.instance.VideoManager;
 import com.chaoneng.ilooknews.module.home.data.NewsListBean;
 import com.chaoneng.ilooknews.module.home.data.NewsListWrapper;
@@ -48,7 +47,6 @@ public class VideoListFragment extends BaseFragment {
 
     private VideoListAdapter mAdapter;
     private RefreshHelper mRefreshHelper;
-    private MockServer mockServer;
 
     private boolean mFull = false;
     private String mCid;

@@ -84,7 +84,7 @@
           android:id="@+id/iv_news_center_image2"
           android:layout_width="0dp"
           android:layout_height="match_parent"
-          android:layout_marginLeft="@dimen/padding_normal"
+          android:layout_marginLeft="@dimen/padding_tiny"
           android:layout_weight="1"
           android:scaleType="centerCrop"
           tools:src="@drawable/ic_image_loading" />
@@ -93,7 +93,7 @@
           android:id="@+id/iv_news_center_image3"
           android:layout_width="0dp"
           android:layout_height="match_parent"
-          android:layout_marginLeft="@dimen/padding_normal"
+          android:layout_marginLeft="@dimen/padding_tiny"
           android:layout_weight="1"
           android:scaleType="centerCrop"
           tools:src="@drawable/ic_image_loading" />

@@ -16,6 +16,7 @@ import butterknife.OnClick;
 import com.chaoneng.ilooknews.AppConstant;
 import com.chaoneng.ilooknews.R;
 import com.chaoneng.ilooknews.api.HomeService;
+import com.chaoneng.ilooknews.api.UserService;
 import com.chaoneng.ilooknews.base.BaseActivity;
 import com.chaoneng.ilooknews.data.ImageInfo;
 import com.chaoneng.ilooknews.data.NewsInfo;
@@ -28,6 +29,7 @@ import com.chaoneng.ilooknews.net.data.HttpResult;
 import com.chaoneng.ilooknews.util.BottomHelper;
 import com.chaoneng.ilooknews.util.CompatUtil;
 import com.chaoneng.ilooknews.util.IntentHelper;
+import com.chaoneng.ilooknews.util.SimpleNotifyListener;
 import com.chaoneng.ilooknews.util.SimplePreNotifyListener;
 import com.chaoneng.ilooknews.util.StringHelper;
 import com.chaoneng.ilooknews.util.UserOptionHelper;
@@ -73,11 +75,14 @@ public class NewsPhotoDetailActivity extends BaseActivity {
     private List<Fragment> mPhotoDetailFragmentList = new ArrayList<>();
     private List<String> mDesList = new ArrayList<>();
     private HomeService service;
+    private UserService userService;
 
     private String PAGE_NEWS_ID;
     private int PAGE_NEWS_TYPE;
+    private String PAGE_UID;
 
     private boolean hasCollected;
+    private boolean hasFollowed;
 
     public static void getInstance(Context context, @NonNull String newsId, int newsType) {
         Intent intent = new Intent(context, NewsPhotoDetailActivity.class);
@@ -99,11 +104,13 @@ public class NewsPhotoDetailActivity extends BaseActivity {
     @Override
     public void handleChildPage(Bundle savedInstanceState) {
 
-        checkIntent();
         StatusBarUtil.setColor(this, CompatUtil.getColor(this, R.color.black));
-        service = NetRequest.getInstance().create(HomeService.class);
-        loadData();
+        checkIntent();
         checkTitle();
+
+        service = NetRequest.getInstance().create(HomeService.class);
+        userService = NetRequest.getInstance().create(UserService.class);
+        loadData();
     }
 
     private void checkIntent() {
@@ -135,6 +142,10 @@ public class NewsPhotoDetailActivity extends BaseActivity {
                     return;
                 } else {
                     hasCollected = TextUtils.equals(AppConstant.HAS_PRAISE, newInfo.isCollection);
+                    hasFollowed = TextUtils.equals(AppConstant.USER_FOLLOW, newInfo.isFollow);
+                    setFollowState();
+                    PAGE_UID = newInfo.userid;
+                    mTitleBar.setHeadImage(StringHelper.getString(newInfo.userIcon));
                     changeStarState(hasCollected);
                 }
 
@@ -160,7 +171,7 @@ public class NewsPhotoDetailActivity extends BaseActivity {
         mTitleBar.setTitleBg(android.R.color.black)
                 .setLeftImage(R.drawable.ic_back)
                 .setRightImage(R.drawable.ic_more_white)
-                .hideDivider()
+                .hideDivider().openImageMode()
                 .setTitleListener(new ILookTitleBar.TitleCallbackAdapter() {
                     @Override
                     public void onClickLeft(View view) {
@@ -175,7 +186,67 @@ public class NewsPhotoDetailActivity extends BaseActivity {
                         IntentHelper.openShareBottomPage(NewsPhotoDetailActivity.this, PAGE_NEWS_ID,
                                 PAGE_NEWS_TYPE);
                     }
+
+                    @Override
+                    public void onClickAvatar(View view) {
+                        super.onClickAvatar(view);
+                        onJumpToUserPage();
+                    }
+
+                    @Override
+                    public void onClickFocus(View view) {
+                        super.onClickFocus(view);
+                        onOptFocus();
+                    }
                 });
+    }
+
+    private void onJumpToUserPage() {
+
+        if (TextUtils.isEmpty(PAGE_UID)) {
+            return;
+        }
+
+        IntentHelper.openUserCenterPage(this, PAGE_UID);
+    }
+
+    private void onOptFocus() {
+
+        if (hasFollowed) {
+            // cancel follow
+            UserOptionHelper.onCancelFollow(userService, PAGE_UID, new SimpleNotifyListener() {
+                @Override
+                public void onSuccess(String msg) {
+
+                    hasFollowed = false;
+                    setFollowState();
+                }
+
+                @Override
+                public void onFailed(String msg) {
+                    onSimpleError(msg);
+                }
+            });
+        } else {
+            // follow
+            UserOptionHelper.onFollow(userService, PAGE_UID, new SimpleNotifyListener() {
+                @Override
+                public void onSuccess(String msg) {
+
+                    hasFollowed = true;
+                    setFollowState();
+                }
+
+                @Override
+                public void onFailed(String msg) {
+                    onSimpleError(msg);
+                }
+            });
+        }
+    }
+
+    private void setFollowState() {
+        mTitleBar.setFocusText(hasFollowed ? "已关注" : "关注");
     }
 
     private void initViewPager() {

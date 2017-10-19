@@ -78,8 +78,9 @@ public class ProfileActivity extends BaseActivity {
         BaseUser user = accountManager.getUser();
         if (null != user) {
             modifyAvatar.setHead(user.icon);
-            modifyNick.setRightText(EmptyUtils.isEmpty(user.username) ? "" : user.username);
-            modifySign.setRightText(EmptyUtils.isEmpty(user.introduce) ? "" : user.introduce);
+            modifyNick.setRightText(EmptyUtils.isEmpty(user.username) ? "昵称" : user.username);
+            modifySign.setRightText(
+                    EmptyUtils.isEmpty(user.introduce) ? "这个人很懒,什么都没留下" : user.introduce);
         }
 
         // init ui
@@ -172,7 +173,7 @@ public class ProfileActivity extends BaseActivity {
      */
     private void modifyNickName(final String text) {
 
-        AccountManager accountManager = AccountManager.getInstance();
+        final AccountManager accountManager = AccountManager.getInstance();
         if (accountManager.hasLogin()) {
             String uid = accountManager.getUserId();
             Map<String, String> params = new HashMap<>();
@@ -186,6 +187,7 @@ public class ProfileActivity extends BaseActivity {
                     hideLoading();
                     ToastUtils.showShort("更改昵称成功");
                     modifyNick.setRightText(text);
+                    accountManager.updateLocalNick(text);
                     LocalBroadcastUtil.sendUpdateUserInfo(LocalBroadcastUtil.UPDATE_NICK, text);
                 }
 
@@ -202,7 +204,7 @@ public class ProfileActivity extends BaseActivity {
      */
     private void modifySignature(final String text) {
 
-        AccountManager accountManager = AccountManager.getInstance();
+        final AccountManager accountManager = AccountManager.getInstance();
         if (accountManager.hasLogin()) {
             String uid = accountManager.getUserId();
             Map<String, String> params = new HashMap<>();
@@ -216,6 +218,7 @@ public class ProfileActivity extends BaseActivity {
                     hideLoading();
                     ToastUtils.showShort("更改签名成功");
                     modifySign.setRightText(text);
+                    accountManager.updateLocalSign(text);
                     LocalBroadcastUtil.sendUpdateUserInfo(LocalBroadcastUtil.UPDATE_SIGN, text);
                 }
 
@@ -232,7 +235,7 @@ public class ProfileActivity extends BaseActivity {
      */
     private void modifyAvatar(final String avatarUrl) {
 
-        AccountManager accountManager = AccountManager.getInstance();
+        final AccountManager accountManager = AccountManager.getInstance();
         if (accountManager.hasLogin()) {
             String uid = accountManager.getUserId();
             Map<String, String> params = new HashMap<>();
@@ -243,6 +246,7 @@ public class ProfileActivity extends BaseActivity {
                 public void onSuccess(JSONObject data) {
                     hideLoading();
                     ToastUtils.showShort("更改头像成功");
+                    accountManager.updateLocalAvatar(avatarUrl);
                     LocalBroadcastUtil.sendUpdateUserInfo(LocalBroadcastUtil.UPDATE_AVATAR,
                             avatarUrl);
                 }

@@ -133,9 +133,12 @@ public class UserCenterActivity extends BaseActivity {
             return;
         }
 
+        String userId = AccountManager.getInstance().getUserId();
+
         showLoading();
         Call<HttpResult<UserInfoWrapper>> call =
-                service.getUserInfo(pageUid, pageUid, 1, 1, AppConstant.DEFAULT_PAGE_SIZE);
+                service.getUserInfo(StringHelper.getString(userId), pageUid, 1, 1,
+                        AppConstant.DEFAULT_PAGE_SIZE);
         call.enqueue(new SimpleCallback<UserInfoWrapper>() {
             @Override
             public void onSuccess(UserInfoWrapper data) {

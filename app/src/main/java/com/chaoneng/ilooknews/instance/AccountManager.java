@@ -92,4 +92,25 @@ public class AccountManager {
         spUtils.put(AppConstant.USER_ICON, "");
         LocalBroadcastUtil.sendUserLogout();
     }
+
+    public void updateLocalNick(String nick) {
+        BaseUser user = getUser();
+        if (null != user) {
+            user.username = nick;
+        }
+    }
+
+    public void updateLocalSign(String sign) {
+        BaseUser user = getUser();
+        if (null != user) {
+            user.introduce = sign;
+        }
+    }
+
+    public void updateLocalAvatar(String avatarUrl) {
+        BaseUser user = getUser();
+        if (null != user) {
+            user.icon = avatarUrl;
+        }
+    }
 }

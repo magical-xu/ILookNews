@@ -15,6 +15,7 @@
       android:layout_height="wrap_content"
       android:layout_centerVertical="true"
       android:layout_marginLeft="@dimen/padding_normal"
+      android:layout_marginRight="@dimen/padding_normal"
       android:gravity="center"
       android:textColor="@color/one_text_color"
       android:textSize="@dimen/font_normal"
@@ -31,16 +32,19 @@
 
   <TextView
       android:id="@+id/id_item_right_text"
-      android:layout_width="wrap_content"
+      android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_centerVertical="true"
       android:layout_marginRight="@dimen/padding_small"
       android:layout_toLeftOf="@id/id_item_arrow"
-      android:gravity="center"
+      android:layout_toRightOf="@id/id_item_title"
+      android:ellipsize="marquee"
+      android:gravity="right|center_vertical"
+      android:maxLines="1"
       android:textColor="@color/two_text_color"
       android:textSize="@dimen/font_normal"
       android:visibility="gone"
-      tools:text="缓存大小 32MB"
+      tools:text="缓存大小 32KB iifejfiaejfiaifejfifaieafafeafeaefiefieaiefae"
       tools:visibility="visible" />
 
   <com.chaoneng.ilooknews.widget.image.HeadImageView
@@ -51,7 +55,7 @@
       android:layout_marginRight="@dimen/padding_small"
       android:layout_toLeftOf="@id/id_item_arrow"
       android:visibility="gone"
-      tools:background="#f00"
+      tools:background="@color/transparent"
       tools:visibility="visible" />
 
   <ToggleButton

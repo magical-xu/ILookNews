@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +26,11 @@ import com.chaoneng.ilooknews.net.client.NetRequest;
 import com.chaoneng.ilooknews.net.data.HttpResult;
 import com.chaoneng.ilooknews.util.IntentHelper;
 import com.chaoneng.ilooknews.util.RefreshHelper;
+import com.chaoneng.ilooknews.util.SimplePreNotifyListener;
+import com.chaoneng.ilooknews.util.UserOptionHelper;
 import com.chaoneng.ilooknews.widget.ilook.ILookTitleBar;
+import com.qmuiteam.qmui.widget.dialog.QMUIDialog;
+import com.qmuiteam.qmui.widget.dialog.QMUIDialogAction;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
@@ -50,6 +55,8 @@ public class CollectionActivity extends BaseActivity {
 
     private boolean mFull;
     private View mEmptyView;
+    private QMUIDialog mClearDialog;
+    private HomeService service;
 
     @Override
     public int getLayoutId() {
@@ -144,10 +151,72 @@ public class CollectionActivity extends BaseActivity {
             }
         });
 
+        mAdapter.setOnItemLongClickListener(new BaseQuickAdapter.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(BaseQuickAdapter adapter, View view, int position) {
+                onCancelCollect(position);
+                return false;
+            }
+        });
+
         mEmptyView = LayoutInflater.from(this)
                 .inflate(R.layout.base_empty_view, (ViewGroup) mRecyclerView.getParent(), false);
 
         mRefreshHelper.beginLoadData();
+    }
+
+    /**
+     * 取消收藏
+     */
+    private void onCancelCollect(final int position) {
+
+        QMUIDialog mClearDialog = new QMUIDialog.MessageDialogBuilder(this).setTitle("提示")
+                .setMessage("确定取消收藏吗")
+                .addAction("取消", new QMUIDialogAction.ActionListener() {
+                    @Override
+                    public void onClick(QMUIDialog dialog, int index) {
+                        dialog.dismiss();
+                    }
+                })
+                .addAction("确定", new QMUIDialogAction.ActionListener() {
+                    @Override
+                    public void onClick(QMUIDialog dialog, int index) {
+                        dialog.dismiss();
+                        cancelCollection(position);
+                    }
+                })
+                .create();
+        mClearDialog.show();
+    }
+
+    private void cancelCollection(final int position) {
+        List<NewsListBean> data = mAdapter.getData();
+        if (data.size() > position) {
+
+            NewsListBean bean = data.get(position);
+            UserOptionHelper.onCancelStar(service, bean.newId, bean.type,
+                    new SimplePreNotifyListener() {
+                        @Override
+                        public void onPreToDo() {
+                            showLoading();
+                        }
+
+                        @Override
+                        public void onSuccess(String msg) {
+                            hideLoading();
+                            //mAdapter.getData().remove(position);
+                            Log.d("magical", " del : " + position);
+                            mAdapter.remove(position);
+                            //mAdapter.notifyItemRemoved(position);
+                            //mAdapter.notifyItemRangeChanged(position, mAdapter.getItemCount());
+                        }
+
+                        @Override
+                        public void onFailed(String msg) {
+                            onSimpleError(msg);
+                        }
+                    });
+        }
     }
 
     private void load(final int page) {
@@ -159,7 +228,7 @@ public class CollectionActivity extends BaseActivity {
         }
 
         showLoading();
-        HomeService service = NetRequest.getInstance().create(HomeService.class);
+        service = NetRequest.getInstance().create(HomeService.class);
         Call<HttpResult<NewsListWrapper>> call =
                 service.getCollectionList(userId, page, AppConstant.DEFAULT_PAGE_SIZE);
         call.enqueue(new SimpleCallback<NewsListWrapper>() {
@@ -170,6 +239,8 @@ public class CollectionActivity extends BaseActivity {
 
                 if (page == 1 && (null == data || null == data.list || data.list.size() == 0)) {
                     mRefreshHelper.finishRefresh();
+                    mAdapter.getData().clear();
+                    mAdapter.notifyDataSetChanged();
                     mAdapter.setEmptyView(mEmptyView);
                     return;
                 }

@@ -125,7 +125,7 @@ public class UserMainFragment extends BaseFragment {
         // user data
         mHeadIv.setHeadImage(data.userIcon);
         mTvNick.setText(data.nickname);
-        mTvSign.setText(data.introduce);
+        mTvSign.setText(String.format(getString(R.string.sign_pre), data.introduce));
     }
 
     @Override
@@ -208,7 +208,7 @@ public class UserMainFragment extends BaseFragment {
         } else if (type == LocalBroadcastUtil.UPDATE_NICK) {
             mTvNick.setText(change);
         } else if (type == LocalBroadcastUtil.UPDATE_SIGN) {
-            mTvSign.setText(change);
+            mTvSign.setText(String.format(getString(R.string.sign_pre), change));
         }
     }
 
@@ -217,6 +217,11 @@ public class UserMainFragment extends BaseFragment {
         mHeadIv.setHeadImage("");
         mTvNick.setText("未登录");
         mTvSign.setText("点击头像可进行登录");
+
+        mTvTopic.setCount(AppConstant.NONE_VALUE);
+        mTvFollow.setCount(AppConstant.NONE_VALUE);
+        mTvFans.setCount(AppConstant.NONE_VALUE);
+        mTvVisit.setCount(AppConstant.NONE_VALUE);
     }
 
     private void setLoginState() {

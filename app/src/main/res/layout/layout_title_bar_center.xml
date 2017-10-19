@@ -89,12 +89,41 @@
         android:layout_height="match_parent"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
+        android:layout_marginLeft="10dp"
         android:paddingLeft="8dp"
         android:paddingRight="8dp"
         android:scaleType="centerInside"
         android:visibility="gone"
         tools:src="@drawable/ic_care_plus_blue"
         tools:visibility="visible" />
+
+    <TextView
+        android:id="@+id/tv_title_focus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="10dp"
+        android:layout_toLeftOf="@id/iv_title_right"
+        android:background="@drawable/bg_btn_focus_white"
+        android:gravity="center"
+        android:paddingBottom="4dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:paddingTop="4dp"
+        android:text="@string/focus_add"
+        android:textColor="@color/white"
+        android:textSize="@dimen/font_normal"
+        android:visibility="gone"
+        tools:textColor="@color/black" />
+
+    <com.chaoneng.ilooknews.widget.image.HeadImageView
+        android:id="@+id/iv_title_avatar"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_centerVertical="true"
+        android:layout_toLeftOf="@id/tv_title_focus"
+        android:visibility="gone"
+        tools:background="#f00" />
   </RelativeLayout>
 
   <View

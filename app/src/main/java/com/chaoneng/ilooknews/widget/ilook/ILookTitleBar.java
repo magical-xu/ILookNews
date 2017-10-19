@@ -32,6 +32,9 @@ public class ILookTitleBar extends RelativeLayout implements View.OnClickListene
     protected View mDivider;
     protected ViewGroup mTitleBg;
 
+    protected HeadImageView mTitleAvatar;
+    protected TextView mTitleFocus;
+
     private TitleCallback listener;
 
     public ILookTitleBar(Context context) {
@@ -67,6 +70,9 @@ public class ILookTitleBar extends RelativeLayout implements View.OnClickListene
 
         mDivider = findViewById(R.id.id_divider_bottom);
         mTitleBg = findViewById(R.id.id_title_bg);
+
+        mTitleAvatar = findViewById(R.id.iv_title_avatar);
+        mTitleFocus = findViewById(R.id.tv_title_focus);
     }
 
     private void setTitleEvent() {
@@ -74,6 +80,8 @@ public class ILookTitleBar extends RelativeLayout implements View.OnClickListene
         mRightImage.setOnClickListener(this);
         mLeftImage.setOnClickListener(this);
         mLeftCircle.setOnClickListener(this);
+        mTitleFocus.setOnClickListener(this);
+        mTitleAvatar.setOnClickListener(this);
     }
 
     public ILookTitleBar setTitle(String title) {
@@ -136,6 +144,22 @@ public class ILookTitleBar extends RelativeLayout implements View.OnClickListene
         return this;
     }
 
+    public ILookTitleBar setHeadImage(String url) {
+        mTitleAvatar.setHeadImage(url);
+        return this;
+    }
+
+    public ILookTitleBar setFocusText(String text) {
+        mTitleFocus.setText(text);
+        return this;
+    }
+
+    public ILookTitleBar openImageMode() {
+        mTitleFocus.setVisibility(View.VISIBLE);
+        mTitleAvatar.setVisibility(View.VISIBLE);
+        return this;
+    }
+
     public void attach(Activity activity) {
         if (mLeftImage != null) {
             mLeftImage.setTag(activity);
@@ -154,6 +178,10 @@ public class ILookTitleBar extends RelativeLayout implements View.OnClickListene
                 listener.onClickLeft(mLeftImage);
             }
             performBack();
+        } else if (v == mTitleFocus && null != listener) {
+            listener.onClickFocus(mTitleFocus);
+        } else if (v == mTitleAvatar && null != listener) {
+            listener.onClickAvatar(mTitleAvatar);
         }
     }
 
@@ -183,6 +211,10 @@ public class ILookTitleBar extends RelativeLayout implements View.OnClickListene
         void onClickRightImage(View view);
 
         boolean needBack();
+
+        void onClickFocus(View view);
+
+        void onClickAvatar(View view);
     }
 
     public static class TitleCallbackAdapter implements TitleCallback {
@@ -202,6 +234,16 @@ public class ILookTitleBar extends RelativeLayout implements View.OnClickListene
         @Override
         public boolean needBack() {
             return true;
+        }
+
+        @Override
+        public void onClickFocus(View view) {
+
+        }
+
+        @Override
+        public void onClickAvatar(View view) {
+
         }
     }
 
