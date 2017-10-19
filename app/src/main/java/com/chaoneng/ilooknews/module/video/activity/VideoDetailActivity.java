@@ -239,21 +239,21 @@ public class VideoDetailActivity extends BaseActivity {
 
     private void onOptLikeSuccess(boolean hasPraise) {
 
-        //if (hasPraise) {
-        //    //不喜欢+1
-        //    String disLikeCount = mDownView.getText().toString();
-        //    if (TextUtils.isDigitsOnly(disLikeCount)) {
-        //        int disCount = Integer.parseInt(disLikeCount);
-        //        mDownView.setText(String.valueOf(disCount + 1));
-        //    }
-        //} else {
-        //    //喜欢+1
-        //    String likeCount = mUpView.getText().toString();
-        //    if (TextUtils.isDigitsOnly(likeCount)) {
-        //        int lCount = Integer.parseInt(likeCount);
-        //        mUpView.setText(String.valueOf(lCount + 1));
-        //    }
-        //}
+        if (hasPraise) {
+            //不喜欢+1
+            String disLikeCount = mHeaderDown.getText().toString();
+            if (TextUtils.isDigitsOnly(disLikeCount)) {
+                int disCount = Integer.parseInt(disLikeCount);
+                mHeaderDown.setText(String.valueOf(disCount + 1));
+            }
+        } else {
+            //喜欢+1
+            String likeCount = mHeaderUp.getText().toString();
+            if (TextUtils.isDigitsOnly(likeCount)) {
+                int lCount = Integer.parseInt(likeCount);
+                mHeaderUp.setText(String.valueOf(lCount + 1));
+            }
+        }
     }
 
     private void checkIntent() {
@@ -277,7 +277,21 @@ public class VideoDetailActivity extends BaseActivity {
             mHeaderTitle = view.findViewById(R.id.tv_title);
             mHeaderNum = view.findViewById(R.id.tv_play_num);
             mHeaderUp = view.findViewById(R.id.tv_up);
+            mHeaderUp.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    hasNewsPraise = false;
+                    onPraise(AppConstant.INVALIDATE);
+                }
+            });
             mHeaderDown = view.findViewById(R.id.tv_down);
+            mHeaderDown.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    hasNewsPraise = true;
+                    onPraise(AppConstant.INVALIDATE);
+                }
+            });
             mHeaderIv = view.findViewById(R.id.id_header_iv);
             mHeaderName = view.findViewById(R.id.id_header_name);
             mHeaderFocus = view.findViewById(R.id.id_header_focus);
