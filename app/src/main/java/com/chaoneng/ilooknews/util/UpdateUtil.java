@@ -17,14 +17,6 @@ public class UpdateUtil {
     public static long TIME_GAP_FOR_VIDEO = 24L * 60L * 60L * 1000L;    //以一天为时间更新间隙
     public static long TIME_GAP_FOR_TEST = 60L * 1000L;       //便于调试 60s
 
-    public static void setNewsChannelTotalSize(int size) {
-        SPUtils.getInstance().put(NEWS_CHANNEL_TOTAL_SIZE, size);
-    }
-
-    public static int getNewsChannelTotalSize() {
-        return SPUtils.getInstance().getInt(NEWS_CHANNEL_TOTAL_SIZE, 0);
-    }
-
     /**
      * 设置 新闻或视频频道 最近一次 更新时间
      */

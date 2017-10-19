@@ -19,10 +19,12 @@ import com.chaoneng.ilooknews.module.share.ShareBoardActivity;
 import com.chaoneng.ilooknews.module.user.activity.BrokeActivity;
 import com.chaoneng.ilooknews.module.user.activity.CollectionActivity;
 import com.chaoneng.ilooknews.module.user.activity.FeedBackActivity;
+import com.chaoneng.ilooknews.module.user.activity.ImageBrowseActivity;
 import com.chaoneng.ilooknews.module.user.activity.ProfileActivity;
 import com.chaoneng.ilooknews.module.user.activity.SettingActivity;
 import com.chaoneng.ilooknews.module.user.activity.UserCenterActivity;
 import com.chaoneng.ilooknews.module.video.activity.VideoDetailActivity;
+import java.util.ArrayList;
 
 /**
  * Created by magical on 17/8/17.
@@ -160,5 +162,12 @@ public class IntentHelper {
      */
     public static void openCollectionPage(Context context) {
         context.startActivity(new Intent(context, CollectionActivity.class));
+    }
+
+    /**
+     * 跳转 图片浏览 界面
+     */
+    public static void openImageBrowsePage(Context context, int curPos, ArrayList<String> images) {
+        ImageBrowseActivity.getInstance(context, curPos, images);
     }
 }

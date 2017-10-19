@@ -47,5 +47,4 @@
     <item name="android:windowAnimationStyle">@style/AnimBottom</item>
   </style>
 
-
 </resources>
