@@ -23,7 +23,6 @@ import com.chaoneng.ilooknews.module.home.adapter.ChannelAdapter;
 import com.chaoneng.ilooknews.module.home.callback.ItemDragHelperCallBack;
 import com.chaoneng.ilooknews.module.home.callback.OnChannelDragListener;
 import com.chaoneng.ilooknews.module.home.callback.OnChannelListener;
-import com.magicalxu.library.blankj.ToastUtils;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -99,7 +98,7 @@ public class ChannelDialogFragment extends DialogFragment implements OnChannelDr
         mAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-                ToastUtils.showShort(String.valueOf(position));
+                //ToastUtils.showShort(String.valueOf(position));
             }
         });
         GridLayoutManager manager = new GridLayoutManager(getActivity(), 4);

@@ -10,14 +10,17 @@
 
   <style name="text_style_small" parent="SimpleActivityTheme">
     <item name="iTextSize">@dimen/font_small</item>
+    <item name="iTitleSize">@dimen/font_title_small</item>
   </style>
 
   <style name="text_style_normal" parent="SimpleActivityTheme">
     <item name="iTextSize">@dimen/font_main</item>
+    <item name="iTitleSize">@dimen/font_title_middle</item>
   </style>
 
   <style name="text_style_big" parent="SimpleActivityTheme">
     <item name="iTextSize">@dimen/font_big</item>
+    <item name="iTitleSize">@dimen/font_title_big</item>
   </style>
 
   <style name="SimpleActivityTheme" parent="AppTheme">

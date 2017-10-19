@@ -2,4 +2,5 @@
 <resources>
 
   <attr format="reference|dimension" name="iTextSize" />
+  <attr format="reference|dimension" name="iTitleSize" />
 </resources>

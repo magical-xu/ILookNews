@@ -164,8 +164,6 @@ public class SettingActivity extends BaseActivity {
     private void onChangeTextSize(int index) {
 
         setSystemTextSize(index);
-
-        ToastUtils.showShort(index + "");
         SPUtils.getInstance().put(AppConstant.NEWS_TEXT_SIZE, index);
     }
 

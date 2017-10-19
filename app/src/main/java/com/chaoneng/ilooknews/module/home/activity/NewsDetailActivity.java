@@ -44,6 +44,7 @@ import com.chaoneng.ilooknews.util.UserOptionHelper;
 import com.chaoneng.ilooknews.widget.ilook.ILookTitleBar;
 import com.chaoneng.ilooknews.widget.image.HeadImageView;
 import com.magicalxu.library.blankj.KeyboardUtils;
+import com.magicalxu.library.blankj.SPUtils;
 import com.magicalxu.library.blankj.ToastUtils;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import java.util.List;
@@ -444,6 +445,15 @@ public class NewsDetailActivity extends BaseActivity {
         settings.setDomStorageEnabled(true);
         settings.setUseWideViewPort(true);
         settings.setLoadWithOverviewMode(true);
+
+        int size = SPUtils.getInstance().getInt(AppConstant.NEWS_TEXT_SIZE, 1);
+        if (size == 0) {
+            settings.setTextSize(WebSettings.TextSize.SMALLER);
+        } else if (size == 1) {
+            settings.setTextSize(WebSettings.TextSize.NORMAL);
+        } else {
+            settings.setTextSize(WebSettings.TextSize.LARGER);
+        }
 
         //加载数据时先停止加载图片 防止卡顿
         settings.setBlockNetworkImage(true);

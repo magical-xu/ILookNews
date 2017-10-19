@@ -1,9 +1,11 @@
 package com.chaoneng.ilooknews.module.home.adapter;
 
 import android.text.TextUtils;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.chaoneng.ilooknews.AppConstant;
@@ -13,6 +15,7 @@ import com.chaoneng.ilooknews.library.glide.ImageLoader;
 import com.chaoneng.ilooknews.library.gsyvideoplayer.VideoHelper;
 import com.chaoneng.ilooknews.module.home.data.NewsListBean;
 import com.chaoneng.ilooknews.util.StringHelper;
+import com.magicalxu.library.blankj.SPUtils;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 import java.util.List;
 
@@ -64,6 +67,7 @@ public class NewsListAdapter extends BaseMultiItemQuickAdapter<NewsListBean, Bas
     private void bindVideo(BaseViewHolder helper, NewsListBean item) {
 
         helper.setText(R.id.tv_news_title, item.title);
+        checkTextSize(((TextView) helper.getView(R.id.tv_news_title)));
         helper.setText(R.id.id_bottom_publisher, item.nickname);
         helper.setText(R.id.id_bottom_comment_count,
                 String.format(mContext.getString(R.string.place_comment),
@@ -152,7 +156,10 @@ public class NewsListAdapter extends BaseMultiItemQuickAdapter<NewsListBean, Bas
 
     private void bindText(BaseViewHolder helper, NewsListBean item) {
 
-        helper.setText(R.id.tv_news_title, item.title);
+        TextView tvTitle = helper.getView(R.id.tv_news_title);
+        tvTitle.setText(StringHelper.getString(item.title));
+        checkTextSize(tvTitle);
+
         helper.setText(R.id.id_bottom_publisher, item.nickname);
         helper.setText(R.id.id_bottom_comment_count,
                 String.format(mContext.getString(R.string.place_comment),
@@ -167,6 +174,19 @@ public class NewsListAdapter extends BaseMultiItemQuickAdapter<NewsListBean, Bas
         } else if (TextUtils.equals(picStyle, NONE_IMAGE)) {
             helper.getView(R.id.ll_three_container).setVisibility(View.GONE);
             helper.getView(R.id.iv_news_right).setVisibility(View.GONE);
+        }
+    }
+
+    private void checkTextSize(TextView textView) {
+
+        int size = SPUtils.getInstance().getInt(AppConstant.NEWS_TEXT_SIZE, 1);
+        // 14sp 17sp 20sp
+        if (size == 0) {
+            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+        } else if (size == 1) {
+            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 17);
+        } else {
+            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
         }
     }
 }

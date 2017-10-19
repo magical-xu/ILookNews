@@ -15,8 +15,12 @@
   <dimen name="font_small">12sp</dimen>
   <dimen name="font_normal">14sp</dimen>
   <dimen name="font_main">16sp</dimen>
+  <dimen name="font_little_big">18sp</dimen>
   <dimen name="font_big">20sp</dimen>
   <dimen name="font_large">24sp</dimen>
+  <dimen name="font_title_big">26sp</dimen>
+  <dimen name="font_title_middle">22sp</dimen>
+  <dimen name="font_title_small">18sp</dimen>
 
   <dimen name="padding_tiny">4dp</dimen>
   <dimen name="padding_small">8dp</dimen>

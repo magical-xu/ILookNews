@@ -14,7 +14,7 @@
       android:maxLines="2"
       android:padding="@dimen/padding_small"
       android:textColor="@color/one_text_color"
-      android:textSize="@dimen/font_big"
+      android:textSize="?attr/iTitleSize"
       tools:text="@string/test_text_long" />
 
   <LinearLayout
