@@ -7,12 +7,12 @@
     android:paddingRight="@dimen/padding_normal"
     android:paddingTop="@dimen/padding_normal">
 
-  <com.chaoneng.ilooknews.widget.text.CountEditText
+  <com.aktt.news.widget.text.CountEditText
       android:id="@+id/id_count_edit"
       android:layout_width="match_parent"
       android:layout_height="230dp" />
 
-  <com.chaoneng.ilooknews.widget.selector.ImageSelector
+  <com.aktt.news.widget.selector.ImageSelector
       android:id="@+id/id_image_selector"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"

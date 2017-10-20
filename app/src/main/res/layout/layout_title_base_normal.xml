@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-  <com.chaoneng.ilooknews.widget.ilook.ILookTitleBar
+  <com.aktt.news.widget.ilook.ILookTitleBar
       android:id="@+id/id_title_bar"
       android:layout_width="match_parent"
       android:layout_height="wrap_content" />

@@ -67,7 +67,7 @@
       android:paddingBottom="@dimen/padding_small"
       android:paddingLeft="@dimen/padding_normal">
 
-    <com.chaoneng.ilooknews.widget.image.HeadImageView
+    <com.aktt.news.widget.image.HeadImageView
         android:id="@+id/id_header_iv"
         android:layout_width="40dp"
         android:layout_height="40dp"

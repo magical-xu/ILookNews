@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.chaoneng.ilooknews">
+    package="com.aktt.news">
 
   <uses-permission android:name="android.permission.INTERNET" />
   <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -22,7 +22,7 @@
   <!-- mob sdk end-->
 
   <application
-      android:name=".ILookApplication"
+      android:name="com.aktt.news.ILookApplication"
       android:allowBackup="true"
       android:icon="@mipmap/ic_logo"
       android:label="@string/app_name"
@@ -58,7 +58,7 @@
     <!-- mob sdk end -->
 
     <activity
-        android:name=".module.login.SplashActivity"
+        android:name="com.aktt.news.module.login.SplashActivity"
         android:theme="@style/SplashActivityTheme">
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />
@@ -68,94 +68,94 @@
     </activity>
 
     <activity
-        android:name=".MainActivity"
+        android:name="com.aktt.news.MainActivity"
         android:configChanges="orientation|screenSize|keyboard|keyboardHidden"
         android:exported="false"
         android:screenOrientation="portrait"
         android:theme="@style/text_style_normal" />
     <activity
-        android:name=".module.home.activity.NotifyActivity"
+        android:name="com.aktt.news.module.home.activity.NotifyActivity"
         android:screenOrientation="portrait"
         android:theme="@style/SimpleActivityTheme" />
     <activity
-        android:name=".module.user.activity.FeedBackActivity"
+        android:name="com.aktt.news.module.user.activity.FeedBackActivity"
         android:screenOrientation="portrait"
         android:theme="@style/SimpleActivityTheme" />
     <activity
-        android:name=".module.video.activity.VideoDetailActivity"
+        android:name="com.aktt.news.module.video.activity.VideoDetailActivity"
         android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize"
         android:screenOrientation="portrait"
         android:theme="@style/SimpleActivityTheme" />
     <activity
-        android:name=".module.user.activity.SettingActivity"
+        android:name="com.aktt.news.module.user.activity.SettingActivity"
         android:screenOrientation="portrait"
         android:theme="@style/SimpleActivityTheme" />
     <activity
-        android:name=".module.login.LoginActivity"
+        android:name="com.aktt.news.module.login.LoginActivity"
         android:screenOrientation="portrait"
         android:theme="@style/SimpleActivityTheme" />
     <activity
-        android:name=".module.user.activity.ProfileActivity"
+        android:name="com.aktt.news.module.user.activity.ProfileActivity"
         android:configChanges="orientation|screenSize|keyboard|keyboardHidden"
         android:screenOrientation="portrait"
         android:theme="@style/SimpleActivityTheme" />
     <activity
-        android:name=".module.user.activity.BrokeActivity"
+        android:name="com.aktt.news.module.user.activity.BrokeActivity"
         android:screenOrientation="portrait"
         android:theme="@style/SimpleActivityTheme" />
     <activity
-        android:name=".module.search.SearchActivity"
+        android:name="com.aktt.news.module.search.SearchActivity"
         android:screenOrientation="portrait"
         android:theme="@style/SimpleActivityTheme" />
     <activity
-        android:name=".module.user.activity.UserCenterActivity"
+        android:name="com.aktt.news.module.user.activity.UserCenterActivity"
         android:screenOrientation="portrait"
         android:theme="@style/SimpleActivityTheme" />
     <activity
-        android:name=".module.home.activity.NewsPhotoDetailActivity"
+        android:name="com.aktt.news.module.home.activity.NewsPhotoDetailActivity"
         android:screenOrientation="portrait"
         android:theme="@style/SimpleActivityTheme" />
     <activity
-        android:name=".module.home.activity.NewsDetailActivity"
+        android:name="com.aktt.news.module.home.activity.NewsDetailActivity"
         android:screenOrientation="portrait"
         android:theme="@style/SimpleActivityTheme" />
     <activity
-        android:name=".module.login.RegisterActivity"
+        android:name="com.aktt.news.module.login.RegisterActivity"
         android:configChanges="orientation|screenSize|keyboard|keyboardHidden"
         android:screenOrientation="portrait"
         android:theme="@style/SimpleActivityTheme" />
     <activity
-        android:name=".module.focus.AddFollowListActivity"
+        android:name="com.aktt.news.module.focus.AddFollowListActivity"
         android:configChanges="orientation|screenSize|keyboard|keyboardHidden"
         android:screenOrientation="portrait"
         android:theme="@style/SimpleActivityTheme" />
     <activity
-        android:name=".SimpleWebActivity"
+        android:name="com.aktt.news.SimpleWebActivity"
         android:configChanges="orientation|screenSize|keyboard|keyboardHidden"
         android:screenOrientation="portrait"
         android:theme="@style/SimpleActivityTheme" />
     <activity
-        android:name=".module.search.SearchDetailActivity"
+        android:name="com.aktt.news.module.search.SearchDetailActivity"
         android:configChanges="orientation|screenSize|keyboard|keyboardHidden"
         android:screenOrientation="portrait"
         android:theme="@style/SimpleActivityTheme" />
     <activity
-        android:name=".module.home.activity.CommentActivity"
+        android:name="com.aktt.news.module.home.activity.CommentActivity"
         android:configChanges="orientation|screenSize|keyboard|keyboardHidden"
         android:screenOrientation="portrait"
         android:theme="@style/SimpleActivityTheme" />
     <activity
-        android:name=".module.share.ShareBoardActivity"
+        android:name="com.aktt.news.module.share.ShareBoardActivity"
         android:configChanges="orientation|screenSize|keyboard|keyboardHidden"
         android:screenOrientation="portrait"
         android:theme="@style/ThemeDialog.BottomWithAnim" />
     <activity
-        android:name=".module.user.activity.CollectionActivity"
+        android:name="com.aktt.news.module.user.activity.CollectionActivity"
         android:configChanges="orientation|screenSize|keyboard|keyboardHidden"
         android:screenOrientation="portrait"
         android:theme="@style/SimpleActivityTheme" />
     <activity
-        android:name=".module.user.activity.ImageBrowseActivity"
+        android:name="com.aktt.news.module.user.activity.ImageBrowseActivity"
         android:configChanges="orientation|screenSize|keyboard|keyboardHidden"
         android:exported="false"
         android:screenOrientation="portrait"

@@ -6,14 +6,14 @@ android {
   buildToolsVersion "26.0.1"
 
   defaultConfig {
-    applicationId "com.chaoneng.ilooknews"
+    applicationId "com.aktt.news"
     minSdkVersion 16
     targetSdkVersion 26
     versionCode 1
     versionName "1.0"
     testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
-    manifestPlaceholders = ["tencentAuthId": "tencent123456"] // tencent+你的AppId
+    manifestPlaceholders = ["tencentAuthId": "tencent101414852"] // tencent+你的AppId
 
     ndk {
 

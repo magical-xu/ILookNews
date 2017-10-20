@@ -14,7 +14,7 @@
       android:layout_marginTop="@dimen/padding_small"
       android:src="@drawable/ic_finish" />
 
-  <com.chaoneng.ilooknews.widget.image.HeadImageView
+  <com.aktt.news.widget.image.HeadImageView
       android:id="@+id/id_avatar"
       android:layout_width="80dp"
       android:layout_height="80dp"

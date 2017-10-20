@@ -10,49 +10,49 @@
       android:layout_height="wrap_content"
       android:orientation="vertical">
 
-    <com.chaoneng.ilooknews.module.user.widget.SettingItemView
+    <com.aktt.news.module.user.widget.SettingItemView
         android:id="@+id/id_edit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
     <include layout="@layout/include_divider_rect" />
 
-    <com.chaoneng.ilooknews.module.user.widget.SettingItemView
+    <com.aktt.news.module.user.widget.SettingItemView
         android:id="@+id/id_toggle_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
     <include layout="@layout/include_left_margin_divider" />
 
-    <com.chaoneng.ilooknews.module.user.widget.SettingItemView
+    <com.aktt.news.module.user.widget.SettingItemView
         android:id="@+id/id_clear_cache"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
     <include layout="@layout/include_left_margin_divider" />
 
-    <com.chaoneng.ilooknews.module.user.widget.SettingItemView
+    <com.aktt.news.module.user.widget.SettingItemView
         android:id="@+id/id_wifi"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
     <include layout="@layout/include_divider_rect" />
 
-    <com.chaoneng.ilooknews.module.user.widget.SettingItemView
+    <com.aktt.news.module.user.widget.SettingItemView
         android:id="@+id/id_agreement"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
     <include layout="@layout/include_left_margin_divider" />
 
-    <com.chaoneng.ilooknews.module.user.widget.SettingItemView
+    <com.aktt.news.module.user.widget.SettingItemView
         android:id="@+id/id_version"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
     <include layout="@layout/include_left_margin_divider" />
 
-    <com.chaoneng.ilooknews.module.user.widget.SettingItemView
+    <com.aktt.news.module.user.widget.SettingItemView
         android:id="@+id/id_about"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />

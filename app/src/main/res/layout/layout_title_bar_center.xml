@@ -16,7 +16,7 @@
       android:paddingLeft="@dimen/padding_small"
       android:paddingRight="@dimen/padding_small">
 
-    <com.chaoneng.ilooknews.widget.image.HeadImageView
+    <com.aktt.news.widget.image.HeadImageView
         android:id="@+id/iv_circle_left"
         android:layout_width="25dp"
         android:layout_height="25dp"
@@ -116,7 +116,7 @@
         android:visibility="gone"
         tools:textColor="@color/black" />
 
-    <com.chaoneng.ilooknews.widget.image.HeadImageView
+    <com.aktt.news.widget.image.HeadImageView
         android:id="@+id/iv_title_avatar"
         android:layout_width="24dp"
         android:layout_height="24dp"

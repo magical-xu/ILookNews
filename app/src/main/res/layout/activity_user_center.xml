@@ -10,7 +10,7 @@
       android:id="@+id/layout_appbar"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      app:layout_behavior="com.chaoneng.ilooknews.widget.FlingBehavior">
+      app:layout_behavior="com.aktt.news.widget.FlingBehavior">
 
     <android.support.design.widget.CollapsingToolbarLayout
         android:id="@+id/collapsing_toolbar"
@@ -32,7 +32,7 @@
             android:layout_height="148dp"
             android:background="@color/alpha_70_black">
 
-          <com.chaoneng.ilooknews.widget.image.HeadImageView
+          <com.aktt.news.widget.image.HeadImageView
               android:id="@+id/iv_avatar"
               android:layout_width="64dp"
               android:layout_height="64dp"

@@ -55,7 +55,7 @@
         android:orientation="vertical"
         android:showDividers="middle|end">
 
-      <com.chaoneng.ilooknews.module.user.widget.SettingItemView
+      <com.aktt.news.module.user.widget.SettingItemView
           android:id="@+id/id_history"
           android:layout_width="match_parent"
           android:layout_height="wrap_content" />
@@ -70,7 +70,7 @@
           custom:showDividerHorizontal="middle"
           custom:showDividerVertical="middle" />
 
-      <com.chaoneng.ilooknews.module.user.widget.SettingItemView
+      <com.aktt.news.module.user.widget.SettingItemView
           android:id="@+id/id_recommend"
           android:layout_width="match_parent"
           android:layout_height="wrap_content" />

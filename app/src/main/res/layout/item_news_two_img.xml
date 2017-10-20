@@ -30,14 +30,14 @@
       android:paddingLeft="12dp"
       android:paddingRight="12dp">
 
-    <com.chaoneng.ilooknews.widget.image.SquareImageView
+    <com.aktt.news.widget.image.SquareImageView
         android:id="@+id/iv_news_left"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         tools:src="@mipmap/ic_launcher" />
 
-    <com.chaoneng.ilooknews.widget.image.SquareImageView
+    <com.aktt.news.widget.image.SquareImageView
         android:id="@+id/iv_news_right"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
