@@ -7,9 +7,11 @@ package com.aktt.news.data;
 
 public class ShareData {
 
-    public String title;
+    public String appIcon;
 
-    public String summary;
+    public String title;    //射箭小能手
 
-    public String newsUrl;
+    public String description;
+
+    public String newsUrl;  //分享链接
 }

@@ -3,8 +3,10 @@ package com.aktt.news.module.share;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
@@ -18,14 +20,19 @@ import com.aktt.news.R;
 import com.aktt.news.api.UserService;
 import com.aktt.news.data.ShareData;
 import com.aktt.news.instance.AccountManager;
+import com.aktt.news.library.glide.GlideApp;
 import com.aktt.news.library.glide.ImageLoader;
+import com.aktt.news.library.shareloginlib.ShareLoginHelper;
 import com.aktt.news.net.callback.SimpleCallback;
 import com.aktt.news.net.callback.SimpleRawJsonCallback;
 import com.aktt.news.net.client.NetRequest;
 import com.aktt.news.net.data.HttpResult;
+import com.aktt.news.util.SimpleNotifyListener;
 import com.aktt.news.util.StringHelper;
-import com.liulishuo.share.SsoShareManager;
-import com.liulishuo.share.content.ShareContentWebPage;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.liulishuo.share.type.SsoShareType;
 import com.magicalxu.library.blankj.ToastUtils;
 import okhttp3.ResponseBody;
@@ -180,32 +187,44 @@ public class ShareBoardActivity extends Activity {
         });
     }
 
-    public void onShare(String type, ShareData data) {
+    public void onShare(String type, final ShareData data) {
 
-        data.title = "爱看头条";
-        data.summary = "我们上线了";
+        GlideApp.with(this).asBitmap().listener(new RequestListener<Bitmap>() {
+            @Override
+            public boolean onLoadFailed(@Nullable GlideException e, Object model,
+                    Target<Bitmap> target, boolean isFirstResource) {
+                ToastUtils.showShort("分享失败");
+                return false;
+            }
 
-        SsoShareManager.share(this, type,
-                new ShareContentWebPage(data.title, data.summary, data.newsUrl, null, null),
-                new SsoShareManager.ShareStateListener() {
+            @Override
+            public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target,
+                    DataSource dataSource, boolean isFirstResource) {
 
-                    @Override
-                    public void onSuccess() {
-                        super.onSuccess();
-                        ToastUtils.showShort("分享成功");
-                    }
+                //resource.compress(Bitmap.CompressFormat.JPEG,80,)
 
-                    @Override
-                    public void onCancel() {
-                        super.onCancel();
-                        ToastUtils.showShort("分享取消");
-                    }
+                return false;
+            }
+        });
 
-                    @Override
-                    public void onError(String msg) {
-                        super.onError(msg);
-                        ToastUtils.showShort("分享失败");
-                    }
-                });
+        if (TextUtils.isEmpty(data.title)) {
+            data.title = "爱看头条";
+        }
+
+        if (TextUtils.isEmpty(data.description)) {
+            data.description = "后台未返回描述字段";
+        }
+
+        ShareLoginHelper.share(this, type, data, new SimpleNotifyListener() {
+            @Override
+            public void onSuccess(String msg) {
+                ToastUtils.showShort(msg);
+            }
+
+            @Override
+            public void onFailed(String msg) {
+                ToastUtils.showShort(msg);
+            }
+        });
     }
 }

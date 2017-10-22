@@ -78,8 +78,8 @@ public class ShareLoginHelper {
 
         // 分享
         SsoShareManager.share(context, type,
-                new ShareContentWebPage(shareData.title, shareData.summary, shareData.newsUrl, null,
-                        null), new SsoShareManager.ShareStateListener() {
+                new ShareContentWebPage(shareData.title, shareData.description, shareData.newsUrl,
+                        null, null), new SsoShareManager.ShareStateListener() {
                     @Override
                     public void onSuccess() {
                         super.onSuccess(); // must call super
