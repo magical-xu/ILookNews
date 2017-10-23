@@ -334,6 +334,8 @@ public class VideoDetailActivity extends BaseActivity {
             //mVideoPlayer.setPlayPosition(helper.getAdapterPosition());
             VideoHelper.initDetailPage(this, info.video_url, mVideoPlayer, orientationUtils,
                     PAGE_PROGRESS);
+
+            addVideoPlayCount();
         }
 
         hasHeaderAdd = true;
@@ -353,6 +355,24 @@ public class VideoDetailActivity extends BaseActivity {
             mCommentCountView.setVisibility(View.VISIBLE);
             mCommentCountView.setText(String.valueOf(info.commentCount));
         }
+    }
+
+    private void addVideoPlayCount() {
+
+        if (TextUtils.isEmpty(PAGE_VID)) {
+            return;
+        }
+
+        Call<HttpResult<JSONObject>> call = userService.addVideoPlayCount(PAGE_VID);
+        call.enqueue(new SimpleCallback<JSONObject>() {
+            @Override
+            public void onSuccess(JSONObject data) {
+            }
+
+            @Override
+            public void onFail(String code, String errorMsg) {
+            }
+        });
     }
 
     private void checkTitle() {
@@ -397,11 +417,13 @@ public class VideoDetailActivity extends BaseActivity {
 
     private void loadComment(final int page) {
 
+        String userId = AccountManager.getInstance().getUserId();
+
         showLoading();
         mRefreshHelper.setCurPage(page);
         Call<HttpResult<NewsInfoWrapper>> call =
-                service.getNewsComment(PAGE_VID, PAGE_NEWS_TYPE, AppConstant.NONE_VALUE, page,
-                        AppConstant.DEFAULT_PAGE_SIZE);
+                service.getNewsComment(StringHelper.getString(userId), PAGE_VID, PAGE_NEWS_TYPE,
+                        AppConstant.NONE_VALUE, page, AppConstant.DEFAULT_PAGE_SIZE);
         call.enqueue(new SimpleCallback<NewsInfoWrapper>() {
             @Override
             public void onSuccess(NewsInfoWrapper data) {

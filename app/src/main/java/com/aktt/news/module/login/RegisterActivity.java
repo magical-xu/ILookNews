@@ -42,7 +42,7 @@ import static com.magicalxu.library.blankj.ToastUtils.showShort;
 
 /**
  * Created by magical on 2017/8/29.
- * Description : 测试注册
+ * Description : 注册界面
  */
 
 public class RegisterActivity extends BaseActivity {
@@ -67,7 +67,6 @@ public class RegisterActivity extends BaseActivity {
     private long lastTimeMills;
     private boolean secondPageShow;
     private String lastMobile;      //防止在验证 验证码的时候 用户重新操作了 输入框 导致验证失效
-    private String lastPwd;         //防止在验证 验证码的时候 用户重新操作了 输入框 导致验证失效
     private String tempAvatarUrl;
 
     @Override
@@ -85,6 +84,7 @@ public class RegisterActivity extends BaseActivity {
             @Override
             public void afterEvent(int event, int result, Object data) {
                 super.afterEvent(event, result, data);
+                hideLoadingOnUiThread();
                 if (data instanceof Throwable) {
                     Throwable throwable = (Throwable) data;
                     String msg = throwable.getMessage();
@@ -92,7 +92,7 @@ public class RegisterActivity extends BaseActivity {
                 } else {
                     if (event == SMSSDK.EVENT_SUBMIT_VERIFICATION_CODE) {
                         //提交验证码成功
-                        onUiThread("验证成功，接下来走注册流程");
+                        //onUiThread("验证成功，接下来走注册流程");
                         registerByMobile();
                     } else if (event == SMSSDK.EVENT_GET_VERIFICATION_CODE) {
                         //获取验证码成功
@@ -297,6 +297,8 @@ public class RegisterActivity extends BaseActivity {
         }
 
         lastTimeMills = currentTimeMillis;
+        lastMobile = mobile;    //重要，记录真正验证的手机号
+        showLoading();
         MobHelper.getInstance().getVerifyCode(mobile);
     }
 
@@ -305,16 +307,26 @@ public class RegisterActivity extends BaseActivity {
      */
     private void checkVerifyCode() {
 
-        lastMobile = idPage2Username.getText().toString();
-        lastPwd = idPage2Pwd.getText().toString();
+        String mobile = idPage2Username.getText().toString();
+        String pwd = idPage2Pwd.getText().toString();
         String code = idPage2Code.getText().toString();
 
-        if (TextUtils.isEmpty(lastMobile) || TextUtils.isEmpty(code) || TextUtils.isEmpty(
-                lastPwd)) {
+        if (TextUtils.isEmpty(mobile) || TextUtils.isEmpty(code) || TextUtils.isEmpty(pwd)) {
             showShort(R.string.plz_input_mobile_and_code);
             return;
         }
 
+        if (TextUtils.isEmpty(lastMobile)) {
+            showShort("请先获取正确的验证码！");
+            return;
+        }
+
+        if (!TextUtils.equals(mobile, lastMobile)) {
+            showShort("验证的手机号和当前输入手机号不一致！");
+            return;
+        }
+
+        showLoading();
         MobHelper.getInstance().submitVerifyCode(lastMobile, code);
     }
 
@@ -323,14 +335,11 @@ public class RegisterActivity extends BaseActivity {
      */
     private void registerByMobile() {
 
-        // 再次验证一下
-        if (TextUtils.isEmpty(lastMobile) || TextUtils.isEmpty(lastPwd)) {
-            return;
-        }
+        String pwd = idPage2Pwd.getText().toString().trim();    //拿最新的 密码可以不用管 只用最后一次的
 
-        showLoading();
+        showLoadingOnUiThread();
         Call<HttpResult<UserWrapper>> call =
-                loginService.registerByPhone(lastMobile, lastPwd, tempAvatarUrl);
+                loginService.registerByPhone(lastMobile, pwd, tempAvatarUrl);
         call.enqueue(new SimpleCallback<UserWrapper>() {
             @Override
             public void onSuccess(UserWrapper data) {

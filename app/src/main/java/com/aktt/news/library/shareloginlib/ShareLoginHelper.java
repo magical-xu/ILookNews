@@ -2,6 +2,7 @@ package com.aktt.news.library.shareloginlib;
 
 import android.app.Activity;
 import android.app.Application;
+import android.graphics.Bitmap;
 import android.support.annotation.Nullable;
 import com.aktt.news.R;
 import com.aktt.news.data.ShareData;
@@ -74,12 +75,12 @@ public class ShareLoginHelper {
     }
 
     public static void share(Activity context, String type, ShareData shareData,
-            final SimpleNotifyListener listener) {
+            @Nullable Bitmap thumb, @Nullable Bitmap large, final SimpleNotifyListener listener) {
 
         // 分享
         SsoShareManager.share(context, type,
                 new ShareContentWebPage(shareData.title, shareData.description, shareData.newsUrl,
-                        null, null), new SsoShareManager.ShareStateListener() {
+                        thumb, large), new SsoShareManager.ShareStateListener() {
                     @Override
                     public void onSuccess() {
                         super.onSuccess(); // must call super

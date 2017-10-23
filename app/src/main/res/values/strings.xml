@@ -27,6 +27,7 @@
 
   <string name="user_main_text_msg">消息通知</string>
   <string name="user_main_text_collection">我的收藏</string>
+  <string name="user_main_text_broke_list">爆料列表</string>
   <string name="user_main_text_shop">头条商城</string>
   <string name="user_main_text_jd">京东特供</string>
   <string name="user_main_text_feedback">用户反馈</string>
@@ -177,6 +178,7 @@
   <string name="cannot_send_verify_code_in_60_seconds">60秒内不能重新发送！</string>
   <string name="verify_code">验证码</string>
   <string name="plz_input_mobile_and_code">请输入手机号、密码和验证码</string>
+  <string name="plz_input_mobile_or_code">请输入手机号和验证码</string>
   <string name="plz_input_username_and_pwd">请输入用户名和密码</string>
   <string name="no_account_to_register">没有账号？注册</string>
   <string name="plz_input_user_and_pwd">请输入用户名和密码！</string>

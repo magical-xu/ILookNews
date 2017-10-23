@@ -11,12 +11,15 @@ import android.widget.TextView;
 import android.widget.ViewFlipper;
 import butterknife.BindView;
 import butterknife.OnClick;
+import cn.smssdk.EventHandler;
+import cn.smssdk.SMSSDK;
 import com.aktt.news.AppConstant;
 import com.aktt.news.R;
 import com.aktt.news.api.LoginService;
 import com.aktt.news.base.BaseActivity;
 import com.aktt.news.data.UserWrapper;
 import com.aktt.news.instance.AccountManager;
+import com.aktt.news.library.mob.MobHelper;
 import com.aktt.news.library.shareloginlib.ShareLoginHelper;
 import com.aktt.news.net.callback.SimpleCallback;
 import com.aktt.news.net.client.NetRequest;
@@ -27,8 +30,9 @@ import com.aktt.news.widget.edit.PasswordEditText;
 import com.liulishuo.share.type.SsoLoginType;
 import com.magicalxu.library.blankj.KeyboardUtils;
 import com.magicalxu.library.blankj.ToastUtils;
-import org.json.JSONObject;
 import retrofit2.Call;
+
+import static com.magicalxu.library.blankj.ToastUtils.showShort;
 
 /**
  * Created by magical on 17/8/20.
@@ -54,6 +58,11 @@ public class LoginActivity extends BaseActivity {
 
     boolean showPage;
     private LoginService loginService;
+    private EventHandler eventHandler;
+    private long lastTimeMills;
+
+    private String lastMobile;      //防止在验证 验证码的时候 用户重新操作了 输入框 导致验证失效
+    //private String lastPwd;         //防止在验证 验证码的时候 用户重新操作了 输入框 导致验证失效
 
     @Override
     public int getLayoutId() {
@@ -64,6 +73,42 @@ public class LoginActivity extends BaseActivity {
     public void handleChildPage(Bundle savedInstanceState) {
 
         loginService = NetRequest.getInstance().create(LoginService.class);
+
+        eventHandler = new EventHandler() {
+            @Override
+            public void afterEvent(int event, int result, Object data) {
+                super.afterEvent(event, result, data);
+                hideLoadingOnUiThread();
+                if (data instanceof Throwable) {
+                    Throwable throwable = (Throwable) data;
+                    String msg = throwable.getMessage();
+                    onUiThread(msg);
+                } else {
+                    if (event == SMSSDK.EVENT_SUBMIT_VERIFICATION_CODE) {
+                        //提交验证码成功
+                        //onUiThread("验证成功，接下来走登录流程");
+                        onRealMobileLogin();
+                    } else if (event == SMSSDK.EVENT_GET_VERIFICATION_CODE) {
+                        //获取验证码成功
+                        if (result == SMSSDK.RESULT_COMPLETE) {
+                            boolean smart = (Boolean) data;
+                            if (smart) {
+                                //通过智能验证
+                            } else {
+                                //依然走短信验证
+                                onUiThread("已成功发送验证码");
+                            }
+                        }
+                    } else if (event == SMSSDK.EVENT_GET_SUPPORTED_COUNTRIES) {
+                        //返回支持发送验证码的国家列表
+                        //ToastUtils.showShort(data.toString());
+                        Log.d("magical", data.toString());
+                    }
+                }
+            }
+        };
+
+        MobHelper.register(eventHandler);
     }
 
     @OnClick({
@@ -86,15 +131,15 @@ public class LoginActivity extends BaseActivity {
                 onLogin();
                 break;
             case R.id.id_we_chat:
-                ToastUtils.showShort("微信登录");
+                showShort("微信登录");
                 onThirdLogin(SsoLoginType.WEIXIN);
                 break;
             case R.id.id_qq:
-                ToastUtils.showShort("QQ登录");
+                showShort("QQ登录");
                 onThirdLogin(SsoLoginType.QQ);
                 break;
             case R.id.id_wei_bo:
-                ToastUtils.showShort("微博登录");
+                showShort("微博登录");
                 onThirdLogin(SsoLoginType.WEIBO);
                 break;
             case R.id.tv_send_msg:
@@ -126,12 +171,12 @@ public class LoginActivity extends BaseActivity {
 
             @Override
             public void onCancel() {
-                ToastUtils.showShort("登录取消");
+                showShort("登录取消");
             }
 
             @Override
             public void onError(String msg) {
-                ToastUtils.showShort(msg);
+                showShort(msg);
             }
         });
     }
@@ -141,6 +186,16 @@ public class LoginActivity extends BaseActivity {
         loginService.onThirdLogin(String.valueOf(type), token, expired, null);
     }
 
+    public void onUiThread(final String msg) {
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                showShort(msg);
+            }
+        });
+    }
+
     /**
      * 发送验证码
      */
@@ -148,22 +203,21 @@ public class LoginActivity extends BaseActivity {
 
         String mobile = idPage2Username.getText().toString().trim();
         if (TextUtils.isEmpty(mobile)) {
-            ToastUtils.showShort("请输入手机号！");
+            showShort("请输入手机号！");
             return;
         }
 
-        Call<HttpResult<JSONObject>> call = loginService.sendMobileCode(mobile);
-        call.enqueue(new SimpleCallback<JSONObject>() {
-            @Override
-            public void onSuccess(JSONObject data) {
-                ToastUtils.showShort("验证码发送成功 ：" + data);
-            }
+        long currentTimeMillis = System.currentTimeMillis();
+        if (currentTimeMillis - lastTimeMills < 60 * 1000) {
+            ToastUtils.showShort(R.string.cannot_send_verify_code_in_60_seconds);
+            return;
+        }
 
-            @Override
-            public void onFail(String code, String errorMsg) {
-                ToastUtils.showShort(errorMsg);
-            }
-        });
+        lastTimeMills = currentTimeMillis;
+
+        lastMobile = mobile;    //重要，记录真正验证的手机号
+        showLoading();
+        MobHelper.getInstance().getVerifyCode(lastMobile);
     }
 
     private void onLogin() {
@@ -185,12 +239,27 @@ public class LoginActivity extends BaseActivity {
         String code = idPage2Pwd.getText().toString().trim();
 
         if (TextUtils.isEmpty(mobile) || TextUtils.isEmpty(code)) {
-            ToastUtils.showShort("请输入手机号和验证码！");
+            showShort("请输入手机号和验证码！");
+            return;
+        }
+
+        if (TextUtils.isEmpty(lastMobile)) {
+            showShort("请先获取正确的验证码！");
+            return;
+        }
+
+        if (!TextUtils.equals(mobile, lastMobile)) {
+            showShort("验证的手机号和当前输入手机号不一致！");
             return;
         }
 
         showLoading();
-        Call<HttpResult<UserWrapper>> call = loginService.loginByPhone(mobile, code);
+        checkVerifyCode();
+    }
+
+    private void onRealMobileLogin() {
+        showLoadingOnUiThread();
+        Call<HttpResult<UserWrapper>> call = loginService.loginByPhone(lastMobile);
         call.enqueue(new SimpleCallback<UserWrapper>() {
             @Override
             public void onSuccess(UserWrapper data) {
@@ -205,6 +274,23 @@ public class LoginActivity extends BaseActivity {
     }
 
     /**
+     * 通过Mob Sdk 验证验证码
+     */
+    private void checkVerifyCode() {
+
+        String mobile = idPage2Username.getText().toString();
+        //lastPwd = idPage2Pwd.getText().toString();
+        String code = idPage2Pwd.getText().toString();
+
+        if (TextUtils.isEmpty(mobile) || TextUtils.isEmpty(code)) {
+            showShort(R.string.plz_input_mobile_or_code);
+            return;
+        }
+
+        MobHelper.getInstance().submitVerifyCode(lastMobile, code);
+    }
+
+    /**
      * 账号密码登录
      */
     private void onNameLogin() {
@@ -213,7 +299,7 @@ public class LoginActivity extends BaseActivity {
         String pwd = idPage1Pwd.getText().toString().trim();
 
         if (TextUtils.isEmpty(username) || TextUtils.isEmpty(pwd)) {
-            ToastUtils.showShort(R.string.plz_input_user_and_pwd);
+            showShort(R.string.plz_input_user_and_pwd);
             return;
         }
 
@@ -254,6 +340,7 @@ public class LoginActivity extends BaseActivity {
         idToggle.setDisplayedChild(showPage ? 1 : 0);
         mLoginType.setText(showPage ? "免密码登录" : "账号密码登录");
         tvChangeLoginType.setText(showPage ? "账号密码登录" : "免密码登录");
+        idPage2Pwd.setHint(showPage ? "验证码" : "密码");
     }
 
     @Override
@@ -264,5 +351,11 @@ public class LoginActivity extends BaseActivity {
             Log.d("magical", " onActivityResult : back from register page");
             finish();
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        MobHelper.unRegister(eventHandler);
     }
 }

@@ -160,6 +160,12 @@
         android:exported="false"
         android:screenOrientation="portrait"
         android:theme="@style/SimpleActivityTheme" />
+    <activity
+        android:name="com.aktt.news.module.user.activity.BrokeListActivity"
+        android:configChanges="orientation|screenSize|keyboard|keyboardHidden"
+        android:exported="false"
+        android:screenOrientation="portrait"
+        android:theme="@style/SimpleActivityTheme" />
   </application>
 
 </manifest>

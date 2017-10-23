@@ -58,7 +58,7 @@
       android:textColor="@color/white"
       android:textSize="@dimen/font_big" />
 
-  <LinearLayout
+  <RelativeLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:orientation="horizontal"
@@ -73,20 +73,24 @@
         android:padding="@dimen/padding_small"
         android:text="@string/register_by_mobile"
         android:textColor="@color/main_color"
-        android:textSize="@dimen/font_main" />
+        android:textSize="@dimen/font_main"
+        android:visibility="gone" />
 
     <Space
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1" />
+        android:layout_weight="1"
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/tv_back_to_login"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:gravity="center_horizontal"
         android:padding="@dimen/padding_small"
         android:text="@string/back_to_login"
         android:textColor="@color/main_color"
         android:textSize="@dimen/font_main" />
-  </LinearLayout>
+  </RelativeLayout>
 </LinearLayout>

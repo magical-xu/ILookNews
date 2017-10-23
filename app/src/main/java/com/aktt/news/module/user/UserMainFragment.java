@@ -47,6 +47,7 @@ public class UserMainFragment extends BaseFragment {
     @BindView(R.id.id_item_broke) RelativeLayout mItemBroke;
     @BindView(R.id.id_item_feedback) RelativeLayout mItemFeed;
     @BindView(R.id.id_item_setting) RelativeLayout mItemSetting;
+    @BindView(R.id.id_item_broke_list) RelativeLayout mItemBrokeList;
 
     private UserService service;
     private IntentFilter filter;
@@ -152,7 +153,7 @@ public class UserMainFragment extends BaseFragment {
     @OnClick({
             R.id.id_item_msg, R.id.id_item_collect, R.id.id_item_broke, R.id.id_item_feedback,
             R.id.id_item_setting, R.id.credit_topic, R.id.credit_following, R.id.credit_fans,
-            R.id.credit_visitors
+            R.id.credit_visitors, R.id.id_item_broke_list
     })
     public void onItemClick(View view) {
 
@@ -180,6 +181,12 @@ public class UserMainFragment extends BaseFragment {
                 break;
             case R.id.id_item_setting:
                 IntentHelper.openSettingPage(getActivity());
+                break;
+            case R.id.id_item_broke_list:
+                if (AccountManager.getInstance().checkLogin(getActivity())) {
+                    return;
+                }
+                IntentHelper.openBrokeListPage(getActivity());
                 break;
             case R.id.credit_topic:
                 break;

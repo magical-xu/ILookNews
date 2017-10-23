@@ -202,10 +202,12 @@ public class CommentDialogFragment extends BaseDialogFragment {
 
     private void loadComment(final int page) {
 
+        String userId = AccountManager.getInstance().getUserId();
+
         showLoading();
         Call<HttpResult<NewsInfoWrapper>> call =
-                homeService.getNewsComment(PAGE_NEWS_ID, PAGE_NEWS_TYPE, PAGE_CID, page,
-                        AppConstant.DEFAULT_PAGE_SIZE);
+                homeService.getNewsComment(StringHelper.getString(userId), PAGE_NEWS_ID,
+                        PAGE_NEWS_TYPE, PAGE_CID, page, AppConstant.DEFAULT_PAGE_SIZE);
         call.enqueue(new SimpleCallback<NewsInfoWrapper>() {
             @Override
             public void onSuccess(NewsInfoWrapper data) {

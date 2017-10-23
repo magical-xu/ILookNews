@@ -164,6 +164,26 @@ public abstract class BaseActivity extends AppCompatActivity {
         mDialogManager.dismissDialog();
     }
 
+    public void showLoadingOnUiThread() {
+        ensureDialogManager();
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mDialogManager.showDialog("正在加载");
+            }
+        });
+    }
+
+    public void hideLoadingOnUiThread() {
+        ensureDialogManager();
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mDialogManager.dismissDialog();
+            }
+        });
+    }
+
     @Override
     protected void onDestroy() {
 

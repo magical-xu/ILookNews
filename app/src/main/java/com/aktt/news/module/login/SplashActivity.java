@@ -40,7 +40,7 @@ public class SplashActivity extends BaseActivity {
     public void handleChildPage(Bundle savedInstanceState) {
 
         alphaAnimation();
-        //countDown();
+        countDown();
 
         // for init tab as early as possible
         final TabManager tabManager = TabManager.getInstance();
@@ -48,13 +48,13 @@ public class SplashActivity extends BaseActivity {
             @Override
             public void onSuccess() {
                 tabManager.setHasInit(true);
-                onTimeEnd();
+                //onTimeEnd();
             }
 
             @Override
             public void onFail() {
                 tabManager.setHasInit(false);
-                onTimeEnd();
+                //onTimeEnd();
             }
         });
         tabManager.getVideoChannel(this, null);
@@ -77,7 +77,7 @@ public class SplashActivity extends BaseActivity {
     }
 
     private void countDown() {
-        int durationMs = 2 * 1000;
+        int durationMs = 1500;
 
         mTimeCountdown = new TimeCountdown(durationMs, 1000) {
             @Override

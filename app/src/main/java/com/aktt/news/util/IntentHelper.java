@@ -17,6 +17,7 @@ import com.aktt.news.module.search.SearchActivity;
 import com.aktt.news.module.search.SearchDetailActivity;
 import com.aktt.news.module.share.ShareBoardActivity;
 import com.aktt.news.module.user.activity.BrokeActivity;
+import com.aktt.news.module.user.activity.BrokeListActivity;
 import com.aktt.news.module.user.activity.CollectionActivity;
 import com.aktt.news.module.user.activity.FeedBackActivity;
 import com.aktt.news.module.user.activity.ImageBrowseActivity;
@@ -169,5 +170,12 @@ public class IntentHelper {
      */
     public static void openImageBrowsePage(Context context, int curPos, ArrayList<String> images) {
         ImageBrowseActivity.getInstance(context, curPos, images);
+    }
+
+    /**
+     * 跳转 爆料列表 界面
+     */
+    public static void openBrokeListPage(Context context) {
+        context.startActivity(new Intent(context, BrokeListActivity.class));
     }
 }

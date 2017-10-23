@@ -29,12 +29,11 @@ import com.aktt.news.net.client.NetRequest;
 import com.aktt.news.net.data.HttpResult;
 import com.aktt.news.util.SimpleNotifyListener;
 import com.aktt.news.util.StringHelper;
-import com.bumptech.glide.load.DataSource;
-import com.bumptech.glide.load.engine.GlideException;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.liulishuo.share.type.SsoShareType;
 import com.magicalxu.library.blankj.ToastUtils;
+import java.util.List;
 import okhttp3.ResponseBody;
 import org.json.JSONObject;
 import retrofit2.Call;
@@ -177,7 +176,7 @@ public class ShareBoardActivity extends Activity {
             @Override
             public void onSuccess(ShareData data) {
 
-                onShare(type, data);
+                downLoadImage(type, data);
             }
 
             @Override
@@ -187,25 +186,43 @@ public class ShareBoardActivity extends Activity {
         });
     }
 
-    public void onShare(String type, final ShareData data) {
+    private void downLoadImage(final String type, final ShareData data) {
 
-        GlideApp.with(this).asBitmap().listener(new RequestListener<Bitmap>() {
+        final List<String> images = data.coverpic;
+
+        GlideApp.with(this)
+                .asBitmap()
+                .dontAnimate()
+                .load(data.appIcon)
+                .into(new SimpleTarget<Bitmap>() {
+
+                    @Override
+                    public void onResourceReady(Bitmap resource,
+                            Transition<? super Bitmap> transition) {
+
+                        if (null != images && images.size() >= 1) {
+                            downLoadNewsImage(type, data, resource);
+                        } else {
+                            onShare(type, data, resource, null);
+                        }
+                    }
+                });
+    }
+
+    private void downLoadNewsImage(final String type, final ShareData data, final Bitmap thumb) {
+
+        String url = data.coverpic.get(0);
+        GlideApp.with(this).asBitmap().dontAnimate().load(url).into(new SimpleTarget<Bitmap>() {
+
             @Override
-            public boolean onLoadFailed(@Nullable GlideException e, Object model,
-                    Target<Bitmap> target, boolean isFirstResource) {
-                ToastUtils.showShort("分享失败");
-                return false;
-            }
+            public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
 
-            @Override
-            public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target,
-                    DataSource dataSource, boolean isFirstResource) {
-
-                //resource.compress(Bitmap.CompressFormat.JPEG,80,)
-
-                return false;
+                onShare(type, data, thumb, resource);
             }
         });
+    }
+
+    public void onShare(String type, final ShareData data, Bitmap thumb, Bitmap large) {
 
         if (TextUtils.isEmpty(data.title)) {
             data.title = "爱看头条";
@@ -215,7 +232,7 @@ public class ShareBoardActivity extends Activity {
             data.description = "后台未返回描述字段";
         }
 
-        ShareLoginHelper.share(this, type, data, new SimpleNotifyListener() {
+        ShareLoginHelper.share(this, type, data, thumb, large, new SimpleNotifyListener() {
             @Override
             public void onSuccess(String msg) {
                 ToastUtils.showShort(msg);
