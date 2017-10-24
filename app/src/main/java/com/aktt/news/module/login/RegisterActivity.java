@@ -32,6 +32,7 @@ import com.aktt.news.widget.edit.PasswordEditText;
 import com.aktt.news.widget.image.HeadImageView;
 import com.magicalxu.library.blankj.ToastUtils;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import retrofit2.Call;
 import timber.log.Timber;
@@ -132,6 +133,11 @@ public class RegisterActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         MobHelper.unRegister(eventHandler);
+    }
+
+    @Override
+    public ArrayList<Call> addRequestList() {
+        return null;
     }
 
     @OnClick({

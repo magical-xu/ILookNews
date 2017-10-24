@@ -54,6 +54,8 @@ public class UserCenterActivity extends BaseActivity {
     private String pageUid;
     private boolean hasFollowed;
 
+    private ArrayList<Call> callList;
+
     public static void getInstance(Context context, String userId) {
         Intent intent = new Intent(context, UserCenterActivity.class);
         intent.putExtra(IntentHelper.PARAMS_ONE, userId);
@@ -74,6 +76,12 @@ public class UserCenterActivity extends BaseActivity {
 
         initView();
         loadData();
+    }
+
+    @Override
+    public ArrayList<Call> addRequestList() {
+        callList = new ArrayList<>();
+        return callList;
     }
 
     public void initView() {
@@ -136,17 +144,20 @@ public class UserCenterActivity extends BaseActivity {
         String userId = AccountManager.getInstance().getUserId();
 
         showLoading();
-        Call<HttpResult<UserInfoWrapper>> call =
+        final Call<HttpResult<UserInfoWrapper>> call =
                 service.getUserInfo(StringHelper.getString(userId), pageUid, 1, 1,
                         AppConstant.DEFAULT_PAGE_SIZE);
+        onAddCall(call);
         call.enqueue(new SimpleCallback<UserInfoWrapper>() {
             @Override
             public void onSuccess(UserInfoWrapper data) {
+                onRemoveCall(call);
                 initUserInfo(data);
             }
 
             @Override
             public void onFail(String code, String errorMsg) {
+                onRemoveCall(call);
                 onSimpleError(errorMsg);
             }
         });

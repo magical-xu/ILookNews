@@ -8,6 +8,8 @@ import com.aktt.news.base.BaseActivity;
 import com.aktt.news.instance.AccountManager;
 import com.aktt.news.module.user.fragment.BrokeNewsListFragment;
 import com.aktt.news.widget.ilook.ILookTitleBar;
+import java.util.ArrayList;
+import retrofit2.Call;
 
 /**
  * Created by magical on 2017/10/23.
@@ -26,6 +28,11 @@ public class BrokeListActivity extends BaseActivity {
     @Override
     protected boolean addTitleBar() {
         return true;
+    }
+
+    @Override
+    public ArrayList<Call> addRequestList() {
+        return null;
     }
 
     @Override

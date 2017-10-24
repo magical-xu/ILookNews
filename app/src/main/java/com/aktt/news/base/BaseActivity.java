@@ -11,10 +11,13 @@ import android.widget.LinearLayout;
 import butterknife.ButterKnife;
 import com.aktt.news.AppConstant;
 import com.aktt.news.R;
+import com.aktt.news.net.client.NetRequest;
 import com.aktt.news.widget.DialogManager;
 import com.aktt.news.widget.ilook.ILookTitleBar;
 import com.magicalxu.library.blankj.SPUtils;
 import com.magicalxu.library.blankj.ToastUtils;
+import java.util.ArrayList;
+import retrofit2.Call;
 
 /**
  * Created by magical on 17/8/14.
@@ -22,6 +25,8 @@ import com.magicalxu.library.blankj.ToastUtils;
  */
 
 public abstract class BaseActivity extends AppCompatActivity {
+
+    protected String TAG = getClass().getSimpleName();
 
     protected ViewGroup mDecorView;
     protected FrameLayout mFrameContent;
@@ -41,6 +46,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         checkTitleBar();
 
         ButterKnife.bind(this);
+        NetRequest.getInstance().addRequestList(TAG, addRequestList());
         handleChildPage(savedInstanceState);
     }
 
@@ -192,12 +198,25 @@ public abstract class BaseActivity extends AppCompatActivity {
             mDialogManager = null;
         }
 
+        //Log.d("magical"," onDestroy : " + TAG);
+        NetRequest.getInstance().cancelByTag(TAG);
+
         super.onDestroy();
     }
+
+    public abstract ArrayList<Call> addRequestList();
 
     /*********************** 以下为方便调用使用 ***********************/
     protected void onSimpleError(String msg) {
         hideLoading();
         ToastUtils.showShort(msg);
+    }
+
+    protected void onRemoveCall(Call call) {
+        NetRequest.getInstance().removeRequest(TAG, call);
+    }
+
+    protected void onAddCall(Call call) {
+        NetRequest.getInstance().addRequest(TAG, call);
     }
 }

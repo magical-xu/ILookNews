@@ -47,6 +47,7 @@ import com.magicalxu.library.blankj.KeyboardUtils;
 import com.magicalxu.library.blankj.SPUtils;
 import com.magicalxu.library.blankj.ToastUtils;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import java.util.ArrayList;
 import java.util.List;
 import org.json.JSONObject;
 import retrofit2.Call;
@@ -63,8 +64,6 @@ import static com.aktt.news.AppConstant.PARAMS_NEWS_TYPE;
  */
 
 public class NewsDetailActivity extends BaseActivity {
-
-    private static final String TAG = "NewsDetailActivity";
 
     @BindView(R.id.id_recycler) RecyclerView mRecyclerView;
     @BindView(R.id.id_refresh_layout) SmartRefreshLayout mRefreshLayout;
@@ -97,6 +96,8 @@ public class NewsDetailActivity extends BaseActivity {
     private boolean hasNewsPraise;
     private boolean hasFollowed;
 
+    private ArrayList<Call> callList;
+
     public static void getInstance(Context context, @NonNull String newsId, int newsType) {
         Intent intent = new Intent(context, NewsDetailActivity.class);
         intent.putExtra(PARAMS_NEWS_ID, newsId);
@@ -112,6 +113,12 @@ public class NewsDetailActivity extends BaseActivity {
     @Override
     protected boolean addTitleBar() {
         return true;
+    }
+
+    @Override
+    public ArrayList<Call> addRequestList() {
+        callList = new ArrayList<>();
+        return callList;
     }
 
     @Override
@@ -372,12 +379,14 @@ public class NewsDetailActivity extends BaseActivity {
         String userId = AccountManager.getInstance().getUserId();
 
         showLoading();
-        Call<HttpResult<NewsInfoWrapper>> call =
+        final Call<HttpResult<NewsInfoWrapper>> call =
                 homeService.getNewsDetail(StringHelper.getString(userId), PAGE_NEWS_ID, 2);
+        onAddCall(call);
         call.enqueue(new SimpleCallback<NewsInfoWrapper>() {
             @Override
             public void onSuccess(NewsInfoWrapper data) {
 
+                onRemoveCall(call);
                 hideLoading();
                 if (null == data) {
                     return;
@@ -390,6 +399,7 @@ public class NewsDetailActivity extends BaseActivity {
 
             @Override
             public void onFail(String code, String errorMsg) {
+                onRemoveCall(call);
                 onSimpleError(errorMsg);
             }
         });
@@ -500,14 +510,16 @@ public class NewsDetailActivity extends BaseActivity {
 
         showLoading();
         mRefreshHelper.setCurPage(page);
-        Call<HttpResult<NewsInfoWrapper>> call =
+        final Call<HttpResult<NewsInfoWrapper>> call =
                 homeService.getNewsComment(StringHelper.getString(userId), PAGE_NEWS_ID,
                         PAGE_NEWS_TYPE, AppConstant.NONE_VALUE, page,
                         AppConstant.DEFAULT_PAGE_SIZE);
+        onAddCall(call);
         call.enqueue(new SimpleCallback<NewsInfoWrapper>() {
             @Override
             public void onSuccess(NewsInfoWrapper data) {
                 hideLoading();
+                onRemoveCall(call);
 
                 if (page == 1 && (null == data
                         || null == data.commentlist
@@ -526,6 +538,7 @@ public class NewsDetailActivity extends BaseActivity {
             @Override
             public void onFail(String code, String errorMsg) {
                 onSimpleError(errorMsg);
+                onRemoveCall(call);
             }
         });
     }

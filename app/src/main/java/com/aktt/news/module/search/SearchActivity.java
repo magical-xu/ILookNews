@@ -13,7 +13,6 @@ import com.aktt.news.AppConstant;
 import com.aktt.news.R;
 import com.aktt.news.api.SearchService;
 import com.aktt.news.base.BaseActivity;
-import com.aktt.news.module.search.data.SearchHistory;
 import com.aktt.news.module.search.data.SearchRecommend;
 import com.aktt.news.module.user.widget.SettingItemView;
 import com.aktt.news.net.callback.SimpleCallback;
@@ -128,6 +127,11 @@ public class SearchActivity extends BaseActivity {
         loadRecommend();
     }
 
+    @Override
+    public ArrayList<Call> addRequestList() {
+        return null;
+    }
+
     private void initHistorySearch() {
         String longHistory = SPUtils.getInstance().getString(AppConstant.SEARCH_HISTORY, "");
         String[] tmpHistory = longHistory.split(",");                            //split后长度为1有一个空串对象
@@ -196,26 +200,6 @@ public class SearchActivity extends BaseActivity {
         });
     }
 
-    @Deprecated
-    private void loadHistory() {
-
-        Call<HttpResult<SearchHistory>> searchHistory =
-                service.getSearchHistory(AppConstant.TEST_USER_ID);
-        searchHistory.enqueue(new SimpleCallback<SearchHistory>() {
-            @Override
-            public void onSuccess(SearchHistory data) {
-
-                List<SearchHistory.ListBean> list = data.list;
-                //addHistoryView(list);
-            }
-
-            @Override
-            public void onFail(String code, String errorMsg) {
-
-            }
-        });
-    }
-
     /**
      * 将搜索历史添加到 FlexboxLayout中
      */
@@ -226,8 +210,6 @@ public class SearchActivity extends BaseActivity {
             final String keyword = list.get(i);
             ViewGroup view = (ViewGroup) inflater.inflate(R.layout.include_search_item_view, null);
 
-            //TextView textView = new TextView(this);
-            //textView.setTextColor(CompatUtil.getColor(this, R.color.one_text_color));
             TextView textView = (TextView) view.getChildAt(0);
             textView.setText(keyword);
             textView.setOnClickListener(new View.OnClickListener() {
@@ -236,8 +218,6 @@ public class SearchActivity extends BaseActivity {
                     handleSearch(keyword);
                 }
             });
-            //textView.setPadding(SizeUtils.dp2px(8), 0, 0, 0);
-            //textView.setGravity(Gravity.CENTER_VERTICAL);
 
             FlexboxLayout.LayoutParams params = new FlexboxLayout.LayoutParams(SizeUtils.dp2px(42),
                     ViewGroup.LayoutParams.MATCH_PARENT);
@@ -256,8 +236,6 @@ public class SearchActivity extends BaseActivity {
             final SearchRecommend.ListBean listBean = list.get(i);
             ViewGroup view = (ViewGroup) inflater.inflate(R.layout.include_search_item_view, null);
 
-            //TextView textView = new TextView(this);
-            //textView.setTextColor(CompatUtil.getColor(this, R.color.one_text_color));
             TextView textView = (TextView) view.getChildAt(0);
             textView.setText(listBean.keyText);
             textView.setOnClickListener(new View.OnClickListener() {
@@ -266,8 +244,6 @@ public class SearchActivity extends BaseActivity {
                     handleSearch(listBean.keyText);
                 }
             });
-            //textView.setPadding(SizeUtils.dp2px(8), 0, 0, 0);
-            //textView.setGravity(Gravity.CENTER_VERTICAL);
 
             FlexboxLayout.LayoutParams params = new FlexboxLayout.LayoutParams(SizeUtils.dp2px(42),
                     ViewGroup.LayoutParams.MATCH_PARENT);

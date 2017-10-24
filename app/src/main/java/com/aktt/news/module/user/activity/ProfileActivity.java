@@ -31,6 +31,7 @@ import com.magicalxu.library.blankj.KeyboardUtils;
 import com.magicalxu.library.blankj.ToastUtils;
 import com.qmuiteam.qmui.widget.dialog.QMUIDialog;
 import com.qmuiteam.qmui.widget.dialog.QMUIDialogAction;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -58,6 +59,11 @@ public class ProfileActivity extends BaseActivity {
     @Override
     protected boolean addTitleBar() {
         return true;
+    }
+
+    @Override
+    public ArrayList<Call> addRequestList() {
+        return null;
     }
 
     @Override

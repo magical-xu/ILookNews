@@ -23,6 +23,7 @@ import com.flyco.tablayout.listener.OnTabSelectListener;
 import com.magicalxu.library.blankj.ToastUtils;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 import java.util.ArrayList;
+import retrofit2.Call;
 
 public class MainActivity extends BaseActivity {
 
@@ -181,5 +182,10 @@ public class MainActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         TabManager.getInstance().setHasInit(false);
+    }
+
+    @Override
+    public ArrayList<Call> addRequestList() {
+        return null;
     }
 }

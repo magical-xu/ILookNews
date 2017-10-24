@@ -6,12 +6,10 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import butterknife.BindView;
-import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.aktt.news.AppConstant;
 import com.aktt.news.R;
 import com.aktt.news.api.HomeService;
@@ -29,6 +27,7 @@ import com.aktt.news.util.RefreshHelper;
 import com.aktt.news.util.SimplePreNotifyListener;
 import com.aktt.news.util.UserOptionHelper;
 import com.aktt.news.widget.ilook.ILookTitleBar;
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.qmuiteam.qmui.widget.dialog.QMUIDialog;
 import com.qmuiteam.qmui.widget.dialog.QMUIDialogAction;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
@@ -58,6 +57,8 @@ public class CollectionActivity extends BaseActivity {
     private QMUIDialog mClearDialog;
     private HomeService service;
 
+    private ArrayList<Call> callList;
+
     @Override
     public int getLayoutId() {
         return R.layout.simple_recycler_list;
@@ -79,6 +80,8 @@ public class CollectionActivity extends BaseActivity {
                 finish();
             }
         });
+
+        service = NetRequest.getInstance().create(HomeService.class);
 
         mAdapter = new NewsListAdapter(mDataList);
         mRefreshHelper = new RefreshHelper(mRefreshLayout, mAdapter, mRecyclerView) {
@@ -204,11 +207,7 @@ public class CollectionActivity extends BaseActivity {
                         @Override
                         public void onSuccess(String msg) {
                             hideLoading();
-                            //mAdapter.getData().remove(position);
-                            Log.d("magical", " del : " + position);
                             mAdapter.remove(position);
-                            //mAdapter.notifyItemRemoved(position);
-                            //mAdapter.notifyItemRangeChanged(position, mAdapter.getItemCount());
                         }
 
                         @Override
@@ -228,14 +227,15 @@ public class CollectionActivity extends BaseActivity {
         }
 
         showLoading();
-        service = NetRequest.getInstance().create(HomeService.class);
-        Call<HttpResult<NewsListWrapper>> call =
+        final Call<HttpResult<NewsListWrapper>> call =
                 service.getCollectionList(userId, page, AppConstant.DEFAULT_PAGE_SIZE);
+        onAddCall(call);
         call.enqueue(new SimpleCallback<NewsListWrapper>() {
             @Override
             public void onSuccess(NewsListWrapper data) {
 
                 hideLoading();
+                onRemoveCall(call);
 
                 if (page == 1 && (null == data || null == data.list || data.list.size() == 0)) {
                     mRefreshHelper.finishRefresh();
@@ -251,6 +251,7 @@ public class CollectionActivity extends BaseActivity {
 
             @Override
             public void onFail(String code, String errorMsg) {
+                onRemoveCall(call);
                 mRefreshHelper.onFail();
                 hideLoading();
             }
@@ -273,6 +274,12 @@ public class CollectionActivity extends BaseActivity {
     public void onDestroy() {
         super.onDestroy();
         GSYVideoPlayer.releaseAllVideos();
+    }
+
+    @Override
+    public ArrayList<Call> addRequestList() {
+        callList = new ArrayList<>();
+        return callList;
     }
 
     @Override

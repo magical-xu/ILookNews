@@ -19,6 +19,7 @@ import com.aktt.news.net.data.HttpResult;
 import com.aktt.news.util.RefreshHelper;
 import com.aktt.news.widget.ilook.ILookTitleBar;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import java.util.ArrayList;
 import retrofit2.Call;
 
 /**
@@ -34,6 +35,7 @@ public class AddFollowListActivity extends BaseActivity {
     private FocusAddAdapter mAdapter;
     private RefreshHelper<FocusBean> mRefreshHelper;
     private UserService service;
+    private ArrayList<Call> callList;
 
     @Override
     public int getLayoutId() {
@@ -43,6 +45,12 @@ public class AddFollowListActivity extends BaseActivity {
     @Override
     protected boolean addTitleBar() {
         return true;
+    }
+
+    @Override
+    public ArrayList<Call> addRequestList() {
+        callList = new ArrayList<>();
+        return callList;
     }
 
     @Override
@@ -82,18 +90,21 @@ public class AddFollowListActivity extends BaseActivity {
         }
 
         showLoading();
-        Call<HttpResult<FocusWrapper>> call =
+        final Call<HttpResult<FocusWrapper>> call =
                 service.getNotFollowList(userId, page, AppConstant.DEFAULT_PAGE_SIZE);
+        onAddCall(call);
         call.enqueue(new SimpleCallback<FocusWrapper>() {
             @Override
             public void onSuccess(FocusWrapper data) {
 
+                onRemoveCall(call);
                 hideLoading();
-                mRefreshHelper.setData(data.list,data.haveNext);
+                mRefreshHelper.setData(data.list, data.haveNext);
             }
 
             @Override
             public void onFail(String code, String errorMsg) {
+                onRemoveCall(call);
                 mRefreshHelper.onFail();
                 onSimpleError(errorMsg);
             }

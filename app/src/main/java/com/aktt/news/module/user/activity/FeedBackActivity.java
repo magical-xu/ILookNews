@@ -16,6 +16,7 @@ import com.aktt.news.util.StringHelper;
 import com.aktt.news.widget.ilook.ILookTitleBar;
 import com.magicalxu.library.blankj.KeyboardUtils;
 import com.magicalxu.library.blankj.ToastUtils;
+import java.util.ArrayList;
 import retrofit2.Call;
 
 /**
@@ -38,6 +39,11 @@ public class FeedBackActivity extends BaseActivity {
     @Override
     protected boolean addTitleBar() {
         return true;
+    }
+
+    @Override
+    public ArrayList<Call> addRequestList() {
+        return null;
     }
 
     @Override

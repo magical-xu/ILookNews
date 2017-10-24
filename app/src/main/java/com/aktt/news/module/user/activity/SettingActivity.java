@@ -22,6 +22,8 @@ import com.magicalxu.library.blankj.SPUtils;
 import com.magicalxu.library.blankj.ToastUtils;
 import com.qmuiteam.qmui.widget.dialog.QMUIDialog;
 import com.qmuiteam.qmui.widget.dialog.QMUIDialogAction;
+import java.util.ArrayList;
+import retrofit2.Call;
 
 /**
  * Created by magical on 2017/8/19.
@@ -52,6 +54,11 @@ public class SettingActivity extends BaseActivity {
     @Override
     protected boolean addTitleBar() {
         return true;
+    }
+
+    @Override
+    public ArrayList<Call> addRequestList() {
+        return null;
     }
 
     @Override

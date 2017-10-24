@@ -33,6 +33,7 @@ import com.aktt.news.widget.ilook.ILookTitleBar;
 import com.magicalxu.library.blankj.KeyboardUtils;
 import com.magicalxu.library.blankj.ToastUtils;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import java.util.ArrayList;
 import java.util.List;
 import org.json.JSONObject;
 import retrofit2.Call;
@@ -49,8 +50,6 @@ import static com.aktt.news.AppConstant.PARAMS_NEWS_TYPE;
 
 public class CommentActivity extends BaseActivity {
 
-    private static final String TAG = "CommentActivity";
-
     @BindView(R.id.id_recycler) RecyclerView mRecyclerView;
     @BindView(R.id.id_refresh_layout) SmartRefreshLayout mRefreshLayout;
     @BindView(R.id.id_edit) EditText mInputView;
@@ -63,6 +62,8 @@ public class CommentActivity extends BaseActivity {
     private String PAGE_NEWS_ID;
     private int PAGE_NEWS_TYPE;
     private View mEmptyView;
+
+    private ArrayList<Call> callList;
 
     public static void getInstance(Context context, @NonNull String newsId, int newsType) {
         Intent intent = new Intent(context, CommentActivity.class);
@@ -79,6 +80,12 @@ public class CommentActivity extends BaseActivity {
     @Override
     protected boolean addTitleBar() {
         return true;
+    }
+
+    @Override
+    public ArrayList<Call> addRequestList() {
+        callList = new ArrayList<>();
+        return callList;
     }
 
     @Override
@@ -102,11 +109,6 @@ public class CommentActivity extends BaseActivity {
                 switch (view.getId()) {
                     case R.id.id_comment_count:
                         CommentBean commentBean = mAdapter.getData().get(position);
-
-                        //int commentCount = commentBean.commentCount;
-                        //if (0 == commentCount) {
-                        //    return;
-                        //}
 
                         String commentId = commentBean.cid;
                         CommentDialogFragment fragment =
@@ -151,14 +153,16 @@ public class CommentActivity extends BaseActivity {
         String userId = AccountManager.getInstance().getUserId();
 
         showLoading();
-        Call<HttpResult<NewsInfoWrapper>> call =
+        final Call<HttpResult<NewsInfoWrapper>> call =
                 homeService.getNewsComment(StringHelper.getString(userId), PAGE_NEWS_ID,
                         PAGE_NEWS_TYPE, AppConstant.COMMENT_LEVEL_ONE, page,
                         AppConstant.DEFAULT_PAGE_SIZE);
+        onAddCall(call);
         call.enqueue(new SimpleCallback<NewsInfoWrapper>() {
             @Override
             public void onSuccess(NewsInfoWrapper data) {
 
+                onRemoveCall(call);
                 hideLoading();
                 if (page == 1 && (null == data
                         || null == data.commentlist
@@ -174,6 +178,7 @@ public class CommentActivity extends BaseActivity {
             @Override
             public void onFail(String code, String errorMsg) {
 
+                onRemoveCall(call);
                 mRefreshHelper.onFail();
                 onSimpleError(errorMsg);
             }

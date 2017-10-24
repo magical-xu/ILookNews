@@ -1,10 +1,13 @@
 package com.aktt.news.net.client;
 
 import android.content.Context;
+import android.support.annotation.Nullable;
 import com.aktt.news.net.config.CookieManager;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import okhttp3.OkHttpClient;
+import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -23,7 +26,11 @@ public class NetRequest {
         return INSTANCE;
     }
 
-    private Map<String, Map<Integer, retrofit2.Call>> mRequestMap = new ConcurrentHashMap<>();
+    private HashMap<String, ArrayList<Call>> mRequestMap = new HashMap<>();
+
+    public Map<String, ArrayList<Call>> getRequestMap() {
+        return mRequestMap;
+    }
 
     public Context mContext;
 
@@ -56,5 +63,47 @@ public class NetRequest {
 
     public void clearCookie() {
         ((CookieManager) mOkHttpClient.cookieJar()).clearCookie();
+    }
+
+    public void cancelByTag(String TAG) {
+
+        ArrayList<Call> list = mRequestMap.get(TAG);
+        if (null != list && list.size() > 0) {
+            cancelPageCall(list);
+            mRequestMap.remove(list);
+        }
+    }
+
+    public void cancelPageCall(ArrayList<Call> list) {
+        for (int i = 0; i < list.size(); i++) {
+
+            Call call = list.get(i);
+            if (!call.isCanceled()) {
+                call.cancel();
+            }
+        }
+    }
+
+    public void addRequest(String TAG, Call call) {
+
+        ArrayList<Call> list = mRequestMap.get(TAG);
+        if (null != list) {
+            list.add(call);
+        }
+    }
+
+    public void removeRequest(String TAG, Call call) {
+
+        ArrayList<Call> list = mRequestMap.get(TAG);
+        if (null != list) {
+            list.remove(call);
+        }
+    }
+
+    public void addRequestList(String TAG, @Nullable ArrayList<Call> list) {
+
+        if (null != list) {
+            mRequestMap.put(TAG, list);
+        }
     }
 }

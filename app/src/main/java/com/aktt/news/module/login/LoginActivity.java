@@ -30,6 +30,8 @@ import com.aktt.news.widget.edit.PasswordEditText;
 import com.liulishuo.share.type.SsoLoginType;
 import com.magicalxu.library.blankj.KeyboardUtils;
 import com.magicalxu.library.blankj.ToastUtils;
+import java.util.ArrayList;
+import org.json.JSONObject;
 import retrofit2.Call;
 
 import static com.magicalxu.library.blankj.ToastUtils.showShort;
@@ -109,6 +111,11 @@ public class LoginActivity extends BaseActivity {
         };
 
         MobHelper.register(eventHandler);
+    }
+
+    @Override
+    public ArrayList<Call> addRequestList() {
+        return null;
     }
 
     @OnClick({

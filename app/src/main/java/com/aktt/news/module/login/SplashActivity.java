@@ -16,6 +16,8 @@ import com.aktt.news.base.BaseActivity;
 import com.aktt.news.instance.TabManager;
 import com.aktt.news.util.NotifyListener;
 import com.aktt.news.util.TimeCountdown;
+import java.util.ArrayList;
+import retrofit2.Call;
 
 /**
  * Created by magical on 17/8/20.
@@ -107,5 +109,10 @@ public class SplashActivity extends BaseActivity {
         if (null != mTimeCountdown) {
             mTimeCountdown.removeCallback();
         }
+    }
+
+    @Override
+    public ArrayList<Call> addRequestList() {
+        return null;
     }
 }

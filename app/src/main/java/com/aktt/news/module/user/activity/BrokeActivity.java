@@ -7,7 +7,6 @@ import android.util.Log;
 import android.util.SparseArray;
 import android.view.View;
 import butterknife.BindView;
-import com.bilibili.boxing.model.entity.BaseMedia;
 import com.aktt.news.AppConstant;
 import com.aktt.news.R;
 import com.aktt.news.api.HomeService;
@@ -25,7 +24,9 @@ import com.aktt.news.widget.ilook.ILookTitleBar;
 import com.aktt.news.widget.selector.ImageSelector;
 import com.aktt.news.widget.selector.ImageSelectorCallback;
 import com.aktt.news.widget.text.CountEditText;
+import com.bilibili.boxing.model.entity.BaseMedia;
 import com.magicalxu.library.blankj.EmptyUtils;
+import com.magicalxu.library.blankj.FileUtils;
 import com.magicalxu.library.blankj.KeyboardUtils;
 import com.magicalxu.library.blankj.SizeUtils;
 import com.magicalxu.library.blankj.ThreadPoolUtils;
@@ -160,7 +161,7 @@ public class BrokeActivity extends BaseActivity {
         }
 
         //开启压缩
-        compressImage(localList,token);
+        compressImage(localList, token);
     }
 
     /**
@@ -173,7 +174,7 @@ public class BrokeActivity extends BaseActivity {
         }
 
         int size = sortCompressList.size();
-        Collections.sort(sortCompressList,new MyComparator());
+        Collections.sort(sortCompressList, new MyComparator());
 
         for (int i = 0; i < size; i++) {
 
@@ -191,6 +192,7 @@ public class BrokeActivity extends BaseActivity {
 
     /**
      * 压缩图片
+     *
      * @param localList 本地图片地址集合
      */
     private void compressImage(List<String> localList, final String token) {
@@ -306,6 +308,7 @@ public class BrokeActivity extends BaseActivity {
 
                 hideLoading();
                 ToastUtils.showShort("爆料成功");
+                finish();
             }
 
             @Override
@@ -338,5 +341,24 @@ public class BrokeActivity extends BaseActivity {
         public int compare(ImageBean t1, ImageBean t2) {
             return t1.sort > t2.sort ? 1 : -1;
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        deleteCacheImage();
+    }
+
+    @Override
+    public ArrayList<Call> addRequestList() {
+        return null;
+    }
+
+    private void deleteCacheImage() {
+
+        String cachePath = PathHelper.getCachePath();
+        boolean result = FileUtils.deleteAllInDir(cachePath);
+        Timber.d("delete cache image result : " + result);
     }
 }

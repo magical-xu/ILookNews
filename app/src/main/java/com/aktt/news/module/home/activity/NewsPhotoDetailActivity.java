@@ -56,8 +56,6 @@ import static com.aktt.news.AppConstant.PARAMS_NEWS_TYPE;
 
 public class NewsPhotoDetailActivity extends BaseActivity {
 
-    private static final String TAG = "NewsPhotoDetailActivity";
-
     @BindView(R.id.view_pager) ViewPagerFixed mViewPager;
     @BindView(R.id.photo_detail_title_tv) TextView mContentTv;
     @BindView(R.id.id_fake_bottom) ViewGroup mFakeBottom;
@@ -83,6 +81,8 @@ public class NewsPhotoDetailActivity extends BaseActivity {
 
     private boolean hasCollected;
     private boolean hasFollowed;
+
+    private ArrayList<Call> callList;
 
     public static void getInstance(Context context, @NonNull String newsId, int newsType) {
         Intent intent = new Intent(context, NewsPhotoDetailActivity.class);
@@ -124,13 +124,15 @@ public class NewsPhotoDetailActivity extends BaseActivity {
 
         String userId = AccountManager.getInstance().getUserId();
         showLoading();
-        Call<HttpResult<NewsInfoWrapper>> call =
+        final Call<HttpResult<NewsInfoWrapper>> call =
                 service.getNewsDetail(StringHelper.getString(userId), PAGE_NEWS_ID, 3);
+        onAddCall(call);
         call.enqueue(new SimpleCallback<NewsInfoWrapper>() {
             @Override
             public void onSuccess(NewsInfoWrapper data) {
 
                 hideLoading();
+                onRemoveCall(call);
                 if (null == data) {
                     Timber.e("data is null");
                     return;
@@ -161,6 +163,7 @@ public class NewsPhotoDetailActivity extends BaseActivity {
 
             @Override
             public void onFail(String code, String errorMsg) {
+                onRemoveCall(call);
                 onSimpleError(errorMsg);
             }
         });
@@ -170,8 +173,7 @@ public class NewsPhotoDetailActivity extends BaseActivity {
 
         mTitleBar.setTitleBg(android.R.color.black)
                 .setLeftImage(R.drawable.ic_back)
-                .setRightImage(R.drawable.ic_more_white)
-                .hideDivider().openImageMode()
+                .setRightImage(R.drawable.ic_more_white).hideDivider().openImageMode()
                 .setTitleListener(new ILookTitleBar.TitleCallbackAdapter() {
                     @Override
                     public void onClickLeft(View view) {
@@ -386,6 +388,12 @@ public class NewsPhotoDetailActivity extends BaseActivity {
             return;
         }
         super.onBackPressed();
+    }
+
+    @Override
+    public ArrayList<Call> addRequestList() {
+        callList = new ArrayList<>();
+        return callList;
     }
 
     /**

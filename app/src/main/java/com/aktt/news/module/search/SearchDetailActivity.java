@@ -9,6 +9,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import butterknife.BindView;
+import com.aktt.news.instance.AccountManager;
+import com.aktt.news.util.StringHelper;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.aktt.news.AppConstant;
 import com.aktt.news.R;
@@ -51,6 +53,8 @@ public class SearchDetailActivity extends BaseActivity {
     private String mKeyword;
     private boolean mFull;
 
+    private ArrayList<Call> callList;
+
     public static void getInstance(Context context, String keyword) {
         Intent intent = new Intent(context, SearchDetailActivity.class);
         intent.putExtra(PARAMS_KEY, keyword);
@@ -60,6 +64,12 @@ public class SearchDetailActivity extends BaseActivity {
     @Override
     protected boolean addTitleBar() {
         return true;
+    }
+
+    @Override
+    public ArrayList<Call> addRequestList() {
+        callList = new ArrayList<>();
+        return callList;
     }
 
     @Override
@@ -150,8 +160,7 @@ public class SearchDetailActivity extends BaseActivity {
                 int itemType = bean.getItemType();
                 String newId = bean.newId;
                 if (itemType == NewsListBean.VIDEO) {
-                    IntentHelper.openVideoDetailPage(SearchDetailActivity.this, "", 0,
-                            bean.type);
+                    IntentHelper.openVideoDetailPage(SearchDetailActivity.this, "", 0, bean.type);
                 } else if (itemType == NewsListBean.TEXT) {
                     IntentHelper.openNewsDetailPage(SearchDetailActivity.this, newId, itemType);
                 } else if (itemType == NewsListBean.IMAGE) {
@@ -173,11 +182,15 @@ public class SearchDetailActivity extends BaseActivity {
 
     private void load(final int page) {
 
-        Call<HttpResult<NewsListWrapper>> call =
-                service.doSearch(AppConstant.TEST_USER_ID, mKeyword);
+        String userId = AccountManager.getInstance().getUserId();
+
+        final Call<HttpResult<NewsListWrapper>> call =
+                service.doSearch(StringHelper.getString(userId), mKeyword);
+        onAddCall(call);
         call.enqueue(new SimpleCallback<NewsListWrapper>() {
             @Override
             public void onSuccess(NewsListWrapper data) {
+                onRemoveCall(call);
                 if (page == 1) {
 
                     mRefreshHelper.finishRefresh();
@@ -201,6 +214,7 @@ public class SearchDetailActivity extends BaseActivity {
 
             @Override
             public void onFail(String code, String errorMsg) {
+                onRemoveCall(call);
                 mRefreshHelper.onFail();
             }
         });

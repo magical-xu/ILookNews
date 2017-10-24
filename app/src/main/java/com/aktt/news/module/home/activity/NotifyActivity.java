@@ -19,6 +19,7 @@ import com.aktt.news.net.data.HttpResult;
 import com.aktt.news.util.RefreshHelper;
 import com.aktt.news.widget.ilook.ILookTitleBar;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import java.util.ArrayList;
 import retrofit2.Call;
 
 /**
@@ -35,6 +36,8 @@ public class NotifyActivity extends BaseActivity {
     private RefreshHelper<NotifyBean> mRefreshHelper;
     private UserService service;
 
+    private ArrayList<Call> callList;
+
     @Override
     public int getLayoutId() {
         return R.layout.activity_notify;
@@ -43,6 +46,12 @@ public class NotifyActivity extends BaseActivity {
     @Override
     protected boolean addTitleBar() {
         return true;
+    }
+
+    @Override
+    public ArrayList<Call> addRequestList() {
+        callList = new ArrayList<>();
+        return callList;
     }
 
     @Override
@@ -92,17 +101,20 @@ public class NotifyActivity extends BaseActivity {
         }
 
         showLoading();
-        Call<HttpResult<NotifyWrapper>> call =
+        final Call<HttpResult<NotifyWrapper>> call =
                 service.getMyMessageList(userId, page, AppConstant.DEFAULT_PAGE_SIZE);
+        onAddCall(call);
         call.enqueue(new SimpleCallback<NotifyWrapper>() {
             @Override
             public void onSuccess(NotifyWrapper data) {
                 hideLoading();
+                onRemoveCall(call);
                 mRefreshHelper.setData(data.systemMessageList, data.haveNext);
             }
 
             @Override
             public void onFail(String code, String errorMsg) {
+                onRemoveCall(call);
                 mRefreshHelper.onFail();
                 onSimpleError(errorMsg);
             }

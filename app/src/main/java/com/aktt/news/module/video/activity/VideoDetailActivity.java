@@ -48,6 +48,7 @@ import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
+import java.util.ArrayList;
 import java.util.List;
 import org.json.JSONObject;
 import retrofit2.Call;
@@ -108,6 +109,8 @@ public class VideoDetailActivity extends BaseActivity {
     private long PAGE_PROGRESS;     //当前播放进度
     private int PAGE_NEWS_TYPE;
     private String NEWS_PUBLISHER;  //新闻发布者ID
+
+    private ArrayList<Call> callList;
 
     public static void newInstance(Context context, String vid, long seek, int newsType) {
         Intent intent = new Intent(context, VideoDetailActivity.class);
@@ -421,13 +424,15 @@ public class VideoDetailActivity extends BaseActivity {
 
         showLoading();
         mRefreshHelper.setCurPage(page);
-        Call<HttpResult<NewsInfoWrapper>> call =
+        final Call<HttpResult<NewsInfoWrapper>> call =
                 service.getNewsComment(StringHelper.getString(userId), PAGE_VID, PAGE_NEWS_TYPE,
                         AppConstant.NONE_VALUE, page, AppConstant.DEFAULT_PAGE_SIZE);
+        onAddCall(call);
         call.enqueue(new SimpleCallback<NewsInfoWrapper>() {
             @Override
             public void onSuccess(NewsInfoWrapper data) {
                 hideLoading();
+                onRemoveCall(call);
 
                 if (page == 1 && (null == data
                         || null == data.commentlist
@@ -446,6 +451,7 @@ public class VideoDetailActivity extends BaseActivity {
 
             @Override
             public void onFail(String code, String errorMsg) {
+                onRemoveCall(call);
                 onSimpleError(errorMsg);
             }
         });
@@ -482,6 +488,12 @@ public class VideoDetailActivity extends BaseActivity {
 
         mVideoPlayer.getCurrentPlayer().release();
         if (orientationUtils != null) orientationUtils.releaseListener();
+    }
+
+    @Override
+    public ArrayList<Call> addRequestList() {
+        callList = new ArrayList<>();
+        return callList;
     }
 
     @Override
