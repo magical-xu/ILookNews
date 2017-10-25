@@ -25,6 +25,7 @@ import com.aktt.news.net.data.HttpResult;
 import com.aktt.news.util.IntentHelper;
 import com.aktt.news.util.RefreshHelper;
 import com.aktt.news.util.SimplePreNotifyListener;
+import com.aktt.news.util.StringHelper;
 import com.aktt.news.util.UserOptionHelper;
 import com.aktt.news.widget.ilook.ILookTitleBar;
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -54,7 +55,6 @@ public class CollectionActivity extends BaseActivity {
 
     private boolean mFull;
     private View mEmptyView;
-    private QMUIDialog mClearDialog;
     private HomeService service;
 
     private ArrayList<Call> callList;
@@ -147,7 +147,8 @@ public class CollectionActivity extends BaseActivity {
                     IntentHelper.openNewsPhotoDetailPage(CollectionActivity.this, newId, itemType);
                 } else if (itemType == NewsListBean.HTML) {
                     //跳转类
-                    IntentHelper.openWebPage(CollectionActivity.this, AppConstant.TEST_WEB_URL);
+                    IntentHelper.openWebPage(CollectionActivity.this,
+                            StringHelper.getString(bean.url));
                 } else {
                     Timber.e("can't resolve jump type.");
                 }

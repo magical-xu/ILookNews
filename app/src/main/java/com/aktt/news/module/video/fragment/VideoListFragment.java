@@ -11,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import butterknife.BindView;
-import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.aktt.news.AppConstant;
 import com.aktt.news.R;
 import com.aktt.news.api.HomeService;
@@ -25,7 +24,7 @@ import com.aktt.news.net.client.NetRequest;
 import com.aktt.news.net.data.HttpResult;
 import com.aktt.news.util.IntentHelper;
 import com.aktt.news.util.RefreshHelper;
-import com.magicalxu.library.blankj.ToastUtils;
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
@@ -107,12 +106,9 @@ public class VideoListFragment extends BaseFragment {
         mRefreshHelper = new RefreshHelper(mRefreshLayout, mAdapter, mRecyclerView) {
             @Override
             public void onRequest(int page) {
-                //mockServer.mockGankCall(page, MockServer.Type.VIDEO_LIST);
                 load(page);
             }
         };
-        //mockServer = MockServer.getInstance();
-        //mockServer.init(mRefreshHelper);
 
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
 
@@ -158,9 +154,14 @@ public class VideoListFragment extends BaseFragment {
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
                 int viewId = view.getId();
                 if (viewId == R.id.id_focus_plus) {
-                    ToastUtils.showShort(" 加关注 " + position);
+                    List<NewsListBean> newsListBean = mAdapter.getData();
+                    if (newsListBean.size() > position) {
+                        NewsListBean item = newsListBean.get(position);
+                        if (null != item) {
+                            IntentHelper.openShareBottomPage(mContext, item.newId, item.type);
+                        }
+                    }
                 } else if (viewId == R.id.tv_comments) {
-                    ToastUtils.showShort("跳转视频详情" + position);
                     handleItemClick(position);
                 }
             }

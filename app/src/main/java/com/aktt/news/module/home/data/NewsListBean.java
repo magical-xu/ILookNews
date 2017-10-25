@@ -47,4 +47,6 @@ public class NewsListBean implements MultiItemEntity {
 
     public String videoUrl;
     //public String newstype;
+    public String url;
+    public int playCount;
 }

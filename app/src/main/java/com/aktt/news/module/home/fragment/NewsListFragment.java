@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import butterknife.BindView;
+import com.aktt.news.util.StringHelper;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.aktt.news.AppConstant;
 import com.aktt.news.R;
@@ -138,7 +139,7 @@ public class NewsListFragment extends BaseFragment {
                     IntentHelper.openNewsPhotoDetailPage(mContext, newId, itemType);
                 } else if (itemType == NewsListBean.HTML) {
                     //跳转类
-                    IntentHelper.openWebPage(getActivity(), AppConstant.TEST_WEB_URL);
+                    IntentHelper.openWebPage(getActivity(), StringHelper.getString(bean.url));
                 } else {
                     Timber.e("can't resolve jump type.");
                 }

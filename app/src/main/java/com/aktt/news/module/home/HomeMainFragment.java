@@ -8,6 +8,7 @@ import android.content.IntentFilter;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -82,6 +83,7 @@ public class HomeMainFragment extends BaseFragment implements OnChannelListener 
 
         //先从 sp 里 拿头像
         avatar = SPUtils.getInstance().getString(AppConstant.USER_ICON);
+        Log.d("magical", " s p url : " + avatar);
 
         BaseUser user = AccountManager.getInstance().getUser();
         if (null != user) {

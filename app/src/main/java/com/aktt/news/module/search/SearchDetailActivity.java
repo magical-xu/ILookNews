@@ -160,7 +160,8 @@ public class SearchDetailActivity extends BaseActivity {
                 int itemType = bean.getItemType();
                 String newId = bean.newId;
                 if (itemType == NewsListBean.VIDEO) {
-                    IntentHelper.openVideoDetailPage(SearchDetailActivity.this, "", 0, bean.type);
+                    IntentHelper.openVideoDetailPage(SearchDetailActivity.this, newId, 0,
+                            bean.type);
                 } else if (itemType == NewsListBean.TEXT) {
                     IntentHelper.openNewsDetailPage(SearchDetailActivity.this, newId, itemType);
                 } else if (itemType == NewsListBean.IMAGE) {
@@ -172,7 +173,8 @@ public class SearchDetailActivity extends BaseActivity {
                             itemType);
                 } else if (itemType == NewsListBean.HTML) {
                     //跳转类
-                    IntentHelper.openWebPage(SearchDetailActivity.this, AppConstant.TEST_WEB_URL);
+                    IntentHelper.openWebPage(SearchDetailActivity.this,
+                            StringHelper.getString(bean.url));
                 } else {
                     Timber.e("can't resolve jump type.");
                 }

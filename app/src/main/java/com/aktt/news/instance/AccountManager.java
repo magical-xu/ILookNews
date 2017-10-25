@@ -112,5 +112,6 @@ public class AccountManager {
         if (null != user) {
             user.icon = avatarUrl;
         }
+        SPUtils.getInstance().put(AppConstant.USER_ICON, avatarUrl);
     }
 }

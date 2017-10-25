@@ -9,7 +9,7 @@ import android.text.TextUtils;
 
 public class StringHelper {
 
-    public static String getString(String raw){
-        return TextUtils.isEmpty(raw)?"":raw;
+    public static String getString(String raw) {
+        return TextUtils.isEmpty(raw) ? "" : raw;
     }
 }

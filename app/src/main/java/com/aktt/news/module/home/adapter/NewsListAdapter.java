@@ -135,10 +135,8 @@ public class NewsListAdapter extends BaseMultiItemQuickAdapter<NewsListBean, Bas
 
         helper.setText(R.id.tv_news_title,
                 ILookApplication.getLocalString(R.string.test_text_long));
-        ImageLoader.loadImage(AppConstant.TEST_AVATAR,
-                ((ImageView) helper.getView(R.id.iv_news_right)));
-        ImageLoader.loadImage(AppConstant.TEST_AVATAR,
-                ((ImageView) helper.getView(R.id.iv_news_left)));
+        ImageLoader.loadImage("url", ((ImageView) helper.getView(R.id.iv_news_right)));
+        ImageLoader.loadImage("url", ((ImageView) helper.getView(R.id.iv_news_left)));
     }
 
     private void bindSingleImg(BaseViewHolder helper, NewsListBean item) {

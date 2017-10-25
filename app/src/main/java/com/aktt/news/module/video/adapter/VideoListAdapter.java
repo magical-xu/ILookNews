@@ -51,7 +51,9 @@ public class VideoListAdapter extends BaseQuickAdapter<NewsListBean, BaseViewHol
 
         helper.setText(R.id.tv_author, StringHelper.getString(item.nickname));
 
-        helper.setText(R.id.tv_play_time, "1111次播放")
+        helper.setText(R.id.tv_play_time,
+                String.format(mContext.getString(R.string.test_format_play_video_num),
+                        item.playCount))
                 .setText(R.id.tv_comments, String.valueOf(item.commentCount));
 
         helper.addOnClickListener(R.id.id_focus_plus).addOnClickListener(R.id.tv_comments);

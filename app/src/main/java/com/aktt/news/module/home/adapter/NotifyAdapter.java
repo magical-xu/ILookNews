@@ -3,9 +3,6 @@ package com.aktt.news.module.home.adapter;
 import android.support.annotation.LayoutRes;
 import android.text.TextUtils;
 import android.view.View;
-import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.BaseViewHolder;
-import com.aktt.news.AppConstant;
 import com.aktt.news.R;
 import com.aktt.news.api.UserService;
 import com.aktt.news.instance.AccountManager;
@@ -15,6 +12,8 @@ import com.aktt.news.net.client.NetRequest;
 import com.aktt.news.net.data.HttpResult;
 import com.aktt.news.util.StringHelper;
 import com.aktt.news.widget.image.HeadImageView;
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.BaseViewHolder;
 import com.magicalxu.library.blankj.ToastUtils;
 import com.mcxtzhang.swipemenulib.SwipeMenuLayout;
 import org.json.JSONObject;
@@ -41,7 +40,7 @@ public class NotifyAdapter extends BaseQuickAdapter<NotifyBean, BaseViewHolder> 
         final SwipeMenuLayout root = helper.getView(R.id.id_item_root);
 
         // TODO: 2017/10/10 系统消息 缺个头像
-        ((HeadImageView) helper.getView(R.id.iv_avatar)).setHeadImage(AppConstant.TEST_AVATAR);
+        ((HeadImageView) helper.getView(R.id.iv_avatar)).setHeadImage("");
         helper.setText(R.id.tv_notify_type, StringHelper.getString(item.title));
         helper.setText(R.id.tv_notify_msg, StringHelper.getString(item.content));
         helper.setText(R.id.tv_notify_time, StringHelper.getString(item.created_time));
