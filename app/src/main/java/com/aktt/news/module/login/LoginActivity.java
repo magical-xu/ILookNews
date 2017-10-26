@@ -2,6 +2,7 @@ package com.aktt.news.module.login;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
@@ -27,11 +28,13 @@ import com.aktt.news.net.data.HttpResult;
 import com.aktt.news.util.IntentHelper;
 import com.aktt.news.widget.edit.ClearEditText;
 import com.aktt.news.widget.edit.PasswordEditText;
+import com.liulishuo.share.OAuthUserInfo;
+import com.liulishuo.share.SsoUserInfoManager;
 import com.liulishuo.share.type.SsoLoginType;
 import com.magicalxu.library.blankj.KeyboardUtils;
 import com.magicalxu.library.blankj.ToastUtils;
 import java.util.ArrayList;
-import org.json.JSONObject;
+import java.util.HashMap;
 import retrofit2.Call;
 
 import static com.magicalxu.library.blankj.ToastUtils.showShort;
@@ -173,7 +176,8 @@ public class LoginActivity extends BaseActivity {
             @Override
             public void onSuccess(String accessToken, String uId, long expiresIn,
                     @Nullable String wholeData) {
-                onRequestInnerServer(copyInt, accessToken, String.valueOf(expiresIn), wholeData);
+                onRequestUserInfo(copyInt, type, accessToken, uId, String.valueOf(expiresIn),
+                        wholeData);
             }
 
             @Override
@@ -188,9 +192,57 @@ public class LoginActivity extends BaseActivity {
         });
     }
 
-    private void onRequestInnerServer(int type, String token, String expired, String wholeData) {
+    private void onRequestUserInfo(final int serverType, String type, final String token,
+            final String openId, final String expiresIn, final String wholeData) {
 
-        loginService.onThirdLogin(String.valueOf(type), token, expired, null);
+        showLoading();
+        final HashMap<String, String> hm = new HashMap<>();
+        ShareLoginHelper.getUserInfo(this, type, token, openId,
+                new SsoUserInfoManager.UserInfoListener() {
+                    @Override
+                    public void onSuccess(@NonNull OAuthUserInfo oAuthUserInfo) {
+
+                        Log.d("magical", " 获取用户信息成功");
+                        hideLoading();
+                        Log.d("magical", " userinfo :" + oAuthUserInfo.toString());
+
+                        if (!TextUtils.isEmpty(oAuthUserInfo.nickName)) {
+                            hm.put("nickname", oAuthUserInfo.nickName);
+                        }
+                        if (!TextUtils.isEmpty(oAuthUserInfo.headImgUrl)) {
+                            hm.put("icon", oAuthUserInfo.headImgUrl);
+                        }
+                        onRequestInnerServer(serverType, openId, token, expiresIn, wholeData, hm);
+                    }
+
+                    @Override
+                    public void onError(String s) {
+                        Log.d("magical", " 获取用户信息失败");
+                        onSimpleError(s);
+                        onRequestInnerServer(serverType, openId, token, expiresIn, wholeData, hm);
+                    }
+                });
+    }
+
+    private void onRequestInnerServer(int type, String openId, String token, String expired,
+            String wholeData, HashMap<String, String> hm) {
+
+        Log.d("magical", "third login ：" + wholeData);
+
+        showLoading();
+        Call<HttpResult<UserWrapper>> call =
+                loginService.onThirdLogin(String.valueOf(type), openId, token, expired, hm);
+        call.enqueue(new SimpleCallback<UserWrapper>() {
+            @Override
+            public void onSuccess(UserWrapper data) {
+                onLoginSuccess(data);
+            }
+
+            @Override
+            public void onFail(String code, String errorMsg) {
+                onSimpleError(errorMsg);
+            }
+        });
     }
 
     public void onUiThread(final String msg) {

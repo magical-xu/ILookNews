@@ -84,7 +84,7 @@ public class ProfileActivity extends BaseActivity {
         BaseUser user = accountManager.getUser();
         if (null != user) {
             modifyAvatar.setHead(user.icon);
-            modifyNick.setRightText(EmptyUtils.isEmpty(user.username) ? "昵称" : user.username);
+            modifyNick.setRightText(EmptyUtils.isEmpty(user.nickname) ? "昵称" : user.nickname);
             modifySign.setRightText(
                     EmptyUtils.isEmpty(user.introduce) ? "这个人很懒,什么都没留下" : user.introduce);
         }

@@ -62,6 +62,7 @@ public class BaseUser implements Serializable {
     public int qq_code;
     public int microblog_code;
     public int wechat_code;
+    public String nickname;
 
     //add by magical to test
     public String icon;

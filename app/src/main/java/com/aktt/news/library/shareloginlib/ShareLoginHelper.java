@@ -2,6 +2,7 @@ package com.aktt.news.library.shareloginlib;
 
 import android.app.Activity;
 import android.app.Application;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.support.annotation.Nullable;
 import com.aktt.news.R;
@@ -11,6 +12,7 @@ import com.liulishuo.share.ShareLoginSDK;
 import com.liulishuo.share.SlConfig;
 import com.liulishuo.share.SsoLoginManager;
 import com.liulishuo.share.SsoShareManager;
+import com.liulishuo.share.SsoUserInfoManager;
 import com.liulishuo.share.content.ShareContentWebPage;
 
 /**
@@ -21,14 +23,14 @@ import com.liulishuo.share.content.ShareContentWebPage;
 public class ShareLoginHelper {
 
     public static final String QQ_APP_ID = "101414852";
-    public static final String QQ_SCOPE = "get_user_info";
+    public static final String QQ_SCOPE = "get_simple_userinfo";
 
-    public static final String WX_APP_ID = "wx_app_id";
-    public static final String WX_APP_SECRET = "wx_app_secret";
+    public static final String WX_APP_ID = "wx97a9b0c8570b0df9";
+    public static final String WX_APP_SECRET = "9ac335291b56015b1dea76044c5a5774";
 
     public static final String WB_APP_ID = "wb_app_id";
     public static final String WB_REDIRECT_URL = "wb_redirect_url";
-    public static final String WB_SCOPE = "get_user_info";
+    public static final String WB_SCOPE = "get_simple_userinfo";
 
     public static void init(Application application) {
 
@@ -79,7 +81,7 @@ public class ShareLoginHelper {
 
         // 分享
         SsoShareManager.share(context, type,
-                new ShareContentWebPage(shareData.title, shareData.description, shareData.newsUrl,
+                new ShareContentWebPage(shareData.title, shareData.description, shareData.url,
                         thumb, large), new SsoShareManager.ShareStateListener() {
                     @Override
                     public void onSuccess() {
@@ -105,6 +107,11 @@ public class ShareLoginHelper {
                         }
                     }
                 });
+    }
+
+    public static void getUserInfo(Context context, String type, String token, String openId,
+            SsoUserInfoManager.UserInfoListener listener) {
+        SsoUserInfoManager.getUserInfo(context, type, token, openId, listener);
     }
 
     public interface ThirdLoginListener {

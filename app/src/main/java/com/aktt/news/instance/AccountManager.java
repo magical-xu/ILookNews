@@ -96,7 +96,7 @@ public class AccountManager {
     public void updateLocalNick(String nick) {
         BaseUser user = getUser();
         if (null != user) {
-            user.username = nick;
+            user.nickname = nick;
         }
     }
 

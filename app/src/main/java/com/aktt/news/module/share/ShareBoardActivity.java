@@ -33,7 +33,6 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.liulishuo.share.type.SsoShareType;
 import com.magicalxu.library.blankj.ToastUtils;
-import java.util.List;
 import okhttp3.ResponseBody;
 import org.json.JSONObject;
 import retrofit2.Call;
@@ -188,19 +187,18 @@ public class ShareBoardActivity extends Activity {
 
     private void downLoadImage(final String type, final ShareData data) {
 
-        final List<String> images = data.coverpic;
+        final String url = data.gtt;
 
         GlideApp.with(this)
                 .asBitmap()
-                .dontAnimate()
-                .load(data.appIcon)
+                .dontAnimate().load(data.img)
                 .into(new SimpleTarget<Bitmap>() {
 
                     @Override
                     public void onResourceReady(Bitmap resource,
                             Transition<? super Bitmap> transition) {
 
-                        if (null != images && images.size() >= 1) {
+                        if (!TextUtils.isEmpty(url)) {
                             downLoadNewsImage(type, data, resource);
                         } else {
                             onShare(type, data, resource, null);
@@ -211,7 +209,7 @@ public class ShareBoardActivity extends Activity {
 
     private void downLoadNewsImage(final String type, final ShareData data, final Bitmap thumb) {
 
-        String url = data.coverpic.get(0);
+        String url = data.gtt;
         GlideApp.with(this).asBitmap().dontAnimate().load(url).into(new SimpleTarget<Bitmap>() {
 
             @Override

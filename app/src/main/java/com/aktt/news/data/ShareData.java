@@ -1,7 +1,5 @@
 package com.aktt.news.data;
 
-import java.util.List;
-
 /**
  * Created by magical on 17/10/20.
  * Description :
@@ -9,13 +7,9 @@ import java.util.List;
 
 public class ShareData {
 
-    public String appIcon;
-
-    public String title;    //射箭小能手
-
     public String description;
-
-    public String newsUrl;  //分享链接
-
-    public List<String> coverpic;
+    public String gtt;
+    public String img;
+    public String title; //射箭小能手
+    public String url;   //分享链接
 }

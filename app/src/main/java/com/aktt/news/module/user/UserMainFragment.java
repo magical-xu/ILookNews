@@ -98,7 +98,7 @@ public class UserMainFragment extends BaseFragment {
 
         BaseUser user = new BaseUser();
         user.icon = data.userIcon;
-        user.username = data.nickname;
+        user.nickname = data.nickname;
         user.address = data.address;
         user.city = data.city;
         user.fansNum = data.fansNum;
@@ -238,7 +238,7 @@ public class UserMainFragment extends BaseFragment {
 
             UserCenterWrapper user = new UserCenterWrapper();
             user.userIcon = data.icon;
-            user.nickname = data.username;
+            user.nickname = data.nickname;
             user.address = data.address;
             user.city = data.city;
             user.fansNum = data.fansNum;

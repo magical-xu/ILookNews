@@ -121,7 +121,8 @@ public class UserCenterActivity extends BaseActivity {
 
         ivAvatar.setHeadImage(StringHelper.getString(data.userIcon));
         tvName.setText(StringHelper.getString(data.nickname));
-        tvSignature.setText(StringHelper.getString(data.introduce));
+
+        tvSignature.setText(TextUtils.isEmpty(data.introduce) ? "这个人很懒，什么都没留下" : data.introduce);
 
         focusView.setText(String.valueOf(data.followedNum));
         fansView.setText(String.valueOf(data.fansNum));

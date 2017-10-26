@@ -51,6 +51,6 @@ public interface LoginService {
 
     @POST("loginThrid")
     Call<HttpResult<UserWrapper>> onThirdLogin(@Query("type") String type,
-            @Query("thridtoken") String token, @Query("thridexpired") String expired,
-            @QueryMap Map<String, String> options);
+            @Query("thrid") String openId, @Query("thridtoken") String token,
+            @Query("thridexpired") String expired, @QueryMap Map<String, String> options);
 }
