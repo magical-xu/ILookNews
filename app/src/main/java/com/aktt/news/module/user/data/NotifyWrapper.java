@@ -9,17 +9,18 @@ import java.util.List;
 
 public class NotifyWrapper {
 
-  /**
-   * page : 1
-   * haveNext : false
-   * pageSize : 10
-   * userid : 402881e55dc28260015dc2827ba10000
-   * systemMessageList : []
-   */
+    /**
+     * page : 1
+     * haveNext : false
+     * pageSize : 10
+     * userid : 402881e55dc28260015dc2827ba10000
+     * systemMessageList : []
+     */
 
-  public int page;
-  public boolean haveNext;
-  public int pageSize;
-  public String userid;
-  public List<NotifyBean> systemMessageList;
+    public int page;
+    public boolean haveNext;
+    public int pageSize;
+    public String userid;
+    public List<NotifyBean> systemMessageList;
+    public List<SystemIcon> sysIcon;
 }

@@ -79,7 +79,7 @@ public class FocusMainFragment extends BaseTitleFragment {
         mAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-                onChildClick(view,position);
+                onChildClick(view, position);
             }
         });
     }
@@ -95,7 +95,7 @@ public class FocusMainFragment extends BaseTitleFragment {
                     FocusBean item = data.get(position);
                     String target_id = item.target_id;
                     if (!TextUtils.isEmpty(target_id)) {
-                        IntentHelper.openUserCenterPage(getActivity(),target_id);
+                        IntentHelper.openUserCenterPage(getActivity(), target_id);
                     }
                 }
                 break;

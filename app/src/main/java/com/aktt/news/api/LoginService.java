@@ -33,8 +33,9 @@ public interface LoginService {
     /**
      * 手机号登录
      */
-    @POST("loginByPhone")
-    Call<HttpResult<UserWrapper>> loginByPhone(@Query("mobile") String mobile);
+    @POST("quicklyloginPhone")
+    Call<HttpResult<UserWrapper>> loginByPhone(@Query("phone") String mobile,
+            @Query("veriCode") String code, @Query("code") String md5);
 
     /**
      * 用户名密码登录

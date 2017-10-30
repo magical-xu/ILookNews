@@ -3,6 +3,7 @@ package com.aktt.news.module.user.activity;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils;
+import android.view.View;
 import com.aktt.news.R;
 import com.aktt.news.base.BaseActivity;
 import com.aktt.news.instance.AccountManager;
@@ -38,7 +39,13 @@ public class BrokeListActivity extends BaseActivity {
     @Override
     public void handleChildPage(Bundle savedInstanceState) {
 
-        mTitleBar.setTitle("爆料列表").setTitleListener(new ILookTitleBar.TitleCallbackAdapter());
+        mTitleBar.setTitle("爆料列表").setTitleListener(new ILookTitleBar.TitleCallbackAdapter() {
+            @Override
+            public void onClickLeft(View view) {
+                super.onClickLeft(view);
+                finish();
+            }
+        });
 
         String userId = AccountManager.getInstance().getUserId();
         if (TextUtils.isEmpty(userId)) {

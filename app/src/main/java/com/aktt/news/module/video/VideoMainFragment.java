@@ -7,6 +7,7 @@ import android.content.IntentFilter;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
+import android.view.View;
 import android.widget.ImageView;
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -24,6 +25,7 @@ import com.aktt.news.util.NotifyListener;
 import com.aktt.news.util.StringHelper;
 import com.aktt.news.widget.adapter.BaseFragmentStateAdapter;
 import com.aktt.news.widget.adapter.OnPageChangeListener;
+import com.aktt.news.widget.ilook.ILookTitleBar;
 import com.flyco.tablayout.SlidingTabLayout;
 import com.magicalxu.library.blankj.SPUtils;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
@@ -123,8 +125,27 @@ public class VideoMainFragment extends BaseTitleFragment {
 
     private void checkTitle() {
 
-        mTitleBar.setTitleImage(R.drawable.img_video_title).hideDivider();
+        mTitleBar.setTitleImage(R.drawable.img_video_title)
+                .hideDivider()
+                .setTitleListener(new ILookTitleBar.TitleCallbackAdapter() {
+                    @Override
+                    public void onClickLeftAvatar(View view) {
+                        super.onClickLeftAvatar(view);
+                        onIntentUser();
+                    }
+                });
         setUserIcon();
+    }
+
+    private void onIntentUser() {
+        if (AccountManager.getInstance().hasLogin()) {
+            String userId = AccountManager.getInstance().getUserId();
+            if (!TextUtils.isEmpty(userId)) {
+                IntentHelper.openUserCenterPage(getActivity(), userId);
+            }
+        } else {
+            IntentHelper.openLoginPage(getActivity());
+        }
     }
 
     @Override

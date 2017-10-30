@@ -109,6 +109,7 @@ public class NotifyActivity extends BaseActivity {
             public void onSuccess(NotifyWrapper data) {
                 hideLoading();
                 onRemoveCall(call);
+                mAdapter.setSystemIcon(data.sysIcon);
                 mRefreshHelper.setData(data.systemMessageList, data.haveNext);
             }
 

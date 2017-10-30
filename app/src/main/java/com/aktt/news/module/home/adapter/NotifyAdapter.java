@@ -7,6 +7,7 @@ import com.aktt.news.R;
 import com.aktt.news.api.UserService;
 import com.aktt.news.instance.AccountManager;
 import com.aktt.news.module.user.data.NotifyBean;
+import com.aktt.news.module.user.data.SystemIcon;
 import com.aktt.news.net.callback.SimpleCallback;
 import com.aktt.news.net.client.NetRequest;
 import com.aktt.news.net.data.HttpResult;
@@ -16,6 +17,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.magicalxu.library.blankj.ToastUtils;
 import com.mcxtzhang.swipemenulib.SwipeMenuLayout;
+import java.util.List;
 import org.json.JSONObject;
 import retrofit2.Call;
 
@@ -26,11 +28,16 @@ import retrofit2.Call;
 
 public class NotifyAdapter extends BaseQuickAdapter<NotifyBean, BaseViewHolder> {
 
-    UserService service;
+    private UserService service;
+    private List<SystemIcon> mSystemList;
 
     public NotifyAdapter(@LayoutRes int layoutResId) {
         super(layoutResId);
         service = NetRequest.getInstance().create(UserService.class);
+    }
+
+    public void setSystemIcon(List<SystemIcon> list) {
+        this.mSystemList = list;
     }
 
     @Override
@@ -39,8 +46,23 @@ public class NotifyAdapter extends BaseQuickAdapter<NotifyBean, BaseViewHolder> 
         final int pos = helper.getLayoutPosition();
         final SwipeMenuLayout root = helper.getView(R.id.id_item_root);
 
-        // TODO: 2017/10/10 系统消息 缺个头像
-        ((HeadImageView) helper.getView(R.id.iv_avatar)).setHeadImage("");
+        String innerType = item.innertype;
+        String avatar = "";
+        if (!TextUtils.isEmpty(innerType)
+                && TextUtils.isDigitsOnly(innerType)
+                && mSystemList != null) {
+
+            int type = Integer.parseInt(innerType);
+            for (int i = 0; i < mSystemList.size(); i++) {
+
+                if (mSystemList.get(i).shuzu == type) {
+                    avatar = mSystemList.get(i).icon;
+                    break;
+                }
+            }
+        }
+        ((HeadImageView) helper.getView(R.id.iv_avatar)).setHeadImage(avatar);
+
         helper.setText(R.id.tv_notify_type, StringHelper.getString(item.title));
         helper.setText(R.id.tv_notify_msg, StringHelper.getString(item.content));
         helper.setText(R.id.tv_notify_time, StringHelper.getString(item.created_time));

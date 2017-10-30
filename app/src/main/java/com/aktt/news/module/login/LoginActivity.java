@@ -26,6 +26,7 @@ import com.aktt.news.net.callback.SimpleCallback;
 import com.aktt.news.net.client.NetRequest;
 import com.aktt.news.net.data.HttpResult;
 import com.aktt.news.util.IntentHelper;
+import com.aktt.news.util.MD5Util;
 import com.aktt.news.widget.edit.ClearEditText;
 import com.aktt.news.widget.edit.PasswordEditText;
 import com.liulishuo.share.OAuthUserInfo;
@@ -92,7 +93,8 @@ public class LoginActivity extends BaseActivity {
                     if (event == SMSSDK.EVENT_SUBMIT_VERIFICATION_CODE) {
                         //提交验证码成功
                         //onUiThread("验证成功，接下来走登录流程");
-                        onRealMobileLogin();
+                        //onRealMobileLogin();
+                        checkVerifyCode(lastMobile);
                     } else if (event == SMSSDK.EVENT_GET_VERIFICATION_CODE) {
                         //获取验证码成功
                         if (result == SMSSDK.RESULT_COMPLETE) {
@@ -276,7 +278,7 @@ public class LoginActivity extends BaseActivity {
 
         lastMobile = mobile;    //重要，记录真正验证的手机号
         showLoading();
-        MobHelper.getInstance().getVerifyCode(lastMobile);
+        MobHelper.getInstance().getVerifyCode(mobile);
     }
 
     private void onLogin() {
@@ -314,11 +316,12 @@ public class LoginActivity extends BaseActivity {
 
         showLoading();
         checkVerifyCode();
+        //checkVerifyCode(mobile, code);
     }
 
-    private void onRealMobileLogin() {
+    private void onRealMobileLogin(String mobile, String code, String md5) {
         showLoadingOnUiThread();
-        Call<HttpResult<UserWrapper>> call = loginService.loginByPhone(lastMobile);
+        Call<HttpResult<UserWrapper>> call = loginService.loginByPhone(mobile, code, md5);
         call.enqueue(new SimpleCallback<UserWrapper>() {
             @Override
             public void onSuccess(UserWrapper data) {
@@ -347,6 +350,20 @@ public class LoginActivity extends BaseActivity {
         }
 
         MobHelper.getInstance().submitVerifyCode(lastMobile, code);
+    }
+
+    /**
+     * 调用我们自己的服务端验证接口
+     *
+     * @param mobile 手机号
+     */
+    private void checkVerifyCode(String mobile) {
+
+        String code = idPage2Pwd.getText().toString();
+
+        String total = mobile + code;
+        String md5String = MD5Util.encryption(total);
+        onRealMobileLogin(mobile, code, md5String);
     }
 
     /**

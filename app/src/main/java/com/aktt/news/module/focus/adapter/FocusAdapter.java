@@ -28,8 +28,8 @@ public class FocusAdapter extends BaseQuickAdapter<FocusBean, BaseViewHolder> {
         helper.setText(R.id.tv_name, StringHelper.getString(item.nickname))
                 .setText(R.id.tv_intro, item.introduce)
                 //.setText(R.id.tv_time, item.lastTitleVideo)
-                .setText(R.id.tv_title_one, item.lastTitleVideo)
-                .setText(R.id.tv_title_two, item.lastTitleVideo);
+                .setText(R.id.tv_title_one, StringHelper.getString(item.lastOneNewstitle))
+                .setText(R.id.tv_title_two, StringHelper.getString(item.lastTwoNewsTitle));
 
         helper.addOnClickListener(R.id.iv_avatar);
     }

@@ -182,6 +182,8 @@ public class ILookTitleBar extends RelativeLayout implements View.OnClickListene
             listener.onClickFocus(mTitleFocus);
         } else if (v == mTitleAvatar && null != listener) {
             listener.onClickAvatar(mTitleAvatar);
+        } else if (v == mLeftCircle && null != listener) {
+            listener.onClickLeftAvatar(mLeftCircle);
         }
     }
 
@@ -215,6 +217,8 @@ public class ILookTitleBar extends RelativeLayout implements View.OnClickListene
         void onClickFocus(View view);
 
         void onClickAvatar(View view);
+
+        void onClickLeftAvatar(View view);
     }
 
     public static class TitleCallbackAdapter implements TitleCallback {
@@ -243,6 +247,11 @@ public class ILookTitleBar extends RelativeLayout implements View.OnClickListene
 
         @Override
         public void onClickAvatar(View view) {
+
+        }
+
+        @Override
+        public void onClickLeftAvatar(View view) {
 
         }
     }
