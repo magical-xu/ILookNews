@@ -118,18 +118,21 @@ public abstract class RefreshHelper<T> {
     }
 
     public void setData(List<T> data,boolean hasMore) {
-        if (curPage == 1) {
-            finishRefresh();
-            mAdapter.setNewData(data);
-        } else {
-            finishLoadmore();
-            mAdapter.addData(data);
-        }
+        //if (curPage == 1) {
+        //    finishRefresh();
+        //    mAdapter.setNewData(data);
+        //} else {
+        //    finishLoadmore();
+        //    mAdapter.addData(data);
+        //}
 
         if (curPage == 1) {
             finishRefresh();
             mAdapter.setNewData(data);
         } else {
+
+            finishLoadmore();
+            mAdapter.addData(data);
 
             if (!hasMore) {
                 setNoMoreData();
@@ -140,18 +143,6 @@ public abstract class RefreshHelper<T> {
                 setNoMoreData();
                 return;
             }
-
-            finishLoadmore();
-            mAdapter.addData(data);
         }
-    }
-
-    public boolean mockNoMoreData() {
-        if (curPage == 4) {
-            setNoMoreData();
-            curPage = 3;
-            return true;
-        }
-        return false;
     }
 }
