@@ -72,7 +72,8 @@
         android:configChanges="orientation|screenSize|keyboard|keyboardHidden"
         android:exported="false"
         android:screenOrientation="portrait"
-        android:theme="@style/text_style_normal" />
+        android:theme="@style/text_style_normal"
+        android:windowSoftInputMode="stateAlwaysHidden" />
     <activity
         android:name="com.aktt.news.module.home.activity.NotifyActivity"
         android:screenOrientation="portrait"

@@ -220,7 +220,8 @@ public class LoginActivity extends BaseActivity {
                     @Override
                     public void onError(String s) {
                         Log.d("magical", " 获取用户信息失败");
-                        onSimpleError(s);
+                        //onSimpleError(s);
+                        hideLoading();
                         onRequestInnerServer(serverType, openId, token, expiresIn, wholeData, hm);
                     }
                 });

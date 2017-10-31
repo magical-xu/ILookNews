@@ -81,7 +81,7 @@ public class BrokeActivity extends BaseActivity {
                     @Override
                     public void onClickLeft(View view) {
                         super.onClickLeft(view);
-                        finish();
+                        onBackPressed();
                     }
 
                     @Override

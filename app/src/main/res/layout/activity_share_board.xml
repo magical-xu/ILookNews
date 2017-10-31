@@ -115,6 +115,7 @@
           android:padding="10dp">
 
         <TextView
+            android:id="@+id/tv_copy_url"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:drawableTop="@drawable/option_ic_link"
@@ -122,6 +123,7 @@
             style="@style/share_item" />
 
         <TextView
+            android:id="@+id/tv_report"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:drawableTop="@drawable/option_ic_violate"

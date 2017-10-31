@@ -32,6 +32,7 @@ import com.aktt.news.util.StringHelper;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.liulishuo.share.type.SsoShareType;
+import com.magicalxu.library.blankj.ClipboardUtils;
 import com.magicalxu.library.blankj.ToastUtils;
 import okhttp3.ResponseBody;
 import org.json.JSONObject;
@@ -113,7 +114,7 @@ public class ShareBoardActivity extends Activity {
 
     @OnClick({
             R.id.tv_share_wx_friend, R.id.tv_share_wx_circle, R.id.tv_share_qq, R.id.tv_share_qzone,
-            R.id.tv_share_sina, R.id.tv_cancel
+            R.id.tv_share_sina, R.id.tv_cancel, R.id.tv_copy_url, R.id.tv_report
     })
     public void onViewClicked(View view) {
 
@@ -140,7 +141,50 @@ public class ShareBoardActivity extends Activity {
             case R.id.tv_cancel:
                 finish();
                 break;
+            case R.id.tv_copy_url:
+                onCopyNewsUrl();
+                break;
+            case R.id.tv_report:
+                onReportUrl();
+                break;
         }
+    }
+
+    /**
+     * 复制链接
+     */
+    private void onCopyNewsUrl() {
+
+        String userId = AccountManager.getInstance().getUserId();
+        Call<HttpResult<ShareData>> call =
+                service.getShare(StringHelper.getString(userId), SHARE_NID, 2, NEWS_TYPE);
+        call.enqueue(new SimpleCallback<ShareData>() {
+            @Override
+            public void onSuccess(ShareData data) {
+
+                copyToClipBoard(data);
+            }
+
+            @Override
+            public void onFail(String code, String errorMsg) {
+                ToastUtils.showShort(errorMsg);
+            }
+        });
+    }
+
+    private void copyToClipBoard(ShareData data) {
+
+        ClipboardUtils.copyText(StringHelper.getString(data.url));
+        ToastUtils.showShort("已经复制到剪贴板");
+    }
+
+    /**
+     * 举报新闻
+     */
+    private void onReportUrl() {
+
+        // TODO: 17/10/31 举报新闻
+        ToastUtils.showShort("举报");
     }
 
     /**
@@ -187,22 +231,21 @@ public class ShareBoardActivity extends Activity {
 
     private void downLoadImage(final String type, final ShareData data) {
 
-        final String url = data.gtt;
+        //final String url = data.gtt;
 
         GlideApp.with(this)
-                .asBitmap()
-                .dontAnimate().load(data.img)
+                .asBitmap().dontAnimate().load(data.img)
                 .into(new SimpleTarget<Bitmap>() {
 
                     @Override
                     public void onResourceReady(Bitmap resource,
                             Transition<? super Bitmap> transition) {
 
-                        if (!TextUtils.isEmpty(url)) {
-                            downLoadNewsImage(type, data, resource);
-                        } else {
-                            onShare(type, data, resource, null);
-                        }
+                        //if (!TextUtils.isEmpty(url)) {
+                        //    downLoadNewsImage(type, data, resource);
+                        //} else {
+                        onShare(type, data, resource, null);
+                        //}
                     }
                 });
     }
@@ -227,7 +270,7 @@ public class ShareBoardActivity extends Activity {
         }
 
         if (TextUtils.isEmpty(data.description)) {
-            data.description = "后台未返回描述字段";
+            data.description = "爱看头条";
         }
 
         ShareLoginHelper.share(this, type, data, thumb, large, new SimpleNotifyListener() {
