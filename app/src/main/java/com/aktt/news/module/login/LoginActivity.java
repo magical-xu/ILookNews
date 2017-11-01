@@ -94,6 +94,7 @@ public class LoginActivity extends BaseActivity {
                         //提交验证码成功
                         //onUiThread("验证成功，接下来走登录流程");
                         //onRealMobileLogin();
+                        Log.d("Mob", " verify code success by mob sdk");
                         checkVerifyCode(lastMobile);
                     } else if (event == SMSSDK.EVENT_GET_VERIFICATION_CODE) {
                         //获取验证码成功

@@ -53,7 +53,7 @@ public class BrokeListActivity extends BaseActivity {
         }
 
         if (null == mBrokeListFragment) {
-            mBrokeListFragment = BrokeNewsListFragment.getInstance(userId);
+            mBrokeListFragment = BrokeNewsListFragment.getInstance(userId, 1);
         }
 
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();

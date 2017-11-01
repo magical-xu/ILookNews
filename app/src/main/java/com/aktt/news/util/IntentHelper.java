@@ -37,6 +37,7 @@ import java.util.ArrayList;
 public class IntentHelper {
 
     public static final String PARAMS_ONE = "params_one";
+    public static final String PARAMS_TWO = "params_two";
 
     /**
      * 跳转 我的消息界面

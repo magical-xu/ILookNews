@@ -142,6 +142,13 @@ public interface UserService {
             @Query("page") int page, @Query("pageSize") int pageSize);
 
     /**
+     * 获取所有用户的爆料列表
+     */
+    @GET("getBaoLiaoListAll")
+    Call<HttpResult<BrokeListWrapper>> getBaoLiaoListAll(@Query("userid") String userId,
+            @Query("page") int page, @Query("pageSize") int pageSize);
+
+    /**
      * 我的个人中心
      */
     @GET("getMyCenter")

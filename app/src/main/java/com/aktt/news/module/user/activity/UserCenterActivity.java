@@ -103,7 +103,7 @@ public class UserCenterActivity extends BaseActivity {
 
         ArrayList<Fragment> fragments = new ArrayList<>();
         fragments.add(StateListFragment.getInstance(pageUid));
-        fragments.add(BrokeNewsListFragment.getInstance(pageUid));
+        fragments.add(BrokeNewsListFragment.getInstance(pageUid, 0));
 
         List<String> titles = new ArrayList<>(2);
         titles.add("动态");

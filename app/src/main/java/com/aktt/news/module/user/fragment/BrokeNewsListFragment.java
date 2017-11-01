@@ -35,14 +35,16 @@ public class BrokeNewsListFragment extends BaseFragment {
     private BrokeNewsListAdapter mAdapter;
     private UserService userService;
     private String pageUid;
+    private int pageType;
 
     private View mEmptyView;
 
-    public static BrokeNewsListFragment getInstance(String uid) {
+    public static BrokeNewsListFragment getInstance(String uid, int pageType) {
 
         BrokeNewsListFragment fragment = new BrokeNewsListFragment();
         Bundle bundle = new Bundle();
         bundle.putString(IntentHelper.PARAMS_ONE, uid);
+        bundle.putInt(IntentHelper.PARAMS_TWO, pageType);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -64,6 +66,7 @@ public class BrokeNewsListFragment extends BaseFragment {
         Bundle arguments = getArguments();
         if (null != arguments) {
             pageUid = arguments.getString(IntentHelper.PARAMS_ONE);
+            pageType = arguments.getInt(IntentHelper.PARAMS_TWO, 0);
         }
 
         userService = NetRequest.getInstance().create(UserService.class);
@@ -92,8 +95,15 @@ public class BrokeNewsListFragment extends BaseFragment {
         }
 
         showLoading();
-        Call<HttpResult<BrokeListWrapper>> call =
-                userService.getBaoLiaoList(pageUid, page, AppConstant.DEFAULT_PAGE_SIZE);
+        Call<HttpResult<BrokeListWrapper>> call;
+        if (pageType == 0) {
+            //个人爆料
+            call = userService.getBaoLiaoList(pageUid, page, AppConstant.DEFAULT_PAGE_SIZE);
+        } else {
+            //所有人爆料
+            call = userService.getBaoLiaoListAll(pageUid, page, AppConstant.DEFAULT_PAGE_SIZE);
+        }
+
         call.enqueue(new SimpleCallback<BrokeListWrapper>() {
             @Override
             public void onSuccess(BrokeListWrapper data) {
@@ -106,7 +116,7 @@ public class BrokeNewsListFragment extends BaseFragment {
                 }
 
                 //noinspection unchecked
-                mRefreshHelper.setData(data.list,data.haveNext);
+                mRefreshHelper.setData(data.list, data.haveNext);
             }
 
             @Override
