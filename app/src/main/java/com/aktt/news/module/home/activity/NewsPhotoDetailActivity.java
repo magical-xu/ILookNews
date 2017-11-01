@@ -173,7 +173,9 @@ public class NewsPhotoDetailActivity extends BaseActivity {
 
         mTitleBar.setTitleBg(android.R.color.black)
                 .setLeftImage(R.drawable.ic_back)
-                .setRightImage(R.drawable.ic_more_white).hideDivider().openImageMode()
+                .setRightImage(R.drawable.ic_more_white)
+                .hideDivider()
+                .openImageMode()
                 .setTitleListener(new ILookTitleBar.TitleCallbackAdapter() {
                     @Override
                     public void onClickLeft(View view) {
@@ -186,7 +188,7 @@ public class NewsPhotoDetailActivity extends BaseActivity {
                     public void onClickRightImage(View view) {
                         super.onClickRightImage(view);
                         IntentHelper.openShareBottomPage(NewsPhotoDetailActivity.this, PAGE_NEWS_ID,
-                                PAGE_NEWS_TYPE);
+                                PAGE_NEWS_TYPE, PAGE_UID);
                     }
 
                     @Override

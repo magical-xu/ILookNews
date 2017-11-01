@@ -390,8 +390,8 @@ public class VideoDetailActivity extends BaseActivity {
         mTitleShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                IntentHelper.openShareBottomPage(VideoDetailActivity.this, PAGE_VID,
-                        PAGE_NEWS_TYPE);
+                IntentHelper.openShareBottomPage(VideoDetailActivity.this, PAGE_VID, PAGE_NEWS_TYPE,
+                        NEWS_PUBLISHER);
             }
         });
     }

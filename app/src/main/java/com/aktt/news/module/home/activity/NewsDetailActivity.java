@@ -369,7 +369,7 @@ public class NewsDetailActivity extends BaseActivity {
                     public void onClickRightImage(View view) {
                         super.onClickRightImage(view);
                         IntentHelper.openShareBottomPage(NewsDetailActivity.this, PAGE_NEWS_ID,
-                                PAGE_NEWS_TYPE);
+                                PAGE_NEWS_TYPE, NEWS_PUBLISHER);
                     }
                 });
     }

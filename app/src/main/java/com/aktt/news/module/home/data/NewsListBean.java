@@ -41,6 +41,7 @@ public class NewsListBean implements MultiItemEntity {
     public String createTime;
     public int weight;
     public int adtype;
+    public String adcontent;
     public String appName;
 
     public String picStyle;

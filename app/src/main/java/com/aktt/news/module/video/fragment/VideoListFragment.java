@@ -158,7 +158,8 @@ public class VideoListFragment extends BaseFragment {
                     if (newsListBean.size() > position) {
                         NewsListBean item = newsListBean.get(position);
                         if (null != item) {
-                            IntentHelper.openShareBottomPage(mContext, item.newId, item.type);
+                            IntentHelper.openShareBottomPage(mContext, item.newId, item.type,
+                                    item.userid);
                         }
                     }
                 } else if (viewId == R.id.tv_comments) {

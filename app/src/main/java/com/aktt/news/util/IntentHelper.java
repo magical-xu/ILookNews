@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import com.aktt.news.AppConstant;
 import com.aktt.news.SimpleWebActivity;
 import com.aktt.news.module.focus.AddFollowListActivity;
@@ -22,6 +23,7 @@ import com.aktt.news.module.user.activity.CollectionActivity;
 import com.aktt.news.module.user.activity.FeedBackActivity;
 import com.aktt.news.module.user.activity.ImageBrowseActivity;
 import com.aktt.news.module.user.activity.ProfileActivity;
+import com.aktt.news.module.user.activity.ReportActivity;
 import com.aktt.news.module.user.activity.SettingActivity;
 import com.aktt.news.module.user.activity.UserCenterActivity;
 import com.aktt.news.module.video.activity.VideoDetailActivity;
@@ -140,8 +142,8 @@ public class IntentHelper {
     /**
      * 跳转 web 页面
      */
-    public static void openWebPage(Context context, @NonNull String url) {
-        SimpleWebActivity.getInstance(context, url);
+    public static void openWebPage(Context context, @NonNull String url, @Nullable String content) {
+        SimpleWebActivity.getInstance(context, url, content);
     }
 
     /**
@@ -154,8 +156,9 @@ public class IntentHelper {
     /**
      * 底部弹出分享框
      */
-    public static void openShareBottomPage(Context context, String newsId, int newsType) {
-        ShareBoardActivity.getInstance(context, newsId, newsType);
+    public static void openShareBottomPage(Context context, String newsId, int newsType,
+            String publisher) {
+        ShareBoardActivity.getInstance(context, newsId, newsType, publisher);
     }
 
     /**
@@ -177,5 +180,12 @@ public class IntentHelper {
      */
     public static void openBrokeListPage(Context context) {
         context.startActivity(new Intent(context, BrokeListActivity.class));
+    }
+
+    /**
+     * 跳转 举报界面
+     */
+    public static void openReportPage(Context context, String toId, String newsId, int newsType) {
+        ReportActivity.getInstance(context, toId, newsId, newsType);
     }
 }

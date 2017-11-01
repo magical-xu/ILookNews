@@ -153,4 +153,12 @@ public interface UserService {
      */
     @POST("addPlayCount")
     Call<HttpResult<JSONObject>> addVideoPlayCount(@Query("newsId") String newsId);
+
+    /**
+     * 举报
+     */
+    @POST("addJuBaoRecord")
+    Call<HttpResult<JSONObject>> report(@Query("fromUserid") String uid,
+            @Query("toUserid") String toUid, @Query("tempid") String newsId,
+            @Query("type") int type, @Query("reason") String reason);
 }

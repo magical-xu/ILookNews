@@ -136,10 +136,12 @@ public class NewsListFragment extends BaseFragment {
                     IntentHelper.openNewsPhotoDetailPage(mContext, newId, itemType);
                 } else if (itemType == NewsListBean.AD) {
                     //广告类跳转
-                    IntentHelper.openNewsPhotoDetailPage(mContext, newId, itemType);
+                    IntentHelper.openWebPage(getActivity(), StringHelper.getString(bean.url),
+                            StringHelper.getString(bean.adcontent));
                 } else if (itemType == NewsListBean.HTML) {
                     //跳转类
-                    IntentHelper.openWebPage(getActivity(), StringHelper.getString(bean.url));
+                    IntentHelper.openWebPage(getActivity(), StringHelper.getString(bean.url),
+                            StringHelper.getString(bean.adcontent));
                 } else {
                     Timber.e("can't resolve jump type.");
                 }

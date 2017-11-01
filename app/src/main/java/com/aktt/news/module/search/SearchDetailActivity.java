@@ -169,12 +169,14 @@ public class SearchDetailActivity extends BaseActivity {
                             itemType);
                 } else if (itemType == NewsListBean.AD) {
                     //广告类跳转
-                    IntentHelper.openNewsPhotoDetailPage(SearchDetailActivity.this, newId,
-                            itemType);
+                    IntentHelper.openWebPage(SearchDetailActivity.this,
+                            StringHelper.getString(bean.url),
+                            StringHelper.getString(bean.adcontent));
                 } else if (itemType == NewsListBean.HTML) {
                     //跳转类
                     IntentHelper.openWebPage(SearchDetailActivity.this,
-                            StringHelper.getString(bean.url));
+                            StringHelper.getString(bean.url),
+                            StringHelper.getString(bean.adcontent));
                 } else {
                     Timber.e("can't resolve jump type.");
                 }

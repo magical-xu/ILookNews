@@ -78,7 +78,7 @@ public class StateListFragment extends BaseFragment {
                         NewsInfo newsInfo = data.get(position);
 
                         IntentHelper.openShareBottomPage(getActivity(), newsInfo.newId,
-                                newsInfo.newstype);
+                                newsInfo.newstype, pageUid);
                     }
                 }
             }

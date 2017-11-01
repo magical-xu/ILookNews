@@ -144,11 +144,14 @@ public class CollectionActivity extends BaseActivity {
                     IntentHelper.openNewsPhotoDetailPage(CollectionActivity.this, newId, itemType);
                 } else if (itemType == NewsListBean.AD) {
                     //广告类跳转
-                    IntentHelper.openNewsPhotoDetailPage(CollectionActivity.this, newId, itemType);
+                    IntentHelper.openWebPage(CollectionActivity.this,
+                            StringHelper.getString(bean.url),
+                            StringHelper.getString(bean.adcontent));
                 } else if (itemType == NewsListBean.HTML) {
                     //跳转类
                     IntentHelper.openWebPage(CollectionActivity.this,
-                            StringHelper.getString(bean.url));
+                            StringHelper.getString(bean.url),
+                            StringHelper.getString(bean.adcontent));
                 } else {
                     Timber.e("can't resolve jump type.");
                 }

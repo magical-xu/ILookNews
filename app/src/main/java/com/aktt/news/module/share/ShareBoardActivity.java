@@ -27,6 +27,7 @@ import com.aktt.news.net.callback.SimpleCallback;
 import com.aktt.news.net.callback.SimpleRawJsonCallback;
 import com.aktt.news.net.client.NetRequest;
 import com.aktt.news.net.data.HttpResult;
+import com.aktt.news.util.IntentHelper;
 import com.aktt.news.util.SimpleNotifyListener;
 import com.aktt.news.util.StringHelper;
 import com.bumptech.glide.request.target.SimpleTarget;
@@ -56,12 +57,14 @@ public class ShareBoardActivity extends Activity {
     private UserService service;
     private String SHARE_NID;
     private int NEWS_TYPE;
+    private String PUBLISHER;
 
-    public static void getInstance(Context context, String newsId, int newsType) {
+    public static void getInstance(Context context, String newsId, int newsType, String publisher) {
 
         Intent intent = new Intent(context, ShareBoardActivity.class);
         intent.putExtra(AppConstant.PARAMS_NEWS_ID, newsId);
         intent.putExtra(AppConstant.PARAMS_NEWS_TYPE, newsType);
+        intent.putExtra(AppConstant.PARAMS_USER_ID, publisher);
         context.startActivity(intent);
     }
 
@@ -85,6 +88,7 @@ public class ShareBoardActivity extends Activity {
         Intent intent = getIntent();
         SHARE_NID = intent.getStringExtra(AppConstant.PARAMS_NEWS_ID);
         NEWS_TYPE = intent.getIntExtra(AppConstant.PARAMS_NEWS_TYPE, AppConstant.INVALIDATE);
+        PUBLISHER = intent.getStringExtra(AppConstant.PARAMS_USER_ID);
 
         service = NetRequest.getInstance().create(UserService.class);
 
@@ -183,8 +187,11 @@ public class ShareBoardActivity extends Activity {
      */
     private void onReportUrl() {
 
-        // TODO: 17/10/31 举报新闻
-        ToastUtils.showShort("举报");
+        if (AccountManager.getInstance().checkLogin(this)) {
+            return;
+        }
+
+        IntentHelper.openReportPage(this, PUBLISHER, SHARE_NID, NEWS_TYPE);
     }
 
     /**
@@ -233,8 +240,7 @@ public class ShareBoardActivity extends Activity {
 
         //final String url = data.gtt;
 
-        GlideApp.with(this)
-                .asBitmap().dontAnimate().load(data.img)
+        GlideApp.with(this).asBitmap().dontAnimate().load(data.img)
                 .into(new SimpleTarget<Bitmap>() {
 
                     @Override

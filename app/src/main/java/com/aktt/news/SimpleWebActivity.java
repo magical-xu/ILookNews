@@ -6,9 +6,9 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +21,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import com.aktt.news.util.HtmlUtil;
 import com.aktt.news.widget.Html5WebView;
 
 /**
@@ -32,7 +33,9 @@ public class SimpleWebActivity extends AppCompatActivity {
 
     private static final String TAG = "SimpleWebActivity";
     private static final String PARAMS = "params";
+    private static final String PARAMS_CONTENT = "params_content";
     private String mUrl;
+    private String mAdContent;
 
     private LinearLayout mLayout;
     private WebView mWebView;
@@ -42,10 +45,11 @@ public class SimpleWebActivity extends AppCompatActivity {
 
     private long mOldTime;
 
-    public static void getInstance(Context context, @NonNull String url) {
+    public static void getInstance(Context context, @NonNull String url, @Nullable String content) {
 
         Intent intent = new Intent(context, SimpleWebActivity.class);
         intent.putExtra(PARAMS, url);
+        intent.putExtra(PARAMS_CONTENT, content);
         context.startActivity(intent);
     }
 
@@ -54,13 +58,6 @@ public class SimpleWebActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);//去掉标题栏
         setContentView(R.layout.activity_simple_web);
-
-        Intent intent = getIntent();
-        mUrl = intent.getStringExtra(PARAMS);
-        if (TextUtils.isEmpty(mUrl)) {
-            Log.e(TAG, " the web url is null !");
-            return;
-        }
 
         mLayout = (LinearLayout) findViewById(R.id.web_container);
         mWebProgress = (ProgressBar) findViewById(R.id.id_web_progress);
@@ -74,6 +71,10 @@ public class SimpleWebActivity extends AppCompatActivity {
             }
         });
 
+        Intent intent = getIntent();
+        mUrl = intent.getStringExtra(PARAMS);
+        mAdContent = intent.getStringExtra(PARAMS_CONTENT);
+
         LinearLayout.LayoutParams params =
                 new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                         ViewGroup.LayoutParams.MATCH_PARENT);
@@ -84,16 +85,30 @@ public class SimpleWebActivity extends AppCompatActivity {
         mWebView.setLayoutParams(params);
         mLayout.addView(mWebView);
 
-        mWebView.loadUrl(mUrl);
+        if (TextUtils.isEmpty(mUrl)) {
+
+            if (!TextUtils.isEmpty(mAdContent)) {
+                mWebView.loadDataWithBaseURL("about:blank", HtmlUtil.getHtmlData(mAdContent),
+                        "text/html", "utf-8", null);
+            }
+        } else {
+            mWebView.loadUrl(mUrl);
+        }
     }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if (System.currentTimeMillis() - mOldTime < 1500) {
+            if (null != mWebView && System.currentTimeMillis() - mOldTime < 1500) {
                 mWebView.clearHistory();
-                mWebView.loadUrl(mUrl);
-            } else if (mWebView.canGoBack()) {
+
+                if (TextUtils.isEmpty(mUrl)) {
+                    mWebView.loadDataWithBaseURL("about:blank", HtmlUtil.getHtmlData(mAdContent),
+                            "text/html", "utf-8", null);
+                } else {
+                    mWebView.loadUrl(mUrl);
+                }
+            } else if (null != mWebView && mWebView.canGoBack()) {
                 mWebView.goBack();
             } else {
                 SimpleWebActivity.this.finish();
