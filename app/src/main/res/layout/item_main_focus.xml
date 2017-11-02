@@ -53,7 +53,7 @@
           android:layout_alignParentRight="true"
           android:textColor="@color/three_text_color"
           android:textSize="@dimen/font_small"
-          android:visibility="gone"
+          android:visibility="visible"
           tools:text="四天前" />
 
     </RelativeLayout>

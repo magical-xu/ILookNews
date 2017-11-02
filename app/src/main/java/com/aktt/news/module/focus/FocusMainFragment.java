@@ -1,10 +1,13 @@
 package com.aktt.news.module.focus;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 import butterknife.BindView;
-import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.aktt.news.AppConstant;
 import com.aktt.news.R;
 import com.aktt.news.api.UserService;
@@ -17,8 +20,10 @@ import com.aktt.news.net.callback.SimpleCallback;
 import com.aktt.news.net.client.NetRequest;
 import com.aktt.news.net.data.HttpResult;
 import com.aktt.news.util.IntentHelper;
+import com.aktt.news.util.LocalBroadcastUtil;
 import com.aktt.news.util.RefreshHelper;
 import com.aktt.news.widget.ilook.ILookTitleBar;
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import java.util.List;
 import retrofit2.Call;
@@ -36,6 +41,8 @@ public class FocusMainFragment extends BaseTitleFragment {
     private FocusAdapter mAdapter;
     private RefreshHelper<FocusBean> mRefreshHelper;
     private UserService service;
+    private boolean needRefresh = false;        //防止用户退出登录 换账号登录后还显示上个账户加载的数据
+    private IntentFilter filter;
 
     @Override
     protected void beginLoadData() {
@@ -57,7 +64,28 @@ public class FocusMainFragment extends BaseTitleFragment {
                 });
 
         service = NetRequest.getInstance().create(UserService.class);
+
+        initFilter();
+        if (null != receiver && null != filter) {
+            LocalBroadcastUtil.register(receiver, filter);
+        }
+
         config();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (needRefresh && getUserVisibleHint()) {
+            loadData(1);
+            needRefresh = false;
+        }
+    }
+
+    private void initFilter() {
+        filter = new IntentFilter();
+        filter.addAction(LocalBroadcastUtil.LOGIN);
+        filter.addAction(LocalBroadcastUtil.LOGOUT);
     }
 
     @Override
@@ -128,4 +156,24 @@ public class FocusMainFragment extends BaseTitleFragment {
             }
         });
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (null != receiver) {
+            LocalBroadcastUtil.unRegister(receiver);
+        }
+    }
+
+    private BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            if (TextUtils.equals(intent.getAction(), LocalBroadcastUtil.LOGOUT)) {
+                needRefresh = true;
+            } else if (TextUtils.equals(intent.getAction(), LocalBroadcastUtil.LOGIN)) {
+                needRefresh = true;
+            }
+        }
+    };
 }

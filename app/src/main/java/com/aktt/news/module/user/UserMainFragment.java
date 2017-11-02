@@ -118,7 +118,7 @@ public class UserMainFragment extends BaseFragment {
         }
 
         // relation data
-        mTvTopic.setCount(String.valueOf(data.followedNum));
+        mTvTopic.setCount(String.valueOf(data.dongtai));
         mTvFollow.setCount(String.valueOf(data.followedNum));
         mTvFans.setCount(String.valueOf(data.fansNum));
         mTvVisit.setCount(String.valueOf(data.visitorsNum));
@@ -247,6 +247,7 @@ public class UserMainFragment extends BaseFragment {
             user.introduce = data.introduce;
             user.visitorsNum = data.visitorsNum;
             user.province = data.province;
+            user.dongtai = data.dongTai;
             bindUserData(user);
         }
     }

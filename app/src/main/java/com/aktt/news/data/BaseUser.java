@@ -56,6 +56,7 @@ public class BaseUser implements Serializable {
     public int followedNum;
     public int fansNum;
     public int visitorsNum;
+    public int notReadCount;
     public String introduce;
     public int registerType;
     public int mobile_code;

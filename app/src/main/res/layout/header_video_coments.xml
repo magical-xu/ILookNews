@@ -9,7 +9,7 @@
       android:id="@+id/tv_title"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_marginTop="@dimen/padding_normal"
+      android:layout_marginTop="10dp"
       android:paddingLeft="@dimen/padding_normal"
       android:paddingRight="@dimen/padding_normal"
       android:textColor="@color/one_text_color"

@@ -18,7 +18,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.OnClick;
-import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.aktt.news.AppConstant;
 import com.aktt.news.R;
 import com.aktt.news.api.HomeService;
@@ -43,6 +42,7 @@ import com.aktt.news.util.StringHelper;
 import com.aktt.news.util.UserOptionHelper;
 import com.aktt.news.widget.ilook.ILookTitleBar;
 import com.aktt.news.widget.image.HeadImageView;
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.magicalxu.library.blankj.KeyboardUtils;
 import com.magicalxu.library.blankj.SPUtils;
 import com.magicalxu.library.blankj.ToastUtils;
@@ -549,6 +549,12 @@ public class NewsDetailActivity extends BaseActivity {
         public void onPageFinished(WebView view, String url) {
             super.onPageFinished(view, url);
             mWebView.getSettings().setBlockNetworkImage(false);
+        }
+
+        @Override
+        public boolean shouldOverrideUrlLoading(WebView view, String url) {
+            view.loadUrl(url);
+            return true;
         }
     }
 }

@@ -46,7 +46,7 @@ public class FocusAddAdapter extends BaseQuickAdapter<FocusBean, BaseViewHolder>
         UserItemRowView view = helper.getView(R.id.id_user_row);
         view.setHead(StringHelper.getString(item.icon))
                 .setName(StringHelper.getString(item.nickname))
-                .setIntro(StringHelper.getString(item.introduce))
+                .setIntro(TextUtils.isEmpty(item.introduce) ? "这家伙很懒，什么也没有留下~" : item.introduce)
                 .changeFollowState(TextUtils.equals(AppConstant.USER_FOLLOW, item.isFollow))
                 .setFocusListener(new View.OnClickListener() {
                     @Override

@@ -30,4 +30,6 @@ public class FocusBean implements Serializable {
 
     public String lastOneNewstitle;
     public String lastTwoNewsTitle;
+
+    public String thisTime;
 }
