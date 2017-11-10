@@ -12,6 +12,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import com.aktt.news.AppConstant;
 import com.aktt.news.R;
+import com.aktt.news.api.Constant;
 import com.aktt.news.base.BaseActivity;
 import com.aktt.news.instance.AccountManager;
 import com.aktt.news.module.user.widget.SettingItemView;
@@ -133,10 +134,10 @@ public class SettingActivity extends BaseActivity {
                 showClearDialog();
                 break;
             case R.id.id_agreement:
-                ToastUtils.showShort("用户协议");
+                IntentHelper.openWebPage(this, Constant.User_Agreement, null);
                 break;
             case R.id.id_about:
-                ToastUtils.showShort("关于");
+                IntentHelper.openWebPage(this, Constant.About_Page, null);
                 break;
             case R.id.tv_logout:
                 AccountManager.getInstance().logout();
