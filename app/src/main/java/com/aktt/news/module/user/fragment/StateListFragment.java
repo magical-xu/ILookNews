@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import butterknife.BindView;
-import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.aktt.news.AppConstant;
 import com.aktt.news.R;
 import com.aktt.news.api.UserService;
@@ -15,15 +14,19 @@ import com.aktt.news.base.BaseFragment;
 import com.aktt.news.data.NewsInfo;
 import com.aktt.news.data.NewsInfoListWrapper;
 import com.aktt.news.instance.AccountManager;
+import com.aktt.news.module.home.data.NewsListBean;
 import com.aktt.news.module.user.adapter.StateAdapter;
 import com.aktt.news.net.callback.SimpleCallback;
 import com.aktt.news.net.client.NetRequest;
 import com.aktt.news.net.data.HttpResult;
 import com.aktt.news.util.IntentHelper;
 import com.aktt.news.util.RefreshHelper;
+import com.aktt.news.util.StringHelper;
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import java.util.List;
 import retrofit2.Call;
+import timber.log.Timber;
 
 /**
  * Created by magical on 17/8/24.
@@ -78,8 +81,33 @@ public class StateListFragment extends BaseFragment {
                         NewsInfo newsInfo = data.get(position);
 
                         IntentHelper.openShareBottomPage(getActivity(), newsInfo.newId,
-                                newsInfo.newstype, pageUid);
+                                adaptNewsType(newsInfo.newstype), pageUid);
                     }
+                }
+            }
+        });
+        mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                NewsInfo bean = mAdapter.getData().get(position);
+                int itemType = bean.newstype;
+                String newId = bean.newId;
+                if (itemType == NewsListBean.VIDEO) {
+                    IntentHelper.openVideoDetailPage(getActivity(), newId, 0, itemType);
+                } else if (itemType == NewsListBean.TEXT) {
+                    IntentHelper.openNewsDetailPage(mContext, newId, itemType);
+                } else if (itemType == NewsListBean.IMAGE) {
+                    IntentHelper.openNewsPhotoDetailPage(mContext, newId, itemType);
+                } else if (itemType == NewsListBean.AD) {
+                    //广告类跳转
+                    IntentHelper.openWebPage(getActivity(), StringHelper.getString(bean.html_url),
+                            StringHelper.getString(bean.adcontent));
+                } else if (itemType == NewsListBean.HTML) {
+                    //跳转类
+                    IntentHelper.openWebPage(getActivity(), StringHelper.getString(bean.html_url),
+                            StringHelper.getString(bean.adcontent));
+                } else {
+                    Timber.e("can't resolve jump type.");
                 }
             }
         });
@@ -88,6 +116,10 @@ public class StateListFragment extends BaseFragment {
 
         mEmptyView = LayoutInflater.from(getActivity())
                 .inflate(R.layout.base_empty_view, (ViewGroup) mRecyclerView.getParent(), false);
+    }
+
+    private int adaptNewsType(int rawType) {
+        return rawType == 9 ? 12 : rawType;
     }
 
     @Override

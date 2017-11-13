@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -252,6 +253,12 @@ public class ShareBoardActivity extends Activity {
                         //} else {
                         onShare(type, data, resource, null);
                         //}
+                    }
+
+                    @Override
+                    public void onLoadFailed(@Nullable Drawable errorDrawable) {
+                        super.onLoadFailed(errorDrawable);
+                        ToastUtils.showShort("获取分享缩略图失败 --> 错误的图片链接");
                     }
                 });
     }

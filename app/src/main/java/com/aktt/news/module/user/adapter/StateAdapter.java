@@ -31,8 +31,8 @@ public class StateAdapter extends BaseQuickAdapter<NewsInfo, BaseViewHolder> {
                 StringHelper.getString(item.userIcon));
         helper.setText(R.id.tv_name, StringHelper.getString(item.nickname));
         helper.setText(R.id.tv_time, StringHelper.getString(item.createTime));
-        helper.setText(R.id.tv_title, StringHelper.getString(item.title));
-        helper.setText(R.id.tv_refer, StringHelper.getString(item.content));
+        helper.setText(R.id.tv_title, getContent(item.newstype));
+        helper.setText(R.id.tv_refer, StringHelper.getString(item.title));
 
         helper.setText(R.id.tv_up, String.valueOf(item.likeCount));
         helper.setText(R.id.tv_comment, String.valueOf(item.commentCount));
@@ -66,6 +66,16 @@ public class StateAdapter extends BaseQuickAdapter<NewsInfo, BaseViewHolder> {
             }
         } else {
             refer.setVisibility(View.GONE);
+        }
+    }
+
+    private String getContent(int type) {
+        if (type == 9) {
+            return "发布了一个动态";
+        } else if (type == 1) {
+            return "发布了一个视频";
+        } else {
+            return "发布了一个新闻";
         }
     }
 }

@@ -54,7 +54,7 @@ public interface UserService {
      * @param type 0关注的人 type=1粉丝列表 2其他访客
      */
     @GET("getfollowsBytype")
-    Call<HttpResult<String>> getRelationList(@Query("userid") String userId,
+    Call<HttpResult<FocusWrapper>> getRelationList(@Query("userid") String userId,
             @Query("myid") String myId, @Query("type") int type, @Query("page") int page,
             @Query("pageSize") int size);
 

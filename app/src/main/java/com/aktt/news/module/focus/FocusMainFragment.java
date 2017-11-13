@@ -140,8 +140,25 @@ public class FocusMainFragment extends BaseTitleFragment {
         }
 
         showLoading();
+        //Call<HttpResult<FocusWrapper>> call =
+        //        service.getNotFollowList(loginUserId, page, AppConstant.DEFAULT_PAGE_SIZE);
+        //call.enqueue(new SimpleCallback<FocusWrapper>() {
+        //    @Override
+        //    public void onSuccess(FocusWrapper data) {
+        //        hideLoading();
+        //        mRefreshHelper.setData(data.list, data.haveNext);
+        //    }
+        //
+        //    @Override
+        //    public void onFail(String code, String errorMsg) {
+        //        mRefreshHelper.onFail();
+        //        onSimpleError(errorMsg);
+        //    }
+        //});
+
         Call<HttpResult<FocusWrapper>> call =
-                service.getNotFollowList(loginUserId, page, AppConstant.DEFAULT_PAGE_SIZE);
+                service.getRelationList(loginUserId, loginUserId, 0, page,
+                        AppConstant.DEFAULT_PAGE_SIZE);
         call.enqueue(new SimpleCallback<FocusWrapper>() {
             @Override
             public void onSuccess(FocusWrapper data) {

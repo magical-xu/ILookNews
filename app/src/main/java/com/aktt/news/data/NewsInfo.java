@@ -59,4 +59,6 @@ public class NewsInfo implements Serializable {
 
     //动态列表多出来的
     public List<String> coverpic;
+
+    public String adcontent;
 }
