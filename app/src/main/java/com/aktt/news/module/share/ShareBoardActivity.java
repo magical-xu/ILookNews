@@ -241,7 +241,7 @@ public class ShareBoardActivity extends Activity {
 
         //final String url = data.gtt;
 
-        GlideApp.with(this).asBitmap().dontAnimate().load(data.img)
+        GlideApp.with(this).asBitmap().dontAnimate().load(adaptUrl(data))
                 .into(new SimpleTarget<Bitmap>() {
 
                     @Override
@@ -261,6 +261,17 @@ public class ShareBoardActivity extends Activity {
                         ToastUtils.showShort("获取分享缩略图失败 --> 错误的图片链接");
                     }
                 });
+    }
+
+    private String adaptUrl(ShareData data) {
+
+        String rawUrl = data.img;
+        if (rawUrl.endsWith("\"")) {
+            int length = rawUrl.length();
+            rawUrl = rawUrl.substring(0, length - 1);
+        }
+
+        return rawUrl;
     }
 
     private void downLoadNewsImage(final String type, final ShareData data, final Bitmap thumb) {
