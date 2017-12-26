@@ -1,6 +1,7 @@
 package com.aktt.news.module.user.fragment;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -39,7 +40,7 @@ public class BrokeNewsListFragment extends BaseFragment {
 
     private View mEmptyView;
 
-    public static BrokeNewsListFragment getInstance(String uid, int pageType) {
+    public static BrokeNewsListFragment getInstance(@Nullable String uid, int pageType) {
 
         BrokeNewsListFragment fragment = new BrokeNewsListFragment();
         Bundle bundle = new Bundle();
@@ -90,18 +91,20 @@ public class BrokeNewsListFragment extends BaseFragment {
 
     public void loadData(final int page) {
 
-        if (TextUtils.isEmpty(pageUid)) {
-            return;
-        }
+        //if (TextUtils.isEmpty(pageUid)) {
+        //    return;
+        //}
 
         showLoading();
         Call<HttpResult<BrokeListWrapper>> call;
         if (pageType == 0) {
             //个人爆料
-            call = userService.getBaoLiaoList(pageUid, page, AppConstant.DEFAULT_PAGE_SIZE);
+            call = userService.getBaoLiaoList(getNotNull(pageUid), page,
+                    AppConstant.DEFAULT_PAGE_SIZE);
         } else {
             //所有人爆料
-            call = userService.getBaoLiaoListAll(pageUid, page, AppConstant.DEFAULT_PAGE_SIZE);
+            call = userService.getBaoLiaoListAll(getNotNull(pageUid), page,
+                    AppConstant.DEFAULT_PAGE_SIZE);
         }
 
         call.enqueue(new SimpleCallback<BrokeListWrapper>() {
@@ -125,5 +128,9 @@ public class BrokeNewsListFragment extends BaseFragment {
                 onSimpleError(errorMsg);
             }
         });
+    }
+
+    public String getNotNull(String raw) {
+        return TextUtils.isEmpty(raw) ? "" : raw;
     }
 }

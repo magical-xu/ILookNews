@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     android:orientation="vertical">
 
   <android.support.design.widget.AppBarLayout
@@ -120,10 +121,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:maxLines="1"
                 android:layout_marginRight="@dimen/padding_normal"
                 android:background="@drawable/bg_btn_focus_white"
                 android:gravity="center"
+                android:maxLines="1"
                 android:text="@string/focus_add"
                 android:textColor="@color/white"
                 android:textSize="@dimen/font_normal" />

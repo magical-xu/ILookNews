@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.view.View;
@@ -27,6 +28,7 @@ import com.aktt.news.widget.adapter.BaseFragmentStateAdapter;
 import com.aktt.news.widget.adapter.OnPageChangeListener;
 import com.aktt.news.widget.ilook.ILookTitleBar;
 import com.flyco.tablayout.SlidingTabLayout;
+import com.githang.statusbar.StatusBarCompat;
 import com.magicalxu.library.blankj.SPUtils;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
@@ -51,6 +53,9 @@ public class VideoMainFragment extends BaseTitleFragment {
 
     @Override
     public void init() {
+
+        StatusBarCompat.setStatusBarColor(getActivity(),
+                ContextCompat.getColor(getActivity(), R.color.white));
         checkTitle();
 
         initFilter();
@@ -203,5 +208,14 @@ public class VideoMainFragment extends BaseTitleFragment {
 
     private void updateAvatar(String newAvatar) {
         mTitleBar.setLeftCircle(newAvatar);
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (!hidden) {
+            StatusBarCompat.setStatusBarColor(getActivity(),
+                    ContextCompat.getColor(getActivity(), R.color.white));
+        }
     }
 }

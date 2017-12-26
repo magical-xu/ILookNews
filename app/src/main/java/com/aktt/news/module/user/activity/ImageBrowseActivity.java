@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -17,6 +18,7 @@ import com.aktt.news.module.home.fragment.PhotoDetailFragment;
 import com.aktt.news.widget.adapter.BaseFragmentAdapter;
 import com.aktt.news.widget.adapter.OnPageChangeListener;
 import com.aktt.news.widget.viewpager.ViewPagerFixed;
+import com.githang.statusbar.StatusBarCompat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,6 +52,7 @@ public class ImageBrowseActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_browse);
+        StatusBarCompat.setStatusBarColor(this, ContextCompat.getColor(this, R.color.black));
         ButterKnife.bind(this);
 
         Intent intent = getIntent();

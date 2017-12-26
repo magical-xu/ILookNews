@@ -49,7 +49,8 @@ public class BrokeListActivity extends BaseActivity {
 
         String userId = AccountManager.getInstance().getUserId();
         if (TextUtils.isEmpty(userId)) {
-            return;
+            //return;
+            userId = "";
         }
 
         if (null == mBrokeListFragment) {

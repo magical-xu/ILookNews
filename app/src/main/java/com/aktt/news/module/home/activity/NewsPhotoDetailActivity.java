@@ -37,7 +37,7 @@ import com.aktt.news.widget.adapter.BaseFragmentAdapter;
 import com.aktt.news.widget.adapter.OnPageChangeListener;
 import com.aktt.news.widget.ilook.ILookTitleBar;
 import com.aktt.news.widget.viewpager.ViewPagerFixed;
-import com.jaeger.library.StatusBarUtil;
+import com.githang.statusbar.StatusBarCompat;
 import com.magicalxu.library.blankj.KeyboardUtils;
 import com.magicalxu.library.blankj.ToastUtils;
 import java.util.ArrayList;
@@ -104,7 +104,7 @@ public class NewsPhotoDetailActivity extends BaseActivity {
     @Override
     public void handleChildPage(Bundle savedInstanceState) {
 
-        StatusBarUtil.setColor(this, CompatUtil.getColor(this, R.color.black));
+        StatusBarCompat.setStatusBarColor(this, CompatUtil.getColor(this, R.color.black));
         checkIntent();
         checkTitle();
 

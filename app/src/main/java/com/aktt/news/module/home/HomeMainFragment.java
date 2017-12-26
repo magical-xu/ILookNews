@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.util.Log;
@@ -36,6 +37,7 @@ import com.aktt.news.widget.adapter.BaseFragmentStateAdapter;
 import com.aktt.news.widget.adapter.OnPageChangeListener;
 import com.aktt.news.widget.image.HeadImageView;
 import com.flyco.tablayout.SlidingTabLayout;
+import com.githang.statusbar.StatusBarCompat;
 import com.magicalxu.library.blankj.SPUtils;
 import com.magicalxu.library.blankj.ToastUtils;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
@@ -119,6 +121,8 @@ public class HomeMainFragment extends BaseFragment implements OnChannelListener 
     @Override
     protected void doInit() {
 
+        StatusBarCompat.setStatusBarColor(getActivity(),
+                ContextCompat.getColor(getActivity(), R.color.main_color));
         homeService = NetRequest.getInstance().create(HomeService.class);
 
         initFilter();
@@ -284,4 +288,13 @@ public class HomeMainFragment extends BaseFragment implements OnChannelListener 
             }
         }
     };
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (!hidden) {
+            StatusBarCompat.setStatusBarColor(getActivity(),
+                    ContextCompat.getColor(getActivity(), R.color.main_color));
+        }
+    }
 }

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -23,6 +24,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import com.aktt.news.util.HtmlUtil;
 import com.aktt.news.widget.Html5WebView;
+import com.githang.statusbar.StatusBarCompat;
 
 /**
  * Created by magical on 17/9/7.
@@ -58,6 +60,8 @@ public class SimpleWebActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);//去掉标题栏
         setContentView(R.layout.activity_simple_web);
+
+        StatusBarCompat.setStatusBarColor(this, ContextCompat.getColor(this, R.color.white));
 
         mLayout = (LinearLayout) findViewById(R.id.web_container);
         mWebProgress = (ProgressBar) findViewById(R.id.id_web_progress);

@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
@@ -24,6 +25,7 @@ import com.aktt.news.util.LocalBroadcastUtil;
 import com.aktt.news.util.RefreshHelper;
 import com.aktt.news.widget.ilook.ILookTitleBar;
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.githang.statusbar.StatusBarCompat;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import java.util.List;
 import retrofit2.Call;
@@ -52,6 +54,8 @@ public class FocusMainFragment extends BaseTitleFragment {
     @Override
     public void init() {
 
+        StatusBarCompat.setStatusBarColor(getActivity(),
+                ContextCompat.getColor(getActivity(), R.color.white));
         mTitleBar.setTitleImage(R.drawable.img_focus_title)
                 .setRightImage(R.drawable.ic_care_plus_blue)
                 .hideLeftImage()
@@ -199,4 +203,13 @@ public class FocusMainFragment extends BaseTitleFragment {
             }
         }
     };
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (!hidden) {
+            StatusBarCompat.setStatusBarColor(getActivity(),
+                    ContextCompat.getColor(getActivity(), R.color.white));
+        }
+    }
 }

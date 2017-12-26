@@ -6,7 +6,7 @@
     android:layout_height="250dp"
     android:orientation="vertical">
 
-  <com.shuyu.gsyvideoplayer.video.NormalGSYVideoPlayer
+  <com.aktt.news.library.gsyvideoplayer.ILookVideoPlayer
       android:id="@+id/video_player"
       android:layout_width="match_parent"
       android:layout_height="@dimen/layout_height_video" />

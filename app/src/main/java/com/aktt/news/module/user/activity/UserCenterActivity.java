@@ -3,7 +3,9 @@ package com.aktt.news.module.user.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -26,9 +28,11 @@ import com.aktt.news.util.IntentHelper;
 import com.aktt.news.util.SimpleNotifyListener;
 import com.aktt.news.util.StringHelper;
 import com.aktt.news.util.UserOptionHelper;
+import com.aktt.news.widget.adapter.AppBarStateChangeListener;
 import com.aktt.news.widget.adapter.BaseFragmentAdapter;
 import com.aktt.news.widget.image.HeadImageView;
 import com.flyco.tablayout.SlidingTabLayout;
+import com.githang.statusbar.StatusBarCompat;
 import java.util.ArrayList;
 import java.util.List;
 import retrofit2.Call;
@@ -48,6 +52,7 @@ public class UserCenterActivity extends BaseActivity {
     @BindView(R.id.sliding_tabs) SlidingTabLayout slidingTabLayout;
     @BindView(R.id.view_pager) ViewPager viewPager;
     @BindView(R.id.toolbar) Toolbar toolbar;
+    @BindView(R.id.layout_appbar) AppBarLayout mAppBarLayout;
 
     private BaseFragmentAdapter baseFragmentAdapter;
     private UserService service;
@@ -70,6 +75,8 @@ public class UserCenterActivity extends BaseActivity {
     @Override
     public void handleChildPage(Bundle savedInstanceState) {
 
+        StatusBarCompat.setStatusBarColor(this,
+                ContextCompat.getColor(this, R.color.alpha_70_black));
         Intent intent = getIntent();
         pageUid = intent.getStringExtra(IntentHelper.PARAMS_ONE);
         service = NetRequest.getInstance().create(UserService.class);
@@ -113,6 +120,25 @@ public class UserCenterActivity extends BaseActivity {
                 new BaseFragmentAdapter(getSupportFragmentManager(), fragments, titles);
         viewPager.setAdapter(baseFragmentAdapter);
         slidingTabLayout.setViewPager(viewPager);
+
+        mAppBarLayout.addOnOffsetChangedListener(new AppBarStateChangeListener() {
+            @Override
+            public void onStateChanged(AppBarLayout appBarLayout, State state) {
+                if (state == State.EXPANDED) {
+
+                    //展开状态
+                    toolbar.setNavigationIcon(R.drawable.ic_back);
+                } else if (state == State.COLLAPSED) {
+
+                    //折叠状态
+                    toolbar.setNavigationIcon(R.drawable.ic_back_black);
+                } else {
+
+                    //中间状态
+
+                }
+            }
+        });
     }
 
     private void initUserInfo(UserInfoWrapper data) {

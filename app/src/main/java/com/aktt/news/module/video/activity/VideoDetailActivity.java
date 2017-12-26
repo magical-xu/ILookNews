@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
@@ -42,6 +43,7 @@ import com.aktt.news.util.SimplePreNotifyListener;
 import com.aktt.news.util.StringHelper;
 import com.aktt.news.util.UserOptionHelper;
 import com.aktt.news.widget.image.HeadImageView;
+import com.githang.statusbar.StatusBarCompat;
 import com.magicalxu.library.blankj.KeyboardUtils;
 import com.magicalxu.library.blankj.ToastUtils;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
@@ -128,6 +130,7 @@ public class VideoDetailActivity extends BaseActivity {
     @Override
     public void handleChildPage(Bundle savedInstanceState) {
 
+        StatusBarCompat.setStatusBarColor(this, ContextCompat.getColor(this, R.color.black));
         checkIntent();
         checkTitle();
         mAdapter = new CommentAdapter(false, R.layout.item_video_comment);

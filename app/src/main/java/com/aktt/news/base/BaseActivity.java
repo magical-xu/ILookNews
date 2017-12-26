@@ -2,6 +2,7 @@ package com.aktt.news.base;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,7 @@ import com.aktt.news.R;
 import com.aktt.news.net.client.NetRequest;
 import com.aktt.news.widget.DialogManager;
 import com.aktt.news.widget.ilook.ILookTitleBar;
+import com.githang.statusbar.StatusBarCompat;
 import com.magicalxu.library.blankj.SPUtils;
 import com.magicalxu.library.blankj.ToastUtils;
 import java.util.ArrayList;
@@ -47,6 +49,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
         NetRequest.getInstance().addRequestList(TAG, addRequestList());
+        StatusBarCompat.setStatusBarColor(this, ContextCompat.getColor(this, R.color.white));
         handleChildPage(savedInstanceState);
     }
 
