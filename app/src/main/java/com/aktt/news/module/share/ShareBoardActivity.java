@@ -290,11 +290,11 @@ public class ShareBoardActivity extends Activity {
     public void onShare(String type, final ShareData data, Bitmap thumb, Bitmap large) {
 
         if (TextUtils.isEmpty(data.title)) {
-            data.title = "爱看头条";
+            data.title = "趣看看";
         }
 
         if (TextUtils.isEmpty(data.description)) {
-            data.description = "爱看头条";
+            data.description = "趣看看";
         }
 
         ShareLoginHelper.share(this, type, data, thumb, large, new SimpleNotifyListener() {

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.view.KeyEvent;
 import android.widget.FrameLayout;
 import butterknife.BindView;
@@ -20,6 +21,7 @@ import com.aktt.news.util.IntentHelper;
 import com.flyco.tablayout.CommonTabLayout;
 import com.flyco.tablayout.listener.CustomTabEntity;
 import com.flyco.tablayout.listener.OnTabSelectListener;
+import com.jaeger.library.StatusBarUtil;
 import com.magicalxu.library.blankj.ToastUtils;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 import java.util.ArrayList;
@@ -75,6 +77,7 @@ public class MainActivity extends BaseActivity {
     @Override
     public void handleChildPage(Bundle savedInstanceState) {
 
+        StatusBarUtil.setColor(this, ContextCompat.getColor(this, R.color.main_color));
         initTab();
         initFragment();
     }

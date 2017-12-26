@@ -23,6 +23,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/padding_normal"
         android:ellipsize="end"
+        android:textColor="@color/one_text_color"
+        android:textSize="@dimen/font_little_big"
         android:maxLines="1"
         android:paddingLeft="@dimen/padding_large"
         android:paddingRight="@dimen/padding_large"
@@ -31,6 +33,8 @@
     <TextView
         android:id="@+id/id_sign"
         android:layout_width="wrap_content"
+        android:textColor="@color/three_text_color"
+        android:textSize="@dimen/font_normal"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/padding_small"
         android:ellipsize="end"

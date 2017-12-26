@@ -28,9 +28,12 @@ public class ShareLoginHelper {
     public static final String WX_APP_ID = "wx97a9b0c8570b0df9";
     public static final String WX_APP_SECRET = "9ac335291b56015b1dea76044c5a5774";
 
-    public static final String WB_APP_ID = "wb_app_id";
-    public static final String WB_REDIRECT_URL = "wb_redirect_url";
-    public static final String WB_SCOPE = "get_simple_userinfo";
+    public static final String WB_APP_ID = "3216227037";
+    public static final String WB_REDIRECT_URL = "http://www.super1288.xyz/";
+    public static final String WB_SCOPE = "email,direct_messages_read,direct_messages_write,"
+            + "friendships_groups_read,friendships_groups_write,statuses_to_me_read,"
+            + "follow_app_official_microblog,"
+            + "invitation_write";
 
     public static void init(Application application) {
 

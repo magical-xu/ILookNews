@@ -104,6 +104,12 @@ public class FocusMainFragment extends BaseTitleFragment {
             }
         };
 
+        mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                onChildClick(view, position);
+            }
+        });
         mAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
@@ -114,22 +120,22 @@ public class FocusMainFragment extends BaseTitleFragment {
 
     private void onChildClick(View view, int position) {
 
-        switch (view.getId()) {
-            case R.id.iv_avatar:
+        //switch (view.getId()) {
+        //    case R.id.iv_avatar:
 
-                List<FocusBean> data = mAdapter.getData();
-                if (position < data.size()) {
+        List<FocusBean> data = mAdapter.getData();
+        if (position < data.size()) {
 
-                    FocusBean item = data.get(position);
-                    String target_id = item.target_id;
-                    if (!TextUtils.isEmpty(target_id)) {
-                        IntentHelper.openUserCenterPage(getActivity(), target_id);
-                    }
-                }
-                break;
-            default:
-                break;
+            FocusBean item = data.get(position);
+            String target_id = item.target_id;
+            if (!TextUtils.isEmpty(target_id)) {
+                IntentHelper.openUserCenterPage(getActivity(), target_id);
+            }
         }
+        //break;
+        //default:
+        //    break;
+        //}
     }
 
     private void loadData(int page) {

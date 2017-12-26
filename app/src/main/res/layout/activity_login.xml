@@ -19,7 +19,7 @@
       android:layout_height="80dp"
       android:layout_gravity="center_horizontal"
       android:layout_marginTop="@dimen/padding_large"
-      android:src="@mipmap/ilook_icon" />
+      android:src="@mipmap/ic_launcher" />
 
   <TextView
       android:id="@+id/id_login_type"

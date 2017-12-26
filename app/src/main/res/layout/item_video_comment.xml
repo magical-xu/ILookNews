@@ -28,6 +28,7 @@
         android:layout_weight="1"
         android:maxLines="1"
         android:paddingRight="@dimen/padding_small"
+        android:textColor="@color/one_text_color"
         android:textSize="@dimen/font_main"
         tools:text="magical" />
 
@@ -41,6 +42,7 @@
         android:paddingBottom="@dimen/padding_tiny"
         android:paddingRight="@dimen/padding_small"
         android:paddingTop="@dimen/padding_tiny"
+        android:textColor="@color/two_text_color"
         tools:text="23" />
   </LinearLayout>
 
@@ -50,7 +52,7 @@
       android:layout_height="wrap_content"
       android:layout_alignLeft="@id/ll_container"
       android:layout_below="@id/ll_container"
-      android:textColor="@color/one_text_color"
+      android:textColor="@color/two_text_color"
       android:visibility="visible"
       tools:text="@string/test_text_long" />
 

@@ -1,5 +1,5 @@
 <resources>
-  <string name="app_name">爱看头条</string>
+  <string name="app_name">趣看看</string>
 
   <!-- Main TAB -->
   <string name="main_tab_home">首页</string>
@@ -44,7 +44,7 @@
   <string name="text_num">%d/300</string>
 
   <string name="setting_logout">退出登录</string>
-  <string name="tips_logout">再按一次退出爱看头条</string>
+  <string name="tips_logout">再按一次退出趣看看</string>
 
   <!--Login-->
   <string name="login_text">进入头条</string>

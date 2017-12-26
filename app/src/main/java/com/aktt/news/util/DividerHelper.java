@@ -13,7 +13,7 @@ import com.magicalxu.library.blankj.SizeUtils;
 public class DividerHelper {
 
   public static DrawableItemDecoration newRvDividerRect(Context context) {
-    return new DrawableItemDecoration(context, R.color.main_divider_color,
+    return new DrawableItemDecoration(context, R.color.gray,
         CompatUtil.getDimension(context, R.dimen.divide_block_width), 0);
   }
 

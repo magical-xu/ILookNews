@@ -52,7 +52,7 @@ public abstract class RefreshHelper<T> {
     private void init() {
 
         configRecyclerView();
-        mAdapter.openLoadAnimation(BaseQuickAdapter.SLIDEIN_LEFT);
+        //mAdapter.openLoadAnimation(BaseQuickAdapter.ALPHAIN);
         mRecyclerView.setAdapter(mAdapter);
 
         mRefreshLayout.setOnRefreshListener(new OnRefreshListener() {

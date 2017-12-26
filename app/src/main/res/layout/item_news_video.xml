@@ -16,7 +16,7 @@
       android:textSize="@dimen/font_main"
       tools:text="@string/test_text_long" />
 
-  <com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer
+  <com.shuyu.gsyvideoplayer.video.NormalGSYVideoPlayer
       android:id="@+id/videoplayer"
       android:layout_width="match_parent"
       android:layout_height="@dimen/layout_height_video"
