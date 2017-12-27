@@ -10,6 +10,7 @@ import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -54,6 +55,7 @@ public class ShareBoardActivity extends Activity {
     @BindView(R.id.tv_share_sina) TextView tvShareSina;
     @BindView(R.id.tv_cancel) TextView tvCancel;
     @BindView(R.id.id_ad_image) ImageView mAdImage;
+    @BindView(R.id.id_ad_container) ViewGroup mAdRoot;
 
     private UserService service;
     private String SHARE_NID;
@@ -107,7 +109,11 @@ public class ShareBoardActivity extends Activity {
             public void onSuccess(JSONObject data) {
 
                 String imageUrl = data.optString("picUrl");
-                ImageLoader.loadImage(imageUrl, mAdImage);
+                if (TextUtils.isEmpty(imageUrl)) {
+                    mAdRoot.setVisibility(View.GONE);
+                } else {
+                    ImageLoader.loadImage(imageUrl, mAdImage);
+                }
             }
 
             @Override

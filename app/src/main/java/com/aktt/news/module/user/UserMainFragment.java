@@ -4,7 +4,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -26,7 +25,6 @@ import com.aktt.news.net.data.HttpResult;
 import com.aktt.news.util.IntentHelper;
 import com.aktt.news.util.LocalBroadcastUtil;
 import com.aktt.news.widget.image.HeadImageView;
-import com.githang.statusbar.StatusBarCompat;
 import com.magicalxu.library.blankj.ToastUtils;
 import retrofit2.Call;
 
@@ -134,8 +132,8 @@ public class UserMainFragment extends BaseFragment {
     @Override
     protected void doInit() {
 
-        StatusBarCompat.setStatusBarColor(getActivity(),
-                ContextCompat.getColor(getActivity(), R.color.white));
+        //StatusBarCompat.setStatusBarColor(getActivity(),
+        //        ContextCompat.getColor(getActivity(), R.color.white));
         initFilter();
 
         if (null != filter && null != receiver) {
@@ -290,8 +288,8 @@ public class UserMainFragment extends BaseFragment {
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
         if (!hidden) {
-            StatusBarCompat.setStatusBarColor(getActivity(),
-                    ContextCompat.getColor(getActivity(), R.color.white));
+            //StatusBarCompat.setStatusBarColor(getActivity(),
+            //        ContextCompat.getColor(getActivity(), R.color.white));
         }
     }
 }

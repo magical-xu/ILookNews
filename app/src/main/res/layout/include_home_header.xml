@@ -8,15 +8,17 @@
 
   <!-- header -->
   <LinearLayout
+      android:id="@+id/id_header_layout"
       android:layout_width="match_parent"
       android:layout_height="44dp"
-      android:gravity="center_vertical"
+      android:gravity="bottom"
       android:orientation="horizontal">
 
     <com.aktt.news.widget.image.HeadImageView
         android:id="@+id/iv_avatar"
         android:layout_width="24dp"
         android:layout_height="24dp"
+        android:layout_marginBottom="10dp"
         android:layout_marginLeft="@dimen/padding_normal"
         android:layout_marginRight="@dimen/padding_normal" />
 
@@ -24,6 +26,7 @@
         android:id="@+id/ll_search"
         android:layout_width="0dp"
         android:layout_height="24dp"
+        android:layout_marginBottom="10dp"
         android:layout_weight="1"
         android:background="@drawable/bg_search_view"
         android:divider="@drawable/divider_line_vertical_main"
@@ -55,6 +58,7 @@
         android:id="@+id/iv_notify"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
         android:paddingBottom="4dp"
         android:paddingLeft="@dimen/padding_normal"
         android:paddingRight="@dimen/padding_normal"

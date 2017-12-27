@@ -6,10 +6,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -37,9 +37,10 @@ import com.aktt.news.widget.adapter.BaseFragmentStateAdapter;
 import com.aktt.news.widget.adapter.OnPageChangeListener;
 import com.aktt.news.widget.image.HeadImageView;
 import com.flyco.tablayout.SlidingTabLayout;
-import com.githang.statusbar.StatusBarCompat;
 import com.magicalxu.library.blankj.SPUtils;
 import com.magicalxu.library.blankj.ToastUtils;
+import com.qmuiteam.qmui.util.QMUIStatusBarHelper;
+import com.scwang.smartrefresh.layout.util.DensityUtil;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 import java.util.ArrayList;
 import java.util.List;
@@ -59,6 +60,7 @@ public class HomeMainFragment extends BaseFragment implements OnChannelListener 
     @BindView(R.id.iv_edit_channel) ImageView mMorePlusView;
     @BindView(R.id.id_view_pager) ViewPager mViewPager;
     @BindView(R.id.id_search_key) TextView mSearchKey;
+    @BindView(R.id.id_header_layout) ViewGroup mHeaderLayout;
 
     private BaseFragmentStateAdapter mPagerAdapter;
     private List<Fragment> newsFragmentList = new ArrayList<>();
@@ -121,8 +123,19 @@ public class HomeMainFragment extends BaseFragment implements OnChannelListener 
     @Override
     protected void doInit() {
 
-        StatusBarCompat.setStatusBarColor(getActivity(),
-                ContextCompat.getColor(getActivity(), R.color.main_color));
+        //ImmersionBar.with(getActivity())
+        //        .statusBarDarkFont(true)
+        //        .titleBarMarginTop(mHeaderLayout)
+        //        .init();
+        //StatusBarUtil.setTransparent(getActivity());
+        //StatusBarCompat.setFitsSystemWindows(getActivity().getWindow(), false);
+
+        //重置头部高度
+        int height = QMUIStatusBarHelper.getStatusbarHeight(getActivity());
+        ViewGroup.LayoutParams layoutParams = mHeaderLayout.getLayoutParams();
+        layoutParams.height = DensityUtil.dp2px(44) + height;
+        mHeaderLayout.setLayoutParams(layoutParams);
+
         homeService = NetRequest.getInstance().create(HomeService.class);
 
         initFilter();
@@ -293,8 +306,9 @@ public class HomeMainFragment extends BaseFragment implements OnChannelListener 
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
         if (!hidden) {
-            StatusBarCompat.setStatusBarColor(getActivity(),
-                    ContextCompat.getColor(getActivity(), R.color.main_color));
+
+            //StatusBarUtil.setTransparent(getActivity());
+            //StatusBarCompat.setFitsSystemWindows(getActivity().getWindow(), false);
         }
     }
 }

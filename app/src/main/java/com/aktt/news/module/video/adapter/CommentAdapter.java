@@ -1,6 +1,7 @@
 package com.aktt.news.module.video.adapter;
 
 import android.support.annotation.LayoutRes;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -33,7 +34,7 @@ public class CommentAdapter extends BaseQuickAdapter<CommentBean, BaseViewHolder
         HeadImageView headImageView = helper.getView(R.id.iv_avatar);
         headImageView.setHeadImage(item.icon);
 
-        helper.setText(R.id.tv_name, item.nickname)
+        helper.setText(R.id.tv_name, getOrDefault(item.nickname))
                 .setText(R.id.tv_up, String.valueOf(item.careCount))
                 .setText(R.id.tv_comment, item.text)
                 .setText(R.id.id_timestamp, item.createDate)
@@ -55,6 +56,10 @@ public class CommentAdapter extends BaseQuickAdapter<CommentBean, BaseViewHolder
             String format = String.format(mContext.getString(R.string.place_reply), reply);
             tvReply.setText(format);
         }
+    }
+
+    public String getOrDefault(String raw) {
+        return TextUtils.isEmpty(raw) ? "游客" : raw;
     }
 }
 

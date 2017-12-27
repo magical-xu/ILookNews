@@ -93,4 +93,5 @@ dependencies {
   annotationProcessor 'com.github.jokermonn:permissions4m:2.1.2-processor'
   compile 'com.readystatesoftware.systembartint:systembartint:1.0.3'
   compile 'com.githang:status-bar-compat:latest.integration'
+  compile 'com.gyf.barlibrary:barlibrary:2.3.0'
 }

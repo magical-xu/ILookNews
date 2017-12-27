@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
@@ -53,6 +54,7 @@ public class UserCenterActivity extends BaseActivity {
     @BindView(R.id.view_pager) ViewPager viewPager;
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.layout_appbar) AppBarLayout mAppBarLayout;
+    @BindView(R.id.collapsing_toolbar) CollapsingToolbarLayout collapsingToolbarLayout;
 
     private BaseFragmentAdapter baseFragmentAdapter;
     private UserService service;
@@ -139,6 +141,12 @@ public class UserCenterActivity extends BaseActivity {
                 }
             }
         });
+        mAppBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+
+            }
+        });
     }
 
     private void initUserInfo(UserInfoWrapper data) {
@@ -146,7 +154,9 @@ public class UserCenterActivity extends BaseActivity {
         hideLoading();
 
         ivAvatar.setHeadImage(StringHelper.getString(data.userIcon));
-        tvName.setText(StringHelper.getString(data.nickname));
+        //tvName.setText(StringHelper.getString(data.nickname));
+        //toolbar.setTitle(StringHelper.getString(data.nickname));
+        collapsingToolbarLayout.setTitle(StringHelper.getString(data.nickname));
 
         tvSignature.setText(TextUtils.isEmpty(data.introduce) ? "这个人很懒，什么都没留下" : data.introduce);
 

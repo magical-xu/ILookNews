@@ -50,4 +50,12 @@
     <item name="android:windowAnimationStyle">@style/AnimBottom</item>
   </style>
 
+  <style name="DialogTheme" parent="@style/Base.Theme.AppCompat.Light.Dialog"></style>
+
+  <!--自定义Dialog样式-->
+  <style name="MyDialog" parent="AlertDialog.AppCompat">
+    <item name="android:background">@android:color/transparent</item>
+    <item name="android:backgroundDimEnabled">true</item>
+  </style>
+
 </resources>

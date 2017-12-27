@@ -20,6 +20,7 @@ import com.aktt.news.util.IntentHelper;
 import com.flyco.tablayout.CommonTabLayout;
 import com.flyco.tablayout.listener.CustomTabEntity;
 import com.flyco.tablayout.listener.OnTabSelectListener;
+import com.gyf.barlibrary.ImmersionBar;
 import com.magicalxu.library.blankj.ToastUtils;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 import java.util.ArrayList;
@@ -74,6 +75,8 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public void handleChildPage(Bundle savedInstanceState) {
+
+        ImmersionBar.with(this).statusBarDarkFont(true).init();
 
         initTab();
         initFragment();

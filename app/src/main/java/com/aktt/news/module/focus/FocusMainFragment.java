@@ -4,15 +4,16 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
 import butterknife.BindView;
 import com.aktt.news.AppConstant;
 import com.aktt.news.R;
 import com.aktt.news.api.UserService;
-import com.aktt.news.base.BaseTitleFragment;
+import com.aktt.news.base.BaseFragment;
 import com.aktt.news.instance.AccountManager;
 import com.aktt.news.module.focus.adapter.FocusAdapter;
 import com.aktt.news.module.focus.data.FocusBean;
@@ -23,10 +24,10 @@ import com.aktt.news.net.data.HttpResult;
 import com.aktt.news.util.IntentHelper;
 import com.aktt.news.util.LocalBroadcastUtil;
 import com.aktt.news.util.RefreshHelper;
-import com.aktt.news.widget.ilook.ILookTitleBar;
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.githang.statusbar.StatusBarCompat;
+import com.qmuiteam.qmui.util.QMUIStatusBarHelper;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smartrefresh.layout.util.DensityUtil;
 import java.util.List;
 import retrofit2.Call;
 
@@ -35,10 +36,12 @@ import retrofit2.Call;
  * Description : 主页 - 关注
  */
 
-public class FocusMainFragment extends BaseTitleFragment {
+public class FocusMainFragment extends BaseFragment {
 
     @BindView(R.id.id_recycler) RecyclerView mRecyclerView;
     @BindView(R.id.id_refresh_layout) SmartRefreshLayout mRefreshLayout;
+    @BindView(R.id.iv_title_right) ImageView mTitleRight;
+    @BindView(R.id.id_video_main) ViewGroup mTitleRoot;
 
     private FocusAdapter mAdapter;
     private RefreshHelper<FocusBean> mRefreshHelper;
@@ -52,20 +55,26 @@ public class FocusMainFragment extends BaseTitleFragment {
     }
 
     @Override
-    public void init() {
+    protected int getLayoutName() {
+        return R.layout.layout_main_focus;
+    }
 
-        StatusBarCompat.setStatusBarColor(getActivity(),
-                ContextCompat.getColor(getActivity(), R.color.white));
-        mTitleBar.setTitleImage(R.drawable.img_focus_title)
-                .setRightImage(R.drawable.ic_care_plus_blue)
-                .hideLeftImage()
-                .setTitleListener(new ILookTitleBar.TitleCallbackAdapter() {
-                    @Override
-                    public void onClickRightImage(View view) {
-                        super.onClickRightImage(view);
-                        IntentHelper.openAddFocusPage(getActivity());
-                    }
-                });
+    @Override
+    protected void doInit() {
+        super.doInit();
+
+        //重置头部高度
+        int height = QMUIStatusBarHelper.getStatusbarHeight(getActivity());
+        ViewGroup.LayoutParams layoutParams = mTitleRoot.getLayoutParams();
+        layoutParams.height = DensityUtil.dp2px(44) + height;
+        mTitleRoot.setLayoutParams(layoutParams);
+
+        mTitleRight.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                IntentHelper.openAddFocusPage(getActivity());
+            }
+        });
 
         service = NetRequest.getInstance().create(UserService.class);
 
@@ -90,11 +99,6 @@ public class FocusMainFragment extends BaseTitleFragment {
         filter = new IntentFilter();
         filter.addAction(LocalBroadcastUtil.LOGIN);
         filter.addAction(LocalBroadcastUtil.LOGOUT);
-    }
-
-    @Override
-    public int getSubLayout() {
-        return R.layout.simple_recycler_list;
     }
 
     private void config() {
@@ -124,9 +128,6 @@ public class FocusMainFragment extends BaseTitleFragment {
 
     private void onChildClick(View view, int position) {
 
-        //switch (view.getId()) {
-        //    case R.id.iv_avatar:
-
         List<FocusBean> data = mAdapter.getData();
         if (position < data.size()) {
 
@@ -136,10 +137,6 @@ public class FocusMainFragment extends BaseTitleFragment {
                 IntentHelper.openUserCenterPage(getActivity(), target_id);
             }
         }
-        //break;
-        //default:
-        //    break;
-        //}
     }
 
     private void loadData(int page) {
@@ -150,22 +147,6 @@ public class FocusMainFragment extends BaseTitleFragment {
         }
 
         showLoading();
-        //Call<HttpResult<FocusWrapper>> call =
-        //        service.getNotFollowList(loginUserId, page, AppConstant.DEFAULT_PAGE_SIZE);
-        //call.enqueue(new SimpleCallback<FocusWrapper>() {
-        //    @Override
-        //    public void onSuccess(FocusWrapper data) {
-        //        hideLoading();
-        //        mRefreshHelper.setData(data.list, data.haveNext);
-        //    }
-        //
-        //    @Override
-        //    public void onFail(String code, String errorMsg) {
-        //        mRefreshHelper.onFail();
-        //        onSimpleError(errorMsg);
-        //    }
-        //});
-
         Call<HttpResult<FocusWrapper>> call =
                 service.getRelationList(loginUserId, loginUserId, 0, page,
                         AppConstant.DEFAULT_PAGE_SIZE);
@@ -203,13 +184,4 @@ public class FocusMainFragment extends BaseTitleFragment {
             }
         }
     };
-
-    @Override
-    public void onHiddenChanged(boolean hidden) {
-        super.onHiddenChanged(hidden);
-        if (!hidden) {
-            StatusBarCompat.setStatusBarColor(getActivity(),
-                    ContextCompat.getColor(getActivity(), R.color.white));
-        }
-    }
 }

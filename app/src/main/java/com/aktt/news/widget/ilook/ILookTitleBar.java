@@ -75,6 +75,10 @@ public class ILookTitleBar extends RelativeLayout implements View.OnClickListene
         mTitleFocus = findViewById(R.id.tv_title_focus);
     }
 
+    public View getRootView() {
+        return mTitleBg;
+    }
+
     private void setTitleEvent() {
         mRightText.setOnClickListener(this);
         mRightImage.setOnClickListener(this);

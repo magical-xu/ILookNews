@@ -458,11 +458,14 @@ public class NewsDetailActivity extends BaseActivity {
 
         int size = SPUtils.getInstance().getInt(AppConstant.NEWS_TEXT_SIZE, 1);
         if (size == 0) {
-            settings.setTextSize(WebSettings.TextSize.SMALLER);
+            //settings.setTextSize(WebSettings.TextSize.SMALLER);
+            settings.setDefaultFontSize(12);
         } else if (size == 1) {
-            settings.setTextSize(WebSettings.TextSize.NORMAL);
+            //settings.setTextSize(WebSettings.TextSize.NORMAL);
+            settings.setDefaultFontSize(15);
         } else {
-            settings.setTextSize(WebSettings.TextSize.LARGER);
+            //settings.setTextSize(WebSettings.TextSize.LARGER);
+            settings.setDefaultFontSize(18);
         }
 
         //加载数据时先停止加载图片 防止卡顿

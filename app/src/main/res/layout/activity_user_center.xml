@@ -17,16 +17,21 @@
         android:id="@+id/collapsing_toolbar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:collapsedTitleTextAppearance="@style/expanded_title"
+        app:collapsedTitleGravity="left|center_vertical"
+        app:collapsedTitleTextAppearance="@style/collapsing_title"
         app:contentScrim="@color/white"
+        app:expandedTitleMarginBottom="113dp"
+        app:expandedTitleMarginStart="100dp"
         app:expandedTitleTextAppearance="@style/expanded_title"
         app:layout_scrollFlags="scroll|exitUntilCollapsed"
-        app:scrimAnimationDuration="100">
+        app:scrimAnimationDuration="100"
+        app:titleEnabled="true">
 
       <LinearLayout
           android:layout_width="match_parent"
           android:layout_height="match_parent"
-          android:orientation="vertical">
+          android:orientation="vertical"
+          app:layout_collapseParallaxMultiplier="0.7">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -52,6 +57,7 @@
               android:layout_toRightOf="@id/iv_avatar"
               android:textColor="@color/white"
               android:textSize="@dimen/font_main"
+              android:visibility="invisible"
               tools:text="@string/test_text_short" />
 
           <LinearLayout

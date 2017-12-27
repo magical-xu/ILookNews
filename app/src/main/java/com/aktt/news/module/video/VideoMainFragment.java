@@ -5,16 +5,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import butterknife.BindView;
 import butterknife.OnClick;
 import com.aktt.news.AppConstant;
 import com.aktt.news.R;
-import com.aktt.news.base.BaseTitleFragment;
+import com.aktt.news.base.BaseFragment;
 import com.aktt.news.data.BaseUser;
 import com.aktt.news.data.Channel;
 import com.aktt.news.instance.AccountManager;
@@ -26,10 +26,11 @@ import com.aktt.news.util.NotifyListener;
 import com.aktt.news.util.StringHelper;
 import com.aktt.news.widget.adapter.BaseFragmentStateAdapter;
 import com.aktt.news.widget.adapter.OnPageChangeListener;
-import com.aktt.news.widget.ilook.ILookTitleBar;
+import com.aktt.news.widget.image.HeadImageView;
 import com.flyco.tablayout.SlidingTabLayout;
-import com.githang.statusbar.StatusBarCompat;
 import com.magicalxu.library.blankj.SPUtils;
+import com.qmuiteam.qmui.util.QMUIStatusBarHelper;
+import com.scwang.smartrefresh.layout.util.DensityUtil;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 import java.util.ArrayList;
@@ -40,11 +41,13 @@ import java.util.List;
  * Description : 主页 - 视频
  */
 
-public class VideoMainFragment extends BaseTitleFragment {
+public class VideoMainFragment extends BaseFragment {
 
     @BindView(R.id.sliding_tabs) SlidingTabLayout mTabView;
     @BindView(R.id.btn_search) ImageView mSearchView;
     @BindView(R.id.view_pager) ViewPager mViewPager;
+    @BindView(R.id.iv_circle_left) HeadImageView mHead;
+    @BindView(R.id.id_video_main) ViewGroup mTitleRoot;
 
     private BaseFragmentStateAdapter mPagerAdapter;
     private List<Fragment> videoFragmentList = new ArrayList<>();
@@ -52,10 +55,15 @@ public class VideoMainFragment extends BaseTitleFragment {
     private IntentFilter filter;
 
     @Override
-    public void init() {
+    protected void doInit() {
+        super.doInit();
 
-        StatusBarCompat.setStatusBarColor(getActivity(),
-                ContextCompat.getColor(getActivity(), R.color.white));
+        //重置头部高度
+        int height = QMUIStatusBarHelper.getStatusbarHeight(getActivity());
+        ViewGroup.LayoutParams layoutParams = mTitleRoot.getLayoutParams();
+        layoutParams.height = DensityUtil.dp2px(44) + height;
+        mTitleRoot.setLayoutParams(layoutParams);
+
         checkTitle();
 
         initFilter();
@@ -130,15 +138,22 @@ public class VideoMainFragment extends BaseTitleFragment {
 
     private void checkTitle() {
 
-        mTitleBar.setTitleImage(R.drawable.img_video_title)
-                .hideDivider()
-                .setTitleListener(new ILookTitleBar.TitleCallbackAdapter() {
-                    @Override
-                    public void onClickLeftAvatar(View view) {
-                        super.onClickLeftAvatar(view);
-                        onIntentUser();
-                    }
-                });
+        mHead.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onIntentUser();
+            }
+        });
+
+        //mTitleBar.setTitleImage(R.drawable.img_video_title)
+        //        .hideDivider()
+        //        .setTitleListener(new ILookTitleBar.TitleCallbackAdapter() {
+        //            @Override
+        //            public void onClickLeftAvatar(View view) {
+        //                super.onClickLeftAvatar(view);
+        //                onIntentUser();
+        //            }
+        //        });
         setUserIcon();
     }
 
@@ -154,13 +169,13 @@ public class VideoMainFragment extends BaseTitleFragment {
     }
 
     @Override
-    public int getSubLayout() {
-        return R.layout.layout_main_video_fg;
+    protected void beginLoadData() {
+
     }
 
     @Override
-    protected void beginLoadData() {
-
+    protected int getLayoutName() {
+        return R.layout.layout_main_video_fg;
     }
 
     @OnClick(R.id.btn_search)
@@ -207,15 +222,6 @@ public class VideoMainFragment extends BaseTitleFragment {
     };
 
     private void updateAvatar(String newAvatar) {
-        mTitleBar.setLeftCircle(newAvatar);
-    }
-
-    @Override
-    public void onHiddenChanged(boolean hidden) {
-        super.onHiddenChanged(hidden);
-        if (!hidden) {
-            StatusBarCompat.setStatusBarColor(getActivity(),
-                    ContextCompat.getColor(getActivity(), R.color.white));
-        }
+        mHead.setHeadImage(newAvatar);
     }
 }

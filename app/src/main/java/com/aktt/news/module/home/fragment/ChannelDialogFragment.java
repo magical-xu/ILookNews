@@ -1,28 +1,22 @@
 package com.aktt.news.module.home.fragment;
 
-import android.app.Dialog;
 import android.content.DialogInterface;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
-import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.BaseViewHolder;
 import com.aktt.news.R;
+import com.aktt.news.base.BaseDialogFragment2;
 import com.aktt.news.data.Channel;
 import com.aktt.news.instance.TabManager;
 import com.aktt.news.module.home.adapter.ChannelAdapter;
 import com.aktt.news.module.home.callback.ItemDragHelperCallBack;
 import com.aktt.news.module.home.callback.OnChannelDragListener;
 import com.aktt.news.module.home.callback.OnChannelListener;
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.BaseViewHolder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,7 +27,7 @@ import static com.aktt.news.data.Channel.TYPE_MY_CHANNEL;
  * 频道编辑的 fragment
  */
 
-public class ChannelDialogFragment extends DialogFragment implements OnChannelDragListener {
+public class ChannelDialogFragment extends BaseDialogFragment2 implements OnChannelDragListener {
 
     @BindView(R.id.recyclerView) RecyclerView mRecyclerView;
 
@@ -53,29 +47,48 @@ public class ChannelDialogFragment extends DialogFragment implements OnChannelDr
         return dialogFragment;
     }
 
+    //@Override
+    //public void onCreate(@Nullable Bundle savedInstanceState) {
+    //    super.onCreate(savedInstanceState);
+    //    setStyle(DialogFragment.STYLE_NORMAL, R.style.MyDialog);
+    //}
+
+    //@Nullable
+    //@Override
+    //public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    //        Bundle savedInstanceState) {
+    //
+    //    final Window window = getDialog().getWindow();
+    //    View view = inflater.inflate(fragment_home_channel_edit,
+    //            ((ViewGroup) window.findViewById(android.R.id.content)),
+    //            false);//需要用android.R.id.content这个view
+    //    window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));//注意此处
+    //    window.setLayout(-1, -1);//这2行,和上面的一样,注意顺序就行;
+    //    return view;
+    //}
+
+    //@Override
+    //public void onViewCreated(View view, Bundle savedInstanceState) {
+    //    super.onViewCreated(view, savedInstanceState);
+    //    ButterKnife.bind(this, view);
+    //    processLogic();
+    //}
+
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setStyle(DialogFragment.STYLE_NORMAL, android.R.style.Theme_Black_NoTitleBar);
+    protected int setLayoutId() {
+        return R.layout.fragment_home_channel_edit;
     }
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
-        Dialog dialog = getDialog();
-        if (dialog != null && dialog.getWindow() != null) {
-            //添加动画
-            dialog.getWindow().setWindowAnimations(R.style.dialogSlideAnim);
-        }
-        return inflater.inflate(R.layout.fragment_home_channel_edit, null);
-    }
-
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        ButterKnife.bind(this, view);
+    protected void initView() {
+        super.initView();
         processLogic();
+    }
+
+    @Override
+    protected void initImmersionBar() {
+        super.initImmersionBar();
+        mImmersionBar.statusBarDarkFont(true).init();
     }
 
     private void processLogic() {
