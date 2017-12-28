@@ -39,7 +39,8 @@ public class CommentAdapter extends BaseQuickAdapter<CommentBean, BaseViewHolder
                 .setText(R.id.tv_comment, item.text)
                 .setText(R.id.id_timestamp, item.createDate)
                 .addOnClickListener(R.id.id_comment_count)
-                .addOnClickListener(R.id.tv_up);
+                .addOnClickListener(R.id.tv_up)
+                .addOnClickListener(R.id.iv_avatar);
 
         TextView tvReply = helper.getView(R.id.id_comment_count);
         if (isSubPage) {

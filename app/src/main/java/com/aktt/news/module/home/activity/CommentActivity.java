@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.OnClick;
+import com.aktt.news.util.IntentHelper;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.aktt.news.AppConstant;
 import com.aktt.news.R;
@@ -106,9 +107,9 @@ public class CommentActivity extends BaseActivity {
         mAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                CommentBean commentBean = mAdapter.getData().get(position);
                 switch (view.getId()) {
                     case R.id.id_comment_count:
-                        CommentBean commentBean = mAdapter.getData().get(position);
 
                         String commentId = commentBean.cid;
                         CommentDialogFragment fragment =
@@ -118,6 +119,14 @@ public class CommentActivity extends BaseActivity {
                         break;
                     case R.id.tv_up:
                         onPraise(position);
+                        break;
+                    case R.id.iv_avatar:
+
+                        if (TextUtils.isEmpty(commentBean.nickname)) {
+                            return;
+                        }
+                        IntentHelper.openUserCenterPage(CommentActivity.this, commentBean.userid);
+
                         break;
                 }
             }
@@ -136,6 +145,7 @@ public class CommentActivity extends BaseActivity {
             @Override
             public void onClickLeft(View view) {
                 super.onClickLeft(view);
+                KeyboardUtils.hideSoftInput(CommentActivity.this);
                 finish();
             }
         });

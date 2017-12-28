@@ -149,14 +149,9 @@ public class VideoDetailActivity extends BaseActivity {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
 
+                CommentBean commentBean = mAdapter.getData().get(position);
                 switch (view.getId()) {
                     case R.id.id_comment_count:
-                        CommentBean commentBean = mAdapter.getData().get(position);
-
-                        //int commentCount = commentBean.commentCount;
-                        //if (0 == commentCount) {
-                        //    return;
-                        //}
 
                         String commentId = commentBean.cid;
                         CommentDialogFragment fragment =
@@ -166,6 +161,13 @@ public class VideoDetailActivity extends BaseActivity {
                         break;
                     case R.id.tv_up:
                         onPraise(position);
+                        break;
+                    case R.id.iv_avatar:
+                        if (TextUtils.isEmpty(commentBean.nickname)) {
+                            return;
+                        }
+                        IntentHelper.openUserCenterPage(VideoDetailActivity.this,
+                                commentBean.userid);
                         break;
                 }
             }
@@ -386,7 +388,7 @@ public class VideoDetailActivity extends BaseActivity {
         mTitleBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                finish();
+                onBackPressed();
             }
         });
 

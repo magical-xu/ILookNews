@@ -8,6 +8,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
         android:drawableLeft="@drawable/ic_profile_notify"
         android:drawablePadding="@dimen/padding_small"
         android:gravity="center"
@@ -29,6 +30,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
         android:drawableLeft="@drawable/ic_profile_collection"
         android:drawablePadding="@dimen/padding_small"
         android:gravity="center"
@@ -50,6 +52,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
         android:drawableLeft="@drawable/ic_profile_broke_list"
         android:drawablePadding="@dimen/padding_small"
         android:gravity="center"
@@ -71,6 +74,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
         android:drawableLeft="@drawable/ic_profile_broke"
         android:drawablePadding="@dimen/padding_small"
         android:gravity="center"
@@ -92,6 +96,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
         android:drawableLeft="@drawable/ic_profile_talk"
         android:drawablePadding="@dimen/padding_small"
         android:gravity="center"
@@ -113,6 +118,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
         android:drawableLeft="@drawable/ic_profile_setting"
         android:drawablePadding="@dimen/padding_small"
         android:gravity="center"

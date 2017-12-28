@@ -73,7 +73,7 @@
         android:exported="false"
         android:screenOrientation="portrait"
         android:theme="@style/text_style_normal"
-        android:windowSoftInputMode="stateAlwaysHidden" />
+        android:windowSoftInputMode="stateAlwaysHidden|adjustPan" />
     <activity
         android:name="com.aktt.news.module.home.activity.NotifyActivity"
         android:screenOrientation="portrait"

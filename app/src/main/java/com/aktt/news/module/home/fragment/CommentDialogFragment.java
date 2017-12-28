@@ -15,6 +15,7 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import com.aktt.news.util.IntentHelper;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.aktt.news.AppConstant;
 import com.aktt.news.R;
@@ -112,6 +113,7 @@ public class CommentDialogFragment extends BaseDialogFragment {
         mIvBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                KeyboardUtils.hideSoftInput(mInputView);
                 dismiss();
             }
         });
@@ -132,6 +134,13 @@ public class CommentDialogFragment extends BaseDialogFragment {
                 switch (view.getId()) {
                     case R.id.tv_up:
                         onPraise(position);
+                        break;
+                    case R.id.iv_avatar:
+                        CommentBean commentBean = mAdapter.getData().get(position);
+                        if (TextUtils.isEmpty(commentBean.nickname)) {
+                            return;
+                        }
+                        IntentHelper.openUserCenterPage(getActivity(), commentBean.userid);
                         break;
                 }
             }

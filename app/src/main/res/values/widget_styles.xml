@@ -36,8 +36,9 @@
   <style name="user_item_setting_vg">
     <item name="android:layout_width">match_parent</item>
     <item name="android:background">?attr/selectableItemBackground</item>
-    <item name="android:layout_height">wrap_content</item>
-    <item name="android:padding">@dimen/padding_normal</item>
+    <item name="android:layout_height">48dp</item>
+    <item name="android:paddingLeft">@dimen/padding_normal</item>
+    <item name="android:paddingRight">@dimen/padding_normal</item>
     <item name="android:clickable">true</item>
     <item name="android:descendantFocusability">blocksDescendants</item>
   </style>
