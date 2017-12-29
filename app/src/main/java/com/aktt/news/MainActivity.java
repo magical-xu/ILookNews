@@ -76,7 +76,7 @@ public class MainActivity extends BaseActivity {
     @Override
     public void handleChildPage(Bundle savedInstanceState) {
 
-        ImmersionBar.with(this).statusBarDarkFont(true).init();
+        ImmersionBar.with(this).statusBarDarkFont(false, 0.5f).init();
 
         initTab();
         initFragment();

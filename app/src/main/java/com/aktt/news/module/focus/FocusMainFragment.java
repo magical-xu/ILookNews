@@ -24,6 +24,7 @@ import com.aktt.news.net.data.HttpResult;
 import com.aktt.news.util.IntentHelper;
 import com.aktt.news.util.LocalBroadcastUtil;
 import com.aktt.news.util.RefreshHelper;
+import com.aktt.news.util.StatusUtil;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.qmuiteam.qmui.util.QMUIStatusBarHelper;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
@@ -62,6 +63,8 @@ public class FocusMainFragment extends BaseFragment {
     @Override
     protected void doInit() {
         super.doInit();
+
+        StatusUtil.toGreyMode(getActivity());
 
         //重置头部高度
         int height = QMUIStatusBarHelper.getStatusbarHeight(getActivity());
@@ -184,4 +187,12 @@ public class FocusMainFragment extends BaseFragment {
             }
         }
     };
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (!hidden) {
+            StatusUtil.toGreyMode(getActivity());
+        }
+    }
 }

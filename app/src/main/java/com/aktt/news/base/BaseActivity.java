@@ -49,7 +49,8 @@ public abstract class BaseActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
         NetRequest.getInstance().addRequestList(TAG, addRequestList());
-        StatusBarCompat.setStatusBarColor(this, ContextCompat.getColor(this, R.color.white));
+        StatusBarCompat.setStatusBarColor(this,
+                ContextCompat.getColor(this, R.color.tv_talk_content));
         handleChildPage(savedInstanceState);
     }
 

@@ -23,6 +23,7 @@ import com.aktt.news.module.video.fragment.VideoListFragment;
 import com.aktt.news.util.IntentHelper;
 import com.aktt.news.util.LocalBroadcastUtil;
 import com.aktt.news.util.NotifyListener;
+import com.aktt.news.util.StatusUtil;
 import com.aktt.news.util.StringHelper;
 import com.aktt.news.widget.adapter.BaseFragmentStateAdapter;
 import com.aktt.news.widget.adapter.OnPageChangeListener;
@@ -57,6 +58,8 @@ public class VideoMainFragment extends BaseFragment {
     @Override
     protected void doInit() {
         super.doInit();
+
+        StatusUtil.toGreyMode(getActivity());
 
         //重置头部高度
         int height = QMUIStatusBarHelper.getStatusbarHeight(getActivity());
@@ -145,15 +148,6 @@ public class VideoMainFragment extends BaseFragment {
             }
         });
 
-        //mTitleBar.setTitleImage(R.drawable.img_video_title)
-        //        .hideDivider()
-        //        .setTitleListener(new ILookTitleBar.TitleCallbackAdapter() {
-        //            @Override
-        //            public void onClickLeftAvatar(View view) {
-        //                super.onClickLeftAvatar(view);
-        //                onIntentUser();
-        //            }
-        //        });
         setUserIcon();
     }
 
@@ -223,5 +217,13 @@ public class VideoMainFragment extends BaseFragment {
 
     private void updateAvatar(String newAvatar) {
         mHead.setHeadImage(newAvatar);
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (!hidden) {
+            StatusUtil.toGreyMode(getActivity());
+        }
     }
 }

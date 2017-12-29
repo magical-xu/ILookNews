@@ -24,6 +24,7 @@ import com.aktt.news.net.client.NetRequest;
 import com.aktt.news.net.data.HttpResult;
 import com.aktt.news.util.IntentHelper;
 import com.aktt.news.util.LocalBroadcastUtil;
+import com.aktt.news.util.StatusUtil;
 import com.aktt.news.widget.image.HeadImageView;
 import com.magicalxu.library.blankj.ToastUtils;
 import retrofit2.Call;
@@ -132,8 +133,7 @@ public class UserMainFragment extends BaseFragment {
     @Override
     protected void doInit() {
 
-        //StatusBarCompat.setStatusBarColor(getActivity(),
-        //        ContextCompat.getColor(getActivity(), R.color.white));
+        StatusUtil.toGreyMode(getActivity());
         initFilter();
 
         if (null != filter && null != receiver) {
@@ -288,8 +288,7 @@ public class UserMainFragment extends BaseFragment {
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
         if (!hidden) {
-            //StatusBarCompat.setStatusBarColor(getActivity(),
-            //        ContextCompat.getColor(getActivity(), R.color.white));
+            StatusUtil.toGreyMode(getActivity());
         }
     }
 }

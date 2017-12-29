@@ -32,6 +32,7 @@ import com.aktt.news.net.data.HttpResult;
 import com.aktt.news.util.IntentHelper;
 import com.aktt.news.util.LocalBroadcastUtil;
 import com.aktt.news.util.NotifyListener;
+import com.aktt.news.util.StatusUtil;
 import com.aktt.news.util.StringHelper;
 import com.aktt.news.widget.adapter.BaseFragmentStateAdapter;
 import com.aktt.news.widget.adapter.OnPageChangeListener;
@@ -123,12 +124,7 @@ public class HomeMainFragment extends BaseFragment implements OnChannelListener 
     @Override
     protected void doInit() {
 
-        //ImmersionBar.with(getActivity())
-        //        .statusBarDarkFont(true)
-        //        .titleBarMarginTop(mHeaderLayout)
-        //        .init();
-        //StatusBarUtil.setTransparent(getActivity());
-        //StatusBarCompat.setFitsSystemWindows(getActivity().getWindow(), false);
+        StatusUtil.toDarkMode(getActivity());
 
         //重置头部高度
         int height = QMUIStatusBarHelper.getStatusbarHeight(getActivity());
@@ -306,9 +302,7 @@ public class HomeMainFragment extends BaseFragment implements OnChannelListener 
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
         if (!hidden) {
-
-            //StatusBarUtil.setTransparent(getActivity());
-            //StatusBarCompat.setFitsSystemWindows(getActivity().getWindow(), false);
+            StatusUtil.toDarkMode(getActivity());
         }
     }
 }
