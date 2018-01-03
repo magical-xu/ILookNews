@@ -164,9 +164,16 @@ public class MainActivity extends BaseActivity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN) {
-            if (null != mCurPage && mCurPage instanceof VideoMainFragment) {
-                if (((VideoMainFragment) mCurPage).onBackPressed()) {
-                    return true;
+            if (null != mCurPage) {
+
+                if (mCurPage instanceof VideoMainFragment) {
+                    if (((VideoMainFragment) mCurPage).onBackPressed()) {
+                        return true;
+                    }
+                } else if (mCurPage instanceof HomeMainFragment) {
+                    if (((HomeMainFragment) mCurPage).onBackPressed()) {
+                        return true;
+                    }
                 }
             }
 

@@ -27,7 +27,7 @@ public class VideoHelper {
 
     public static void initPlayer(final Context context,
             final StandardGSYVideoPlayer gsyVideoPlayer, String url, String title,
-            final OrientationUtils orientationUtils) {
+            final OrientationUtils orientationUtils, boolean showTitle) {
 
         long progress = VideoManager.getInstance().getProgress(url);
         gsyVideoPlayer.setSeekOnStart(progress);
@@ -43,7 +43,7 @@ public class VideoHelper {
         gsyVideoPlayer.setUp(url, true, null, title);
 
         //隐藏title
-        gsyVideoPlayer.getTitleTextView().setVisibility(View.GONE);
+        gsyVideoPlayer.getTitleTextView().setVisibility(showTitle ? View.VISIBLE : View.GONE);
         //隐藏返回键
         gsyVideoPlayer.getBackButton().setVisibility(View.GONE);
 
@@ -134,8 +134,10 @@ public class VideoHelper {
         GSYVideoOptionBuilder gsyVideoOption = new GSYVideoOptionBuilder();
         gsyVideoOption
                 //.setThumbImageView(imageView)
-                .setIsTouchWiget(true).setNeedShowWifiTip(needTip)
-                .setRotateViewAuto(false).setSeekOnStart(progress1)
+                .setIsTouchWiget(true)
+                .setNeedShowWifiTip(needTip)
+                .setRotateViewAuto(false)
+                .setSeekOnStart(progress1)
                 .setLockLand(false)
                 .setShowFullAnimation(false)
                 .setNeedLockFull(false)

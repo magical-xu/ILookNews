@@ -101,7 +101,7 @@ public class NewsListAdapter extends BaseMultiItemQuickAdapter<NewsListBean, Bas
 
         if (!TextUtils.isEmpty(url)) {
             VideoHelper.initPlayer(mContext, mVideoPlayer, url, StringHelper.getString(item.title),
-                    null);
+                    null, false);
         }
     }
 
