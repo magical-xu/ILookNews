@@ -48,6 +48,7 @@ public class VideoListAdapter extends BaseQuickAdapter<NewsListBean, BaseViewHol
 
         ((HeadImageView) helper.getView(R.id.iv_avatar)).setHeadImage(
                 StringHelper.getString(item.userIcon));
+        helper.setText(R.id.id_video_item_title, StringHelper.getString(item.title));
 
         helper.setText(R.id.tv_author, StringHelper.getString(item.nickname));
 

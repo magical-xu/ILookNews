@@ -6,10 +6,27 @@
     android:layout_height="250dp"
     android:orientation="vertical">
 
-  <com.aktt.news.library.gsyvideoplayer.ILookVideoPlayer
-      android:id="@+id/video_player"
+  <FrameLayout
       android:layout_width="match_parent"
-      android:layout_height="@dimen/layout_height_video" />
+      android:layout_height="@dimen/layout_height_video">
+
+    <com.aktt.news.library.gsyvideoplayer.ILookVideoPlayer
+        android:id="@+id/video_player"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/layout_height_video" />
+
+    <TextView
+        android:id="@+id/id_video_item_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left|top"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:textColor="@color/white"
+        android:textSize="@dimen/font_main"
+        tools:text="嫂子吃饺子" />
+
+  </FrameLayout>
 
   <LinearLayout
       android:layout_width="match_parent"
