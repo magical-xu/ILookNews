@@ -124,6 +124,16 @@ public class NewsDetailActivity extends BaseActivity {
     @Override
     public void handleChildPage(Bundle savedInstanceState) {
 
+        //SwipeBackLayout swipeBackLayout = getSwipeBackLayout();
+        //swipeBackLayout.setEnableGesture(true);
+        //swipeBackLayout.setEdgeTrackingEnabled(SwipeBackLayout.EDGE_LEFT);
+        //DisplayMetrics metrics = new DisplayMetrics();
+        //Display display = getWindowManager().getDefaultDisplay();
+        //display.getMetrics(metrics);
+        //
+        //int size = metrics.widthPixels * 3 / 4;
+        //swipeBackLayout.setEdgeSize(size);
+        mSwipeBackHelper.setSwipeBackEnable(true);
         checkIntent();
         checkTitle();
         homeService = NetRequest.getInstance().create(HomeService.class);

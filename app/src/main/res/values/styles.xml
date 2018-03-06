@@ -26,6 +26,7 @@
   <style name="SimpleActivityTheme" parent="AppTheme">
     <item name="android:exported">false</item>
     <item name="android:windowSoftInputMode">adjustResize|stateHidden</item>
+    <!--<item name="android:windowIsTranslucent">true</item>-->
   </style>
 
   <style name="SplashActivityTheme" parent="SimpleActivityTheme">

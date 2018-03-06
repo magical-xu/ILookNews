@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import com.aktt.news.util.TimeUtil;
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.aktt.news.AppConstant;
@@ -72,7 +73,7 @@ public class NewsListAdapter extends BaseMultiItemQuickAdapter<NewsListBean, Bas
         helper.setText(R.id.id_bottom_comment_count,
                 String.format(mContext.getString(R.string.place_comment),
                         String.valueOf(item.commentCount)));
-        helper.setText(R.id.id_bottom_time, item.createTime);
+        helper.setText(R.id.id_bottom_time, TimeUtil.getFormatString(item.createTime));
 
         StandardGSYVideoPlayer mVideoPlayer = helper.getView(R.id.videoplayer);
         String url = item.videoUrl;
@@ -162,7 +163,7 @@ public class NewsListAdapter extends BaseMultiItemQuickAdapter<NewsListBean, Bas
         helper.setText(R.id.id_bottom_comment_count,
                 String.format(mContext.getString(R.string.place_comment),
                         String.valueOf(item.commentCount)));
-        helper.setText(R.id.id_bottom_time, item.createTime);
+        helper.setText(R.id.id_bottom_time, TimeUtil.getFormatString(item.createTime));
 
         String picStyle = item.picStyle;
         if (TextUtils.equals(picStyle, ONE_IMAGE)) {

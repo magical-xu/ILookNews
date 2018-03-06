@@ -131,6 +131,7 @@ public class VideoDetailActivity extends BaseActivity {
     public void handleChildPage(Bundle savedInstanceState) {
 
         StatusBarCompat.setStatusBarColor(this, ContextCompat.getColor(this, R.color.black));
+        mSwipeBackHelper.setSwipeBackEnable(true);
         checkIntent();
         checkTitle();
         mAdapter = new CommentAdapter(false, R.layout.item_video_comment);

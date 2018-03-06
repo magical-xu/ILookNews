@@ -10,7 +10,7 @@ android {
     minSdkVersion 16
     targetSdkVersion 27
     versionCode 1
-    versionName "1.0"
+    versionName "1.6.0"
     testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
     manifestPlaceholders = ["tencentAuthId": "tencent101414852"] // tencent+你的AppId
@@ -94,4 +94,6 @@ dependencies {
   compile 'com.readystatesoftware.systembartint:systembartint:1.0.3'
   compile 'com.githang:status-bar-compat:latest.integration'
   compile 'com.gyf.barlibrary:barlibrary:2.3.0'
+//  compile 'me.imid.swipebacklayout.lib:library:1.1.0'
+  compile 'cn.bingoogolapple:bga-swipebacklayout:1.1.8@aar'
 }
